@@ -28,3 +28,6 @@ label{
 th, td{
     color: #ffffff !important;
 }
+.page-link{
+    cursor: pointer;
+}

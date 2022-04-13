@@ -7,22 +7,25 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import TableSkeleton from "../../components/TableSkeleton";
 import $ from 'jquery';
+
 export default function Category({user}) {
     const [categories, setCategories] = useState();
+    const [total, setTotal] = useState([]);
+    const [page, setPage] = useState(0);
     useEffect(() => {
         async function getCategories() {
             try {
                 const res = await axios.post(
-                    '/api/category',
+                    '/api/category',{page}
                 );
                 if (res.status === 200) {
-                    setCategories(res.data);
+                    setCategories(res.data.categories);
+                    setTotal(res.data.totalPages);
                 }
             } catch (err) {
                 console.log(err);
             }
         }
-
         getCategories();
     }, [setCategories]);
     const searchCategory = async () => {
@@ -31,11 +34,30 @@ export default function Category({user}) {
             const res = await axios.post(
                 '/api/category',
                 {
-                    name : terms
+                    name: terms,
+                    page: 0
                 }
             );
             if (res.status === 200) {
-                setCategories(res.data);
+                setCategories(res.data.categories);
+                setTotal(res.data.totalPages);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    const paginate = async (page) => {
+        try {
+            const res = await axios.post(
+                '/api/category',
+                {
+                    page: page
+                }
+            );
+            if (res.status === 200) {
+                setCategories(res.data.categories);
+                setTotal(res.data.totalPages);
+                setPage(page);
             }
         } catch (err) {
             console.log(err);
@@ -63,8 +85,10 @@ export default function Category({user}) {
                                 <form>
                                     <div className="row">
                                         <div className="col">
-                                            <input type="text" className="form-control terms" placeholder={`Search category`}
-                                                   name="email" onKeyUp={searchCategory} onKeyDown={searchCategory} onChange={searchCategory}/>
+                                            <input type="text" className="form-control terms"
+                                                   placeholder={`Search category`}
+                                                   name="email" onKeyUp={searchCategory} onKeyDown={searchCategory}
+                                                   onChange={searchCategory}/>
                                         </div>
                                     </div>
                                 </form>
@@ -87,9 +111,9 @@ export default function Category({user}) {
                                 )
                             }
                             {categories && (
-                                categories.map((el, index)=> (
+                                categories.map((el, index) => (
                                     <tr key={el._id} valign={`middle`}>
-                                        <td>{index+1}</td>
+                                        <td>{index + 1}</td>
                                         <td>{el.name}</td>
                                         <td>
                                             <Link href={`#`}>
@@ -110,6 +134,23 @@ export default function Category({user}) {
                             )}
 
                             </tbody>
+                            <tfoot>
+                            <tr>
+                                <td colSpan={3}>
+                                    <nav className={`float-end`}>
+                                        <ul className="pagination mt-3">
+                                            {
+                                                total.map(el=> (
+                                                    <li className={`page-item ${page === el ? 'active' : ''}`} key={el}>
+                                                        <a className={`page-link`} onClick={()=> paginate(el)}>{el+1}</a>
+                                                    </li>
+                                                ))
+                                            }
+                                        </ul>
+                                    </nav>
+                                </td>
+                            </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
