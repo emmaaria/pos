@@ -6,7 +6,7 @@ import Link from "next/link";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import TableSkeleton from "../../components/TableSkeleton";
-
+import $ from 'jquery';
 export default function Category({user}) {
     const [categories, setCategories] = useState();
     useEffect(() => {
@@ -25,6 +25,22 @@ export default function Category({user}) {
 
         getCategories();
     }, [setCategories]);
+    const searchCategory = async () => {
+        const terms = $('.terms').val();
+        try {
+            const res = await axios.post(
+                '/api/category',
+                {
+                    name : terms
+                }
+            );
+            if (res.status === 200) {
+                setCategories(res.data);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
     return (
         <>
             <Head>
@@ -35,11 +51,25 @@ export default function Category({user}) {
             <Layout user={user} title={`Category`}>
                 <div className="content">
                     <div className="custom-card">
-                        <Link href={`/category/create`}>
-                            <a className={`btn btn-success`}>
-                                <i className="fa-solid fa-plus"/> Add New Category
-                            </a>
-                        </Link>
+                        <div className="row">
+                            <div className="col-md-9">
+                                <Link href={`/category/create`}>
+                                    <a className={`btn btn-success`}>
+                                        <i className="fa-solid fa-plus"/> Add New Category
+                                    </a>
+                                </Link>
+                            </div>
+                            <div className="col-md-3">
+                                <form>
+                                    <div className="row">
+                                        <div className="col">
+                                            <input type="text" className="form-control terms" placeholder={`Search category`}
+                                                   name="email" onKeyUp={searchCategory} onKeyDown={searchCategory} onChange={searchCategory}/>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                         <table className={`table mt-4`}>
                             <thead>
                             <tr>
