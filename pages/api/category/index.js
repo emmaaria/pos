@@ -11,7 +11,7 @@ export default withIronSessionApiRoute(async (req, res) => {
             const total = await CategoryModel.find({name: new RegExp(name, 'i') }).count();
             const categories = await CategoryModel.find({name: new RegExp(name, 'i') }).lean();
             await db.disconnect();
-            const totalPagesCount = Math.ceil(total / 5);
+            const totalPagesCount = Math.ceil(total / 50);
             let totalPages = [];
             for (let i = 0; i <= totalPagesCount-1; i++){
                 totalPages.push(i);
@@ -19,9 +19,9 @@ export default withIronSessionApiRoute(async (req, res) => {
             res.status(200).send({categories, totalPages});
         }else {
             const total = await CategoryModel.find({}).count();
-            const categories = await CategoryModel.find({}).skip(5*page).limit(5);
+            const categories = await CategoryModel.find({}).skip(50*page).limit(50);
             await db.disconnect();
-            const totalPagesCount = Math.ceil(total / 5);
+            const totalPagesCount = Math.ceil(total / 50);
             let totalPages = [];
             for (let i = 0; i <= totalPagesCount-1; i++){
                 totalPages.push(i);

@@ -7,25 +7,25 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import TableSkeleton from "../../components/TableSkeleton";
 import $ from 'jquery';
-
+import {ToastContainer, toast} from 'react-toastify';
 export default function Category({user}) {
     const [categories, setCategories] = useState();
     const [total, setTotal] = useState([]);
     const [page, setPage] = useState(0);
-    useEffect(() => {
-        async function getCategories() {
-            try {
-                const res = await axios.post(
-                    '/api/category',{page}
-                );
-                if (res.status === 200) {
-                    setCategories(res.data.categories);
-                    setTotal(res.data.totalPages);
-                }
-            } catch (err) {
-                console.log(err);
+    async function getCategories() {
+        try {
+            const res = await axios.post(
+                '/api/category', {page}
+            );
+            if (res.status === 200) {
+                setCategories(res.data.categories);
+                setTotal(res.data.totalPages);
             }
+        } catch (err) {
+            console.log(err);
         }
+    }
+    useEffect(() => {
         getCategories();
     }, [setCategories]);
     const searchCategory = async () => {
@@ -63,6 +63,41 @@ export default function Category({user}) {
             console.log(err);
         }
     }
+    const deleteHandler = async (id) => {
+        toast.loading('Deleting', {
+            position: "bottom-right",
+            theme: 'dark'
+        });
+        try {
+            const response = await axios.post('/api/category/delete', {
+                id: id,
+            });
+            if (response.status === 201) {
+                toast.dismiss();
+                toast.success('Successfully Deleted', {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: 'dark',
+                });
+                await getCategories();
+            }
+        } catch (err) {
+            toast.dismiss();
+            toast.error(err.response.data, {
+                position: "bottom-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+            });
+        }
+    };
     return (
         <>
             <Head>
@@ -70,6 +105,7 @@ export default function Category({user}) {
                     Categories
                 </title>
             </Head>
+            <ToastContainer/>
             <Layout user={user} title={`Category`}>
                 <div className="content">
                     <div className="custom-card">
@@ -121,11 +157,20 @@ export default function Category({user}) {
                                                     <i className="fa-solid fa-pen-to-square"/>
                                                 </a>
                                             </Link>
-                                            <Link href={`#`}>
-                                                <a className={`btn btn-danger btn-sm`}>
-                                                    <i className="fa-solid fa-trash-can"/>
-                                                </a>
-                                            </Link>
+                                            <a className={`btn btn-danger btn-sm`} onClick={(e) => {
+                                                e.preventDefault();
+                                                const result =
+                                                    confirm(
+                                                        'Want to delete?'
+                                                    );
+                                                if (result) {
+                                                    deleteHandler(
+                                                        el._id
+                                                    );
+                                                }
+                                            }}>
+                                                <i className="fa-solid fa-trash-can"/>
+                                            </a>
                                         </td>
                                     </tr>
                                 ))
@@ -140,9 +185,10 @@ export default function Category({user}) {
                                     <nav className={`float-end`}>
                                         <ul className="pagination mt-3">
                                             {
-                                                total.map(el=> (
+                                                total.map(el => (
                                                     <li className={`page-item ${page === el ? 'active' : ''}`} key={el}>
-                                                        <a className={`page-link`} onClick={()=> paginate(el)}>{el+1}</a>
+                                                        <a className={`page-link`}
+                                                           onClick={() => paginate(el)}>{el + 1}</a>
                                                     </li>
                                                 ))
                                             }
