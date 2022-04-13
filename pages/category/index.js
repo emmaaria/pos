@@ -116,7 +116,7 @@ export default function Category({user}) {
                                         <td>{index + 1}</td>
                                         <td>{el.name}</td>
                                         <td>
-                                            <Link href={`#`}>
+                                            <Link href={`/category/${el._id}`}>
                                                 <a className={`btn btn-warning btn-sm me-2`}>
                                                     <i className="fa-solid fa-pen-to-square"/>
                                                 </a>

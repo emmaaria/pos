@@ -2,13 +2,13 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css');
 
 body {
-    font-family: 'Karla', sans-serif;
-    font-size: 14px;
-    background: #0E1947;
+    font-family: 'Karla', sans-serif !important;
+    font-size: 14px !important;;
+    background: #0E1947 !important;;
 }
 
 a {
-    text-decoration: none;
+    text-decoration: none !important;;
 }
 
 .content {

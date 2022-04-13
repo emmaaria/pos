@@ -18,12 +18,12 @@ export default function Sidebar({user}) {
                     <Link href={`/dashboard`}>
                         <a className={`
                                 ${
-                            router.pathname == '/dashboard'
+                            router.pathname === '/dashboard'
                                 ? styles.active
                                 : ''
                         }
                             `}>
-                            <i className="fa-solid fa-gauge-high"></i>
+                            <i className="fa-solid fa-gauge-high"/>
                             Dashboard
                         </a>
                     </Link>
@@ -32,12 +32,12 @@ export default function Sidebar({user}) {
                     <Link href={`/dashboard`}>
                         <a className={`
                                 ${
-                            router.pathname == '/product'
+                            router.pathname === '/product'
                                 ? styles.active
                                 : ''
                         }
                             `}>
-                            <i className="fa-solid fa-bag-shopping"></i>
+                            <i className="fa-solid fa-bag-shopping"/>
                             Products
                         </a>
                     </Link>
@@ -46,13 +46,14 @@ export default function Sidebar({user}) {
                     <Link href={`/category`}>
                         <a className={`
                                 ${
-                            router.pathname == '/category' ||
-                            router.pathname == '/category/create'
+                            router.pathname === '/category' ||
+                            router.pathname === '/category/create' ||
+                            router.pathname === '/category/[id]'
                                 ? styles.active
                                 : ''
                         }
                             `}>
-                            <i className="fa-solid fa-book"></i>
+                            <i className="fa-solid fa-book"/>
                             Category
                         </a>
                     </Link>
@@ -61,12 +62,12 @@ export default function Sidebar({user}) {
                     <Link href={`/dashboard`}>
                         <a className={`
                                 ${
-                            router.pathname == '/product'
+                            router.pathname === '/product'
                                 ? styles.active
                                 : ''
                         }
                             `}>
-                            <i className="fa-solid fa-user-group"></i>
+                            <i className="fa-solid fa-user-group"/>
                             Customer
                         </a>
                     </Link>
@@ -75,12 +76,12 @@ export default function Sidebar({user}) {
                     <Link href={`/dashboard`}>
                         <a className={`
                                 ${
-                            router.pathname == '/product'
+                            router.pathname === '/product'
                                 ? styles.active
                                 : ''
                         }
                             `}>
-                            <i className="fa-solid fa-users"></i>
+                            <i className="fa-solid fa-users"/>
                             Supplier
                         </a>
                     </Link>
