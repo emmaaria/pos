@@ -2,7 +2,6 @@ import Layout from "../../components/layout/Layout";
 import Head from "next/head";
 import {withIronSessionSsr} from 'iron-session/next';
 import session from "../../lib/session";
-import styles from '../../styles/CreateCategory.module.css';
 import {ToastContainer, toast} from 'react-toastify';
 import axios from "axios";
 import $ from 'jquery';
