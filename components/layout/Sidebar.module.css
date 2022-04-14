@@ -43,6 +43,9 @@
     color: #ffffff;
     background: #0E1947;
 }
+.sidebar ul li a.active span{
+    transform: rotate(90deg);
+}
 .sidebar ul li a:hover{
     color: #ffffff;
     background: #0E1947;

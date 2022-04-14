@@ -190,6 +190,22 @@ export default function Sidebar({user}) {
                         </li>
                     </ul>
                 </li>
+                <li>
+                    <Link href={`/unit`}>
+                        <a className={`
+                                ${
+                            router.pathname === '/unit' ||
+                            router.pathname === '/unit/create' ||
+                            router.pathname === '/unit/[id]'
+                                ? styles.active
+                                : ''
+                        }
+                            `}>
+                            <i className="fa-solid fa-scale-balanced"/>
+                            Unit
+                        </a>
+                    </Link>
+                </li>
             </ul>
         </div>
     )

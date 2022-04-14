@@ -1,7 +1,7 @@
 import db from "../../../lib/db";
 import session from "../../../lib/session";
 import {withIronSessionApiRoute} from 'iron-session/next';
-import CategoryModel from "../../../models/Category";
+import UnitModel from "../../../models/Unit";
 export default withIronSessionApiRoute(async (req, res) => {
     if (req.session.user){
         const name = req.body.name;
@@ -12,11 +12,11 @@ export default withIronSessionApiRoute(async (req, res) => {
             });
         }
         await db.connect();
-        const category = await CategoryModel.findByIdAndUpdate(id, {
+        const unit = await UnitModel.findByIdAndUpdate(id, {
             name: name
         });
         await db.disconnect();
-        if (category) {
+        if (unit) {
             res.status(201).send({
                 success: 'Updated',
             });
