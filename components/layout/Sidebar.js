@@ -59,10 +59,12 @@ export default function Sidebar({user}) {
                     </Link>
                 </li>
                 <li>
-                    <Link href={`/dashboard`}>
+                    <Link href={`/customer`}>
                         <a className={`
                                 ${
-                            router.pathname === '/product'
+                            router.pathname === '/customer' ||
+                            router.pathname === '/customer/create' ||
+                            router.pathname === '/customer/[id]'
                                 ? styles.active
                                 : ''
                         }

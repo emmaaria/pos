@@ -5,8 +5,6 @@ import CategoryModel from "../../../models/Category";
 export default withIronSessionApiRoute(async (req, res) => {
     if (req.session.user){
         const name = req.body.name;
-        const mobile = req.body.mobile;
-        const address = req.body.address;
         const id = req.body.id;
         if (name === '') {
             res.status(400).send({
@@ -14,11 +12,11 @@ export default withIronSessionApiRoute(async (req, res) => {
             });
         }
         await db.connect();
-        const customer = await CategoryModel.findByIdAndUpdate(id, {
-            name: name, mobile: mobile, address: address
+        const category = await CategoryModel.findByIdAndUpdate(id, {
+            name: name,
         });
         await db.disconnect();
-        if (customer) {
+        if (category) {
             res.status(201).send({
                 success: 'Updated',
             });

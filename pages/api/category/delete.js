@@ -10,7 +10,7 @@ export default withIronSessionApiRoute(async (req, res) => {
         await db.disconnect();
         if (category) {
             res.status(201).send({
-                success: 'Updated',
+                success: 'Deleted',
             });
         } else {
             res.status(400).send({ error: 'Something went wrong' });
