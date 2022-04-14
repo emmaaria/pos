@@ -31,3 +31,6 @@ th, td{
 .page-link{
     cursor: pointer;
 }
+.open {
+    transform: rotate(90deg);
+}

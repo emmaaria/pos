@@ -9,18 +9,18 @@ import TableSkeleton from "../../components/TableSkeleton";
 import $ from 'jquery';
 import {ToastContainer, toast} from 'react-toastify';
 
-export default function Customer({user}) {
-    const [customers, setCustomers] = useState();
+export default function Supplier({user}) {
+    const [suppliers, setSuppliers] = useState();
     const [total, setTotal] = useState([]);
     const [page, setPage] = useState(0);
 
-    async function getCustomers() {
+    async function getSuppliers() {
         try {
             const res = await axios.post(
-                '/api/customer', {page}
+                '/api/supplier', {page}
             );
             if (res.status === 200) {
-                setCustomers(res.data.customers);
+                setSuppliers(res.data.suppliers);
                 setTotal(res.data.totalPages);
             }
         } catch (err) {
@@ -29,20 +29,20 @@ export default function Customer({user}) {
     }
 
     useEffect(() => {
-        getCustomers();
-    }, [setCustomers]);
-    const searchCustomer = async () => {
+        getSuppliers();
+    }, [setSuppliers]);
+    const searchSupplier = async () => {
         const terms = $('.terms').val();
         try {
             const res = await axios.post(
-                '/api/customer',
+                '/api/supplier',
                 {
                     name: terms,
                     page: 0
                 }
             );
             if (res.status === 200) {
-                setCustomers(res.data.customers);
+                setSuppliers(res.data.suppliers);
                 setTotal(res.data.totalPages);
             }
         } catch (err) {
@@ -52,13 +52,13 @@ export default function Customer({user}) {
     const paginate = async (page) => {
         try {
             const res = await axios.post(
-                '/api/customer',
+                '/api/supplier',
                 {
                     page: page
                 }
             );
             if (res.status === 200) {
-                setCustomers(res.data.customers);
+                setSuppliers(res.data.customers);
                 setTotal(res.data.totalPages);
                 setPage(page);
             }
@@ -72,7 +72,7 @@ export default function Customer({user}) {
             theme: 'dark'
         });
         try {
-            const response = await axios.post('/api/customer/delete', {
+            const response = await axios.post('/api/supplier/delete', {
                 id: id,
             });
             if (response.status === 201) {
@@ -86,7 +86,7 @@ export default function Customer({user}) {
                     draggable: true,
                     theme: 'dark',
                 });
-                await getCustomers();
+                await getSuppliers();
             }
         } catch (err) {
             toast.dismiss();
@@ -117,18 +117,18 @@ export default function Customer({user}) {
         <>
             <Head>
                 <title>
-                    Customers
+                    Suppliers
                 </title>
             </Head>
             <ToastContainer/>
-            <Layout user={user} title={`Customers`}>
+            <Layout user={user} title={`Suppliers`}>
                 <div className="content">
                     <div className="custom-card">
                         <div className="row">
                             <div className="col-md-9">
-                                <Link href={`/customer/create`}>
+                                <Link href={`/supplier/create`}>
                                     <a className={`btn btn-success`}>
-                                        <i className="fa-solid fa-plus"/> Add New Customer
+                                        <i className="fa-solid fa-plus"/> Add New Supplier
                                     </a>
                                 </Link>
                             </div>
@@ -137,9 +137,9 @@ export default function Customer({user}) {
                                     <div className="row">
                                         <div className="col">
                                             <input type="text" className="form-control terms"
-                                                   placeholder={`Search customer`}
-                                                   name="email" onKeyUp={searchCustomer} onKeyDown={searchCustomer}
-                                                   onChange={searchCustomer}/>
+                                                   placeholder={`Search supplier`}
+                                                   name="email" onKeyUp={searchSupplier} onKeyDown={searchSupplier}
+                                                   onChange={searchSupplier}/>
                                         </div>
                                     </div>
                                 </form>
@@ -158,14 +158,14 @@ export default function Customer({user}) {
                             </thead>
                             <tbody>
                             {
-                                customers && customers.length <= 0 && (
+                                suppliers && suppliers.length <= 0 && (
                                     <tr>
-                                        <td colSpan={6} className={`text-center`}>No Customer Found</td>
+                                        <td colSpan={6} className={`text-center`}>No Supplier Found</td>
                                     </tr>
                                 )
                             }
-                            {customers && (
-                                customers.map((el, index) => (
+                            {suppliers && (
+                                suppliers.map((el, index) => (
                                     <tr key={el._id} valign={`middle`}>
                                         <td>{index + 1}</td>
                                         <td>{el.name}</td>
@@ -177,7 +177,7 @@ export default function Customer({user}) {
                                             } Tk.
                                         </td>
                                         <td>
-                                            <Link href={`/customer/${el._id}`}>
+                                            <Link href={`/supplier/${el._id}`}>
                                                 <a className={`btn btn-warning btn-sm me-2`}>
                                                     <i className="fa-solid fa-pen-to-square"/>
                                                 </a>
