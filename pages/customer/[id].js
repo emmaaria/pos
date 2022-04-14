@@ -6,9 +6,9 @@ import {ToastContainer, toast} from 'react-toastify';
 import axios from "axios";
 import $ from 'jquery';
 import db from "../../lib/db";
-import CategoryModel from "../../models/Category";
+import CustomerModel from "../../models/Customer";
 
-export default function EditCategory({user, category}) {
+export default function EditCustomer({user, customer}) {
     const handleForm = async (e) => {
         e.preventDefault();
         toast.loading('Submitting', {
@@ -16,9 +16,11 @@ export default function EditCategory({user, category}) {
             theme: 'dark'
         });
         const name = $('.name').val();
+        const mobile = $('.mobile').val();
+        const address = $('.address').val();
         try {
-            const res = await axios.post('/api/category/update', {
-                name, id: category._id
+            const res = await axios.post('/api/customer/update', {
+                name, mobile, address, id: customer._id
             });
             if (res.status === 201) {
                 toast.dismiss();
@@ -49,18 +51,28 @@ export default function EditCategory({user, category}) {
         <>
             <Head>
                 <title>
-                    Edit Category
+                    Edit Customer
                 </title>
             </Head>
             <ToastContainer/>
-            <Layout user={user} title={`Edit Category`}>
+            <Layout user={user} title={`Edit Customer`}>
                 <div className="content">
                     <div className="custom-card">
                         <form onSubmit={handleForm}>
                             <div className="mb-3">
-                                <label htmlFor="name" className={`form-label`}>Category Name</label>
+                                <label htmlFor="name" className={`form-label`}>Customer Name</label>
                                 <input type="text" className={`form-control name`} id={`name`} required
-                                       defaultValue={category.name}/>
+                                       defaultValue={customer.name}/>
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="mobile" className={`form-label`}>Customer Mobile</label>
+                                <input type="text" className={`form-control mobile`} id={`mobile`}
+                                       defaultValue={customer.mobile}/>
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="address" className={`form-label`}>Customer Address</label>
+                                <input type="text" className={`form-control address`} id={`address`}
+                                       defaultValue={customer.address}/>
                             </div>
                             <button className={`btn btn-success`} type={`submit`}>Update</button>
                         </form>
@@ -73,7 +85,7 @@ export default function EditCategory({user, category}) {
 export const getServerSideProps = withIronSessionSsr(
     async function getServerSideProps({req, params}) {
         const session = req.session;
-        const categoryId = params.id;
+        const customerId = params.id;
         if (!session.user) {
             return {
                 redirect: {
@@ -82,13 +94,13 @@ export const getServerSideProps = withIronSessionSsr(
             };
         }
         await db.connect();
-        const categoryObject = await CategoryModel.findById({_id: categoryId}).lean();
+        const customerObject = await CustomerModel.findById({_id: customerId}).lean();
         await db.disconnect();
-        const category = JSON.stringify(categoryObject);
+        const customer = JSON.stringify(customerObject);
         return {
             props: {
                 user: session.user,
-                category: JSON.parse(category),
+                customer: JSON.parse(customer),
             },
         };
     },

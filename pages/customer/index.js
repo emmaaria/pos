@@ -8,10 +8,12 @@ import axios from "axios";
 import TableSkeleton from "../../components/TableSkeleton";
 import $ from 'jquery';
 import {ToastContainer, toast} from 'react-toastify';
+
 export default function Customer({user}) {
     const [customers, setCustomers] = useState();
     const [total, setTotal] = useState([]);
     const [page, setPage] = useState(0);
+
     async function getCustomers() {
         try {
             const res = await axios.post(
@@ -25,6 +27,7 @@ export default function Customer({user}) {
             console.log(err);
         }
     }
+
     useEffect(() => {
         getCustomers();
     }, [setCustomers]);
@@ -98,6 +101,18 @@ export default function Customer({user}) {
             });
         }
     };
+    const generateBalance = (transactions) => {
+        let debit = 0;
+        let credit = 0;
+        transactions.filter(el => {
+            if (el.transactionType === 'dv') {
+                debit += el.amount;
+            } else {
+                credit += el.amount;
+            }
+        });
+        return debit - credit;
+    }
     return (
         <>
             <Head>
@@ -133,10 +148,11 @@ export default function Customer({user}) {
                         <table className={`table mt-4`}>
                             <thead>
                             <tr>
-                                <th width={`10%`}>Sl</th>
-                                <th width={`40%`}>Name</th>
-                                <th width={`20%`}>Phone</th>
+                                <th width={`5%`}>Sl</th>
+                                <th width={`30%`}>Name</th>
+                                <th width={`15%`}>Phone</th>
                                 <th width={`20%`}>Address</th>
+                                <th width={`20%`}>Balance</th>
                                 <th width={`10%`}>Action</th>
                             </tr>
                             </thead>
@@ -144,7 +160,7 @@ export default function Customer({user}) {
                             {
                                 customers && customers.length <= 0 && (
                                     <tr>
-                                        <td colSpan={5} className={`text-center`}>No Category Found</td>
+                                        <td colSpan={6} className={`text-center`}>No Category Found</td>
                                     </tr>
                                 )
                             }
@@ -155,6 +171,11 @@ export default function Customer({user}) {
                                         <td>{el.name}</td>
                                         <td>{el.mobile}</td>
                                         <td>{el.address}</td>
+                                        <td>
+                                            {
+                                                generateBalance(el.transactions)
+                                            } Tk.
+                                        </td>
                                         <td>
                                             <Link href={`/customer/${el._id}`}>
                                                 <a className={`btn btn-warning btn-sm me-2`}>
@@ -179,12 +200,12 @@ export default function Customer({user}) {
                                     </tr>
                                 ))
                             ) || (
-                                <TableSkeleton tr={3} td={5}/>
+                                <TableSkeleton tr={3} td={6}/>
                             )}
                             </tbody>
                             <tfoot>
                             <tr>
-                                <td colSpan={5}>
+                                <td colSpan={6}>
                                     <nav className={`float-end`}>
                                         <ul className="pagination mt-3">
                                             {

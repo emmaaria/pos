@@ -24,7 +24,7 @@ export default withIronSessionApiRoute(async (req, res) => {
             res.status(200).send({customers, totalPages});
         }else {
             const total = await CustomerModel.find({}).count();
-            const customers = await CustomerModel.find({}).skip(50*page).limit(50);
+            const customers = await CustomerModel.find({},'name mobile address transactions').skip(50*page).limit(50);
             await db.disconnect();
             const totalPagesCount = Math.ceil(total / 50);
             let totalPages = [];

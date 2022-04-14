@@ -1,10 +1,12 @@
 import db from "../../../lib/db";
 import session from "../../../lib/session";
 import {withIronSessionApiRoute} from 'iron-session/next';
-import CategoryModel from "../../../models/Category";
+import CustomerModel from "../../../models/Customer";
 export default withIronSessionApiRoute(async (req, res) => {
     if (req.session.user){
         const name = req.body.name;
+        const mobile = req.body.mobile;
+        const address = req.body.address;
         const id = req.body.id;
         if (name === '') {
             res.status(400).send({
@@ -12,11 +14,13 @@ export default withIronSessionApiRoute(async (req, res) => {
             });
         }
         await db.connect();
-        const category = await CategoryModel.findByIdAndUpdate(id, {
+        const customer = await CustomerModel.findByIdAndUpdate(id, {
             name: name,
+            mobile: mobile,
+            address: address,
         });
         await db.disconnect();
-        if (category) {
+        if (customer) {
             res.status(201).send({
                 success: 'Updated',
             });
