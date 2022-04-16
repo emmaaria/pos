@@ -1,89 +1,85 @@
 "use strict";
+/*
+ * ATTENTION: An "eval-source-map" devtool has been used.
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
 (() => {
 var exports = {};
-exports.id = 1030;
-exports.ids = [1030];
+exports.id = "pages/api/unit";
+exports.ids = ["pages/api/unit"];
 exports.modules = {
 
-/***/ 1185:
+/***/ "mongoose":
+/*!***************************!*\
+  !*** external "mongoose" ***!
+  \***************************/
 /***/ ((module) => {
 
 module.exports = require("mongoose");
 
 /***/ }),
 
-/***/ 4014:
+/***/ "iron-session":
+/*!*******************************!*\
+  !*** external "iron-session" ***!
+  \*******************************/
 /***/ ((module) => {
 
 module.exports = import("iron-session");;
 
 /***/ }),
 
-/***/ 3391:
+/***/ "(api)/./lib/db.js":
+/*!*******************!*\
+  !*** ./lib/db.js ***!
+  \*******************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mongoose */ \"mongoose\");\n/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);\n\nconst connection = {};\nasync function connect() {\n    if (connection.isConnected) {\n        return;\n    }\n    if ((mongoose__WEBPACK_IMPORTED_MODULE_0___default().connections.length) > 0) {\n        connection.isConnected = (mongoose__WEBPACK_IMPORTED_MODULE_0___default().connections[0].readyState);\n        if (connection.isConnected === 1) {\n            return;\n        }\n        await mongoose__WEBPACK_IMPORTED_MODULE_0___default().disconnect();\n    }\n    await mongoose__WEBPACK_IMPORTED_MODULE_0___default().connect(process.env.MONGODB_URI, {\n        useNewUrlParser: true,\n        useUnifiedTopology: true\n    });\n    connection.isConnected = (mongoose__WEBPACK_IMPORTED_MODULE_0___default().connections[0].readyState);\n}\nconst db = {\n    connect\n};\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (db);\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi9saWIvZGIuanMuanMiLCJtYXBwaW5ncyI6Ijs7Ozs7O0FBQWdDO0FBQ2hDLE1BQU1DLFVBQVUsR0FBRyxFQUFFO0FBQ3JCLGVBQWVDLE9BQU8sR0FBRztJQUNyQixJQUFJRCxVQUFVLENBQUNFLFdBQVcsRUFBRTtRQUN4QixPQUFPO0tBQ1Y7SUFDRCxJQUFJSCxvRUFBMkIsR0FBRyxDQUFDLEVBQUU7UUFDakNDLFVBQVUsQ0FBQ0UsV0FBVyxHQUFHSCwyRUFBa0MsQ0FBQztRQUM1RCxJQUFJQyxVQUFVLENBQUNFLFdBQVcsS0FBSyxDQUFDLEVBQUU7WUFDOUIsT0FBTztTQUNWO1FBQ0QsTUFBTUgsMERBQW1CLEVBQUUsQ0FBQztLQUMvQjtJQUNELE1BQU1BLHVEQUFnQixDQUFDUSxPQUFPLENBQUNDLEdBQUcsQ0FBQ0MsV0FBVyxFQUFFO1FBQzVDQyxlQUFlLEVBQUUsSUFBSTtRQUNyQkMsa0JBQWtCLEVBQUUsSUFBSTtLQUMzQixDQUFDLENBQUM7SUFDSFgsVUFBVSxDQUFDRSxXQUFXLEdBQUdILDJFQUFrQyxDQUFDO0NBQy9EO0FBRUQsTUFBTWEsRUFBRSxHQUFHO0lBQUNYLE9BQU87Q0FBQztBQUNwQixpRUFBZVcsRUFBRSxFQUFDIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vcG9zLy4vbGliL2RiLmpzPzNkYzkiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IG1vbmdvb3NlIGZyb20gJ21vbmdvb3NlJztcclxuY29uc3QgY29ubmVjdGlvbiA9IHt9O1xyXG5hc3luYyBmdW5jdGlvbiBjb25uZWN0KCkge1xyXG4gICAgaWYgKGNvbm5lY3Rpb24uaXNDb25uZWN0ZWQpIHtcclxuICAgICAgICByZXR1cm47XHJcbiAgICB9XHJcbiAgICBpZiAobW9uZ29vc2UuY29ubmVjdGlvbnMubGVuZ3RoID4gMCkge1xyXG4gICAgICAgIGNvbm5lY3Rpb24uaXNDb25uZWN0ZWQgPSBtb25nb29zZS5jb25uZWN0aW9uc1swXS5yZWFkeVN0YXRlO1xyXG4gICAgICAgIGlmIChjb25uZWN0aW9uLmlzQ29ubmVjdGVkID09PSAxKSB7XHJcbiAgICAgICAgICAgIHJldHVybjtcclxuICAgICAgICB9XHJcbiAgICAgICAgYXdhaXQgbW9uZ29vc2UuZGlzY29ubmVjdCgpO1xyXG4gICAgfVxyXG4gICAgYXdhaXQgbW9uZ29vc2UuY29ubmVjdChwcm9jZXNzLmVudi5NT05HT0RCX1VSSSwge1xyXG4gICAgICAgIHVzZU5ld1VybFBhcnNlcjogdHJ1ZSxcclxuICAgICAgICB1c2VVbmlmaWVkVG9wb2xvZ3k6IHRydWVcclxuICAgIH0pO1xyXG4gICAgY29ubmVjdGlvbi5pc0Nvbm5lY3RlZCA9IG1vbmdvb3NlLmNvbm5lY3Rpb25zWzBdLnJlYWR5U3RhdGU7XHJcbn1cclxuXHJcbmNvbnN0IGRiID0ge2Nvbm5lY3R9O1xyXG5leHBvcnQgZGVmYXVsdCBkYjtcclxuIl0sIm5hbWVzIjpbIm1vbmdvb3NlIiwiY29ubmVjdGlvbiIsImNvbm5lY3QiLCJpc0Nvbm5lY3RlZCIsImNvbm5lY3Rpb25zIiwibGVuZ3RoIiwicmVhZHlTdGF0ZSIsImRpc2Nvbm5lY3QiLCJwcm9jZXNzIiwiZW52IiwiTU9OR09EQl9VUkkiLCJ1c2VOZXdVcmxQYXJzZXIiLCJ1c2VVbmlmaWVkVG9wb2xvZ3kiLCJkYiJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///(api)/./lib/db.js\n");
+
+/***/ }),
+
+/***/ "(api)/./lib/session.js":
+/*!************************!*\
+  !*** ./lib/session.js ***!
+  \************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\nconst session = {\n    cookieName: \"sm-pos\",\n    password: \"s%3Al3ozSdvQ83TtC5RvJ.CibaQoHtaY0H3QOB1kqR8H2A\",\n    cookieOptions: {\n        secure: true\n    }\n};\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (session);\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi9saWIvc2Vzc2lvbi5qcy5qcyIsIm1hcHBpbmdzIjoiOzs7O0FBQUEsTUFBTUEsT0FBTyxHQUFHO0lBQ1pDLFVBQVUsRUFBRSxRQUFRO0lBQ3BCQyxRQUFRLEVBQUUsZ0RBQWdEO0lBQzFEQyxhQUFhLEVBQUU7UUFDWEMsTUFBTSxFQUFFLElBQUk7S0FDZjtDQUNKO0FBQ0QsaUVBQWVKLE9BQU8sRUFBQyIsInNvdXJjZXMiOlsid2VicGFjazovL3Bvcy8uL2xpYi9zZXNzaW9uLmpzP2ZmOWMiXSwic291cmNlc0NvbnRlbnQiOlsiY29uc3Qgc2Vzc2lvbiA9IHtcclxuICAgIGNvb2tpZU5hbWU6ICdzbS1wb3MnLFxyXG4gICAgcGFzc3dvcmQ6ICdzJTNBbDNvelNkdlE4M1R0QzVSdkouQ2liYVFvSHRhWTBIM1FPQjFrcVI4SDJBJyxcclxuICAgIGNvb2tpZU9wdGlvbnM6IHtcclxuICAgICAgICBzZWN1cmU6IHRydWUsXHJcbiAgICB9LFxyXG59O1xyXG5leHBvcnQgZGVmYXVsdCBzZXNzaW9uOyJdLCJuYW1lcyI6WyJzZXNzaW9uIiwiY29va2llTmFtZSIsInBhc3N3b3JkIiwiY29va2llT3B0aW9ucyIsInNlY3VyZSJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///(api)/./lib/session.js\n");
+
+/***/ }),
+
+/***/ "(api)/./models/Unit.js":
+/*!************************!*\
+  !*** ./models/Unit.js ***!
+  \************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mongoose */ \"mongoose\");\n/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);\n\nconst schema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema)({\n    name: {\n        type: String,\n        required: true\n    }\n}, {\n    timestamps: false,\n    strict: false\n});\nconst UnitModel = (mongoose__WEBPACK_IMPORTED_MODULE_0___default().models.Unit) || mongoose__WEBPACK_IMPORTED_MODULE_0___default().model(\"Unit\", schema);\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (UnitModel);\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi9tb2RlbHMvVW5pdC5qcy5qcyIsIm1hcHBpbmdzIjoiOzs7Ozs7QUFBZ0M7QUFDaEMsTUFBTUMsTUFBTSxHQUFHLElBQUlELHdEQUFlLENBQzlCO0lBQ0lHLElBQUksRUFBRTtRQUNGQyxJQUFJLEVBQUVDLE1BQU07UUFDWkMsUUFBUSxFQUFFLElBQUk7S0FDakI7Q0FDSixFQUNEO0lBQ0lDLFVBQVUsRUFBRSxLQUFLO0lBQ2pCQyxNQUFNLEVBQUUsS0FBSztDQUNoQixDQUNKO0FBRUQsTUFBTUMsU0FBUyxHQUFHVCw2REFBb0IsSUFBSUEscURBQWMsQ0FBQyxNQUFNLEVBQUVDLE1BQU0sQ0FBQztBQUN4RSxpRUFBZVEsU0FBUyxFQUFDIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vcG9zLy4vbW9kZWxzL1VuaXQuanM/NjVlYiJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgbW9uZ29vc2UgZnJvbSAnbW9uZ29vc2UnO1xyXG5jb25zdCBzY2hlbWEgPSBuZXcgbW9uZ29vc2UuU2NoZW1hKFxyXG4gICAge1xyXG4gICAgICAgIG5hbWU6IHtcclxuICAgICAgICAgICAgdHlwZTogU3RyaW5nLFxyXG4gICAgICAgICAgICByZXF1aXJlZDogdHJ1ZSxcclxuICAgICAgICB9LFxyXG4gICAgfSxcclxuICAgIHtcclxuICAgICAgICB0aW1lc3RhbXBzOiBmYWxzZSxcclxuICAgICAgICBzdHJpY3Q6IGZhbHNlXHJcbiAgICB9XHJcbik7XHJcblxyXG5jb25zdCBVbml0TW9kZWwgPSBtb25nb29zZS5tb2RlbHMuVW5pdCB8fCBtb25nb29zZS5tb2RlbCgnVW5pdCcsIHNjaGVtYSk7XHJcbmV4cG9ydCBkZWZhdWx0IFVuaXRNb2RlbDtcclxuIl0sIm5hbWVzIjpbIm1vbmdvb3NlIiwic2NoZW1hIiwiU2NoZW1hIiwibmFtZSIsInR5cGUiLCJTdHJpbmciLCJyZXF1aXJlZCIsInRpbWVzdGFtcHMiLCJzdHJpY3QiLCJVbml0TW9kZWwiLCJtb2RlbHMiLCJVbml0IiwibW9kZWwiXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(api)/./models/Unit.js\n");
+
+/***/ }),
+
+/***/ "(api)/./pages/api/unit/index.js":
+/*!*********************************!*\
+  !*** ./pages/api/unit/index.js ***!
+  \*********************************/
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
-__webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _lib_db__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2759);
-/* harmony import */ var _lib_session__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2182);
-/* harmony import */ var iron_session_next__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8534);
-/* harmony import */ var _models_Unit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4702);
-var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([iron_session_next__WEBPACK_IMPORTED_MODULE_2__]);
-iron_session_next__WEBPACK_IMPORTED_MODULE_2__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
+eval("__webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {\n__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _lib_db__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../lib/db */ \"(api)/./lib/db.js\");\n/* harmony import */ var _lib_session__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../lib/session */ \"(api)/./lib/session.js\");\n/* harmony import */ var iron_session_next__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! iron-session/next */ \"(api)/./node_modules/iron-session/next/dist/index.mjs\");\n/* harmony import */ var _models_Unit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../models/Unit */ \"(api)/./models/Unit.js\");\nvar __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([iron_session_next__WEBPACK_IMPORTED_MODULE_2__]);\niron_session_next__WEBPACK_IMPORTED_MODULE_2__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];\n\n\n\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,iron_session_next__WEBPACK_IMPORTED_MODULE_2__.withIronSessionApiRoute)(async (req, res)=>{\n    if (req.session.user) {\n        const name = req.body.name;\n        const all = req.body.all;\n        const page = parseFloat(req.body.page);\n        await _lib_db__WEBPACK_IMPORTED_MODULE_0__[\"default\"].connect();\n        if (name && name !== \"\") {\n            const total = await _models_Unit__WEBPACK_IMPORTED_MODULE_3__[\"default\"].find({\n                name: new RegExp(name, \"i\")\n            }).count();\n            const units = await _models_Unit__WEBPACK_IMPORTED_MODULE_3__[\"default\"].find({\n                name: new RegExp(name, \"i\")\n            }).lean();\n            const totalPagesCount = Math.ceil(total / 50);\n            let totalPages = [];\n            for(let i = 0; i <= totalPagesCount - 1; i++){\n                totalPages.push(i);\n            }\n            res.status(200).send({\n                units,\n                totalPages\n            });\n        } else if (all && all === true) {\n            const units = await _models_Unit__WEBPACK_IMPORTED_MODULE_3__[\"default\"].find({});\n            res.status(200).send({\n                units\n            });\n        } else {\n            const total = await _models_Unit__WEBPACK_IMPORTED_MODULE_3__[\"default\"].find({}).count();\n            const units = await _models_Unit__WEBPACK_IMPORTED_MODULE_3__[\"default\"].find({}).skip(50 * page).limit(50);\n            const totalPagesCount = Math.ceil(total / 50);\n            let totalPages = [];\n            for(let i = 0; i <= totalPagesCount - 1; i++){\n                totalPages.push(i);\n            }\n            res.status(200).send({\n                units,\n                totalPages\n            });\n        }\n    } else {\n        res.status(401).send(\"Your are not authorized\");\n    }\n}, _lib_session__WEBPACK_IMPORTED_MODULE_1__[\"default\"]));\n\n__webpack_async_result__();\n} catch(e) { __webpack_async_result__(e); } });//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,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QyIsInNvdXJjZXMiOlsid2VicGFjazovL3Bvcy8uL3BhZ2VzL2FwaS91bml0L2luZGV4LmpzP2VlMmUiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IGRiIGZyb20gXCIuLi8uLi8uLi9saWIvZGJcIjtcclxuaW1wb3J0IHNlc3Npb24gZnJvbSBcIi4uLy4uLy4uL2xpYi9zZXNzaW9uXCI7XHJcbmltcG9ydCB7d2l0aElyb25TZXNzaW9uQXBpUm91dGV9IGZyb20gJ2lyb24tc2Vzc2lvbi9uZXh0JztcclxuaW1wb3J0IFVuaXRNb2RlbCBmcm9tIFwiLi4vLi4vLi4vbW9kZWxzL1VuaXRcIjtcclxuZXhwb3J0IGRlZmF1bHQgd2l0aElyb25TZXNzaW9uQXBpUm91dGUoYXN5bmMgKHJlcSwgcmVzKSA9PiB7XHJcbiAgICBpZiAocmVxLnNlc3Npb24udXNlcil7XHJcbiAgICAgICAgY29uc3QgbmFtZSA9IHJlcS5ib2R5Lm5hbWU7XHJcbiAgICAgICAgY29uc3QgYWxsID0gcmVxLmJvZHkuYWxsO1xyXG4gICAgICAgIGNvbnN0IHBhZ2UgPSBwYXJzZUZsb2F0KHJlcS5ib2R5LnBhZ2UpO1xyXG4gICAgICAgIGF3YWl0IGRiLmNvbm5lY3QoKTtcclxuICAgICAgICBpZiAobmFtZSAmJiBuYW1lICE9PSAnJyl7XHJcbiAgICAgICAgICAgIGNvbnN0IHRvdGFsID0gYXdhaXQgVW5pdE1vZGVsLmZpbmQoe25hbWU6IG5ldyBSZWdFeHAobmFtZSwgJ2knKSB9KS5jb3VudCgpO1xyXG4gICAgICAgICAgICBjb25zdCB1bml0cyA9IGF3YWl0IFVuaXRNb2RlbC5maW5kKHtuYW1lOiBuZXcgUmVnRXhwKG5hbWUsICdpJykgfSkubGVhbigpO1xyXG4gICAgICAgICAgICBcclxuICAgICAgICAgICAgY29uc3QgdG90YWxQYWdlc0NvdW50ID0gTWF0aC5jZWlsKHRvdGFsIC8gNTApO1xyXG4gICAgICAgICAgICBsZXQgdG90YWxQYWdlcyA9IFtdO1xyXG4gICAgICAgICAgICBmb3IgKGxldCBpID0gMDsgaSA8PSB0b3RhbFBhZ2VzQ291bnQtMTsgaSsrKXtcclxuICAgICAgICAgICAgICAgIHRvdGFsUGFnZXMucHVzaChpKTtcclxuICAgICAgICAgICAgfVxyXG4gICAgICAgICAgICByZXMuc3RhdHVzKDIwMCkuc2VuZCh7dW5pdHMsIHRvdGFsUGFnZXN9KTtcclxuICAgICAgICB9ZWxzZSBpZiAoYWxsICYmIGFsbCA9PT0gdHJ1ZSkge1xyXG4gICAgICAgICAgICBjb25zdCB1bml0cyA9IGF3YWl0IFVuaXRNb2RlbC5maW5kKHt9KTtcclxuICAgICAgICAgICAgXHJcbiAgICAgICAgICAgIHJlcy5zdGF0dXMoMjAwKS5zZW5kKHt1bml0c30pO1xyXG4gICAgICAgIH1lbHNlIHtcclxuICAgICAgICAgICAgY29uc3QgdG90YWwgPSBhd2FpdCBVbml0TW9kZWwuZmluZCh7fSkuY291bnQoKTtcclxuICAgICAgICAgICAgY29uc3QgdW5pdHMgPSBhd2FpdCBVbml0TW9kZWwuZmluZCh7fSkuc2tpcCg1MCpwYWdlKS5saW1pdCg1MCk7XHJcbiAgICAgICAgICAgIFxyXG4gICAgICAgICAgICBjb25zdCB0b3RhbFBhZ2VzQ291bnQgPSBNYXRoLmNlaWwodG90YWwgLyA1MCk7XHJcbiAgICAgICAgICAgIGxldCB0b3RhbFBhZ2VzID0gW107XHJcbiAgICAgICAgICAgIGZvciAobGV0IGkgPSAwOyBpIDw9IHRvdGFsUGFnZXNDb3VudC0xOyBpKyspe1xyXG4gICAgICAgICAgICAgICAgdG90YWxQYWdlcy5wdXNoKGkpO1xyXG4gICAgICAgICAgICB9XHJcbiAgICAgICAgICAgIHJlcy5zdGF0dXMoMjAwKS5zZW5kKHt1bml0cywgdG90YWxQYWdlc30pO1xyXG4gICAgICAgIH1cclxuXHJcbiAgICB9ZWxzZSB7XHJcbiAgICAgICAgcmVzLnN0YXR1cyg0MDEpLnNlbmQoJ1lvdXIgYXJlIG5vdCBhdXRob3JpemVkJylcclxuICAgIH1cclxufSwgc2Vzc2lvbik7Il0sIm5hbWVzIjpbImRiIiwic2Vzc2lvbiIsIndpdGhJcm9uU2Vzc2lvbkFwaVJvdXRlIiwiVW5pdE1vZGVsIiwicmVxIiwicmVzIiwidXNlciIsIm5hbWUiLCJib2R5IiwiYWxsIiwicGFnZSIsInBhcnNlRmxvYXQiLCJjb25uZWN0IiwidG90YWwiLCJmaW5kIiwiUmVnRXhwIiwiY291bnQiLCJ1bml0cyIsImxlYW4iLCJ0b3RhbFBhZ2VzQ291bnQiLCJNYXRoIiwiY2VpbCIsInRvdGFsUGFnZXMiLCJpIiwicHVzaCIsInN0YXR1cyIsInNlbmQiLCJza2lwIiwibGltaXQiXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(api)/./pages/api/unit/index.js\n");
 
+/***/ }),
 
+/***/ "(api)/./node_modules/iron-session/next/dist/index.mjs":
+/*!*******************************************************!*\
+  !*** ./node_modules/iron-session/next/dist/index.mjs ***!
+  \*******************************************************/
+/***/ ((__webpack_module__, __webpack_exports__, __webpack_require__) => {
 
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,iron_session_next__WEBPACK_IMPORTED_MODULE_2__/* .withIronSessionApiRoute */ .n)(async (req, res)=>{
-    if (req.session.user) {
-        const name = req.body.name;
-        const all = req.body.all;
-        const page = parseFloat(req.body.page);
-        await _lib_db__WEBPACK_IMPORTED_MODULE_0__/* ["default"].connect */ .Z.connect();
-        if (name && name !== "") {
-            const total = await _models_Unit__WEBPACK_IMPORTED_MODULE_3__/* ["default"].find */ .Z.find({
-                name: new RegExp(name, "i")
-            }).count();
-            const units = await _models_Unit__WEBPACK_IMPORTED_MODULE_3__/* ["default"].find */ .Z.find({
-                name: new RegExp(name, "i")
-            }).lean();
-            const totalPagesCount = Math.ceil(total / 50);
-            let totalPages = [];
-            for(let i = 0; i <= totalPagesCount - 1; i++){
-                totalPages.push(i);
-            }
-            res.status(200).send({
-                units,
-                totalPages
-            });
-        } else if (all && all === true) {
-            const units = await _models_Unit__WEBPACK_IMPORTED_MODULE_3__/* ["default"].find */ .Z.find({});
-            res.status(200).send({
-                units
-            });
-        } else {
-            const total = await _models_Unit__WEBPACK_IMPORTED_MODULE_3__/* ["default"].find */ .Z.find({}).count();
-            const units = await _models_Unit__WEBPACK_IMPORTED_MODULE_3__/* ["default"].find */ .Z.find({}).skip(50 * page).limit(50);
-            const totalPagesCount = Math.ceil(total / 50);
-            let totalPages = [];
-            for(let i = 0; i <= totalPagesCount - 1; i++){
-                totalPages.push(i);
-            }
-            res.status(200).send({
-                units,
-                totalPages
-            });
-        }
-    } else {
-        res.status(401).send("Your are not authorized");
-    }
-}, _lib_session__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z));
-
-__webpack_async_result__();
-} catch(e) { __webpack_async_result__(e); } });
+eval("__webpack_require__.a(__webpack_module__, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {\n__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"withIronSessionApiRoute\": () => (/* binding */ withIronSessionApiRoute),\n/* harmony export */   \"withIronSessionSsr\": () => (/* binding */ withIronSessionSsr)\n/* harmony export */ });\n/* harmony import */ var iron_session__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! iron-session */ \"iron-session\");\nvar __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([iron_session__WEBPACK_IMPORTED_MODULE_0__]);\niron_session__WEBPACK_IMPORTED_MODULE_0__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];\n// next/index.ts\n\n\n// src/getPropertyDescriptorForReqSession.ts\nfunction getPropertyDescriptorForReqSession(session) {\n  return {\n    enumerable: true,\n    get() {\n      return session;\n    },\n    set(value) {\n      const keys = Object.keys(value);\n      const currentKeys = Object.keys(session);\n      currentKeys.forEach((key) => {\n        if (!keys.includes(key)) {\n          delete session[key];\n        }\n      });\n      keys.forEach((key) => {\n        session[key] = value[key];\n      });\n    }\n  };\n}\n\n// next/index.ts\nfunction withIronSessionApiRoute(handler, options) {\n  return async function nextApiHandlerWrappedWithIronSession(req, res) {\n    let sessionOptions;\n    if (options instanceof Function) {\n      sessionOptions = await options(req, res);\n    } else {\n      sessionOptions = options;\n    }\n    const session = await (0,iron_session__WEBPACK_IMPORTED_MODULE_0__.getIronSession)(req, res, sessionOptions);\n    Object.defineProperty(req, \"session\", getPropertyDescriptorForReqSession(session));\n    return handler(req, res);\n  };\n}\nfunction withIronSessionSsr(handler, options) {\n  return async function nextGetServerSidePropsHandlerWrappedWithIronSession(context) {\n    let sessionOptions;\n    if (options instanceof Function) {\n      sessionOptions = await options(context.req, context.res);\n    } else {\n      sessionOptions = options;\n    }\n    const session = await (0,iron_session__WEBPACK_IMPORTED_MODULE_0__.getIronSession)(context.req, context.res, sessionOptions);\n    Object.defineProperty(context.req, \"session\", getPropertyDescriptorForReqSession(session));\n    return handler(context);\n  };\n}\n\n//# sourceMappingURL=index.mjs.map\n\n__webpack_async_result__();\n} catch(e) { __webpack_async_result__(e); } });//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi9ub2RlX21vZHVsZXMvaXJvbi1zZXNzaW9uL25leHQvZGlzdC9pbmRleC5tanMuanMiLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7O0FBQUE7QUFDOEM7O0FBRTlDO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLEtBQUs7QUFDTDtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLE9BQU87QUFDUDtBQUNBO0FBQ0EsT0FBTztBQUNQO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxNQUFNO0FBQ047QUFDQTtBQUNBLDBCQUEwQiw0REFBYztBQUN4QztBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxNQUFNO0FBQ047QUFDQTtBQUNBLDBCQUEwQiw0REFBYztBQUN4QztBQUNBO0FBQ0E7QUFDQTtBQUlFO0FBQ0YiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9wb3MvLi9ub2RlX21vZHVsZXMvaXJvbi1zZXNzaW9uL25leHQvZGlzdC9pbmRleC5tanM/YzIwYiJdLCJzb3VyY2VzQ29udGVudCI6WyIvLyBuZXh0L2luZGV4LnRzXG5pbXBvcnQgeyBnZXRJcm9uU2Vzc2lvbiB9IGZyb20gXCJpcm9uLXNlc3Npb25cIjtcblxuLy8gc3JjL2dldFByb3BlcnR5RGVzY3JpcHRvckZvclJlcVNlc3Npb24udHNcbmZ1bmN0aW9uIGdldFByb3BlcnR5RGVzY3JpcHRvckZvclJlcVNlc3Npb24oc2Vzc2lvbikge1xuICByZXR1cm4ge1xuICAgIGVudW1lcmFibGU6IHRydWUsXG4gICAgZ2V0KCkge1xuICAgICAgcmV0dXJuIHNlc3Npb247XG4gICAgfSxcbiAgICBzZXQodmFsdWUpIHtcbiAgICAgIGNvbnN0IGtleXMgPSBPYmplY3Qua2V5cyh2YWx1ZSk7XG4gICAgICBjb25zdCBjdXJyZW50S2V5cyA9IE9iamVjdC5rZXlzKHNlc3Npb24pO1xuICAgICAgY3VycmVudEtleXMuZm9yRWFjaCgoa2V5KSA9PiB7XG4gICAgICAgIGlmICgha2V5cy5pbmNsdWRlcyhrZXkpKSB7XG4gICAgICAgICAgZGVsZXRlIHNlc3Npb25ba2V5XTtcbiAgICAgICAgfVxuICAgICAgfSk7XG4gICAgICBrZXlzLmZvckVhY2goKGtleSkgPT4ge1xuICAgICAgICBzZXNzaW9uW2tleV0gPSB2YWx1ZVtrZXldO1xuICAgICAgfSk7XG4gICAgfVxuICB9O1xufVxuXG4vLyBuZXh0L2luZGV4LnRzXG5mdW5jdGlvbiB3aXRoSXJvblNlc3Npb25BcGlSb3V0ZShoYW5kbGVyLCBvcHRpb25zKSB7XG4gIHJldHVybiBhc3luYyBmdW5jdGlvbiBuZXh0QXBpSGFuZGxlcldyYXBwZWRXaXRoSXJvblNlc3Npb24ocmVxLCByZXMpIHtcbiAgICBsZXQgc2Vzc2lvbk9wdGlvbnM7XG4gICAgaWYgKG9wdGlvbnMgaW5zdGFuY2VvZiBGdW5jdGlvbikge1xuICAgICAgc2Vzc2lvbk9wdGlvbnMgPSBhd2FpdCBvcHRpb25zKHJlcSwgcmVzKTtcbiAgICB9IGVsc2Uge1xuICAgICAgc2Vzc2lvbk9wdGlvbnMgPSBvcHRpb25zO1xuICAgIH1cbiAgICBjb25zdCBzZXNzaW9uID0gYXdhaXQgZ2V0SXJvblNlc3Npb24ocmVxLCByZXMsIHNlc3Npb25PcHRpb25zKTtcbiAgICBPYmplY3QuZGVmaW5lUHJvcGVydHkocmVxLCBcInNlc3Npb25cIiwgZ2V0UHJvcGVydHlEZXNjcmlwdG9yRm9yUmVxU2Vzc2lvbihzZXNzaW9uKSk7XG4gICAgcmV0dXJuIGhhbmRsZXIocmVxLCByZXMpO1xuICB9O1xufVxuZnVuY3Rpb24gd2l0aElyb25TZXNzaW9uU3NyKGhhbmRsZXIsIG9wdGlvbnMpIHtcbiAgcmV0dXJuIGFzeW5jIGZ1bmN0aW9uIG5leHRHZXRTZXJ2ZXJTaWRlUHJvcHNIYW5kbGVyV3JhcHBlZFdpdGhJcm9uU2Vzc2lvbihjb250ZXh0KSB7XG4gICAgbGV0IHNlc3Npb25PcHRpb25zO1xuICAgIGlmIChvcHRpb25zIGluc3RhbmNlb2YgRnVuY3Rpb24pIHtcbiAgICAgIHNlc3Npb25PcHRpb25zID0gYXdhaXQgb3B0aW9ucyhjb250ZXh0LnJlcSwgY29udGV4dC5yZXMpO1xuICAgIH0gZWxzZSB7XG4gICAgICBzZXNzaW9uT3B0aW9ucyA9IG9wdGlvbnM7XG4gICAgfVxuICAgIGNvbnN0IHNlc3Npb24gPSBhd2FpdCBnZXRJcm9uU2Vzc2lvbihjb250ZXh0LnJlcSwgY29udGV4dC5yZXMsIHNlc3Npb25PcHRpb25zKTtcbiAgICBPYmplY3QuZGVmaW5lUHJvcGVydHkoY29udGV4dC5yZXEsIFwic2Vzc2lvblwiLCBnZXRQcm9wZXJ0eURlc2NyaXB0b3JGb3JSZXFTZXNzaW9uKHNlc3Npb24pKTtcbiAgICByZXR1cm4gaGFuZGxlcihjb250ZXh0KTtcbiAgfTtcbn1cbmV4cG9ydCB7XG4gIHdpdGhJcm9uU2Vzc2lvbkFwaVJvdXRlLFxuICB3aXRoSXJvblNlc3Npb25Tc3Jcbn07XG4vLyMgc291cmNlTWFwcGluZ1VSTD1pbmRleC5tanMubWFwXG4iXSwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///(api)/./node_modules/iron-session/next/dist/index.mjs\n");
 
 /***/ })
 
@@ -94,7 +90,7 @@ __webpack_async_result__();
 var __webpack_require__ = require("../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [8534,782], () => (__webpack_exec__(3391)));
+var __webpack_exports__ = (__webpack_exec__("(api)/./pages/api/unit/index.js"));
 module.exports = __webpack_exports__;
 
 })();

@@ -1,164 +1,95 @@
 "use strict";
+/*
+ * ATTENTION: An "eval-source-map" devtool has been used.
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
 (() => {
 var exports = {};
-exports.id = 3908;
-exports.ids = [3908];
+exports.id = "pages/api/auth/login";
+exports.ids = ["pages/api/auth/login"];
 exports.modules = {
 
-/***/ 8432:
+/***/ "bcryptjs":
+/*!***************************!*\
+  !*** external "bcryptjs" ***!
+  \***************************/
 /***/ ((module) => {
 
 module.exports = require("bcryptjs");
 
 /***/ }),
 
-/***/ 1185:
+/***/ "mongoose":
+/*!***************************!*\
+  !*** external "mongoose" ***!
+  \***************************/
 /***/ ((module) => {
 
 module.exports = require("mongoose");
 
 /***/ }),
 
-/***/ 4014:
+/***/ "iron-session":
+/*!*******************************!*\
+  !*** external "iron-session" ***!
+  \*******************************/
 /***/ ((module) => {
 
 module.exports = import("iron-session");;
 
 /***/ }),
 
-/***/ 2759:
+/***/ "(api)/./lib/db.js":
+/*!*******************!*\
+  !*** ./lib/db.js ***!
+  \*******************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Z": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1185);
-/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);
-
-const connection = {};
-async function connect() {
-    if (connection.isConnected) {
-        return;
-    }
-    if ((mongoose__WEBPACK_IMPORTED_MODULE_0___default().connections.length) > 0) {
-        connection.isConnected = (mongoose__WEBPACK_IMPORTED_MODULE_0___default().connections[0].readyState);
-        if (connection.isConnected === 1) {
-            return;
-        }
-        await mongoose__WEBPACK_IMPORTED_MODULE_0___default().disconnect();
-    }
-    await mongoose__WEBPACK_IMPORTED_MODULE_0___default().connect(process.env.MONGODB_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    });
-    connection.isConnected = (mongoose__WEBPACK_IMPORTED_MODULE_0___default().connections[0].readyState);
-}
-const db = {
-    connect
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (db);
-
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mongoose */ \"mongoose\");\n/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);\n\nconst connection = {};\nasync function connect() {\n    if (connection.isConnected) {\n        return;\n    }\n    if ((mongoose__WEBPACK_IMPORTED_MODULE_0___default().connections.length) > 0) {\n        connection.isConnected = (mongoose__WEBPACK_IMPORTED_MODULE_0___default().connections[0].readyState);\n        if (connection.isConnected === 1) {\n            return;\n        }\n        await mongoose__WEBPACK_IMPORTED_MODULE_0___default().disconnect();\n    }\n    await mongoose__WEBPACK_IMPORTED_MODULE_0___default().connect(process.env.MONGODB_URI, {\n        useNewUrlParser: true,\n        useUnifiedTopology: true\n    });\n    connection.isConnected = (mongoose__WEBPACK_IMPORTED_MODULE_0___default().connections[0].readyState);\n}\nconst db = {\n    connect\n};\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (db);\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi9saWIvZGIuanMuanMiLCJtYXBwaW5ncyI6Ijs7Ozs7O0FBQWdDO0FBQ2hDLE1BQU1DLFVBQVUsR0FBRyxFQUFFO0FBQ3JCLGVBQWVDLE9BQU8sR0FBRztJQUNyQixJQUFJRCxVQUFVLENBQUNFLFdBQVcsRUFBRTtRQUN4QixPQUFPO0tBQ1Y7SUFDRCxJQUFJSCxvRUFBMkIsR0FBRyxDQUFDLEVBQUU7UUFDakNDLFVBQVUsQ0FBQ0UsV0FBVyxHQUFHSCwyRUFBa0MsQ0FBQztRQUM1RCxJQUFJQyxVQUFVLENBQUNFLFdBQVcsS0FBSyxDQUFDLEVBQUU7WUFDOUIsT0FBTztTQUNWO1FBQ0QsTUFBTUgsMERBQW1CLEVBQUUsQ0FBQztLQUMvQjtJQUNELE1BQU1BLHVEQUFnQixDQUFDUSxPQUFPLENBQUNDLEdBQUcsQ0FBQ0MsV0FBVyxFQUFFO1FBQzVDQyxlQUFlLEVBQUUsSUFBSTtRQUNyQkMsa0JBQWtCLEVBQUUsSUFBSTtLQUMzQixDQUFDLENBQUM7SUFDSFgsVUFBVSxDQUFDRSxXQUFXLEdBQUdILDJFQUFrQyxDQUFDO0NBQy9EO0FBRUQsTUFBTWEsRUFBRSxHQUFHO0lBQUNYLE9BQU87Q0FBQztBQUNwQixpRUFBZVcsRUFBRSxFQUFDIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vcG9zLy4vbGliL2RiLmpzPzNkYzkiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IG1vbmdvb3NlIGZyb20gJ21vbmdvb3NlJztcclxuY29uc3QgY29ubmVjdGlvbiA9IHt9O1xyXG5hc3luYyBmdW5jdGlvbiBjb25uZWN0KCkge1xyXG4gICAgaWYgKGNvbm5lY3Rpb24uaXNDb25uZWN0ZWQpIHtcclxuICAgICAgICByZXR1cm47XHJcbiAgICB9XHJcbiAgICBpZiAobW9uZ29vc2UuY29ubmVjdGlvbnMubGVuZ3RoID4gMCkge1xyXG4gICAgICAgIGNvbm5lY3Rpb24uaXNDb25uZWN0ZWQgPSBtb25nb29zZS5jb25uZWN0aW9uc1swXS5yZWFkeVN0YXRlO1xyXG4gICAgICAgIGlmIChjb25uZWN0aW9uLmlzQ29ubmVjdGVkID09PSAxKSB7XHJcbiAgICAgICAgICAgIHJldHVybjtcclxuICAgICAgICB9XHJcbiAgICAgICAgYXdhaXQgbW9uZ29vc2UuZGlzY29ubmVjdCgpO1xyXG4gICAgfVxyXG4gICAgYXdhaXQgbW9uZ29vc2UuY29ubmVjdChwcm9jZXNzLmVudi5NT05HT0RCX1VSSSwge1xyXG4gICAgICAgIHVzZU5ld1VybFBhcnNlcjogdHJ1ZSxcclxuICAgICAgICB1c2VVbmlmaWVkVG9wb2xvZ3k6IHRydWVcclxuICAgIH0pO1xyXG4gICAgY29ubmVjdGlvbi5pc0Nvbm5lY3RlZCA9IG1vbmdvb3NlLmNvbm5lY3Rpb25zWzBdLnJlYWR5U3RhdGU7XHJcbn1cclxuXHJcbmNvbnN0IGRiID0ge2Nvbm5lY3R9O1xyXG5leHBvcnQgZGVmYXVsdCBkYjtcclxuIl0sIm5hbWVzIjpbIm1vbmdvb3NlIiwiY29ubmVjdGlvbiIsImNvbm5lY3QiLCJpc0Nvbm5lY3RlZCIsImNvbm5lY3Rpb25zIiwibGVuZ3RoIiwicmVhZHlTdGF0ZSIsImRpc2Nvbm5lY3QiLCJwcm9jZXNzIiwiZW52IiwiTU9OR09EQl9VUkkiLCJ1c2VOZXdVcmxQYXJzZXIiLCJ1c2VVbmlmaWVkVG9wb2xvZ3kiLCJkYiJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///(api)/./lib/db.js\n");
 
 /***/ }),
 
-/***/ 2182:
+/***/ "(api)/./lib/session.js":
+/*!************************!*\
+  !*** ./lib/session.js ***!
+  \************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Z": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-const session = {
-    cookieName: "sm-pos",
-    password: "s%3Al3ozSdvQ83TtC5RvJ.CibaQoHtaY0H3QOB1kqR8H2A",
-    cookieOptions: {
-        secure: true
-    }
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (session);
-
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\nconst session = {\n    cookieName: \"sm-pos\",\n    password: \"s%3Al3ozSdvQ83TtC5RvJ.CibaQoHtaY0H3QOB1kqR8H2A\",\n    cookieOptions: {\n        secure: true\n    }\n};\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (session);\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi9saWIvc2Vzc2lvbi5qcy5qcyIsIm1hcHBpbmdzIjoiOzs7O0FBQUEsTUFBTUEsT0FBTyxHQUFHO0lBQ1pDLFVBQVUsRUFBRSxRQUFRO0lBQ3BCQyxRQUFRLEVBQUUsZ0RBQWdEO0lBQzFEQyxhQUFhLEVBQUU7UUFDWEMsTUFBTSxFQUFFLElBQUk7S0FDZjtDQUNKO0FBQ0QsaUVBQWVKLE9BQU8sRUFBQyIsInNvdXJjZXMiOlsid2VicGFjazovL3Bvcy8uL2xpYi9zZXNzaW9uLmpzP2ZmOWMiXSwic291cmNlc0NvbnRlbnQiOlsiY29uc3Qgc2Vzc2lvbiA9IHtcclxuICAgIGNvb2tpZU5hbWU6ICdzbS1wb3MnLFxyXG4gICAgcGFzc3dvcmQ6ICdzJTNBbDNvelNkdlE4M1R0QzVSdkouQ2liYVFvSHRhWTBIM1FPQjFrcVI4SDJBJyxcclxuICAgIGNvb2tpZU9wdGlvbnM6IHtcclxuICAgICAgICBzZWN1cmU6IHRydWUsXHJcbiAgICB9LFxyXG59O1xyXG5leHBvcnQgZGVmYXVsdCBzZXNzaW9uOyJdLCJuYW1lcyI6WyJzZXNzaW9uIiwiY29va2llTmFtZSIsInBhc3N3b3JkIiwiY29va2llT3B0aW9ucyIsInNlY3VyZSJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///(api)/./lib/session.js\n");
 
 /***/ }),
 
-/***/ 6274:
+/***/ "(api)/./models/User.js":
+/*!************************!*\
+  !*** ./models/User.js ***!
+  \************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Z": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1185);
-/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);
-
-const userSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema)({
-    name: {
-        type: String,
-        required: true
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    role: {
-        type: String,
-        required: true
-    }
-}, {
-    timestamps: true,
-    strict: false
-});
-const User = (mongoose__WEBPACK_IMPORTED_MODULE_0___default().models.User) || mongoose__WEBPACK_IMPORTED_MODULE_0___default().model("User", userSchema);
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (User);
-
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mongoose */ \"mongoose\");\n/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);\n\nconst userSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema)({\n    name: {\n        type: String,\n        required: true\n    },\n    email: {\n        type: String,\n        required: true,\n        unique: true\n    },\n    password: {\n        type: String,\n        required: true\n    },\n    role: {\n        type: String,\n        required: true\n    }\n}, {\n    timestamps: true,\n    strict: false\n});\nconst User = (mongoose__WEBPACK_IMPORTED_MODULE_0___default().models.User) || mongoose__WEBPACK_IMPORTED_MODULE_0___default().model(\"User\", userSchema);\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (User);\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi9tb2RlbHMvVXNlci5qcy5qcyIsIm1hcHBpbmdzIjoiOzs7Ozs7QUFBZ0M7QUFDaEMsTUFBTUMsVUFBVSxHQUFHLElBQUlELHdEQUFlLENBQ2xDO0lBQ0lHLElBQUksRUFBRTtRQUNGQyxJQUFJLEVBQUVDLE1BQU07UUFDWkMsUUFBUSxFQUFFLElBQUk7S0FDakI7SUFDREMsS0FBSyxFQUFFO1FBQ0hILElBQUksRUFBRUMsTUFBTTtRQUNaQyxRQUFRLEVBQUUsSUFBSTtRQUNkRSxNQUFNLEVBQUUsSUFBSTtLQUNmO0lBQ0RDLFFBQVEsRUFBRTtRQUNOTCxJQUFJLEVBQUVDLE1BQU07UUFDWkMsUUFBUSxFQUFFLElBQUk7S0FDakI7SUFDREksSUFBSSxFQUFFO1FBQ0ZOLElBQUksRUFBRUMsTUFBTTtRQUNaQyxRQUFRLEVBQUUsSUFBSTtLQUNqQjtDQUNKLEVBQ0Q7SUFDSUssVUFBVSxFQUFFLElBQUk7SUFDaEJDLE1BQU0sRUFBRSxLQUFLO0NBQ2hCLENBQ0o7QUFFRCxNQUFNQyxJQUFJLEdBQUdiLDZEQUFvQixJQUFJQSxxREFBYyxDQUFDLE1BQU0sRUFBRUMsVUFBVSxDQUFDO0FBQ3ZFLGlFQUFlWSxJQUFJLEVBQUMiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9wb3MvLi9tb2RlbHMvVXNlci5qcz83MzY3Il0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBtb25nb29zZSBmcm9tICdtb25nb29zZSc7XHJcbmNvbnN0IHVzZXJTY2hlbWEgPSBuZXcgbW9uZ29vc2UuU2NoZW1hKFxyXG4gICAge1xyXG4gICAgICAgIG5hbWU6IHtcclxuICAgICAgICAgICAgdHlwZTogU3RyaW5nLFxyXG4gICAgICAgICAgICByZXF1aXJlZDogdHJ1ZSxcclxuICAgICAgICB9LFxyXG4gICAgICAgIGVtYWlsOiB7XHJcbiAgICAgICAgICAgIHR5cGU6IFN0cmluZyxcclxuICAgICAgICAgICAgcmVxdWlyZWQ6IHRydWUsXHJcbiAgICAgICAgICAgIHVuaXF1ZTogdHJ1ZSxcclxuICAgICAgICB9LFxyXG4gICAgICAgIHBhc3N3b3JkOiB7XHJcbiAgICAgICAgICAgIHR5cGU6IFN0cmluZyxcclxuICAgICAgICAgICAgcmVxdWlyZWQ6IHRydWUsXHJcbiAgICAgICAgfSxcclxuICAgICAgICByb2xlOiB7XHJcbiAgICAgICAgICAgIHR5cGU6IFN0cmluZyxcclxuICAgICAgICAgICAgcmVxdWlyZWQ6IHRydWUsXHJcbiAgICAgICAgfSxcclxuICAgIH0sXHJcbiAgICB7XHJcbiAgICAgICAgdGltZXN0YW1wczogdHJ1ZSxcclxuICAgICAgICBzdHJpY3Q6IGZhbHNlXHJcbiAgICB9XHJcbik7XHJcblxyXG5jb25zdCBVc2VyID0gbW9uZ29vc2UubW9kZWxzLlVzZXIgfHwgbW9uZ29vc2UubW9kZWwoJ1VzZXInLCB1c2VyU2NoZW1hKTtcclxuZXhwb3J0IGRlZmF1bHQgVXNlcjtcclxuIl0sIm5hbWVzIjpbIm1vbmdvb3NlIiwidXNlclNjaGVtYSIsIlNjaGVtYSIsIm5hbWUiLCJ0eXBlIiwiU3RyaW5nIiwicmVxdWlyZWQiLCJlbWFpbCIsInVuaXF1ZSIsInBhc3N3b3JkIiwicm9sZSIsInRpbWVzdGFtcHMiLCJzdHJpY3QiLCJVc2VyIiwibW9kZWxzIiwibW9kZWwiXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(api)/./models/User.js\n");
 
 /***/ }),
 
-/***/ 6205:
+/***/ "(api)/./pages/api/auth/login.js":
+/*!*********************************!*\
+  !*** ./pages/api/auth/login.js ***!
+  \*********************************/
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
-__webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _lib_db__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2759);
-/* harmony import */ var iron_session_next__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8534);
-/* harmony import */ var _lib_session__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2182);
-/* harmony import */ var _models_User__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6274);
-/* harmony import */ var bcryptjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(8432);
-/* harmony import */ var bcryptjs__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(bcryptjs__WEBPACK_IMPORTED_MODULE_4__);
-var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([iron_session_next__WEBPACK_IMPORTED_MODULE_1__]);
-iron_session_next__WEBPACK_IMPORTED_MODULE_1__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
+eval("__webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {\n__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _lib_db__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../lib/db */ \"(api)/./lib/db.js\");\n/* harmony import */ var iron_session_next__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! iron-session/next */ \"(api)/./node_modules/iron-session/next/dist/index.mjs\");\n/* harmony import */ var _lib_session__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../lib/session */ \"(api)/./lib/session.js\");\n/* harmony import */ var _models_User__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../models/User */ \"(api)/./models/User.js\");\n/* harmony import */ var bcryptjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! bcryptjs */ \"bcryptjs\");\n/* harmony import */ var bcryptjs__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(bcryptjs__WEBPACK_IMPORTED_MODULE_4__);\nvar __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([iron_session_next__WEBPACK_IMPORTED_MODULE_1__]);\niron_session_next__WEBPACK_IMPORTED_MODULE_1__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];\n\n\n\n\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,iron_session_next__WEBPACK_IMPORTED_MODULE_1__.withIronSessionApiRoute)(async (req, res)=>{\n    const email = req.body.email;\n    const password = req.body.password;\n    await _lib_db__WEBPACK_IMPORTED_MODULE_0__[\"default\"].connect();\n    const user = await _models_User__WEBPACK_IMPORTED_MODULE_3__[\"default\"].findOne({\n        email: email\n    });\n    if (user && bcryptjs__WEBPACK_IMPORTED_MODULE_4___default().compareSync(password, user.password)) {\n        req.session.user = {\n            id: user._id,\n            name: user.name,\n            email: user.email\n        };\n        await req.session.save();\n        res.status(201).send(\"Logged In\");\n    } else {\n        res.status(401).send(\"Invalid credentials\");\n    }\n}, _lib_session__WEBPACK_IMPORTED_MODULE_2__[\"default\"]));\n\n__webpack_async_result__();\n} catch(e) { __webpack_async_result__(e); } });//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi9wYWdlcy9hcGkvYXV0aC9sb2dpbi5qcy5qcyIsIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7O0FBQWlDO0FBQ3lCO0FBQ2Y7QUFDSDtBQUNSO0FBRWhDLGlFQUFlQywwRUFBdUIsQ0FBQyxPQUFPSSxHQUFHLEVBQUVDLEdBQUcsR0FBSztJQUN2RCxNQUFNQyxLQUFLLEdBQUdGLEdBQUcsQ0FBQ0csSUFBSSxDQUFDRCxLQUFLO0lBQzVCLE1BQU1FLFFBQVEsR0FBR0osR0FBRyxDQUFDRyxJQUFJLENBQUNDLFFBQVE7SUFDbEMsTUFBTVQsdURBQVUsRUFBRSxDQUFDO0lBQ25CLE1BQU1XLElBQUksR0FBRyxNQUFNUiw0REFBWSxDQUFDO1FBQUVJLEtBQUssRUFBRUEsS0FBSztLQUFFLENBQUM7SUFFakQsSUFDSUksSUFBSSxJQUNKUCwyREFBb0IsQ0FBQ0ssUUFBUSxFQUFFRSxJQUFJLENBQUNGLFFBQVEsQ0FBQyxFQUMvQztRQUNFSixHQUFHLENBQUNILE9BQU8sQ0FBQ1MsSUFBSSxHQUFHO1lBQ2ZHLEVBQUUsRUFBRUgsSUFBSSxDQUFDSSxHQUFHO1lBQ1pDLElBQUksRUFBRUwsSUFBSSxDQUFDSyxJQUFJO1lBQ2ZULEtBQUssRUFBRUksSUFBSSxDQUFDSixLQUFLO1NBQ3BCLENBQUM7UUFDRixNQUFNRixHQUFHLENBQUNILE9BQU8sQ0FBQ2UsSUFBSSxFQUFFLENBQUM7UUFDekJYLEdBQUcsQ0FBQ1ksTUFBTSxDQUFDLEdBQUcsQ0FBQyxDQUFDQyxJQUFJLENBQUMsV0FBVyxDQUFDLENBQUM7S0FDckMsTUFBTTtRQUNIYixHQUFHLENBQUNZLE1BQU0sQ0FBQyxHQUFHLENBQUMsQ0FBQ0MsSUFBSSxDQUFDLHFCQUFxQixDQUFDLENBQUM7S0FDL0M7Q0FDSixFQUFFakIsb0RBQU8sQ0FBQyxFQUFDIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vcG9zLy4vcGFnZXMvYXBpL2F1dGgvbG9naW4uanM/MTMxNyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgZGIgZnJvbSAnLi4vLi4vLi4vbGliL2RiJztcclxuaW1wb3J0IHt3aXRoSXJvblNlc3Npb25BcGlSb3V0ZX0gZnJvbSAnaXJvbi1zZXNzaW9uL25leHQnO1xyXG5pbXBvcnQgc2Vzc2lvbiBmcm9tICcuLi8uLi8uLi9saWIvc2Vzc2lvbic7XHJcbmltcG9ydCBVc2VyIGZyb20gXCIuLi8uLi8uLi9tb2RlbHMvVXNlclwiO1xyXG5pbXBvcnQgYmNyeXB0anMgZnJvbSBcImJjcnlwdGpzXCI7XHJcblxyXG5leHBvcnQgZGVmYXVsdCB3aXRoSXJvblNlc3Npb25BcGlSb3V0ZShhc3luYyAocmVxLCByZXMpID0+IHtcclxuICAgIGNvbnN0IGVtYWlsID0gcmVxLmJvZHkuZW1haWw7XHJcbiAgICBjb25zdCBwYXNzd29yZCA9IHJlcS5ib2R5LnBhc3N3b3JkO1xyXG4gICAgYXdhaXQgZGIuY29ubmVjdCgpO1xyXG4gICAgY29uc3QgdXNlciA9IGF3YWl0IFVzZXIuZmluZE9uZSh7IGVtYWlsOiBlbWFpbCB9KTtcclxuICAgIFxyXG4gICAgaWYgKFxyXG4gICAgICAgIHVzZXIgJiZcclxuICAgICAgICBiY3J5cHRqcy5jb21wYXJlU3luYyhwYXNzd29yZCwgdXNlci5wYXNzd29yZClcclxuICAgICkge1xyXG4gICAgICAgIHJlcS5zZXNzaW9uLnVzZXIgPSB7XHJcbiAgICAgICAgICAgIGlkOiB1c2VyLl9pZCxcclxuICAgICAgICAgICAgbmFtZTogdXNlci5uYW1lLFxyXG4gICAgICAgICAgICBlbWFpbDogdXNlci5lbWFpbCxcclxuICAgICAgICB9O1xyXG4gICAgICAgIGF3YWl0IHJlcS5zZXNzaW9uLnNhdmUoKTtcclxuICAgICAgICByZXMuc3RhdHVzKDIwMSkuc2VuZCgnTG9nZ2VkIEluJyk7XHJcbiAgICB9IGVsc2Uge1xyXG4gICAgICAgIHJlcy5zdGF0dXMoNDAxKS5zZW5kKCdJbnZhbGlkIGNyZWRlbnRpYWxzJyk7XHJcbiAgICB9XHJcbn0sIHNlc3Npb24pOyJdLCJuYW1lcyI6WyJkYiIsIndpdGhJcm9uU2Vzc2lvbkFwaVJvdXRlIiwic2Vzc2lvbiIsIlVzZXIiLCJiY3J5cHRqcyIsInJlcSIsInJlcyIsImVtYWlsIiwiYm9keSIsInBhc3N3b3JkIiwiY29ubmVjdCIsInVzZXIiLCJmaW5kT25lIiwiY29tcGFyZVN5bmMiLCJpZCIsIl9pZCIsIm5hbWUiLCJzYXZlIiwic3RhdHVzIiwic2VuZCJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///(api)/./pages/api/auth/login.js\n");
 
+/***/ }),
 
+/***/ "(api)/./node_modules/iron-session/next/dist/index.mjs":
+/*!*******************************************************!*\
+  !*** ./node_modules/iron-session/next/dist/index.mjs ***!
+  \*******************************************************/
+/***/ ((__webpack_module__, __webpack_exports__, __webpack_require__) => {
 
-
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,iron_session_next__WEBPACK_IMPORTED_MODULE_1__/* .withIronSessionApiRoute */ .n)(async (req, res)=>{
-    const email = req.body.email;
-    const password = req.body.password;
-    await _lib_db__WEBPACK_IMPORTED_MODULE_0__/* ["default"].connect */ .Z.connect();
-    const user = await _models_User__WEBPACK_IMPORTED_MODULE_3__/* ["default"].findOne */ .Z.findOne({
-        email: email
-    });
-    if (user && bcryptjs__WEBPACK_IMPORTED_MODULE_4___default().compareSync(password, user.password)) {
-        req.session.user = {
-            id: user._id,
-            name: user.name,
-            email: user.email
-        };
-        await req.session.save();
-        res.status(201).send("Logged In");
-    } else {
-        res.status(401).send("Invalid credentials");
-    }
-}, _lib_session__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .Z));
-
-__webpack_async_result__();
-} catch(e) { __webpack_async_result__(e); } });
+eval("__webpack_require__.a(__webpack_module__, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {\n__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"withIronSessionApiRoute\": () => (/* binding */ withIronSessionApiRoute),\n/* harmony export */   \"withIronSessionSsr\": () => (/* binding */ withIronSessionSsr)\n/* harmony export */ });\n/* harmony import */ var iron_session__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! iron-session */ \"iron-session\");\nvar __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([iron_session__WEBPACK_IMPORTED_MODULE_0__]);\niron_session__WEBPACK_IMPORTED_MODULE_0__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];\n// next/index.ts\n\n\n// src/getPropertyDescriptorForReqSession.ts\nfunction getPropertyDescriptorForReqSession(session) {\n  return {\n    enumerable: true,\n    get() {\n      return session;\n    },\n    set(value) {\n      const keys = Object.keys(value);\n      const currentKeys = Object.keys(session);\n      currentKeys.forEach((key) => {\n        if (!keys.includes(key)) {\n          delete session[key];\n        }\n      });\n      keys.forEach((key) => {\n        session[key] = value[key];\n      });\n    }\n  };\n}\n\n// next/index.ts\nfunction withIronSessionApiRoute(handler, options) {\n  return async function nextApiHandlerWrappedWithIronSession(req, res) {\n    let sessionOptions;\n    if (options instanceof Function) {\n      sessionOptions = await options(req, res);\n    } else {\n      sessionOptions = options;\n    }\n    const session = await (0,iron_session__WEBPACK_IMPORTED_MODULE_0__.getIronSession)(req, res, sessionOptions);\n    Object.defineProperty(req, \"session\", getPropertyDescriptorForReqSession(session));\n    return handler(req, res);\n  };\n}\nfunction withIronSessionSsr(handler, options) {\n  return async function nextGetServerSidePropsHandlerWrappedWithIronSession(context) {\n    let sessionOptions;\n    if (options instanceof Function) {\n      sessionOptions = await options(context.req, context.res);\n    } else {\n      sessionOptions = options;\n    }\n    const session = await (0,iron_session__WEBPACK_IMPORTED_MODULE_0__.getIronSession)(context.req, context.res, sessionOptions);\n    Object.defineProperty(context.req, \"session\", getPropertyDescriptorForReqSession(session));\n    return handler(context);\n  };\n}\n\n//# sourceMappingURL=index.mjs.map\n\n__webpack_async_result__();\n} catch(e) { __webpack_async_result__(e); } });//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi9ub2RlX21vZHVsZXMvaXJvbi1zZXNzaW9uL25leHQvZGlzdC9pbmRleC5tanMuanMiLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7O0FBQUE7QUFDOEM7O0FBRTlDO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLEtBQUs7QUFDTDtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLE9BQU87QUFDUDtBQUNBO0FBQ0EsT0FBTztBQUNQO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxNQUFNO0FBQ047QUFDQTtBQUNBLDBCQUEwQiw0REFBYztBQUN4QztBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxNQUFNO0FBQ047QUFDQTtBQUNBLDBCQUEwQiw0REFBYztBQUN4QztBQUNBO0FBQ0E7QUFDQTtBQUlFO0FBQ0YiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9wb3MvLi9ub2RlX21vZHVsZXMvaXJvbi1zZXNzaW9uL25leHQvZGlzdC9pbmRleC5tanM/YzIwYiJdLCJzb3VyY2VzQ29udGVudCI6WyIvLyBuZXh0L2luZGV4LnRzXG5pbXBvcnQgeyBnZXRJcm9uU2Vzc2lvbiB9IGZyb20gXCJpcm9uLXNlc3Npb25cIjtcblxuLy8gc3JjL2dldFByb3BlcnR5RGVzY3JpcHRvckZvclJlcVNlc3Npb24udHNcbmZ1bmN0aW9uIGdldFByb3BlcnR5RGVzY3JpcHRvckZvclJlcVNlc3Npb24oc2Vzc2lvbikge1xuICByZXR1cm4ge1xuICAgIGVudW1lcmFibGU6IHRydWUsXG4gICAgZ2V0KCkge1xuICAgICAgcmV0dXJuIHNlc3Npb247XG4gICAgfSxcbiAgICBzZXQodmFsdWUpIHtcbiAgICAgIGNvbnN0IGtleXMgPSBPYmplY3Qua2V5cyh2YWx1ZSk7XG4gICAgICBjb25zdCBjdXJyZW50S2V5cyA9IE9iamVjdC5rZXlzKHNlc3Npb24pO1xuICAgICAgY3VycmVudEtleXMuZm9yRWFjaCgoa2V5KSA9PiB7XG4gICAgICAgIGlmICgha2V5cy5pbmNsdWRlcyhrZXkpKSB7XG4gICAgICAgICAgZGVsZXRlIHNlc3Npb25ba2V5XTtcbiAgICAgICAgfVxuICAgICAgfSk7XG4gICAgICBrZXlzLmZvckVhY2goKGtleSkgPT4ge1xuICAgICAgICBzZXNzaW9uW2tleV0gPSB2YWx1ZVtrZXldO1xuICAgICAgfSk7XG4gICAgfVxuICB9O1xufVxuXG4vLyBuZXh0L2luZGV4LnRzXG5mdW5jdGlvbiB3aXRoSXJvblNlc3Npb25BcGlSb3V0ZShoYW5kbGVyLCBvcHRpb25zKSB7XG4gIHJldHVybiBhc3luYyBmdW5jdGlvbiBuZXh0QXBpSGFuZGxlcldyYXBwZWRXaXRoSXJvblNlc3Npb24ocmVxLCByZXMpIHtcbiAgICBsZXQgc2Vzc2lvbk9wdGlvbnM7XG4gICAgaWYgKG9wdGlvbnMgaW5zdGFuY2VvZiBGdW5jdGlvbikge1xuICAgICAgc2Vzc2lvbk9wdGlvbnMgPSBhd2FpdCBvcHRpb25zKHJlcSwgcmVzKTtcbiAgICB9IGVsc2Uge1xuICAgICAgc2Vzc2lvbk9wdGlvbnMgPSBvcHRpb25zO1xuICAgIH1cbiAgICBjb25zdCBzZXNzaW9uID0gYXdhaXQgZ2V0SXJvblNlc3Npb24ocmVxLCByZXMsIHNlc3Npb25PcHRpb25zKTtcbiAgICBPYmplY3QuZGVmaW5lUHJvcGVydHkocmVxLCBcInNlc3Npb25cIiwgZ2V0UHJvcGVydHlEZXNjcmlwdG9yRm9yUmVxU2Vzc2lvbihzZXNzaW9uKSk7XG4gICAgcmV0dXJuIGhhbmRsZXIocmVxLCByZXMpO1xuICB9O1xufVxuZnVuY3Rpb24gd2l0aElyb25TZXNzaW9uU3NyKGhhbmRsZXIsIG9wdGlvbnMpIHtcbiAgcmV0dXJuIGFzeW5jIGZ1bmN0aW9uIG5leHRHZXRTZXJ2ZXJTaWRlUHJvcHNIYW5kbGVyV3JhcHBlZFdpdGhJcm9uU2Vzc2lvbihjb250ZXh0KSB7XG4gICAgbGV0IHNlc3Npb25PcHRpb25zO1xuICAgIGlmIChvcHRpb25zIGluc3RhbmNlb2YgRnVuY3Rpb24pIHtcbiAgICAgIHNlc3Npb25PcHRpb25zID0gYXdhaXQgb3B0aW9ucyhjb250ZXh0LnJlcSwgY29udGV4dC5yZXMpO1xuICAgIH0gZWxzZSB7XG4gICAgICBzZXNzaW9uT3B0aW9ucyA9IG9wdGlvbnM7XG4gICAgfVxuICAgIGNvbnN0IHNlc3Npb24gPSBhd2FpdCBnZXRJcm9uU2Vzc2lvbihjb250ZXh0LnJlcSwgY29udGV4dC5yZXMsIHNlc3Npb25PcHRpb25zKTtcbiAgICBPYmplY3QuZGVmaW5lUHJvcGVydHkoY29udGV4dC5yZXEsIFwic2Vzc2lvblwiLCBnZXRQcm9wZXJ0eURlc2NyaXB0b3JGb3JSZXFTZXNzaW9uKHNlc3Npb24pKTtcbiAgICByZXR1cm4gaGFuZGxlcihjb250ZXh0KTtcbiAgfTtcbn1cbmV4cG9ydCB7XG4gIHdpdGhJcm9uU2Vzc2lvbkFwaVJvdXRlLFxuICB3aXRoSXJvblNlc3Npb25Tc3Jcbn07XG4vLyMgc291cmNlTWFwcGluZ1VSTD1pbmRleC5tanMubWFwXG4iXSwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///(api)/./node_modules/iron-session/next/dist/index.mjs\n");
 
 /***/ })
 
@@ -169,7 +100,7 @@ __webpack_async_result__();
 var __webpack_require__ = require("../../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [8534], () => (__webpack_exec__(6205)));
+var __webpack_exports__ = (__webpack_exec__("(api)/./pages/api/auth/login.js"));
 module.exports = __webpack_exports__;
 
 })();
