@@ -8,7 +8,10 @@ export default withIronSessionApiRoute(async (req, res) => {
         const page = parseFloat(req.body.page);
         await db.connect();
         if (name && name !== ''){
-            const total = await CustomerModel.find({name: new RegExp(name, 'i') }).count();
+            const total = await CustomerModel.find({$or : [
+                    {name: new RegExp(name, 'i')},
+                    {mobile: new RegExp(name, 'i')},
+                ]}).count();
             const customers = await CustomerModel.find({
                 $or : [
                     {name: new RegExp(name, 'i')},

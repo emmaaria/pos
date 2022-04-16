@@ -5,6 +5,7 @@ import CategoryModel from "../../../models/Category";
 export default withIronSessionApiRoute(async (req, res) => {
     if (req.session.user){
         const name = req.body.name;
+        const all = req.body.all;
         const page = parseFloat(req.body.page);
         await db.connect();
         if (name && name !== ''){
@@ -17,6 +18,10 @@ export default withIronSessionApiRoute(async (req, res) => {
                 totalPages.push(i);
             }
             res.status(200).send({categories, totalPages});
+        }else if (all && all === true) {
+            const categories = await CategoryModel.find({});
+            await db.disconnect();
+            res.status(200).send({categories});
         }else {
             const total = await CategoryModel.find({}).count();
             const categories = await CategoryModel.find({}).skip(50*page).limit(50);

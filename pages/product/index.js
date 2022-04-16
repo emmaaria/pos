@@ -8,17 +8,17 @@ import axios from "axios";
 import TableSkeleton from "../../components/TableSkeleton";
 import $ from 'jquery';
 import {ToastContainer, toast} from 'react-toastify';
-export default function Unit({user}) {
-    const [units, setUnits] = useState();
+export default function Product({user}) {
+    const [products, setProducts] = useState();
     const [total, setTotal] = useState([]);
     const [page, setPage] = useState(0);
-    async function getUnits() {
+    async function getProducts() {
         try {
             const res = await axios.post(
-                '/api/unit', {page}
+                '/api/product', {page}
             );
             if (res.status === 200) {
-                setUnits(res.data.units);
+                setProducts(res.data.products);
                 setTotal(res.data.totalPages);
             }
         } catch (err) {
@@ -26,20 +26,20 @@ export default function Unit({user}) {
         }
     }
     useEffect(() => {
-        getUnits();
-    }, [setUnits]);
-    const searchUnits = async () => {
+        getProducts();
+    }, [setProducts]);
+    const searchProduct = async () => {
         const terms = $('.terms').val();
         try {
             const res = await axios.post(
-                '/api/unit',
+                '/api/product',
                 {
                     name: terms,
                     page: 0
                 }
             );
             if (res.status === 200) {
-                setUnits(res.data.units);
+                setProducts(res.data.products);
                 setTotal(res.data.totalPages);
             }
         } catch (err) {
@@ -49,13 +49,13 @@ export default function Unit({user}) {
     const paginate = async (page) => {
         try {
             const res = await axios.post(
-                '/api/unit',
+                '/api/product',
                 {
                     page: page
                 }
             );
             if (res.status === 200) {
-                setUnits(res.data.units);
+                setProducts(res.data.products);
                 setTotal(res.data.totalPages);
                 setPage(page);
             }
@@ -69,7 +69,7 @@ export default function Unit({user}) {
             theme: 'dark'
         });
         try {
-            const response = await axios.post('/api/unit/delete', {
+            const response = await axios.post('/api/product/delete', {
                 id: id,
             });
             if (response.status === 201) {
@@ -83,7 +83,7 @@ export default function Unit({user}) {
                     draggable: true,
                     theme: 'dark',
                 });
-                await getUnits();
+                await getProducts();
             }
         } catch (err) {
             toast.dismiss();
@@ -102,18 +102,18 @@ export default function Unit({user}) {
         <>
             <Head>
                 <title>
-                    Units
+                    Products
                 </title>
             </Head>
             <ToastContainer/>
-            <Layout user={user} title={`Units`}>
+            <Layout user={user} title={`Products`}>
                 <div className="content">
                     <div className="custom-card">
                         <div className="row">
                             <div className="col-md-9">
-                                <Link href={`/unit/create`}>
+                                <Link href={`/product/create`}>
                                     <a className={`btn btn-success`}>
-                                        <i className="fa-solid fa-plus"/> Add New Unit
+                                        <i className="fa-solid fa-plus"/> Add New Product
                                     </a>
                                 </Link>
                             </div>
@@ -122,9 +122,9 @@ export default function Unit({user}) {
                                     <div className="row">
                                         <div className="col">
                                             <input type="text" className="form-control terms"
-                                                   placeholder={`Search unit`}
-                                                   name="email" onKeyUp={searchUnits} onKeyDown={searchUnits}
-                                                   onChange={searchUnits}/>
+                                                   placeholder={`Search product`}
+                                                   name="email" onKeyUp={searchProduct} onKeyDown={searchProduct}
+                                                   onChange={searchProduct}/>
                                         </div>
                                     </div>
                                 </form>
@@ -134,25 +134,29 @@ export default function Unit({user}) {
                             <thead>
                             <tr>
                                 <th width={`10%`}>Sl</th>
-                                <th width={`80%`}>Name</th>
+                                <th width={`40%`}>Name</th>
+                                <th width={`20%`}>Sale Price</th>
+                                <th width={`20%`}>Purchase Price</th>
                                 <th width={`10%`}>Action</th>
                             </tr>
                             </thead>
                             <tbody>
                             {
-                                units && units.length <= 0 && (
+                                products && products.length <= 0 && (
                                     <tr>
-                                        <td colSpan={3} className={`text-center`}>No Unit Found</td>
+                                        <td colSpan={5} className={`text-center`}>No Product Found</td>
                                     </tr>
                                 )
                             }
-                            {units && (
-                                units.map((el, index) => (
+                            {products && (
+                                products.map((el, index) => (
                                     <tr key={el._id} valign={`middle`}>
                                         <td>{index + 1}</td>
                                         <td>{el.name}</td>
+                                        <td>{el.defaultUnitPrice} Tk.</td>
+                                        <td>{el.purchasePrice} Tk.</td>
                                         <td>
-                                            <Link href={`/unit/${el._id}`}>
+                                            <Link href={`/product/${el._id}`}>
                                                 <a className={`btn btn-warning btn-sm me-2`}>
                                                     <i className="fa-solid fa-pen-to-square"/>
                                                 </a>
@@ -175,13 +179,12 @@ export default function Unit({user}) {
                                     </tr>
                                 ))
                             ) || (
-                                <TableSkeleton tr={3} td={3}/>
+                                <TableSkeleton tr={3} td={5}/>
                             )}
-
                             </tbody>
                             <tfoot>
                             <tr>
-                                <td colSpan={3}>
+                                <td colSpan={5}>
                                     <nav className={`float-end`}>
                                         <ul className="pagination mt-3">
                                             {
