@@ -15,7 +15,7 @@ export default withIronSessionApiRoute(async (req, res) => {
         const unit = await UnitModel.findByIdAndUpdate(id, {
             name: name
         });
-        await db.disconnect();
+        
         if (unit) {
             res.status(201).send({
                 success: 'Updated',

@@ -95,7 +95,7 @@ export const getServerSideProps = withIronSessionSsr(
         }
         await db.connect();
         const customerObject = await CustomerModel.findById({_id: customerId}).lean();
-        await db.disconnect();
+        
         const customer = JSON.stringify(customerObject);
         return {
             props: {

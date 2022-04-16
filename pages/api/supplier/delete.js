@@ -7,7 +7,7 @@ export default withIronSessionApiRoute(async (req, res) => {
         const id = req.body.id;
         await db.connect();
         const supplier = await SupplierModel.findByIdAndDelete(id);
-        await db.disconnect();
+        
         if (supplier) {
             res.status(201).send({
                 success: 'Deleted',

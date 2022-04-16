@@ -15,7 +15,7 @@ export default withIronSessionApiRoute(async (req, res) => {
             name
         });
         await unit.save();
-        await db.disconnect();
+        
         res.status(201).send('Saved')
     }else {
         res.status(401).send('Your are not authorized')

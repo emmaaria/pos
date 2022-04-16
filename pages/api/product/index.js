@@ -11,7 +11,7 @@ export default withIronSessionApiRoute(async (req, res) => {
         if (name && name !== '') {
             const total = await ProductModel.find({name: new RegExp(name, 'i')}).count();
             const products = await ProductModel.find({name: new RegExp(name, 'i')}, 'name purchasePrice defaultUnitPrice').lean();
-            await db.disconnect();
+            
             const totalPagesCount = Math.ceil(total / 50);
             let totalPages = [];
             for (let i = 0; i <= totalPagesCount - 1; i++) {
@@ -21,7 +21,7 @@ export default withIronSessionApiRoute(async (req, res) => {
         } else {
             const total = await ProductModel.find({}).count();
             const products = await ProductModel.find({}, 'name purchasePrice defaultUnitPrice').skip(50 * page).limit(50);
-            await db.disconnect();
+            
             const totalPagesCount = Math.ceil(total / 50);
             let totalPages = [];
             for (let i = 0; i <= totalPagesCount - 1; i++) {

@@ -83,7 +83,7 @@ export const getServerSideProps = withIronSessionSsr(
         }
         await db.connect();
         const categoryObject = await CategoryModel.findById({_id: categoryId}).lean();
-        await db.disconnect();
+        
         const category = JSON.stringify(categoryObject);
         return {
             props: {

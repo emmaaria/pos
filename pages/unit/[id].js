@@ -83,7 +83,7 @@ export const getServerSideProps = withIronSessionSsr(
         }
         await db.connect();
         const unitObject = await UnitModel.findById({_id: unitId}).lean();
-        await db.disconnect();
+        
         const unit = JSON.stringify(unitObject);
         return {
             props: {

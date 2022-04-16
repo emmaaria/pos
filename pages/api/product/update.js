@@ -1,26 +1,43 @@
 import db from "../../../lib/db";
 import session from "../../../lib/session";
 import {withIronSessionApiRoute} from 'iron-session/next';
-import CustomerModel from "../../../models/Customer";
+import ProductModel from "../../../models/Product";
 export default withIronSessionApiRoute(async (req, res) => {
     if (req.session.user){
         const name = req.body.name;
-        const mobile = req.body.mobile;
-        const address = req.body.address;
+        const category = req.body.category;
+        const defaultUnit = req.body.defaultUnit;
+        const secondaryUnit = req.body.secondaryUnit;
+        const defaultUnitPrice = req.body.defaultUnitPrice;
+        const purchasePrice = req.body.purchasePrice;
+        const secondaryUnitPrice = req.body.secondaryUnitPrice;
+        const defaultUnitValue = req.body.defaultUnitValue;
+        const secondaryUnitValue = req.body.secondaryUnitValue;
         const id = req.body.id;
         if (name === '') {
             res.status(400).send({
                 error: 'Name is required',
             });
         }
+        if (defaultUnit === '') {
+            res.status(400).send({
+                error: 'Default unit is required',
+            });
+        }
         await db.connect();
-        const customer = await CustomerModel.findByIdAndUpdate(id, {
-            name: name,
-            mobile: mobile,
-            address: address,
+        const product = await ProductModel.findByIdAndUpdate(id, {
+            name,
+            category,
+            defaultUnit,
+            secondaryUnit,
+            defaultUnitPrice,
+            purchasePrice,
+            secondaryUnitPrice,
+            defaultUnitValue,
+            secondaryUnitValue
         });
-        await db.disconnect();
-        if (customer) {
+        
+        if (product) {
             res.status(201).send({
                 success: 'Updated',
             });

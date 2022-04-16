@@ -11,7 +11,7 @@ export default withIronSessionApiRoute(async (req, res) => {
         if (name && name !== ''){
             const total = await UnitModel.find({name: new RegExp(name, 'i') }).count();
             const units = await UnitModel.find({name: new RegExp(name, 'i') }).lean();
-            await db.disconnect();
+            
             const totalPagesCount = Math.ceil(total / 50);
             let totalPages = [];
             for (let i = 0; i <= totalPagesCount-1; i++){
@@ -20,12 +20,12 @@ export default withIronSessionApiRoute(async (req, res) => {
             res.status(200).send({units, totalPages});
         }else if (all && all === true) {
             const units = await UnitModel.find({});
-            await db.disconnect();
+            
             res.status(200).send({units});
         }else {
             const total = await UnitModel.find({}).count();
             const units = await UnitModel.find({}).skip(50*page).limit(50);
-            await db.disconnect();
+            
             const totalPagesCount = Math.ceil(total / 50);
             let totalPages = [];
             for (let i = 0; i <= totalPagesCount-1; i++){

@@ -19,7 +19,7 @@ export default withIronSessionApiRoute(async (req, res) => {
             mobile: mobile,
             address: address,
         });
-        await db.disconnect();
+        
         if (customer) {
             res.status(201).send({
                 success: 'Updated',
