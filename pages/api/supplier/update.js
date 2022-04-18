@@ -14,13 +14,13 @@ export default withIronSessionApiRoute(async (req, res) => {
             });
         }
         await db.connect();
-        const customer = await SupplierModel.findByIdAndUpdate(id, {
+        const supplier = await SupplierModel.findByIdAndUpdate(id, {
             name: name,
             mobile: mobile,
             address: address,
         });
         
-        if (customer) {
+        if (supplier) {
             res.status(201).send({
                 success: 'Updated',
             });

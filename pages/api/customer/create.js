@@ -2,13 +2,14 @@ import db from "../../../lib/db";
 import session from "../../../lib/session";
 import {withIronSessionApiRoute} from 'iron-session/next';
 import CustomerModel from "../../../models/Customer";
-
+import uniqueNumber from "generate-unique-id";
 export default withIronSessionApiRoute(async (req, res) => {
     if (req.session.user) {
         const name = req.body.name;
         const mobile = req.body.mobile;
         const address = req.body.address;
         const due = req.body.due;
+        const transactionId = uniqueNumber({length: 15, useLetters: true});
         if (name === '') {
             res.status(400).send({
                 error: 'Name is required',
@@ -23,6 +24,7 @@ export default withIronSessionApiRoute(async (req, res) => {
         } else {
             const customer = new CustomerModel({
                 name, mobile, address, transactions: {
+                    transactionId,
                     transactionType: 'dv',
                     amount: due,
                     date: new Date().toISOString().slice(0, 10),

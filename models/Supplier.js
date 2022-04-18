@@ -6,6 +6,10 @@ const transactionSchema = new mongoose.Schema(
             type: String,
             required: true
         },
+        transactionId: {
+            type: String,
+            required: true
+        },
         amount: {
             type: Number,
             default: 0

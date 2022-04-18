@@ -5,6 +5,7 @@ import SupplierModel from "../../../models/Supplier";
 export default withIronSessionApiRoute(async (req, res) => {
     if (req.session.user){
         const name = req.body.name;
+        const all = req.body.all;
         const page = parseFloat(req.body.page);
         await db.connect();
         if (name && name !== ''){
@@ -25,10 +26,13 @@ export default withIronSessionApiRoute(async (req, res) => {
                 totalPages.push(i);
             }
             res.status(200).send({suppliers, totalPages});
+        }else if (all && all === true) {
+            const suppliers = await SupplierModel.find({},'name');
+            res.status(200).send({suppliers});
         }else {
             const total = await SupplierModel.find({}).count();
             const suppliers = await SupplierModel.find({},'name mobile address transactions').skip(50*page).limit(50);
-            
+
             const totalPagesCount = Math.ceil(total / 50);
             let totalPages = [];
             for (let i = 0; i <= totalPagesCount-1; i++){

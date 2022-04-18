@@ -27,6 +27,7 @@ label{
 }
 th, td{
     color: #ffffff !important;
+    vertical-align: middle;
 }
 .page-link{
     cursor: pointer;

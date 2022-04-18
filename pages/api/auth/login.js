@@ -9,7 +9,7 @@ export default withIronSessionApiRoute(async (req, res) => {
     const password = req.body.password;
     await db.connect();
     const user = await User.findOne({ email: email });
-    
+    console.log(email);
     if (
         user &&
         bcryptjs.compareSync(password, user.password)

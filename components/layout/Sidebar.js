@@ -208,6 +208,22 @@ export default function Sidebar({user}) {
                         </a>
                     </Link>
                 </li>
+                <li>
+                    <Link href={`/purchase`}>
+                        <a className={`
+                                ${
+                            router.pathname === '/purchase' ||
+                            router.pathname === '/purchase/create' ||
+                            router.pathname === '/purchase/[id]'
+                                ? styles.active
+                                : ''
+                        }
+                            `}>
+                            <i className="fa-solid fa-cart-plus"/>
+                            Purchase
+                        </a>
+                    </Link>
+                </li>
             </ul>
         </div>
     )
