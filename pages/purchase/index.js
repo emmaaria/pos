@@ -127,7 +127,12 @@ export default function Purchase({user}) {
                                         <td>{el.amount}</td>
                                         <td>{el.comment}</td>
                                         <td>
-                                            <Link href={`/category/${el._id}`}>
+                                            <Link href={`/purchase/${el._id}`}>
+                                                <a className={`btn btn-success btn-sm me-2`}>
+                                                    <i className="fa-solid fa-eye"/>
+                                                </a>
+                                            </Link>
+                                            <Link href={`/purchase/${el._id}`}>
                                                 <a className={`btn btn-warning btn-sm me-2`}>
                                                     <i className="fa-solid fa-pen-to-square"/>
                                                 </a>
