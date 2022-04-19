@@ -122,12 +122,12 @@ export default function Purchase({user}) {
                                 purchases.map((el, index) => (
                                     <tr key={el._id} valign={`middle`}>
                                         <td>{index + 1}</td>
-                                        <td>{el.purchaseId}</td>
+                                        <td className={`text-uppercase`}>{el.purchaseId}</td>
                                         <td>{el.supplier[0].name}</td>
-                                        <td>{el.amount}</td>
+                                        <td>{el.amount} Tk.</td>
                                         <td>{el.comment}</td>
                                         <td>
-                                            <Link href={`/purchase/${el._id}`}>
+                                            <Link href={`/purchase/view/${el._id}`}>
                                                 <a className={`btn btn-success btn-sm me-2`}>
                                                     <i className="fa-solid fa-eye"/>
                                                 </a>
@@ -146,7 +146,7 @@ export default function Purchase({user}) {
                                                 if (result) {
                                                     deleteHandler(
                                                         el._id
-                                                    );
+                                                    ).then();
                                                 }
                                             }}>
                                                 <i className="fa-solid fa-trash-can"/>
