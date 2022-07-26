@@ -4,8 +4,9 @@ import $ from 'jquery';
 import axios from "axios";
 import {ToastContainer, toast} from 'react-toastify';
 import {useRouter} from "next/router";
-import { withIronSessionSsr } from 'iron-session/next';
+import {withIronSessionSsr} from 'iron-session/next';
 import session from "../lib/session";
+
 export default function Login() {
     const router = useRouter();
     const handleForm = async e => {
@@ -16,27 +17,9 @@ export default function Login() {
         });
         const email = $('.email').val();
         const password = $('.password').val();
-        try {
-            const response = await axios.post('/api/auth/login', {
-                email,password
-            });
-            console.log(response)
-            if (response.status === 201) {
-                toast.dismiss();
-                toast.success(response.data, {
-                    position: "bottom-left",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    theme: 'dark',
-                });
-                await router.replace('/dashboard');
-            }
-        } catch (err) {
+        if (email === ''){
             toast.dismiss();
-            toast.error(err.response.data, {
+            toast.error('Email is required', {
                 position: "bottom-left",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -45,7 +28,85 @@ export default function Login() {
                 draggable: true,
                 theme: 'dark',
             });
+            return;
         }
+        if (password === ''){
+            toast.dismiss();
+            toast.error('Password is required', {
+                position: "bottom-left",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+            });
+            return;
+        }
+        axios
+            .post(`${process.env.API_URL}/login`, {
+                email: email,
+                password: password,
+            })
+            .then((response) => {
+                if (response.data.status === true) {
+                    axios
+                        .post('/api/auth/login', {
+                            id: response.data.user.id,
+                            name: response.data.user.name,
+                            email: response.data.user.email,
+                            token: response.data.token,
+                        })
+                        .then(() => {
+                            toast.dismiss();
+                            toast.success('Successfully Logged In', {
+                                position: "bottom-left",
+                                autoClose: 5000,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                theme: 'dark',
+                            });
+                            router.replace('/dashboard');
+                        })
+                        .catch((err) => {
+                            toast.dismiss();
+                            toast.error(err.response.data, {
+                                position: "bottom-left",
+                                autoClose: 3000,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                theme: 'dark',
+                            });
+                        });
+                }else {
+                    toast.dismiss();
+                    toast.error(response.data.errors, {
+                        position: "bottom-left",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        theme: 'dark',
+                    });
+                }
+            })
+            .catch((err) => {
+                toast.dismiss();
+                toast.error(err.response.data, {
+                    position: "bottom-left",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: 'dark',
+                });
+            });
     }
     return (
         <>
@@ -75,7 +136,7 @@ export default function Login() {
 }
 
 export const getServerSideProps = withIronSessionSsr(
-    async function getServerSideProps({ req }) {
+    async function getServerSideProps({req}) {
         const session = req.session;
         if (session.user) {
             return {

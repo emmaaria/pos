@@ -1,4 +1,4 @@
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 
 export default function TableSkeleton({td, tr}) {
     const countTr = [];
@@ -14,7 +14,7 @@ export default function TableSkeleton({td, tr}) {
             {
                 countTd.map((el, index) => (
                     <td key={index}>
-                        <SkeletonTheme baseColor="#0E1947" highlightColor="#15245E">
+                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
                             <p>
                                 <Skeleton width={`100%`} height={30}/>
                             </p>

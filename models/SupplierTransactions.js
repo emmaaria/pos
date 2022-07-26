@@ -2,34 +2,34 @@ import mongoose from 'mongoose';
 
 const schema = new mongoose.Schema(
     {
-        purchaseId: {
-            type: String,
-            required: true,
-        },
         supplier: {
             type: mongoose.Schema.Types.ObjectId,
             ref:'Supplier',
             required: true,
+        },transactionId: {
+            type: String,
+            required: true
+        },
+        transactionType: {
+            type: String,
+            required: true
         },
         amount: {
-            type: String,
-        },
-        paid: {
             type: Number,
+            default: 0
         },
         comment: {
             type: String,
+            required: true
         },
         date: {
             type: String,
-            required: true,
-        },
+            required : true
+        }
     },
     {
         timestamps: false,
-        strict: false
     }
 );
-
-const PurchaseModel = mongoose.models.Purchase || mongoose.model('Purchase', schema);
-export default PurchaseModel;
+const SupplierTransactionsModel = mongoose.models.SupplierTransactions || mongoose.model('SupplierTransactions', schema);
+export default SupplierTransactionsModel;

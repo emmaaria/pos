@@ -9,36 +9,24 @@ const schema = new mongoose.Schema(
         productId: {
             type: String,
             required: true,
+            unique: true
         },
         category: {
             type: String,
             required: true,
         },
-        defaultUnit: {
+        unit: {
             type: String,
             required: true,
         },
-        secondaryUnit: {
-            type: String,
-        },
-        defaultUnitPrice: {
+        price: {
             type: String,
             required: true,
-        },
-        secondaryUnitPrice: {
-            type: String,
         },
         purchasePrice: {
             type: String,
             required: true,
-        },
-        defaultUnitValue: {
-            type: String,
-            required: true,
-        },
-        secondaryUnitValue: {
-            type: String,
-        },
+        }
     },
     {
         timestamps: false,

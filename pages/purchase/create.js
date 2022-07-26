@@ -5,39 +5,29 @@ import session from "../../lib/session";
 import {ToastContainer, toast} from 'react-toastify';
 import axios from "axios";
 import $ from 'jquery';
-import {useEffect, useState} from "react";
-import Select from 'react-select';
+import {useState} from "react";
 import DatePicker from "react-datepicker";
+import AutocompleteInput from "../../components/AutocompleteInput";
+import Loader from "../../components/Loader";
 
 export default function CreatePurchase({user}) {
+    const [loader, setLoader] = useState(false);
     const [total, setTotal] = useState(0);
     const [due, setDue] = useState(0);
-    const [supplier, setSupplier] = useState(null);
-    const [suppliers, setSuppliers] = useState([]);
-    const [products, setProducts] = useState([]);
+    const [products, setProducts] = useState();
+    const [timer, setTimer] = useState(null);
     const [date, setDate] = useState(new Date());
     const [purchaseProducts, setPurchaseProducts] = useState([]);
-    async function getSuppliers() {
-        try {
-            const res = await axios.post(
-                '/api/supplier', {all: true}
-            );
-            if (res.status === 200) {
-                setSuppliers(res.data.suppliers);
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    }
-    useEffect(() => {
-        getSuppliers();
-    }, [setSuppliers]);
+    const headers = {
+        headers: {Authorization: `Bearer ${user.token}`},
+    };
     const handleForm = async (e) => {
         e.preventDefault();
         toast.loading('Submitting', {
             position: "bottom-right",
             theme: 'dark'
         });
+        setLoader(true);
         const productIds = $('.productId').map(function (index, el) {
             return $(el).val();
         }).get();
@@ -50,7 +40,9 @@ export default function CreatePurchase({user}) {
         const comment = $('.note').val();
         const date = $('.date').val();
         const paid = $('.paid').val();
-        if(supplier == null){
+        const supplier = $('.supplier-id').val();
+        if (supplier === '') {
+            setLoader(false);
             toast.dismiss();
             toast.error('Please select supplier', {
                 position: "bottom-right",
@@ -63,7 +55,8 @@ export default function CreatePurchase({user}) {
             });
             return;
         }
-        if(productIds.length <= 0){
+        if (productIds.length <= 0) {
+            setLoader(false);
             toast.dismiss();
             toast.error('No product added', {
                 position: "bottom-right",
@@ -77,16 +70,17 @@ export default function CreatePurchase({user}) {
             return;
         }
         try {
-            const res = await axios.post('/api/purchase/create', {
-                supplier: supplier.value,
+            const res = await axios.post(`${process.env.API_URL}/purchase/store`, {
+                supplier_id: supplier,
                 productIds,
                 productQuantities,
                 productPrices,
                 date,
                 comment,
-                paid
-            });
-            if (res.status === 201) {
+                paid,
+                total
+            },headers);
+            if (res.data.status === true) {
                 toast.dismiss();
                 toast.success('Successfully Saved', {
                     position: "bottom-right",
@@ -100,8 +94,20 @@ export default function CreatePurchase({user}) {
                 $('form').trigger('reset');
                 setDue(0);
                 setPurchaseProducts([]);
-                setSupplier(null);
                 setTotal(0);
+                setLoader(false);
+            }else {
+                toast.dismiss();
+                toast.success(res.data.error, {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: 'dark',
+                });
+                setLoader(false);
             }
         } catch (e) {
             toast.dismiss();
@@ -114,40 +120,19 @@ export default function CreatePurchase({user}) {
                 draggable: true,
                 theme: 'dark',
             });
+            setLoader(false);
         }
     }
-    useEffect(() => {
-        async function getProducts() {
-            try {
-                const res = await axios.post(
-                    '/api/product', {all: true}
-                );
-                if (res.status === 200) {
-                    setProducts(res.data.products)
-                }
-            } catch (err) {
-                console.log(err);
-            }
-        }
-        getProducts();
-    }, [setProducts]);
-    const addProduct = (data) => {
-        const alreadyAdded = purchaseProducts.filter(product => {
-            return product.value === data.value;
-        });
-        if (alreadyAdded.length > 0) {
-            alert('Product already added');
-        } else {
-            setPurchaseProducts(currentProduct => [...currentProduct, data]);
-            setTotal(oldTotal => oldTotal + parseFloat(data.price));
-        }
-    }
+
     const removeProduct = (productId) => {
         const newProducts = purchaseProducts.filter(product => {
-            return product.value !== productId;
-        })
+            return product.id !== productId;
+        });
         setPurchaseProducts(newProducts);
-        calculateSum();
+        setTotal(0);
+        newProducts.map(el => {
+            setTotal(oldTotal => oldTotal + parseFloat($(`.subtotal_${el.id}`).text()));
+        });
     }
     const calculateSubtotal = (productId) => {
         const price = parseFloat($(`.productPrice_${productId}`).val());
@@ -166,6 +151,41 @@ export default function CreatePurchase({user}) {
         const paid = $(`.paid`).val();
         setDue(parseFloat(paid));
     }
+    const searchProduct = async () => {
+        $('.autocompleteItemContainer.product').show();
+        if (timer) {
+            clearTimeout(timer);
+            setTimer(null);
+        }
+        const name = $(`.search-product`).val();
+        setTimer(
+            setTimeout(() => {
+                axios.get(
+                    `${process.env.API_URL}/product?name=${name}`,
+                    headers
+                ).then(res => {
+                    if (res.data.status === true) {
+                        setProducts(res.data.products.data);
+                    }
+                }).catch(err => {
+                    console.log(err);
+                });
+            }, 500)
+        );
+    }
+    const addProduct = (data) => {
+        const alreadyAdded = purchaseProducts.filter(product => {
+            return product.id === data.id;
+        });
+        if (alreadyAdded.length > 0) {
+            alert('Product already added');
+        } else {
+            setPurchaseProducts(currentProduct => [...currentProduct, data]);
+            setTotal(oldTotal => oldTotal + parseFloat(data.price));
+        }
+        $('.autocompleteItemContainer.product').hide();
+        $(`.search-product`).val('');
+    }
     return (
         <>
             <Head>
@@ -173,6 +193,11 @@ export default function CreatePurchase({user}) {
                     Add New Purchase
                 </title>
             </Head>
+            {
+                loader && loader === true && (
+                    <Loader/>
+                )
+            }
             <ToastContainer/>
             <Layout user={user} title={`Add New Purchase`}>
                 <div className="content">
@@ -182,12 +207,7 @@ export default function CreatePurchase({user}) {
                                 <div className="row">
                                     <div className="col-md-6">
                                         <label htmlFor="supplier" className={`form-label`}>Supplier</label>
-                                        <Select
-                                            options={suppliers.map(el => {
-                                                return {value: el._id, label: el.name}
-                                            })}
-                                            onChange={setSupplier}
-                                        />
+                                        <AutocompleteInput type='supplier' token={user.token}/>
                                     </div>
                                     <div className="col-md-6">
                                         <label htmlFor="date" className={`form-label`}>Date</label>
@@ -202,12 +222,23 @@ export default function CreatePurchase({user}) {
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="product" className={`form-label`}>Choose Product</label>
-                                <Select
-                                    options={products.map(el => {
-                                        return {value: el._id, label: el.name, price: el.purchasePrice}
-                                    })}
-                                    onChange={(data) => addProduct(data)}
-                                />
+                                <div className={`autocompleteWrapper product`}>
+                                    <input type="text" className={`form-control autocompleteInput search-product`}
+                                           autoComplete={`off`} onKeyUp={searchProduct}
+                                           onKeyDown={searchProduct}
+                                           onChange={searchProduct} placeholder={`Search product`}/>
+                                    <div className={`autocompleteItemContainer product`}>
+                                        {
+                                            products && (
+                                                products.map(el => (
+                                                    <div className={`autocompleteItem`}
+                                                         key={`search-product-item-${el.id}`}
+                                                         onClick={() => addProduct(el)}>{el.name}</div>
+                                                ))
+                                            )
+                                        }
+                                    </div>
+                                </div>
                             </div>
                             <table className={`table table-bordered table-hover`}>
                                 <thead>
@@ -235,36 +266,36 @@ export default function CreatePurchase({user}) {
                                 <tbody>
                                 {
                                     purchaseProducts.map((el, index) => (
-                                        <tr key={el.value}>
+                                        <tr key={`purchase-product-item-${el.id}`}>
                                             <td>
                                                 {index + 1}
                                             </td>
                                             <td>
-                                                {el.label}
-                                                <input type="hidden" className={`productId`} defaultValue={el.value}/>
+                                                {el.name}
+                                                <input type="hidden" className={`productId`} defaultValue={el.id}/>
                                             </td>
                                             <td>
                                                 <input type="text"
-                                                       className={`form-control productPrice productPrice_${el.value}`}
+                                                       className={`form-control productPrice productPrice_${el.id}`}
                                                        defaultValue={el.price}
-                                                       onChange={() => calculateSubtotal(el.value)}
-                                                       onKeyUp={() => calculateSubtotal(el.value)}
-                                                       onKeyDown={() => calculateSubtotal(el.value)}/>
+                                                       onChange={() => calculateSubtotal(el.id)}
+                                                       onKeyUp={() => calculateSubtotal(el.id)}
+                                                       onKeyDown={() => calculateSubtotal(el.id)}/>
                                             </td>
                                             <td>
                                                 <input type="text"
-                                                       className={`form-control productQuantity productQuantity_${el.value}`}
-                                                       defaultValue={1} onChange={() => calculateSubtotal(el.value)}
-                                                       onKeyUp={() => calculateSubtotal(el.value)}
-                                                       onKeyDown={() => calculateSubtotal(el.value)}/>
+                                                       className={`form-control productQuantity productQuantity_${el.id}`}
+                                                       defaultValue={1} onChange={() => calculateSubtotal(el.id)}
+                                                       onKeyUp={() => calculateSubtotal(el.id)}
+                                                       onKeyDown={() => calculateSubtotal(el.id)}/>
                                             </td>
                                             <td className={`text-end`}>
-                                                <span className={`subtotal subtotal_${el.value}`}>{el.price}</span> Tk.
+                                                <span className={`subtotal subtotal_${el.id}`}>{el.price}</span> Tk.
                                             </td>
                                             <td className={`text-center`}>
                                                 <button
                                                     className={`btn btn-danger btn-sm`}
-                                                    onClick={() => removeProduct(el.value)}>
+                                                    onClick={() => removeProduct(el.id)}>
                                                     <i className="fa-solid fa-trash-can"/>
                                                 </button>
                                             </td>
@@ -275,21 +306,21 @@ export default function CreatePurchase({user}) {
                                 <tfoot>
                                 <tr>
                                     <td className={`text-end`} colSpan={4}><strong>Total</strong></td>
-                                    <td className={`text-end`}>
+                                    <td className={`text-end border-1 border-white d-block`}>
                                         <span className={`total`}>{total} Tk.</span>
                                     </td>
                                     <td/>
                                 </tr>
                                 <tr>
                                     <td className={`text-end`} colSpan={4}><strong>Paid</strong></td>
-                                    <td>
+                                    <td className={`px-0`}>
                                         <input type="text" className={`form-control paid`} onKeyUp={calculateDue}
                                                onKeyDown={calculateDue} onChange={calculateDue}/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td className={`text-end`} colSpan={4}><strong>Due</strong></td>
-                                    <td className={`text-end`}>
+                                    <td className={`text-end border-1 border-white d-block`}>
                                         <span className={`due`}>{total - due}</span> Tk.
                                     </td>
                                 </tr>
@@ -297,7 +328,7 @@ export default function CreatePurchase({user}) {
                             </table>
                             <div className="mb-3 mt-3">
                                 <label htmlFor="note" className={`form-label`}>Note</label>
-                                <textarea  id="note" rows="3" className={`note form-control`}/>
+                                <textarea id="note" rows="3" className={`note form-control`}/>
                             </div>
                             <button className={`btn btn-success`} type={`submit`}>Save</button>
                         </form>

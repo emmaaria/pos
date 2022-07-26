@@ -5,43 +5,96 @@ import session from "../../lib/session";
 import {ToastContainer, toast} from 'react-toastify';
 import axios from "axios";
 import $ from 'jquery';
-import db from "../../lib/db";
-import ProductModel from "../../models/Product";
-import CategoryModel from "../../models/Category";
-import UnitModel from "../../models/Unit";
+import {useEffect, useState} from "react";
+import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
+import Loader from "../../components/Loader";
 
-export default function EditProduct({user, product, categories, units}) {
+export default function EditProduct({user, id}) {
+    const [product, setProduct] = useState();
+    const [categories, setCategories] = useState();
+    const [units, setUnits] = useState();
+    const [loading, setLoading] = useState(true);
+    const [loader, setLoader] = useState(false);
+    const headers = {
+        headers: {Authorization: `Bearer ${user.token}`},
+    };
+    useEffect(() => {
+        async function getData() {
+            try {
+                const res = await axios.get(
+                    `${process.env.API_URL}/category?allData=true`, headers
+                );
+                if (res.data.status === true) {
+                    setCategories(res.data.categories);
+                }
+            } catch (err) {
+                console.log(err);
+            }
+            try {
+                const res = await axios.get(
+                    `${process.env.API_URL}/unit?allData=true`, headers
+                );
+                if (res.data.status === true) {
+                    setUnits(res.data.units);
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        }
+
+        getData();
+    }, [setCategories, setUnits]);
+    useEffect(() => {
+        axios.get(
+            `${process.env.API_URL}/product/${id}`,
+            headers
+        ).then(res => {
+            if (res.data.status === true) {
+                setProduct(res.data.product);
+                setLoading(false);
+            }
+        }).catch(err => {
+            console.log(err);
+        });
+    }, []);
     const handleForm = async (e) => {
         e.preventDefault();
         toast.loading('Submitting', {
             position: "bottom-right",
             theme: 'dark'
         });
+        setLoader(true);
         const name = $('.name').val();
         const category = $('.category').val();
-        const defaultUnit = $('.unit').val();
-        const secondaryUnit = $('.secondaryUnit').val();
-        const defaultUnitPrice = $('.defaultUnitPrice').val();
-        const secondaryUnitPrice = $('.secondaryUnitPrice').val();
+        const unit = $('.unit').val();
+        const price = $('.price').val();
         const purchasePrice = $('.purchasePrice').val();
-        const defaultUnitValue = $('.defaultUnitValue').val();
-        const secondaryUnitValue = $('.secondaryUnitValue').val();
+        if (name === '') {
+            toast.dismiss();
+            toast.error('Name is required', {
+                position: "bottom-left",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+            });
+            setLoader(false);
+            return;
+        }
         try {
-            const res = await axios.post('/api/product/update', {
-                id: product._id,
+            const res = await axios.post(`${process.env.API_URL}/product/update`, {
+                id: id,
                 name,
                 category,
-                defaultUnit,
-                secondaryUnit,
-                defaultUnitPrice,
-                purchasePrice,
-                secondaryUnitPrice,
-                defaultUnitValue,
-                secondaryUnitValue
-            });
-            if (res.status === 201) {
+                unit,
+                price,
+                purchase_price : purchasePrice
+            }, headers);
+            if (res.data.status === true) {
                 toast.dismiss();
-                toast.success('Successfully Saved', {
+                toast.success('Successfully Updated', {
                     position: "bottom-right",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -50,6 +103,19 @@ export default function EditProduct({user, product, categories, units}) {
                     draggable: true,
                     theme: 'dark',
                 });
+                setLoader(false);
+            } else {
+                toast.dismiss();
+                toast.error(e.response.data.errors, {
+                    position: "bottom-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: 'dark',
+                });
+                setLoader(false);
             }
         } catch (e) {
             toast.dismiss();
@@ -62,6 +128,7 @@ export default function EditProduct({user, product, categories, units}) {
                 draggable: true,
                 theme: 'dark',
             });
+            setLoader(false);
         }
     }
     return (
@@ -71,6 +138,11 @@ export default function EditProduct({user, product, categories, units}) {
                     Edit Product
                 </title>
             </Head>
+            {
+                loader && loader === true && (
+                    <Loader/>
+                )
+            }
             <ToastContainer/>
             <Layout user={user} title={`Edit Product`}>
                 <div className="content">
@@ -79,85 +151,90 @@ export default function EditProduct({user, product, categories, units}) {
                             <div className="mb-3 row">
                                 <div className="col-md-6">
                                     <label htmlFor="name" className={`form-label`}>Product Name</label>
-                                    <input type="text" className={`form-control name`} id={`name`} required
-                                           defaultValue={product.name}/>
+                                    {
+                                        product && loading === false && (
+                                            <input type="text" className={`form-control name`} id={`name`} required
+                                                   defaultValue={product.name}/>
+                                        ) || (
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                <Skeleton width={`100%`} height={40}/>
+                                            </SkeletonTheme>
+                                        )
+                                    }
                                 </div>
                                 <div className="col-md-6">
                                     <label htmlFor="category" className={`form-label`}>Category</label>
-                                    <select className="form-control category" defaultValue={product.category}>
-                                        <option value="">Choose Category</option>
-                                        {
-                                            categories && (
-                                                categories.map(el => (
-                                                    <option value={el._id} key={el._id}>{el.name}</option>
-                                                ))
-                                            )
-                                        }
-                                    </select>
+                                    {
+                                        product && loading === false && (
+                                            <select className="form-control category" defaultValue={product.category} key={`${Math.floor((Math.random() * 1000))}-min`}>
+                                                <option value="">Choose Category</option>
+                                                {
+                                                    categories && (
+                                                        categories.map(el => (
+                                                            <option value={el.id} key={`cat-${el.id}`}>{el.name}</option>
+                                                        ))
+                                                    )
+                                                }
+                                            </select>
+                                        ) || (
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                <Skeleton width={`100%`} height={40}/>
+                                            </SkeletonTheme>
+                                        )
+                                    }
                                 </div>
                             </div>
                             <div className="mb-3 row">
                                 <div className="col-md-6">
-                                    <label htmlFor="unit" className={`form-label`}>Default Unit</label>
-                                    <select className="form-control unit" required defaultValue={product.defaultUnit}>
-                                        <option value="">Choose Unit</option>
-                                        {
-                                            units && (
-                                                units.map(el => (
-                                                    <option value={el._id} key={el._id}>{el.name}</option>
-                                                ))
-                                            )
-                                        }
-                                    </select>
+                                    <label htmlFor="unit" className={`form-label`}>Unit</label>
+                                    {
+                                        product && loading === false && (
+                                            <select className="form-control unit" required defaultValue={product.unit} key={`${Math.floor((Math.random() * 1000))}-min`}>
+                                                <option value="">Choose Unit</option>
+                                                {
+                                                    units && (
+                                                        units.map(el => (
+                                                            <option value={el.id} key={`unit-${el.id}`}>{el.name}</option>
+                                                        ))
+                                                    )
+                                                }
+                                            </select>
+                                        ) || (
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                <Skeleton width={`100%`} height={40}/>
+                                            </SkeletonTheme>
+                                        )
+                                    }
                                 </div>
                                 <div className="col-md-6">
-                                    <label htmlFor="secondaryUnit" className={`form-label`}>Secondary Unit</label>
-                                    <select className="form-control secondaryUnit" defaultValue={product.secondaryUnit}>
-                                        <option value="">Choose Unit</option>
-                                        {
-                                            units && (
-                                                units.map(el => (
-                                                    <option value={el._id} key={el._id}>{el.name}</option>
-                                                ))
-                                            )
-                                        }
-                                    </select>
-                                </div>
+                                    <label htmlFor="price" className={`form-label`}>Selling Price</label>
 
-                            </div>
-                            <div className="row mb-3">
-                                <div className="col-md-6">
-                                    <label htmlFor="defaultUnitValue" className={`form-label`}>Default Unit
-                                        Value</label>
-                                    <input type="text" className={`form-control defaultUnitValue`}
-                                           id={`defaultUnitValue`} required defaultValue={product.defaultUnitValue}/>
-                                </div>
-                                <div className="col-md-6">
-                                    <label htmlFor="secondaryUnitValue" className={`form-label`}>Secondary Unit
-                                        Value</label>
-                                    <input type="text" className={`form-control secondaryUnitValue`}
-                                           id={`secondaryUnitValue`} defaultValue={product.secondaryUnitValue}/>
-                                </div>
-                            </div>
-                            <div className="row mb-3">
-                                <div className="col-md-6">
-                                    <label htmlFor="defaultUnitPrice" className={`form-label`}>Default Unit
-                                        Price</label>
-                                    <input type="text" className={`form-control defaultUnitPrice`}
-                                           id={`defaultUnitPrice`} required defaultValue={product.defaultUnitPrice}/>
-                                </div>
-                                <div className="col-md-6">
-                                    <label htmlFor="secondaryUnitPrice" className={`form-label`}>Secondary Unit
-                                        Price</label>
-                                    <input type="text" className={`form-control secondaryUnitPrice`}
-                                           id={`secondaryUnitPrice`} defaultValue={product.secondaryUnitPrice}/>
+                                    {
+                                        product && loading === false && (
+                                            <input type="text" className={`form-control price`}
+                                                   id={`price`} required defaultValue={product.price}/>
+                                        ) || (
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                <Skeleton width={`100%`} height={40}/>
+                                            </SkeletonTheme>
+                                        )
+                                    }
                                 </div>
                             </div>
                             <div className="row mb-3">
                                 <div className="col-md-6">
                                     <label htmlFor="purchasePrice" className={`form-label`}>Purchase Price</label>
-                                    <input type="text" className={`form-control purchasePrice`} id={`purchasePrice`}
-                                           required defaultValue={product.purchasePrice}/>
+
+                                    {
+                                        product && loading === false && (
+                                            <input type="text" className={`form-control purchasePrice`} id={`purchasePrice`}
+                                                   required defaultValue={product.purchase_price}/>
+                                        ) || (
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                <Skeleton width={`100%`} height={40}/>
+                                            </SkeletonTheme>
+                                        )
+                                    }
                                 </div>
                             </div>
                             <button className={`btn btn-success`} type={`submit`}>Save</button>
@@ -171,7 +248,7 @@ export default function EditProduct({user, product, categories, units}) {
 export const getServerSideProps = withIronSessionSsr(
     async function getServerSideProps({req, params}) {
         const session = req.session;
-        const productId = params.id;
+        const id = params.id;
         if (!session.user) {
             return {
                 redirect: {
@@ -179,19 +256,10 @@ export const getServerSideProps = withIronSessionSsr(
                 },
             };
         }
-        await db.connect();
-        const productObject = await ProductModel.findById({_id: productId}).lean();
-        const product = JSON.stringify(productObject);
-        const categoryObject = await CategoryModel.find({}).lean();
-        const categories = JSON.stringify(categoryObject);
-        const unitObject = await UnitModel.find({}).lean();
-        const units = JSON.stringify(unitObject);
         return {
             props: {
                 user: session.user,
-                product: JSON.parse(product),
-                categories: JSON.parse(categories),
-                units: JSON.parse(units),
+                id
             },
         };
     },

@@ -10,57 +10,63 @@ import $ from 'jquery';
 import {ToastContainer, toast} from 'react-toastify';
 
 export default function Supplier({user}) {
+    const headers = {
+        headers: {Authorization: `Bearer ${user.token}`},
+    };
     const [suppliers, setSuppliers] = useState();
-    const [total, setTotal] = useState([]);
-    const [page, setPage] = useState(0);
-
-    async function getSuppliers() {
-        try {
-            const res = await axios.post(
-                '/api/supplier', {page}
-            );
-            if (res.status === 200) {
-                setSuppliers(res.data.suppliers);
-                setTotal(res.data.totalPages);
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    }
+    const [links, setLinks] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [timer, setTimer] = useState(null);
 
     useEffect(() => {
-        getSuppliers();
-    }, [setSuppliers]);
-    const searchSupplier = async () => {
-        const terms = $('.terms').val();
-        try {
-            const res = await axios.post(
-                '/api/supplier',
-                {
-                    name: terms,
-                    page: 0
-                }
-            );
-            if (res.status === 200) {
-                setSuppliers(res.data.suppliers);
-                setTotal(res.data.totalPages);
+        axios.get(
+            `${process.env.API_URL}/supplier`,
+            headers
+        ).then(res => {
+            if (res.data.status === true) {
+                setSuppliers(res.data.suppliers.data);
+                setLinks(res.data.suppliers.links);
+                setLoading(false);
             }
-        } catch (err) {
+        }).catch(err => {
             console.log(err);
+        });
+    }, []);
+    const searchSupplier = async () => {
+        if (timer) {
+            clearTimeout(timer);
+            setTimer(null);
         }
+        setTimer(
+            setTimeout(() => {
+                setLoading(true);
+                const name = $('.terms').val();
+                axios.get(
+                    `${process.env.API_URL}/supplier?name=${name}`,
+                    headers
+                ).then(res => {
+                    if (res.data.status === true) {
+                        setSuppliers(res.data.suppliers.data);
+                        setLinks(res.data.suppliers.links);
+                        setLoading(false);
+                    }
+                }).catch(err => {
+                    console.log(err);
+                });
+            }, 2000)
+        );
     }
-    const paginate = async (page) => {
+    const paginate = async (url) => {
+        setLoading(true);
         try {
-            const res = await axios.post(
-                '/api/supplier',
-                {
-                    page: page
-                }
+            const res = await axios.get(
+                url,
+                headers
             );
-            if (res.status === 200) {
-                setSuppliers(res.data.customers);
-                setTotal(res.data.totalPages);
-                setPage(page);
+            if (res.data.status === true) {
+                setSuppliers(res.data.suppliers.data);
+                setLinks(res.data.suppliers.links);
+                setLoading(false);
             }
         } catch (err) {
             console.log(err);
@@ -72,10 +78,10 @@ export default function Supplier({user}) {
             theme: 'dark'
         });
         try {
-            const response = await axios.post('/api/supplier/delete', {
+            const response = await axios.post(`${process.env.API_URL}/supplier/delete`, {
                 id: id,
-            });
-            if (response.status === 201) {
+            }, headers);
+            if (response.data.status === true) {
                 toast.dismiss();
                 toast.success('Successfully Deleted', {
                     position: "bottom-right",
@@ -86,11 +92,22 @@ export default function Supplier({user}) {
                     draggable: true,
                     theme: 'dark',
                 });
-                await getSuppliers();
+                $(`.row-id-${id}`).fadeOut();
+            }else {
+                toast.dismiss();
+                toast.error(response.data.error, {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: 'dark',
+                });
             }
         } catch (err) {
             toast.dismiss();
-            toast.error(err.response.data, {
+            toast.error(err.response.data.errors, {
                 position: "bottom-right",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -101,18 +118,6 @@ export default function Supplier({user}) {
             });
         }
     };
-    const generateBalance = (transactions) => {
-        let debit = 0;
-        let credit = 0;
-        transactions.filter(el => {
-            if (el.transactionType === 'dv') {
-                debit += el.amount;
-            } else {
-                credit += el.amount;
-            }
-        });
-        return debit - credit;
-    }
     return (
         <>
             <Head>
@@ -150,7 +155,7 @@ export default function Supplier({user}) {
                             <tr>
                                 <th width={`5%`}>Sl</th>
                                 <th width={`30%`}>Name</th>
-                                <th width={`15%`}>Phone</th>
+                                <th width={`15%`}>Mobile</th>
                                 <th width={`20%`}>Address</th>
                                 <th width={`20%`}>Balance</th>
                                 <th width={`10%`}>Action</th>
@@ -164,20 +169,20 @@ export default function Supplier({user}) {
                                     </tr>
                                 )
                             }
-                            {suppliers && (
+                            {suppliers && !loading &&(
                                 suppliers.map((el, index) => (
-                                    <tr key={el._id} valign={`middle`}>
+                                    <tr key={el.id} valign={`middle`} className={`row-id-${el.id}`}>
                                         <td>{index + 1}</td>
                                         <td>{el.name}</td>
                                         <td>{el.mobile}</td>
                                         <td>{el.address}</td>
                                         <td>
                                             {
-                                                generateBalance(el.transactions)
+                                                el.balance
                                             } Tk.
                                         </td>
                                         <td>
-                                            <Link href={`/supplier/${el._id}`}>
+                                            <Link href={`/supplier/${el.id}`}>
                                                 <a className={`btn btn-warning btn-sm me-2`}>
                                                     <i className="fa-solid fa-pen-to-square"/>
                                                 </a>
@@ -190,7 +195,7 @@ export default function Supplier({user}) {
                                                     );
                                                 if (result) {
                                                     deleteHandler(
-                                                        el._id
+                                                        el.id
                                                     );
                                                 }
                                             }}>
@@ -209,10 +214,12 @@ export default function Supplier({user}) {
                                     <nav className={`float-end`}>
                                         <ul className="pagination mt-3">
                                             {
-                                                total.map(el => (
-                                                    <li className={`page-item ${page === el ? 'active' : ''}`} key={el}>
+                                                links.map(el => (
+                                                    <li className={`page-item ${el.active === true ? 'active' : ''}`}
+                                                        key={el.label}>
                                                         <a className={`page-link`}
-                                                           onClick={() => paginate(el)}>{el + 1}</a>
+                                                           onClick={() => paginate(el.url)}
+                                                           dangerouslySetInnerHTML={{__html: el.label}}/>
                                                     </li>
                                                 ))
                                             }

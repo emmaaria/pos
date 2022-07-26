@@ -5,22 +5,58 @@ import session from "../../lib/session";
 import {ToastContainer, toast} from 'react-toastify';
 import axios from "axios";
 import $ from 'jquery';
-import db from "../../lib/db";
-import CategoryModel from "../../models/Category";
+import {useEffect, useState} from "react";
+import Skeleton, {SkeletonTheme} from 'react-loading-skeleton';
+import Loader from "../../components/Loader";
 
-export default function EditCategory({user, category}) {
+export default function EditCategory({user, id}) {
+    const [loader, setLoader] = useState(false);
+    const [category, setCategory] = useState();
+    const [loading, setLoading] = useState(true);
+    const headers = {
+        headers: {Authorization: `Bearer ${user.token}`},
+    };
+    useEffect(() => {
+        axios.get(
+            `${process.env.API_URL}/category/${id}`,
+            headers
+        ).then(res => {
+            console.log(res.data);
+            if (res.data.status === true) {
+                setCategory(res.data.category);
+                setLoading(false);
+            }
+        }).catch(err => {
+            console.log(err);
+        });
+    }, []);
     const handleForm = async (e) => {
         e.preventDefault();
         toast.loading('Submitting', {
             position: "bottom-right",
             theme: 'dark'
         });
+        setLoader(true);
         const name = $('.name').val();
-        try {
-            const res = await axios.post('/api/category/update', {
-                name, id: category._id
+        if (name === ''){
+            toast.dismiss();
+            toast.error('Name is required', {
+                position: "bottom-left",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
             });
-            if (res.status === 201) {
+            setLoader(false);
+            return;
+        }
+        try {
+            const res = await axios.post(`${process.env.API_URL}/category/update`, {
+                name, id
+            },headers);
+            if (res.data.status === true) {
                 toast.dismiss();
                 toast.success('Successfully Updated', {
                     position: "bottom-right",
@@ -31,10 +67,23 @@ export default function EditCategory({user, category}) {
                     draggable: true,
                     theme: 'dark',
                 });
+                setLoader(false);
+            }else {
+                toast.dismiss();
+                toast.error(res.data.errors, {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: 'dark',
+                });
+                setLoader(false);
             }
         } catch (e) {
             toast.dismiss();
-            toast.error(e.response.data, {
+            toast.error(e.response.data.errors, {
                 position: "bottom-right",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -43,6 +92,7 @@ export default function EditCategory({user, category}) {
                 draggable: true,
                 theme: 'dark',
             });
+            setLoader(false);
         }
     }
     return (
@@ -52,6 +102,11 @@ export default function EditCategory({user, category}) {
                     Edit Category
                 </title>
             </Head>
+            {
+                loader && loader === true && (
+                    <Loader/>
+                )
+            }
             <ToastContainer/>
             <Layout user={user} title={`Edit Category`}>
                 <div className="content">
@@ -59,8 +114,16 @@ export default function EditCategory({user, category}) {
                         <form onSubmit={handleForm}>
                             <div className="mb-3">
                                 <label htmlFor="name" className={`form-label`}>Category Name</label>
-                                <input type="text" className={`form-control name`} id={`name`} required
-                                       defaultValue={category.name}/>
+                                {
+                                    category && loading === false && (
+                                        <input type="text" className={`form-control name`} id={`name`} required
+                                               defaultValue={category.name}/>
+                                    ) || (
+                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                            <Skeleton width={`100%`} height={40}/>
+                                        </SkeletonTheme>
+                                    )
+                                }
                             </div>
                             <button className={`btn btn-success`} type={`submit`}>Update</button>
                         </form>
@@ -73,7 +136,7 @@ export default function EditCategory({user, category}) {
 export const getServerSideProps = withIronSessionSsr(
     async function getServerSideProps({req, params}) {
         const session = req.session;
-        const categoryId = params.id;
+        const id = params.id;
         if (!session.user) {
             return {
                 redirect: {
@@ -81,14 +144,10 @@ export const getServerSideProps = withIronSessionSsr(
                 },
             };
         }
-        await db.connect();
-        const categoryObject = await CategoryModel.findById({_id: categoryId}).lean();
-        
-        const category = JSON.stringify(categoryObject);
         return {
             props: {
                 user: session.user,
-                category: JSON.parse(category),
+                id
             },
         };
     },

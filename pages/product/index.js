@@ -9,55 +9,63 @@ import TableSkeleton from "../../components/TableSkeleton";
 import $ from 'jquery';
 import {ToastContainer, toast} from 'react-toastify';
 export default function Product({user}) {
+    const headers = {
+        headers: {Authorization: `Bearer ${user.token}`},
+    };
     const [products, setProducts] = useState();
-    const [total, setTotal] = useState([]);
-    const [page, setPage] = useState(0);
-    async function getProducts() {
-        try {
-            const res = await axios.post(
-                '/api/product', {page}
-            );
-            if (res.status === 200) {
-                setProducts(res.data.products);
-                setTotal(res.data.totalPages);
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    }
+    const [links, setLinks] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [timer, setTimer] = useState(null);
     useEffect(() => {
-        getProducts();
-    }, [setProducts]);
-    const searchProduct = async () => {
-        const terms = $('.terms').val();
-        try {
-            const res = await axios.post(
-                '/api/product',
-                {
-                    name: terms,
-                    page: 0
-                }
-            );
-            if (res.status === 200) {
-                setProducts(res.data.products);
-                setTotal(res.data.totalPages);
+        axios.get(
+            `${process.env.API_URL}/product`,
+            headers
+        ).then(res => {
+            if (res.data.status === true) {
+                setProducts(res.data.products.data);
+                setLinks(res.data.products.links);
+                setLoading(false);
             }
-        } catch (err) {
+        }).catch(err => {
             console.log(err);
+        });
+    }, []);
+
+    const searchProduct = async () => {
+        if (timer) {
+            clearTimeout(timer);
+            setTimer(null);
         }
+        setTimer(
+            setTimeout(() => {
+                setLoading(true);
+                const name = $('.terms').val();
+                axios.get(
+                    `${process.env.API_URL}/product?name=${name}`,
+                    headers
+                ).then(res => {
+                    if (res.data.status === true) {
+                        setProducts(res.data.products.data);
+                        setLinks(res.data.products.links);
+                        setLoading(false);
+                    }
+                }).catch(err => {
+                    console.log(err);
+                });
+            }, 2000)
+        );
     }
-    const paginate = async (page) => {
+    const paginate = async (url) => {
+        setLoading(true);
         try {
-            const res = await axios.post(
-                '/api/product',
-                {
-                    page: page
-                }
+            const res = await axios.get(
+                url,
+                headers
             );
-            if (res.status === 200) {
-                setProducts(res.data.products);
-                setTotal(res.data.totalPages);
-                setPage(page);
+            if (res.data.status === true) {
+                setProducts(res.data.products.data);
+                setLinks(res.data.products.links);
+                setLoading(false);
             }
         } catch (err) {
             console.log(err);
@@ -69,10 +77,10 @@ export default function Product({user}) {
             theme: 'dark'
         });
         try {
-            const response = await axios.post('/api/product/delete', {
+            const response = await axios.post(`${process.env.API_URL}/product/delete`, {
                 id: id,
-            });
-            if (response.status === 201) {
+            }, headers);
+            if (response.data.status === true) {
                 toast.dismiss();
                 toast.success('Successfully Deleted', {
                     position: "bottom-right",
@@ -83,11 +91,22 @@ export default function Product({user}) {
                     draggable: true,
                     theme: 'dark',
                 });
-                await getProducts();
+                $(`.row-id-${id}`).fadeOut();
+            }else {
+                toast.dismiss();
+                toast.error(response.data.error, {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: 'dark',
+                });
             }
         } catch (err) {
             toast.dismiss();
-            toast.error(err.response.data, {
+            toast.error(err.response.data.errors, {
                 position: "bottom-right",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -148,15 +167,15 @@ export default function Product({user}) {
                                     </tr>
                                 )
                             }
-                            {products && (
+                            {products && !loading &&(
                                 products.map((el, index) => (
-                                    <tr key={el._id} valign={`middle`}>
+                                    <tr key={el.id} valign={`middle`} className={`row-id-${el.id}`}>
                                         <td>{index + 1}</td>
                                         <td>{el.name}</td>
-                                        <td>{el.defaultUnitPrice} Tk.</td>
-                                        <td>{el.purchasePrice} Tk.</td>
+                                        <td>{el.price} Tk.</td>
+                                        <td>{el.purchase_price} Tk.</td>
                                         <td>
-                                            <Link href={`/product/${el._id}`}>
+                                            <Link href={`/product/${el.id}`}>
                                                 <a className={`btn btn-warning btn-sm me-2`}>
                                                     <i className="fa-solid fa-pen-to-square"/>
                                                 </a>
@@ -169,7 +188,7 @@ export default function Product({user}) {
                                                     );
                                                 if (result) {
                                                     deleteHandler(
-                                                        el._id
+                                                        el.id
                                                     );
                                                 }
                                             }}>
@@ -184,14 +203,16 @@ export default function Product({user}) {
                             </tbody>
                             <tfoot>
                             <tr>
-                                <td colSpan={5}>
+                                <td colSpan={6}>
                                     <nav className={`float-end`}>
                                         <ul className="pagination mt-3">
                                             {
-                                                total.map(el => (
-                                                    <li className={`page-item ${page === el ? 'active' : ''}`} key={el}>
+                                                links.map(el => (
+                                                    <li className={`page-item ${el.active === true ? 'active' : ''}`}
+                                                        key={el.label}>
                                                         <a className={`page-link`}
-                                                           onClick={() => paginate(el)}>{el + 1}</a>
+                                                           onClick={() => paginate(el.url)}
+                                                           dangerouslySetInnerHTML={{__html: el.label}}/>
                                                     </li>
                                                 ))
                                             }

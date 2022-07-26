@@ -3,64 +3,108 @@
     padding: 20px 0;
     top: 0;
     bottom: 0;
-    width: 240px;
-    background: #15245E;
-    box-shadow: 3px 0 10px rgba(0,0,0,0.3);
+    width: 20.5rem;
+    background: #212130;
+    z-index: 99999;
 }
 .avatar{
-    height: 3.5rem;
-    width: 3.5rem;
-    margin: 0 auto;
-    border: 1px solid #4E545E;
+    height: 5rem;
+    width: 5rem;
+    margin: 0 auto 10px auto;
     border-radius: 50%;
-    padding: .25rem;
-    overflow: hidden;
+    position: relative;
+    display: block;
+}
+.avatar::before{
+    content: '';
+    position: absolute;
+    width: 115%;
+    height: 115%;
+    background: linear-gradient(0deg,rgb(249, 58, 11), #00ccff, rgb(249, 58, 11));
+    animation: avatar 4s linear infinite;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.avatar::after{
+    content: '';
+    position: absolute;
+    width: 110%;
+    height: 110%;
+    background: #000000;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+@keyframes avatar {
+    0% {
+        transform: translate(-50%,-50%) rotate(0deg);
+    }
+    0% {
+        transform: translate(-50%,-50%) rotate(360deg);
+    }
 }
 .userName{
-    font-size: 15px;
+    font-size: 1.25rem;
     line-height: 16px;
-    font-weight: 600;
+    font-weight: 500;
     color: #ffffff;
     text-align: center;
-    margin-top: 10px;
-    border-bottom: 1px solid #4E545E;
+    margin-top: 20px;
     padding-bottom: 20px;
+    margin-bottom: 0;
 }
 .sidebar ul{
     list-style: none;
-    padding: 0 20px 0 0;
+    padding: 0;
     margin: 0;
 }
 .sidebar ul li a{
-    color: #9295a0;
-    padding: 10px 20px;
+    color: #ffffff;
+    padding: 1.375rem 2.1875rem;
     display: block;
-    font-size: 15px;
-    border-radius: 0 50px 50px 0;
+    font-size: 1rem;
     margin-bottom: 5px;
+    font-weight: 600;
+    position: relative;
 }
 .sidebar ul li a.active{
-    color: #ffffff;
-    background: #0E1947;
+    color: rgb(249, 58, 11);
+    background: rgba(249, 58, 11, 0.1);
+}
+.sidebar ul li a.active::before, .sidebar ul li a:hover::before {
+    position: absolute;
+    content: "";
+    background: rgb(249, 58, 11);
+    width: 0.563rem;
+    height: 100%;
+    top: 0;
+    right: 0;
+    border-radius: 1.25rem;
 }
 .sidebar ul li a.active span{
     transform: rotate(90deg);
 }
 .sidebar ul li a:hover{
-    color: #ffffff;
-    background: #0E1947;
+    color: rgb(249, 58, 11);
+    background: rgba(249, 58, 11, 0.1);
 }
 .sidebar ul li ul a:hover{
-    color: #ffffff;
+    color: rgb(249, 58, 11);
     background: transparent;
 }
 .sidebar ul li ul a.active{
-    color: #ffffff;
+    color: rgb(249, 58, 11);
     background: transparent;
 }
+.sidebar ul li ul a.active::before{
+    width: 0;
+}
 .sidebar ul li a i{
-    margin-right: 10px;
-    font-size: 16px;
+    margin-right: 1.25rem;
+    font-size: 20px;
 }
 .dropdownIcon{
     margin-top: 3px;

@@ -85,7 +85,7 @@ export default function Sidebar({user}) {
                             `}>
                             <i className="fa-solid fa-user-group"/>
                             Customer
-                            <span className={`fa-solid fa-angle-right float-end ${styles.dropdownIcon} ci`}/>
+                            <span className={`fa-solid fa-caret-right float-end ${styles.dropdownIcon} ci`}/>
                         </a>
                     </Link>
                     <ul className={`customerMenu ${styles.subMenu}`}>
@@ -117,7 +117,7 @@ export default function Sidebar({user}) {
                             </Link>
                         </li>
                         <li>
-                            <Link href={`/customer/ledger`}>
+                            <Link href={`#`}>
                                 <a className={`
                                 ${
                                     router.pathname === '/customer/ledger'
@@ -146,7 +146,7 @@ export default function Sidebar({user}) {
                             `}>
                             <i className="fa-solid fa-users"/>
                             Supplier
-                            <span className={`fa-solid fa-angle-right float-end ${styles.dropdownIcon} si`}/>
+                            <span className={`fa-solid fa-caret-right float-end ${styles.dropdownIcon} si`}/>
                         </a>
                     </Link>
                     <ul className={`supplierMenu ${styles.subMenu}`}>
@@ -178,7 +178,7 @@ export default function Sidebar({user}) {
                             </Link>
                         </li>
                         <li>
-                            <Link href={`/supplier/ledger`}>
+                            <Link href={`#`}>
                                 <a className={`
                                 ${
                                     router.pathname === '/supplier/ledger'
@@ -214,7 +214,8 @@ export default function Sidebar({user}) {
                                 ${
                             router.pathname === '/purchase' ||
                             router.pathname === '/purchase/create' ||
-                            router.pathname === '/purchase/[id]'
+                            router.pathname === '/purchase/[id]' ||
+                            router.pathname === '/purchase/view/[id]'
                                 ? styles.active
                                 : ''
                         }

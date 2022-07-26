@@ -5,21 +5,42 @@ import session from "../../lib/session";
 import {ToastContainer, toast} from 'react-toastify';
 import axios from "axios";
 import $ from 'jquery';
+import Loader from "../../components/Loader";
+import {useState} from "react";
 
 export default function CreateCustomer({user}) {
+    const [loader, setLoader] = useState(false);
+    const headers = {
+        headers: {Authorization: `Bearer ${user.token}`},
+    };
     const handleForm = async (e) => {
         e.preventDefault();
         toast.loading('Submitting', {
             position: "bottom-right",
             theme: 'dark'
         });
+        setLoader(true);
         const name = $('.name').val();
         const mobile = $('.mobile').val();
         const address = $('.address').val();
         const due = $('.due').val();
+        if (name === ''){
+            toast.dismiss();
+            toast.error('Name is required', {
+                position: "bottom-left",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+            });
+            setLoader(false);
+            return;
+        }
         try {
-            const res = await axios.post('/api/customer/create',{name,mobile,address, due});
-            if (res.status === 201){
+            const res = await axios.post(`${process.env.API_URL}/customer/store`,{name,mobile,address, due}, headers);
+            if (res.data.status === true){
                 toast.dismiss();
                 toast.success('Successfully Saved', {
                     position: "bottom-right",
@@ -31,10 +52,24 @@ export default function CreateCustomer({user}) {
                     theme: 'dark',
                 });
                 $('form').trigger('reset');
+                setLoader(false);
+            }else {
+                toast.dismiss();
+                toast.success('Something went wrong', {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: 'dark',
+                });
+                $('form').trigger('reset');
+                setLoader(false);
             }
         }catch (e) {
             toast.dismiss();
-            toast.error(e.response.data, {
+            toast.error(e.response.statusText, {
                 position: "bottom-right",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -43,6 +78,7 @@ export default function CreateCustomer({user}) {
                 draggable: true,
                 theme: 'dark',
             });
+            setLoader(false);
         }
     }
     return (
@@ -52,6 +88,11 @@ export default function CreateCustomer({user}) {
                     Add New Customer
                 </title>
             </Head>
+            {
+                loader && loader === true && (
+                    <Loader/>
+                )
+            }
             <ToastContainer/>
             <Layout user={user} title={`Add New Customer`}>
                 <div className="content">

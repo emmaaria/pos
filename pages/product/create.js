@@ -6,63 +6,76 @@ import {ToastContainer, toast} from 'react-toastify';
 import axios from "axios";
 import $ from 'jquery';
 import {useEffect, useState} from "react";
+import Loader from "../../components/Loader";
 
 export default function CreateProduct({user}) {
+    const [loader, setLoader] = useState(false);
     const [categories, setCategories] = useState();
     const [units, setUnits] = useState();
-    useEffect(()=> {
-        async function getData(){
+    const headers = {
+        headers: {Authorization: `Bearer ${user.token}`},
+    };
+    useEffect(() => {
+        async function getData() {
             try {
-                const res = await axios.post(
-                    '/api/category', {all:true}
+                const res = await axios.get(
+                    `${process.env.API_URL}/category?allData=true`, headers
                 );
-                if (res.status === 200) {
+                if (res.data.status === true) {
                     setCategories(res.data.categories);
                 }
             } catch (err) {
                 console.log(err);
             }
             try {
-                const res = await axios.post(
-                    '/api/unit', {all:true}
+                const res = await axios.get(
+                    `${process.env.API_URL}/unit?allData=true`, headers
                 );
-                if (res.status === 200) {
+                if (res.data.status === true) {
                     setUnits(res.data.units);
                 }
             } catch (err) {
                 console.log(err);
             }
         }
+
         getData();
-    },[setCategories,setUnits]);
+    }, [setCategories, setUnits]);
     const handleForm = async (e) => {
         e.preventDefault();
         toast.loading('Submitting', {
             position: "bottom-right",
             theme: 'dark'
         });
+        setLoader(true);
         const name = $('.name').val();
         const category = $('.category').val();
-        const defaultUnit = $('.unit').val();
-        const secondaryUnit = $('.secondaryUnit').val();
-        const defaultUnitPrice = $('.defaultUnitPrice').val();
-        const secondaryUnitPrice = $('.secondaryUnitPrice').val();
+        const unit = $('.unit').val();
+        const price = $('.price').val();
         const purchasePrice = $('.purchasePrice').val();
-        const defaultUnitValue = $('.defaultUnitValue').val();
-        const secondaryUnitValue = $('.secondaryUnitValue').val();
+        if (name === '') {
+            toast.dismiss();
+            toast.error('Name is required', {
+                position: "bottom-left",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+            });
+            setLoader(false);
+            return;
+        }
         try {
-            const res = await axios.post('/api/product/create', {
+            const res = await axios.post(`${process.env.API_URL}/product/store`, {
                 name,
                 category,
-                defaultUnit,
-                secondaryUnit,
-                defaultUnitPrice,
-                purchasePrice,
-                secondaryUnitPrice,
-                defaultUnitValue,
-                secondaryUnitValue
-            });
-            if (res.status === 201) {
+                unit,
+                price,
+                purchase_price: purchasePrice
+            }, headers);
+            if (res.data.status === true){
                 toast.dismiss();
                 toast.success('Successfully Saved', {
                     position: "bottom-right",
@@ -74,10 +87,23 @@ export default function CreateProduct({user}) {
                     theme: 'dark',
                 });
                 $('form').trigger('reset');
+                setLoader(false);
+            }else {
+                toast.dismiss();
+                toast.success('Something went wrong', {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: 'dark',
+                });
+                setLoader(false);
             }
         } catch (e) {
             toast.dismiss();
-            toast.error(e.response.data, {
+            toast.error(e.response.statusText, {
                 position: "bottom-right",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -86,6 +112,7 @@ export default function CreateProduct({user}) {
                 draggable: true,
                 theme: 'dark',
             });
+            setLoader(false);
         }
     }
     return (
@@ -95,6 +122,11 @@ export default function CreateProduct({user}) {
                     Add New Product
                 </title>
             </Head>
+            {
+                loader && loader === true && (
+                    <Loader/>
+                )
+            }
             <ToastContainer/>
             <Layout user={user} title={`Add New Product`}>
                 <div className="content">
@@ -111,8 +143,8 @@ export default function CreateProduct({user}) {
                                         <option value="">Choose Category</option>
                                         {
                                             categories && (
-                                                categories.map(el=> (
-                                                    <option value={el._id} key={el._id}>{el.name}</option>
+                                                categories.map(el => (
+                                                    <option value={el.id} key={el.id}>{el.name}</option>
                                                 ))
                                             )
                                         }
@@ -121,57 +153,28 @@ export default function CreateProduct({user}) {
                             </div>
                             <div className="mb-3 row">
                                 <div className="col-md-6">
-                                    <label htmlFor="unit" className={`form-label`}>Default Unit</label>
+                                    <label htmlFor="unit" className={`form-label`}>Unit</label>
                                     <select className="form-control unit" required>
                                         <option value="">Choose Unit</option>
                                         {
                                             units && (
-                                                units.map(el=> (
-                                                    <option value={el._id} key={el._id}>{el.name}</option>
+                                                units.map(el => (
+                                                    <option value={el.id} key={el.id}>{el.name}</option>
                                                 ))
                                             )
                                         }
                                     </select>
                                 </div>
                                 <div className="col-md-6">
-                                    <label htmlFor="secondaryUnit" className={`form-label`}>Secondary Unit</label>
-                                    <select className="form-control secondaryUnit">
-                                        <option value="">Choose Unit</option>
-                                        {
-                                            units && (
-                                                units.map(el=> (
-                                                    <option value={el._id} key={el._id}>{el.name}</option>
-                                                ))
-                                            )
-                                        }
-                                    </select>
-                                </div>
-
-                            </div>
-                            <div className="row mb-3">
-                                <div className="col-md-6">
-                                    <label htmlFor="defaultUnitValue" className={`form-label`}>Default Unit Value</label>
-                                    <input type="text" className={`form-control defaultUnitValue`} id={`defaultUnitValue`} required defaultValue={1}/>
-                                </div>
-                                <div className="col-md-6">
-                                    <label htmlFor="secondaryUnitValue" className={`form-label`}>Secondary Unit Value</label>
-                                    <input type="text" className={`form-control secondaryUnitValue`} id={`secondaryUnitValue`}/>
-                                </div>
-                            </div>
-                            <div className="row mb-3">
-                                <div className="col-md-6">
-                                    <label htmlFor="defaultUnitPrice" className={`form-label`}>Default Unit Price</label>
-                                    <input type="text" className={`form-control defaultUnitPrice`} id={`defaultUnitPrice`} required/>
-                                </div>
-                                <div className="col-md-6">
-                                    <label htmlFor="secondaryUnitPrice" className={`form-label`}>Secondary Unit Price</label>
-                                    <input type="text" className={`form-control secondaryUnitPrice`} id={`secondaryUnitPrice`}/>
+                                    <label htmlFor="price" className={`form-label`}>Selling Price</label>
+                                    <input type="text" className={`form-control price`} id={`price`} required/>
                                 </div>
                             </div>
                             <div className="row mb-3">
                                 <div className="col-md-6">
                                     <label htmlFor="purchasePrice" className={`form-label`}>Purchase Price</label>
-                                    <input type="text" className={`form-control purchasePrice`} id={`purchasePrice`} required/>
+                                    <input type="text" className={`form-control purchasePrice`} id={`purchasePrice`}
+                                           required/>
                                 </div>
                             </div>
                             <button className={`btn btn-success`} type={`submit`}>Save</button>
