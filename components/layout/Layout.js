@@ -17,7 +17,8 @@ export default function Layout(props) {
                     width: '100%',
                     textAlign: 'center',
                     color: '#ffffff',
-                    fontSize: '20px'
+                    fontSize: '20px',
+                    zIndex: 999999999999
                 }}>
                     No Internet Connection
                 </div>

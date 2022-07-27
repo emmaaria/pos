@@ -178,7 +178,7 @@ export default function Purchase({user}) {
                                         <td>{el.amount} Tk.</td>
                                         <td>{el.comment}</td>
                                         <td>
-                                            <Link href={`/purchase/barcode/${el.id}`}>
+                                            <Link href={`#`}>
                                                 <a className={`btn btn-success btn-sm me-2`}>
                                                     <i className="fa-solid fa-barcode"/>
                                                 </a>

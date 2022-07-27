@@ -6,43 +6,49 @@ import {ToastContainer, toast} from 'react-toastify';
 import axios from "axios";
 import $ from 'jquery';
 import {useEffect, useState} from "react";
-import Select from 'react-select';
 import DatePicker from "react-datepicker";
-import PurchaseModel from "../../models/Purchase";
-import db from "../../lib/db";
-import mongoose from "mongoose";
+import Loader from "../../components/Loader";
+import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
+import TableSkeleton from "../../components/TableSkeleton";
+import AutocompleteDefaultSupplier from "../../components/AutocompleteDefaultSupplier";
 
-export default function EditPurchase({user, purchase, oldPurchaseProducts}) {
-    const [total, setTotal] = useState(parseFloat(purchase[0].amount));
+export default function EditPurchase({user, id}) {
+    const [loader, setLoader] = useState(false);
+    const [total, setTotal] = useState(0);
     const [due, setDue] = useState(0);
-    const [supplier, setSupplier] = useState(purchase[0].supplier);
-    const [suppliers, setSuppliers] = useState([]);
-    const [products, setProducts] = useState([]);
-    const [date, setDate] = useState(new Date(purchase[0].date));
-    const [purchaseProducts, setPurchaseProducts] = useState(oldPurchaseProducts);
-
-    async function getSuppliers() {
-        try {
-            const res = await axios.post(
-                '/api/supplier', {all: true}
-            );
-            if (res.status === 200) {
-                setSuppliers(res.data.suppliers);
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
+    const [purchase, setPurchase] = useState();
+    const [loading, setLoading] = useState(true);
+    const [products, setProducts] = useState();
+    const [timer, setTimer] = useState(null);
+    const [date, setDate] = useState(new Date());
+    const [purchaseProducts, setPurchaseProducts] = useState([]);
+    const headers = {
+        headers: {Authorization: `Bearer ${user.token}`},
+    };
     useEffect(() => {
-        getSuppliers();
-    }, [setSuppliers]);
+        axios.get(
+            `${process.env.API_URL}/purchase/${id}`,
+            headers
+        ).then(res => {
+            if (res.data.status === true) {
+                setPurchase(res.data.purchase);
+                setTotal(res.data.purchase.purchaseData.amount);
+                setDate(new Date(res.data.purchase.purchaseData.date));
+                setDue(res.data.purchase.purchaseData.paid);
+                setPurchaseProducts(res.data.purchase.purchaseItems);
+                setLoading(false);
+            }
+        }).catch(err => {
+            console.log(err);
+        });
+    }, [setPurchase, setTotal, setDate, setDue, setPurchaseProducts, setLoading]);
     const handleForm = async (e) => {
         e.preventDefault();
         toast.loading('Submitting', {
             position: "bottom-right",
             theme: 'dark'
         });
+        setLoader(true);
         const productIds = $('.productId').map(function (index, el) {
             return $(el).val();
         }).get();
@@ -55,7 +61,9 @@ export default function EditPurchase({user, purchase, oldPurchaseProducts}) {
         const comment = $('.note').val();
         const date = $('.date').val();
         const paid = $('.paid').val();
-        if (supplier == null) {
+        const supplier = $('.supplier-id').val();
+        if (supplier === '') {
+            setLoader(false);
             toast.dismiss();
             toast.error('Please select supplier', {
                 position: "bottom-right",
@@ -69,6 +77,7 @@ export default function EditPurchase({user, purchase, oldPurchaseProducts}) {
             return;
         }
         if (productIds.length <= 0) {
+            setLoader(false);
             toast.dismiss();
             toast.error('No product added', {
                 position: "bottom-right",
@@ -82,18 +91,18 @@ export default function EditPurchase({user, purchase, oldPurchaseProducts}) {
             return;
         }
         try {
-            const res = await axios.post('/api/purchase/update', {
-                id: purchase[0]._id,
-                transactionID: purchase[0].purchaseId,
-                supplier: supplier,
+            const res = await axios.post(`${process.env.API_URL}/purchase/update`, {
+                purchase_id: id,
+                supplier_id: supplier,
                 productIds,
                 productQuantities,
                 productPrices,
                 date,
                 comment,
-                paid
-            });
-            if (res.status === 201) {
+                paid,
+                total
+            }, headers);
+            if (res.data.status === true) {
                 toast.dismiss();
                 toast.success('Successfully Saved', {
                     position: "bottom-right",
@@ -104,6 +113,19 @@ export default function EditPurchase({user, purchase, oldPurchaseProducts}) {
                     draggable: true,
                     theme: 'dark',
                 });
+                setLoader(false);
+            } else {
+                toast.dismiss();
+                toast.success(res.data.error, {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: 'dark',
+                });
+                setLoader(false);
             }
         } catch (e) {
             toast.dismiss();
@@ -116,42 +138,19 @@ export default function EditPurchase({user, purchase, oldPurchaseProducts}) {
                 draggable: true,
                 theme: 'dark',
             });
+            setLoader(false);
         }
     }
-    useEffect(() => {
-        async function getProducts() {
-            try {
-                const res = await axios.post(
-                    '/api/product', {all: true}
-                );
-                if (res.status === 200) {
-                    setProducts(res.data.products)
-                }
-            } catch (err) {
-                console.log(err);
-            }
-        }
 
-        getProducts();
-    }, [setProducts]);
-    const addProduct = (data) => {
-        const alreadyAdded = purchaseProducts.filter(product => {
-            return product.value === data.value;
-        });
-        if (alreadyAdded.length > 0) {
-            alert('Product already added');
-        } else {
-            setPurchaseProducts(currentProduct => [...currentProduct, data]);
-            setTotal(oldTotal => oldTotal + parseFloat(data.price));
-            calculateDue();
-        }
-    }
     const removeProduct = (productId) => {
         const newProducts = purchaseProducts.filter(product => {
-            return product.value !== productId;
-        })
+            return product.id !== productId;
+        });
         setPurchaseProducts(newProducts);
-        calculateSum();
+        setTotal(0);
+        newProducts.map(el => {
+            setTotal(oldTotal => oldTotal + parseFloat($(`.subtotal_${el.id}`).text()));
+        });
     }
     const calculateSubtotal = (productId) => {
         const price = parseFloat($(`.productPrice_${productId}`).val());
@@ -159,7 +158,6 @@ export default function EditPurchase({user, purchase, oldPurchaseProducts}) {
         const subTotal = price * quantity;
         $(`.subtotal_${productId}`).text(`${subTotal}`);
         calculateSum();
-        calculateDue();
     }
     const calculateSum = () => {
         setTotal(0);
@@ -169,9 +167,48 @@ export default function EditPurchase({user, purchase, oldPurchaseProducts}) {
     }
     const calculateDue = () => {
         const paid = $(`.paid`).val();
-        setDue(parseFloat(paid));
+        if (paid !== ''){
+            setDue(parseFloat(paid));
+        }else {
+            setDue(0);
+        }
     }
-    console.log(due);
+    const searchProduct = async () => {
+        $('.autocompleteItemContainer.product').show();
+        if (timer) {
+            clearTimeout(timer);
+            setTimer(null);
+        }
+        const name = $(`.search-product`).val();
+        setTimer(
+            setTimeout(() => {
+                axios.get(
+                    `${process.env.API_URL}/product?name=${name}`,
+                    headers
+                ).then(res => {
+                    if (res.data.status === true) {
+                        setProducts(res.data.products.data);
+                    }
+                }).catch(err => {
+                    console.log(err);
+                });
+            }, 500)
+        );
+    }
+    const addProduct = (data) => {
+        const alreadyAdded = purchaseProducts.filter(product => {
+            return product.id === data.id.toString();
+        });
+        console.log(alreadyAdded);
+        if (alreadyAdded.length > 0) {
+            alert('Product already added');
+        } else {
+            setPurchaseProducts(currentProduct => [...currentProduct, data]);
+            setTotal(oldTotal => parseFloat(oldTotal) + parseFloat(data.price));
+        }
+        $('.autocompleteItemContainer.product').hide();
+        $(`.search-product`).val('');
+    }
     return (
         <>
             <Head>
@@ -179,6 +216,11 @@ export default function EditPurchase({user, purchase, oldPurchaseProducts}) {
                     Edit Purchase
                 </title>
             </Head>
+            {
+                loader && loader === true && (
+                    <Loader/>
+                )
+            }
             <ToastContainer/>
             <Layout user={user} title={`Edit Purchase`}>
                 <div className="content">
@@ -188,36 +230,56 @@ export default function EditPurchase({user, purchase, oldPurchaseProducts}) {
                                 <div className="row">
                                     <div className="col-md-6">
                                         <label htmlFor="supplier" className={`form-label`}>Supplier</label>
-                                        <Select
-                                            options={suppliers.map(el => {
-                                                return {value: el._id, label: el.name}
-                                            })}
-                                            onChange={(val) => setSupplier(val.value)}
-                                            defaultValue={{
-                                                value: purchase[0].supplier,
-                                                label: purchase[0].supplierData[0].name
-                                            }}
-                                        />
+                                        {
+                                            purchase && loading === false && (
+                                                <AutocompleteDefaultSupplier name={purchase.purchaseData.supplier_name}
+                                                                             id={purchase.purchaseData.supplier_id}
+                                                                             token={user.token}/>
+                                            ) || (
+                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                    <Skeleton width={`100%`} height={40}/>
+                                                </SkeletonTheme>
+                                            )
+                                        }
                                     </div>
                                     <div className="col-md-6">
                                         <label htmlFor="date" className={`form-label`}>Date</label>
-                                        <DatePicker
-                                            selected={date}
-                                            onChange={(date) => setDate(date)}
-                                            dateFormat='yyyy-MM-dd'
-                                            className={`form-control date`}
-                                        />
+                                        {
+                                            purchase && loading === false && (
+                                                <DatePicker
+                                                    selected={date}
+                                                    onChange={(date) => setDate(date)}
+                                                    dateFormat='yyyy-MM-dd'
+                                                    className={`form-control date`}
+                                                />
+                                            ) || (
+                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                    <Skeleton width={`100%`} height={40}/>
+                                                </SkeletonTheme>
+                                            )
+                                        }
                                     </div>
                                 </div>
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="product" className={`form-label`}>Choose Product</label>
-                                <Select
-                                    options={products.map(el => {
-                                        return {value: el._id, label: el.name, price: el.purchasePrice, quantity: 1}
-                                    })}
-                                    onChange={(data) => addProduct(data)}
-                                />
+                                <div className={`autocompleteWrapper product`}>
+                                    <input type="text" className={`form-control autocompleteInput search-product`}
+                                           autoComplete={`off`} onKeyUp={searchProduct}
+                                           onKeyDown={searchProduct}
+                                           onChange={searchProduct} placeholder={`Search product`}/>
+                                    <div className={`autocompleteItemContainer product`}>
+                                        {
+                                            products && (
+                                                products.map(el => (
+                                                    <div className={`autocompleteItem`}
+                                                         key={`search-product-item-${el.id}`}
+                                                         onClick={() => addProduct(el)}>{el.name}</div>
+                                                ))
+                                            )
+                                        }
+                                    </div>
+                                </div>
                             </div>
                             <table className={`table table-bordered table-hover`}>
                                 <thead>
@@ -244,74 +306,110 @@ export default function EditPurchase({user, purchase, oldPurchaseProducts}) {
                                 </thead>
                                 <tbody>
                                 {
-                                    purchaseProducts.map((el, index) => (
-                                        <tr key={el.value}>
-                                            <td>
-                                                {index + 1}
-                                            </td>
-                                            <td>
-                                                {el.label}
-                                                <input type="hidden" className={`productId`} defaultValue={el.value}/>
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       className={`form-control productPrice productPrice_${el.value}`}
-                                                       defaultValue={el.price}
-                                                       onChange={() => calculateSubtotal(el.value)}
-                                                       onKeyUp={() => calculateSubtotal(el.value)}
-                                                       onKeyDown={() => calculateSubtotal(el.value)}/>
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       className={`form-control productQuantity productQuantity_${el.value}`}
-                                                       defaultValue={el.quantity}
-                                                       onChange={() => calculateSubtotal(el.value)}
-                                                       onKeyUp={() => calculateSubtotal(el.value)}
-                                                       onKeyDown={() => calculateSubtotal(el.value)}/>
-                                            </td>
-                                            <td className={`text-end`}>
-                                                <span
-                                                    className={`subtotal subtotal_${el.value}`}>{el.price * el.quantity}</span> Tk.
-                                            </td>
-                                            <td className={`text-center`}>
-                                                <button
-                                                    className={`btn btn-danger btn-sm`}
-                                                    onClick={() => removeProduct(el.value)}>
-                                                    <i className="fa-solid fa-trash-can"/>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))
+                                    purchaseProducts && !loading && (
+                                        purchaseProducts.map((el, index) => (
+                                            <tr key={`purchase-product-item-${el.id}`}>
+                                                <td>
+                                                    {index + 1}
+                                                </td>
+                                                <td>
+                                                    {el.name}
+                                                    <input type="hidden" className={`productId`} defaultValue={el.id}/>
+                                                </td>
+                                                <td>
+                                                    <input type="text"
+                                                           className={`form-control productPrice productPrice_${el.id}`}
+                                                           defaultValue={el.price}
+                                                           onChange={() => calculateSubtotal(el.id)}
+                                                           onKeyUp={() => calculateSubtotal(el.id)}
+                                                           onKeyDown={() => calculateSubtotal(el.id)}/>
+                                                </td>
+                                                <td>
+                                                    <input type="text"
+                                                           className={`form-control productQuantity productQuantity_${el.id}`}
+                                                           defaultValue={el.quantity ? el.quantity : 1}
+                                                           onChange={() => calculateSubtotal(el.id)}
+                                                           onKeyUp={() => calculateSubtotal(el.id)}
+                                                           onKeyDown={() => calculateSubtotal(el.id)}/>
+                                                </td>
+                                                <td className={`text-end`}>
+                                                    <span
+                                                        className={`subtotal subtotal_${el.id}`}>{el.total ? el.total : el.price}</span> Tk.
+                                                </td>
+                                                <td className={`text-center`}>
+                                                    <button
+                                                        className={`btn btn-danger btn-sm`}
+                                                        onClick={() => removeProduct(el.id)}>
+                                                        <i className="fa-solid fa-trash-can"/>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    ) || (
+                                        <TableSkeleton tr={5} td={6}/>
+                                    )
                                 }
                                 </tbody>
                                 <tfoot>
                                 <tr>
                                     <td className={`text-end`} colSpan={4}><strong>Total</strong></td>
-                                    <td className={`text-end`}>
-                                        <span className={`total`}>{total} Tk.</span>
+                                    <td className={`text-end border-1 border-white d-block`}>
+                                        {
+                                            purchase && loading === false && (
+                                                <span className={`total`}>{total} Tk.</span>
+                                            ) || (
+                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                    <Skeleton width={`100%`} height={30}/>
+                                                </SkeletonTheme>
+                                            )
+                                        }
                                     </td>
                                     <td/>
                                 </tr>
                                 <tr>
                                     <td className={`text-end`} colSpan={4}><strong>Paid</strong></td>
-                                    <td>
-                                        <input type="text" className={`form-control paid`} onKeyUp={calculateDue}
-                                               onKeyDown={calculateDue} onChange={calculateDue}
-                                               defaultValue={purchase[0].paid}/>
+                                    <td className={`px-0`}>
+                                        {
+                                            purchase && loading === false && (
+                                                <input type="text" className={`form-control paid`} onKeyUp={calculateDue}
+                                                       onKeyDown={calculateDue} onChange={calculateDue}
+                                                       defaultValue={purchase.purchaseData.paid}/>
+                                            ) || (
+                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                    <Skeleton width={`100%`} height={30}/>
+                                                </SkeletonTheme>
+                                            )
+                                        }
                                     </td>
                                 </tr>
                                 <tr>
                                     <td className={`text-end`} colSpan={4}><strong>Due</strong></td>
-                                    <td className={`text-end`}>
-                                        <span className={`due`}>{total - purchase[0].paid}</span> Tk.
+                                    <td className={`text-end border-1 border-white d-block`}>
+                                        {
+                                            purchase && loading === false && (
+                                                <span className={`due`}>{total - due} Tk.</span>
+                                            ) || (
+                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                    <Skeleton width={`100%`} height={30}/>
+                                                </SkeletonTheme>
+                                            )
+                                        }
                                     </td>
                                 </tr>
                                 </tfoot>
                             </table>
                             <div className="mb-3 mt-3">
                                 <label htmlFor="note" className={`form-label`}>Note</label>
-                                <textarea id="note" rows="3" className={`note form-control`}
-                                          defaultValue={purchase[0].comment}/>
+                                {
+                                    purchase && !loading && (
+                                        <textarea id="note" rows="3" className={`note form-control`}
+                                                  defaultValue={purchase.purchaseData.comment}/>
+                                    ) || (
+                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                            <Skeleton width={`100%`} height={80}/>
+                                        </SkeletonTheme>
+                                    )
+                                }
                             </div>
                             <button className={`btn btn-success`} type={`submit`}>Update</button>
                         </form>
@@ -323,103 +421,19 @@ export default function EditPurchase({user, purchase, oldPurchaseProducts}) {
 }
 export const getServerSideProps = withIronSessionSsr(
     async function getServerSideProps({req, params}) {
-        const purchaseID = params.id;
         const session = req.session;
+        const id = params.id;
         if (!session.user) {
             return {
                 redirect: {
-                    destination: `/`,
+                    destination: `/admin`,
                 },
             };
         }
-        await db.connect();
-        const purchaseObject = await PurchaseModel.aggregate(
-            [
-                {
-                    $match: {_id: mongoose.Types.ObjectId(purchaseID)}
-                },
-                {
-                    $lookup: {
-                        from: 'suppliers',
-                        localField: 'supplier',
-                        foreignField: '_id',
-                        as: 'supplierData',
-                        pipeline: [
-                            {
-                                $project: {
-                                    name: 1
-                                }
-                            }
-                        ]
-                    }
-                },
-                {
-                    $lookup: {
-                        from: 'productledgers',
-                        localField: 'purchaseId',
-                        foreignField: 'transactionId',
-                        as: 'products',
-                        pipeline: [
-                            {
-                                $lookup: {
-                                    from: 'products',
-                                    localField: 'product',
-                                    foreignField: '_id',
-                                    as: 'productData',
-                                    pipeline: [
-                                        {
-                                            $project: {
-                                                name: 1
-                                            }
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                $project: {
-                                    product: 1,
-                                    quantity: 1,
-                                    unitPrice: 1,
-                                    total: 1,
-                                    productData: 1,
-                                }
-                            }
-                        ]
-                    }
-                },
-                {
-                    $project: {
-                        purchaseId: 1,
-                        supplier: 1,
-                        amount: 1,
-                        paid: 1,
-                        comment: 1,
-                        date: 1,
-                        supplierData: 1,
-                        products: 1,
-                    }
-                }
-            ]
-        );
-        let oldPurchaseProductsObject = [];
-        purchaseObject[0].products.map(el => {
-            oldPurchaseProductsObject.push(
-                {
-                    value: el.product,
-                    price: el.unitPrice,
-                    quantity: el.quantity,
-                    amount: el.total,
-                    label: el.productData[0].name,
-                }
-            )
-        })
-        const purchase = JSON.stringify(purchaseObject);
-        const oldPurchaseProducts = JSON.stringify(oldPurchaseProductsObject);
         return {
             props: {
                 user: session.user,
-                purchase: JSON.parse(purchase),
-                oldPurchaseProducts: JSON.parse(oldPurchaseProducts),
+                id,
             },
         };
     },

@@ -26,7 +26,6 @@ export default function Details({user, id}) {
             console.log(err);
         });
     }, []);
-    console.log(purchase);
     return (
         <>
             <Head>
@@ -98,7 +97,7 @@ export default function Details({user, id}) {
                                         <tr key={`product-${el.id}`}>
                                             <td>{index + 1}</td>
                                             <td>
-                                                {el.product_name}
+                                                {el.name}
                                             </td>
                                             <td>{el.price} Tk.</td>
                                             <td>{el.quantity}</td>

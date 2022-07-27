@@ -178,7 +178,7 @@ export default function Supplier({user}) {
                                         <td>{el.address}</td>
                                         <td>
                                             {
-                                                el.balance
+                                                el.balance ? el.balance : 0
                                             } Tk.
                                         </td>
                                         <td>
