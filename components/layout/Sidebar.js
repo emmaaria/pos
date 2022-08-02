@@ -15,6 +15,11 @@ export default function Sidebar({user}) {
         $('.supplierMenu').slideToggle();
         $('.si').toggleClass('open');
     };
+    const showSaleMenu = (e) => {
+        e.preventDefault();
+        $('.saleMenu').slideToggle();
+        $('.sales').toggleClass('open');
+    };
     return (
         <div className={styles.sidebar}>
             <div className={styles.avatar}>
@@ -37,6 +42,54 @@ export default function Sidebar({user}) {
                             Dashboard
                         </a>
                     </Link>
+                </li>
+                <li>
+                    <Link href={`/supplier`}>
+                        <a
+                            onClick={showSaleMenu}
+                            className={`
+                                ${
+                                router.pathname === '/sale' ||
+                                router.pathname === '/sale/create' ||
+                                router.pathname === '/sale/[id]'
+                                    ? styles.active
+                                    : ''
+                            }
+                            `}>
+                            <i className="fa-solid fa-shopping-cart"/>
+                            Sales
+                            <span className={`fa-solid fa-caret-right float-end ${styles.dropdownIcon} sale`}/>
+                        </a>
+                    </Link>
+                    <ul className={`saleMenu ${styles.subMenu}`}>
+                        <li>
+                            <Link href={`/sale`}>
+                                <a className={`
+                                ${
+                                    router.pathname === '/sale' ||
+                                    router.pathname === '/sale/[id]'
+                                        ? styles.active
+                                        : ''
+                                }
+                            `}>
+                                    Sale List
+                                </a>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href={`/sale/create`}>
+                                <a className={`
+                                ${
+                                    router.pathname === '/sale/create'
+                                        ? styles.active
+                                        : ''
+                                }
+                            `}>
+                                    POS
+                                </a>
+                            </Link>
+                        </li>
+                    </ul>
                 </li>
                 <li>
                     <Link href={`/product`}>

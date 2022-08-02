@@ -2,7 +2,7 @@ import axios from "axios";
 import $ from "jquery";
 import {useState} from "react";
 
-export default function AutocompleteInput({type, token}) {
+export default function AutocompleteInput({type, token, placeholder}) {
     const headers = {
         headers: {Authorization: `Bearer ${token}`},
     };
@@ -31,23 +31,43 @@ export default function AutocompleteInput({type, token}) {
                 }, 1000)
             );
         }
+        if (type === 'customer') {
+            const name = $('.autocompleteInput').val();
+            setTimer(
+                setTimeout(() => {
+                    axios.get(
+                        `${process.env.API_URL}/customer?name=${name}`,
+                        headers
+                    ).then(res => {
+                        if (res.data.status === true) {
+                            setData(res.data.customers.data);
+                        }
+                    }).catch(err => {
+                        console.log(err);
+                    });
+                }, 1000)
+            );
+        }
     }
     const setValue = (label, value) => {
         $('.supplier-input').val(label);
-        if (type === 'supplier'){
+        if (type === 'supplier') {
             $('.supplier-id').val(value);
         }
-        if (type === 'customer'){
-            $('.customer').val(value);
+        if (type === 'customer') {
+            $('.customer-id').val(value);
         }
         $('.autocompleteItemContainer.supplier').hide();
     }
     return (
         <>
             <div className={`autocompleteWrapper`}>
-                <input type="text" className={`form-control autocompleteInput supplier-input`} autoComplete={`off`} onKeyUp={search}
+                <input type="text" className={`form-control autocompleteInput supplier-input`} autoComplete={`off`}
+                       onKeyUp={search}
                        onKeyDown={search}
-                       onChange={search}/>
+                       onChange={search}
+                       placeholder={placeholder ? placeholder : ''}
+                />
                 {
                     type && type === 'supplier' && (
                         <input type="hidden" className={`supplier-id`}/>

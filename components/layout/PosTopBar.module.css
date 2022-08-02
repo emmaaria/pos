@@ -1,0 +1,27 @@
+.topBar{
+    height: 7.5rem;
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: 1001;
+    padding: 0 .75rem 0 0;
+    display: flex;
+    align-items: center;
+    top: 0;
+    background: #212130;
+}
+.pageTitle{
+    color: #f7f7f7;
+    font-size: 1.75rem;
+    font-weight: 600;
+    padding: 0 40px;
+    margin-bottom: 0;
+}
+.logoBox{
+    height: 0;
+    width: 5rem;
+    background: #212130;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
