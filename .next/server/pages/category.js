@@ -55,7 +55,7 @@ function Category({ user  }) {
     const { 0: loading , 1: setLoading  } = (0,react__WEBPACK_IMPORTED_MODULE_6__.useState)(true);
     const { 0: timer , 1: setTimer  } = (0,react__WEBPACK_IMPORTED_MODULE_6__.useState)(null);
     (0,react__WEBPACK_IMPORTED_MODULE_6__.useEffect)(()=>{
-        axios__WEBPACK_IMPORTED_MODULE_7___default().get(`${"http://pos-backend.webxcode.xyz/api"}/category`, headers).then((res)=>{
+        axios__WEBPACK_IMPORTED_MODULE_7___default().get(`${"//pos-backend.webxcode.xyz/api"}/category`, headers).then((res)=>{
             if (res.data.status === true) {
                 setCategories(res.data.categories.data);
                 setLinks(res.data.categories.links);
@@ -73,7 +73,7 @@ function Category({ user  }) {
         setTimer(setTimeout(()=>{
             setLoading(true);
             const name = jquery__WEBPACK_IMPORTED_MODULE_9___default()(".terms").val();
-            axios__WEBPACK_IMPORTED_MODULE_7___default().get(`${"http://pos-backend.webxcode.xyz/api"}/category?name=${name}`, headers).then((res)=>{
+            axios__WEBPACK_IMPORTED_MODULE_7___default().get(`${"//pos-backend.webxcode.xyz/api"}/category?name=${name}`, headers).then((res)=>{
                 if (res.data.status === true) {
                     setCategories(res.data.categories.data);
                     setLinks(res.data.categories.links);
@@ -103,7 +103,7 @@ function Category({ user  }) {
             theme: "dark"
         });
         try {
-            const response = await axios__WEBPACK_IMPORTED_MODULE_7___default().post(`${"http://pos-backend.webxcode.xyz/api"}/category/delete`, {
+            const response = await axios__WEBPACK_IMPORTED_MODULE_7___default().post(`${"//pos-backend.webxcode.xyz/api"}/category/delete`, {
                 id: id
             }, headers);
             console.log(response.data);

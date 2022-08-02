@@ -73,7 +73,7 @@ function EditUnit({ user , id  }) {
         }
     };
     (0,react__WEBPACK_IMPORTED_MODULE_8__.useEffect)(()=>{
-        axios__WEBPACK_IMPORTED_MODULE_6___default().get(`${"http://pos-backend.webxcode.xyz/api"}/unit/${id}`, headers).then((res)=>{
+        axios__WEBPACK_IMPORTED_MODULE_6___default().get(`${"//pos-backend.webxcode.xyz/api"}/unit/${id}`, headers).then((res)=>{
             if (res.data.status === true) {
                 setUnit(res.data.unit);
                 setLoading(false);
@@ -105,7 +105,7 @@ function EditUnit({ user , id  }) {
             return;
         }
         try {
-            const res = await axios__WEBPACK_IMPORTED_MODULE_6___default().post(`${"http://pos-backend.webxcode.xyz/api"}/unit/update`, {
+            const res = await axios__WEBPACK_IMPORTED_MODULE_6___default().post(`${"//pos-backend.webxcode.xyz/api"}/unit/update`, {
                 name,
                 id
             }, headers);

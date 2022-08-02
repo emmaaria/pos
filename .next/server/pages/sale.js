@@ -55,7 +55,7 @@ function Purchase({ user  }) {
         }
     };
     (0,react__WEBPACK_IMPORTED_MODULE_6__.useEffect)(()=>{
-        axios__WEBPACK_IMPORTED_MODULE_7___default().get(`${"http://pos-backend.webxcode.xyz/api"}/purchase`, headers).then((res)=>{
+        axios__WEBPACK_IMPORTED_MODULE_7___default().get(`${"//pos-backend.webxcode.xyz/api"}/purchase`, headers).then((res)=>{
             if (res.data.status === true) {
                 setPurchases(res.data.purchases.data);
                 setLinks(res.data.purchases.links);
@@ -73,7 +73,7 @@ function Purchase({ user  }) {
         setTimer(setTimeout(()=>{
             setLoading(true);
             const name = jquery__WEBPACK_IMPORTED_MODULE_10___default()(".terms").val();
-            axios__WEBPACK_IMPORTED_MODULE_7___default().get(`${"http://pos-backend.webxcode.xyz/api"}/purchase?name=${name}`, headers).then((res)=>{
+            axios__WEBPACK_IMPORTED_MODULE_7___default().get(`${"//pos-backend.webxcode.xyz/api"}/purchase?name=${name}`, headers).then((res)=>{
                 if (res.data.status === true) {
                     setPurchases(res.data.purchases.data);
                     setLinks(res.data.purchases.links);
@@ -103,7 +103,7 @@ function Purchase({ user  }) {
             theme: "dark"
         });
         try {
-            const response = await axios__WEBPACK_IMPORTED_MODULE_7___default().post(`${"http://pos-backend.webxcode.xyz/api"}/purchase/delete`, {
+            const response = await axios__WEBPACK_IMPORTED_MODULE_7___default().post(`${"//pos-backend.webxcode.xyz/api"}/purchase/delete`, {
                 id: id
             }, headers);
             if (response.data.status === true) {

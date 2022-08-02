@@ -73,7 +73,7 @@ function EditCustomer({ user , id  }) {
         }
     };
     (0,react__WEBPACK_IMPORTED_MODULE_8__.useEffect)(()=>{
-        axios__WEBPACK_IMPORTED_MODULE_6___default().get(`${"http://pos-backend.webxcode.xyz/api"}/customer/${id}`, headers).then((res)=>{
+        axios__WEBPACK_IMPORTED_MODULE_6___default().get(`${"//pos-backend.webxcode.xyz/api"}/customer/${id}`, headers).then((res)=>{
             console.log(res.data);
             if (res.data.status === true) {
                 setCustomer(res.data.customer);
@@ -108,7 +108,7 @@ function EditCustomer({ user , id  }) {
             return;
         }
         try {
-            const res = await axios__WEBPACK_IMPORTED_MODULE_6___default().post(`${"http://pos-backend.webxcode.xyz/api"}/customer/update`, {
+            const res = await axios__WEBPACK_IMPORTED_MODULE_6___default().post(`${"//pos-backend.webxcode.xyz/api"}/customer/update`, {
                 name,
                 mobile,
                 address,

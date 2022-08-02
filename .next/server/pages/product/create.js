@@ -72,7 +72,7 @@ function CreateProduct({ user  }) {
     (0,react__WEBPACK_IMPORTED_MODULE_8__.useEffect)(()=>{
         async function getData() {
             try {
-                const res = await axios__WEBPACK_IMPORTED_MODULE_6___default().get(`${"http://pos-backend.webxcode.xyz/api"}/category?allData=true`, headers);
+                const res = await axios__WEBPACK_IMPORTED_MODULE_6___default().get(`${"//pos-backend.webxcode.xyz/api"}/category?allData=true`, headers);
                 if (res.data.status === true) {
                     setCategories(res.data.categories);
                 }
@@ -80,7 +80,7 @@ function CreateProduct({ user  }) {
                 console.log(err);
             }
             try {
-                const res = await axios__WEBPACK_IMPORTED_MODULE_6___default().get(`${"http://pos-backend.webxcode.xyz/api"}/unit?allData=true`, headers);
+                const res = await axios__WEBPACK_IMPORTED_MODULE_6___default().get(`${"//pos-backend.webxcode.xyz/api"}/unit?allData=true`, headers);
                 if (res.data.status === true) {
                     setUnits(res.data.units);
                 }
@@ -120,7 +120,7 @@ function CreateProduct({ user  }) {
             return;
         }
         try {
-            const res = await axios__WEBPACK_IMPORTED_MODULE_6___default().post(`${"http://pos-backend.webxcode.xyz/api"}/product/store`, {
+            const res = await axios__WEBPACK_IMPORTED_MODULE_6___default().post(`${"//pos-backend.webxcode.xyz/api"}/product/store`, {
                 name,
                 category,
                 unit,

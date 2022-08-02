@@ -73,7 +73,7 @@ function EditSupplier({ user , id  }) {
         }
     };
     (0,react__WEBPACK_IMPORTED_MODULE_8__.useEffect)(()=>{
-        axios__WEBPACK_IMPORTED_MODULE_6___default().get(`${"http://pos-backend.webxcode.xyz/api"}/supplier/${id}`, headers).then((res)=>{
+        axios__WEBPACK_IMPORTED_MODULE_6___default().get(`${"//pos-backend.webxcode.xyz/api"}/supplier/${id}`, headers).then((res)=>{
             if (res.data.status === true) {
                 setSupplier(res.data.supplier);
                 setLoading(false);
@@ -107,7 +107,7 @@ function EditSupplier({ user , id  }) {
             return;
         }
         try {
-            const res = await axios__WEBPACK_IMPORTED_MODULE_6___default().post(`${"http://pos-backend.webxcode.xyz/api"}/supplier/update`, {
+            const res = await axios__WEBPACK_IMPORTED_MODULE_6___default().post(`${"//pos-backend.webxcode.xyz/api"}/supplier/update`, {
                 name,
                 mobile,
                 address,

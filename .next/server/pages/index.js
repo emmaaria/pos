@@ -108,7 +108,7 @@ function Login() {
             });
             return;
         }
-        axios__WEBPACK_IMPORTED_MODULE_3___default().post(`${"http://pos-backend.webxcode.xyz/api"}/login`, {
+        axios__WEBPACK_IMPORTED_MODULE_3___default().post(`${"//pos-backend.webxcode.xyz/api"}/login`, {
             email: email,
             password: password
         }).then((response)=>{

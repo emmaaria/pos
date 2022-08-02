@@ -90,7 +90,7 @@ function CreateUnit({ user  }) {
             return;
         }
         try {
-            const res = await axios__WEBPACK_IMPORTED_MODULE_6___default().post(`${"http://pos-backend.webxcode.xyz/api"}/unit/store`, {
+            const res = await axios__WEBPACK_IMPORTED_MODULE_6___default().post(`${"//pos-backend.webxcode.xyz/api"}/unit/store`, {
                 name
             }, headers);
             if (res.data.status === true) {

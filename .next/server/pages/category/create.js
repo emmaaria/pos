@@ -90,7 +90,7 @@ function CreateCategory({ user  }) {
             return;
         }
         try {
-            const res = await axios__WEBPACK_IMPORTED_MODULE_6___default().post(`${"http://pos-backend.webxcode.xyz/api"}/category/store`, {
+            const res = await axios__WEBPACK_IMPORTED_MODULE_6___default().post(`${"//pos-backend.webxcode.xyz/api"}/category/store`, {
                 name
             }, headers);
             if (res.data.status === true) {

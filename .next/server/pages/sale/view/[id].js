@@ -48,7 +48,7 @@ function Details({ user , id  }) {
         }
     };
     (0,react__WEBPACK_IMPORTED_MODULE_5__.useEffect)(()=>{
-        axios__WEBPACK_IMPORTED_MODULE_6___default().get(`${"http://pos-backend.webxcode.xyz/api"}/purchase/${id}`, headers).then((res)=>{
+        axios__WEBPACK_IMPORTED_MODULE_6___default().get(`${"//pos-backend.webxcode.xyz/api"}/purchase/${id}`, headers).then((res)=>{
             if (res.data.status === true) {
                 setPurchase(res.data.purchase);
                 setLoading(false);

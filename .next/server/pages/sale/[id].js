@@ -68,7 +68,7 @@ function EditPurchase({ user , id  }) {
         }
     };
     (0,react__WEBPACK_IMPORTED_MODULE_8__.useEffect)(()=>{
-        axios__WEBPACK_IMPORTED_MODULE_6___default().get(`${"http://pos-backend.webxcode.xyz/api"}/purchase/${id}`, headers).then((res)=>{
+        axios__WEBPACK_IMPORTED_MODULE_6___default().get(`${"//pos-backend.webxcode.xyz/api"}/purchase/${id}`, headers).then((res)=>{
             if (res.data.status === true) {
                 setPurchase(res.data.purchase);
                 setTotal(res.data.purchase.purchaseData.amount);
@@ -137,7 +137,7 @@ function EditPurchase({ user , id  }) {
             return;
         }
         try {
-            const res = await axios__WEBPACK_IMPORTED_MODULE_6___default().post(`${"http://pos-backend.webxcode.xyz/api"}/purchase/update`, {
+            const res = await axios__WEBPACK_IMPORTED_MODULE_6___default().post(`${"//pos-backend.webxcode.xyz/api"}/purchase/update`, {
                 purchase_id: id,
                 supplier_id: supplier,
                 productIds,
@@ -228,7 +228,7 @@ function EditPurchase({ user , id  }) {
         }
         const name = jquery__WEBPACK_IMPORTED_MODULE_7___default()(`.search-product`).val();
         setTimer(setTimeout(()=>{
-            axios__WEBPACK_IMPORTED_MODULE_6___default().get(`${"http://pos-backend.webxcode.xyz/api"}/product?name=${name}`, headers).then((res)=>{
+            axios__WEBPACK_IMPORTED_MODULE_6___default().get(`${"//pos-backend.webxcode.xyz/api"}/product?name=${name}`, headers).then((res)=>{
                 if (res.data.status === true) {
                     setProducts(res.data.products.data);
                 }

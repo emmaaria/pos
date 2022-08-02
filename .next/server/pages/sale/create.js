@@ -101,7 +101,7 @@ function CreateSale({ user  }) {
             return;
         }
         try {
-            const res = await axios__WEBPACK_IMPORTED_MODULE_6___default().post(`${"http://pos-backend.webxcode.xyz/api"}/invoice/store`, {
+            const res = await axios__WEBPACK_IMPORTED_MODULE_6___default().post(`${"//pos-backend.webxcode.xyz/api"}/invoice/store`, {
                 customer_id: customer,
                 productIds,
                 productQuantities,
@@ -209,7 +209,7 @@ function CreateSale({ user  }) {
         }
         const name = jquery__WEBPACK_IMPORTED_MODULE_7___default()(`.search-product`).val();
         setTimer(setTimeout(()=>{
-            axios__WEBPACK_IMPORTED_MODULE_6___default().get(`${"http://pos-backend.webxcode.xyz/api"}/product?name=${name}`, headers).then((res)=>{
+            axios__WEBPACK_IMPORTED_MODULE_6___default().get(`${"//pos-backend.webxcode.xyz/api"}/product?name=${name}`, headers).then((res)=>{
                 if (res.data.status === true) {
                     setProducts(res.data.products.data);
                 }
@@ -222,7 +222,7 @@ function CreateSale({ user  }) {
         e.preventDefault();
         const id = jquery__WEBPACK_IMPORTED_MODULE_7___default()(`.scan-barcode`).val();
         if (id !== "") {
-            axios__WEBPACK_IMPORTED_MODULE_6___default().get(`${"http://pos-backend.webxcode.xyz/api"}/product-by-barcode?id=${id}`, headers).then((res)=>{
+            axios__WEBPACK_IMPORTED_MODULE_6___default().get(`${"//pos-backend.webxcode.xyz/api"}/product-by-barcode?id=${id}`, headers).then((res)=>{
                 if (res.data.status === true) {
                     addProduct(res.data.product);
                     jquery__WEBPACK_IMPORTED_MODULE_7___default()(`.scan-barcode`).val("");

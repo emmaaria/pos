@@ -77,7 +77,7 @@ function EditProduct({ user , id  }) {
     (0,react__WEBPACK_IMPORTED_MODULE_8__.useEffect)(()=>{
         async function getData() {
             try {
-                const res = await axios__WEBPACK_IMPORTED_MODULE_6___default().get(`${"http://pos-backend.webxcode.xyz/api"}/category?allData=true`, headers);
+                const res = await axios__WEBPACK_IMPORTED_MODULE_6___default().get(`${"//pos-backend.webxcode.xyz/api"}/category?allData=true`, headers);
                 if (res.data.status === true) {
                     setCategories(res.data.categories);
                 }
@@ -85,7 +85,7 @@ function EditProduct({ user , id  }) {
                 console.log(err);
             }
             try {
-                const res = await axios__WEBPACK_IMPORTED_MODULE_6___default().get(`${"http://pos-backend.webxcode.xyz/api"}/unit?allData=true`, headers);
+                const res = await axios__WEBPACK_IMPORTED_MODULE_6___default().get(`${"//pos-backend.webxcode.xyz/api"}/unit?allData=true`, headers);
                 if (res.data.status === true) {
                     setUnits(res.data.units);
                 }
@@ -99,7 +99,7 @@ function EditProduct({ user , id  }) {
         setUnits
     ]);
     (0,react__WEBPACK_IMPORTED_MODULE_8__.useEffect)(()=>{
-        axios__WEBPACK_IMPORTED_MODULE_6___default().get(`${"http://pos-backend.webxcode.xyz/api"}/product/${id}`, headers).then((res)=>{
+        axios__WEBPACK_IMPORTED_MODULE_6___default().get(`${"//pos-backend.webxcode.xyz/api"}/product/${id}`, headers).then((res)=>{
             if (res.data.status === true) {
                 setProduct(res.data.product);
                 setLoading(false);
@@ -135,7 +135,7 @@ function EditProduct({ user , id  }) {
             return;
         }
         try {
-            const res = await axios__WEBPACK_IMPORTED_MODULE_6___default().post(`${"http://pos-backend.webxcode.xyz/api"}/product/update`, {
+            const res = await axios__WEBPACK_IMPORTED_MODULE_6___default().post(`${"//pos-backend.webxcode.xyz/api"}/product/update`, {
                 id: id,
                 name,
                 category,

@@ -55,7 +55,7 @@ function Customer({ user  }) {
     const { 0: loading , 1: setLoading  } = (0,react__WEBPACK_IMPORTED_MODULE_6__.useState)(true);
     const { 0: timer , 1: setTimer  } = (0,react__WEBPACK_IMPORTED_MODULE_6__.useState)(null);
     (0,react__WEBPACK_IMPORTED_MODULE_6__.useEffect)(()=>{
-        axios__WEBPACK_IMPORTED_MODULE_7___default().get(`${"http://pos-backend.webxcode.xyz/api"}/customer`, headers).then((res)=>{
+        axios__WEBPACK_IMPORTED_MODULE_7___default().get(`${"//pos-backend.webxcode.xyz/api"}/customer`, headers).then((res)=>{
             if (res.data.status === true) {
                 setCustomers(res.data.customers.data);
                 setLinks(res.data.customers.links);
@@ -73,7 +73,7 @@ function Customer({ user  }) {
         setTimer(setTimeout(()=>{
             setLoading(true);
             const name = jquery__WEBPACK_IMPORTED_MODULE_9___default()(".terms").val();
-            axios__WEBPACK_IMPORTED_MODULE_7___default().get(`${"http://pos-backend.webxcode.xyz/api"}/customer?name=${name}`, headers).then((res)=>{
+            axios__WEBPACK_IMPORTED_MODULE_7___default().get(`${"//pos-backend.webxcode.xyz/api"}/customer?name=${name}`, headers).then((res)=>{
                 if (res.data.status === true) {
                     setCustomers(res.data.customers.data);
                     setLinks(res.data.customers.links);
@@ -103,7 +103,7 @@ function Customer({ user  }) {
             theme: "dark"
         });
         try {
-            const response = await axios__WEBPACK_IMPORTED_MODULE_7___default().post(`${"http://pos-backend.webxcode.xyz/api"}/customer/delete`, {
+            const response = await axios__WEBPACK_IMPORTED_MODULE_7___default().post(`${"//pos-backend.webxcode.xyz/api"}/customer/delete`, {
                 id: id
             }, headers);
             if (response.data.status === true) {

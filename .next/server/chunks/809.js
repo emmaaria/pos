@@ -37,7 +37,7 @@ function AutocompleteDefaultSupplier({ name: name1 , id , token  }) {
         }
         const name = jquery__WEBPACK_IMPORTED_MODULE_2___default()(".autocompleteInput").val();
         setTimer(setTimeout(()=>{
-            axios__WEBPACK_IMPORTED_MODULE_1___default().get(`${"http://pos-backend.webxcode.xyz/api"}/supplier?name=${name}`, headers).then((res)=>{
+            axios__WEBPACK_IMPORTED_MODULE_1___default().get(`${"//pos-backend.webxcode.xyz/api"}/supplier?name=${name}`, headers).then((res)=>{
                 if (res.data.status === true) {
                     setData(res.data.suppliers.data);
                 }
