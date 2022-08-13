@@ -105,6 +105,7 @@ function CreateProduct({ user  }) {
         const unit = jquery__WEBPACK_IMPORTED_MODULE_7___default()(".unit").val();
         const price = jquery__WEBPACK_IMPORTED_MODULE_7___default()(".price").val();
         const purchasePrice = jquery__WEBPACK_IMPORTED_MODULE_7___default()(".purchasePrice").val();
+        const weight = jquery__WEBPACK_IMPORTED_MODULE_7___default()(".weight").val();
         if (name === "") {
             react_toastify__WEBPACK_IMPORTED_MODULE_5__.toast.dismiss();
             react_toastify__WEBPACK_IMPORTED_MODULE_5__.toast.error("Name is required", {
@@ -125,6 +126,7 @@ function CreateProduct({ user  }) {
                 category,
                 unit,
                 price,
+                weight,
                 purchase_price: purchasePrice
             }, headers);
             if (res.data.status === true) {
@@ -277,24 +279,41 @@ function CreateProduct({ user  }) {
                                         })
                                     ]
                                 }),
-                                /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("div", {
+                                /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
                                     className: "row mb-3",
-                                    children: /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-                                        className: "col-md-6",
-                                        children: [
-                                            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("label", {
-                                                htmlFor: "purchasePrice",
-                                                className: `form-label`,
-                                                children: "Purchase Price"
-                                            }),
-                                            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("input", {
-                                                type: "text",
-                                                className: `form-control purchasePrice`,
-                                                id: `purchasePrice`,
-                                                required: true
-                                            })
-                                        ]
-                                    })
+                                    children: [
+                                        /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+                                            className: "col-md-6",
+                                            children: [
+                                                /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("label", {
+                                                    htmlFor: "purchasePrice",
+                                                    className: `form-label`,
+                                                    children: "Purchase Price"
+                                                }),
+                                                /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("input", {
+                                                    type: "text",
+                                                    className: `form-control purchasePrice`,
+                                                    id: `purchasePrice`,
+                                                    required: true
+                                                })
+                                            ]
+                                        }),
+                                        /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+                                            className: "col-md-6",
+                                            children: [
+                                                /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("label", {
+                                                    htmlFor: "weight",
+                                                    className: `form-label`,
+                                                    children: "Weight"
+                                                }),
+                                                /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("input", {
+                                                    type: "text",
+                                                    className: `form-control weight`,
+                                                    id: `weight`
+                                                })
+                                            ]
+                                        })
+                                    ]
                                 }),
                                 /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("button", {
                                     className: `btn btn-success`,

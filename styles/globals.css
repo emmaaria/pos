@@ -69,7 +69,7 @@ th, td {
     top: 100%;
     left: 0;
     z-index: 999;
-    background-color: rgba(249, 58, 11, 1);
+    background-color: #17171E;
     width: 100%;
     border-radius: .25rem;
     overflow-x: scroll;
@@ -87,7 +87,7 @@ th, td {
 }
 
 .autocompleteItem:hover {
-    background-color: #17171E;
+    background-color: rgba(249, 58, 11, 1);
     cursor: pointer;
 }
 

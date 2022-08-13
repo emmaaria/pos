@@ -53,6 +53,7 @@ export default function CreateProduct({user}) {
         const unit = $('.unit').val();
         const price = $('.price').val();
         const purchasePrice = $('.purchasePrice').val();
+        const weight = $('.weight').val();
         if (name === '') {
             toast.dismiss();
             toast.error('Name is required', {
@@ -73,9 +74,10 @@ export default function CreateProduct({user}) {
                 category,
                 unit,
                 price,
+                weight,
                 purchase_price: purchasePrice
             }, headers);
-            if (res.data.status === true){
+            if (res.data.status === true) {
                 toast.dismiss();
                 toast.success('Successfully Saved', {
                     position: "bottom-right",
@@ -88,7 +90,7 @@ export default function CreateProduct({user}) {
                 });
                 $('form').trigger('reset');
                 setLoader(false);
-            }else {
+            } else {
                 toast.dismiss();
                 toast.success('Something went wrong', {
                     position: "bottom-right",
@@ -175,6 +177,10 @@ export default function CreateProduct({user}) {
                                     <label htmlFor="purchasePrice" className={`form-label`}>Purchase Price</label>
                                     <input type="text" className={`form-control purchasePrice`} id={`purchasePrice`}
                                            required/>
+                                </div>
+                                <div className="col-md-6">
+                                    <label htmlFor="weight" className={`form-label`}>Weight</label>
+                                    <input type="text" className={`form-control weight`} id={`weight`}/>
                                 </div>
                             </div>
                             <button className={`btn btn-success`} type={`submit`}>Save</button>

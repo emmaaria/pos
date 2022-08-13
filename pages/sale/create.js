@@ -63,7 +63,7 @@ export default function CreateSale({user}) {
         }
         try {
             const res = await axios.post(`${process.env.API_URL}/invoice/store`, {
-                customer_id : customer,
+                customer_id: customer,
                 productIds,
                 productQuantities,
                 productPrices,

@@ -120,6 +120,7 @@ function EditProduct({ user , id  }) {
         const unit = jquery__WEBPACK_IMPORTED_MODULE_7___default()(".unit").val();
         const price = jquery__WEBPACK_IMPORTED_MODULE_7___default()(".price").val();
         const purchasePrice = jquery__WEBPACK_IMPORTED_MODULE_7___default()(".purchasePrice").val();
+        const weight = jquery__WEBPACK_IMPORTED_MODULE_7___default()(".weight").val();
         if (name === "") {
             react_toastify__WEBPACK_IMPORTED_MODULE_5__.toast.dismiss();
             react_toastify__WEBPACK_IMPORTED_MODULE_5__.toast.error("Name is required", {
@@ -141,6 +142,7 @@ function EditProduct({ user , id  }) {
                 category,
                 unit,
                 price,
+                weight,
                 purchase_price: purchasePrice
             }, headers);
             if (res.data.status === true) {
@@ -324,32 +326,57 @@ function EditProduct({ user , id  }) {
                                         })
                                     ]
                                 }),
-                                /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("div", {
+                                /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
                                     className: "row mb-3",
-                                    children: /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-                                        className: "col-md-6",
-                                        children: [
-                                            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("label", {
-                                                htmlFor: "purchasePrice",
-                                                className: `form-label`,
-                                                children: "Purchase Price"
-                                            }),
-                                            product && loading === false && /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("input", {
-                                                type: "text",
-                                                className: `form-control purchasePrice`,
-                                                id: `purchasePrice`,
-                                                required: true,
-                                                defaultValue: product.purchase_price
-                                            }) || /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(react_loading_skeleton__WEBPACK_IMPORTED_MODULE_9__.SkeletonTheme, {
-                                                baseColor: "rgba(249, 58, 11, 0.1)",
-                                                highlightColor: "#212130",
-                                                children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx((react_loading_skeleton__WEBPACK_IMPORTED_MODULE_9___default()), {
-                                                    width: `100%`,
-                                                    height: 40
+                                    children: [
+                                        /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+                                            className: "col-md-6",
+                                            children: [
+                                                /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("label", {
+                                                    htmlFor: "purchasePrice",
+                                                    className: `form-label`,
+                                                    children: "Purchase Price"
+                                                }),
+                                                product && loading === false && /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("input", {
+                                                    type: "text",
+                                                    className: `form-control purchasePrice`,
+                                                    id: `purchasePrice`,
+                                                    required: true,
+                                                    defaultValue: product.purchase_price
+                                                }) || /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(react_loading_skeleton__WEBPACK_IMPORTED_MODULE_9__.SkeletonTheme, {
+                                                    baseColor: "rgba(249, 58, 11, 0.1)",
+                                                    highlightColor: "#212130",
+                                                    children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx((react_loading_skeleton__WEBPACK_IMPORTED_MODULE_9___default()), {
+                                                        width: `100%`,
+                                                        height: 40
+                                                    })
                                                 })
-                                            })
-                                        ]
-                                    })
+                                            ]
+                                        }),
+                                        /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+                                            className: "col-md-6",
+                                            children: [
+                                                /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("label", {
+                                                    htmlFor: "weight",
+                                                    className: `form-label`,
+                                                    children: "Weight"
+                                                }),
+                                                product && loading === false && /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("input", {
+                                                    type: "text",
+                                                    className: `form-control weight`,
+                                                    id: `weight`,
+                                                    defaultValue: product.weight
+                                                }) || /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(react_loading_skeleton__WEBPACK_IMPORTED_MODULE_9__.SkeletonTheme, {
+                                                    baseColor: "rgba(249, 58, 11, 0.1)",
+                                                    highlightColor: "#212130",
+                                                    children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx((react_loading_skeleton__WEBPACK_IMPORTED_MODULE_9___default()), {
+                                                        width: `100%`,
+                                                        height: 40
+                                                    })
+                                                })
+                                            ]
+                                        })
+                                    ]
                                 }),
                                 /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("button", {
                                     className: `btn btn-success`,

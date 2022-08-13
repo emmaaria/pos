@@ -69,6 +69,7 @@ export default function EditProduct({user, id}) {
         const unit = $('.unit').val();
         const price = $('.price').val();
         const purchasePrice = $('.purchasePrice').val();
+        const weight = $('.weight').val();
         if (name === '') {
             toast.dismiss();
             toast.error('Name is required', {
@@ -90,7 +91,8 @@ export default function EditProduct({user, id}) {
                 category,
                 unit,
                 price,
-                purchase_price : purchasePrice
+                weight,
+                purchase_price: purchasePrice
             }, headers);
             if (res.data.status === true) {
                 toast.dismiss();
@@ -166,7 +168,8 @@ export default function EditProduct({user, id}) {
                                     <label htmlFor="category" className={`form-label`}>Category</label>
                                     {
                                         product && loading === false && (
-                                            <select className="form-control category" defaultValue={product.category} key={`${Math.floor((Math.random() * 1000))}-min`}>
+                                            <select className="form-control category" defaultValue={product.category}
+                                                    key={`${Math.floor((Math.random() * 1000))}-min`}>
                                                 <option value="">Choose Category</option>
                                                 {
                                                     categories && (
@@ -189,7 +192,8 @@ export default function EditProduct({user, id}) {
                                     <label htmlFor="unit" className={`form-label`}>Unit</label>
                                     {
                                         product && loading === false && (
-                                            <select className="form-control unit" required defaultValue={product.unit} key={`${Math.floor((Math.random() * 1000))}-min`}>
+                                            <select className="form-control unit" required defaultValue={product.unit}
+                                                    key={`${Math.floor((Math.random() * 1000))}-min`}>
                                                 <option value="">Choose Unit</option>
                                                 {
                                                     units && (
@@ -229,6 +233,21 @@ export default function EditProduct({user, id}) {
                                         product && loading === false && (
                                             <input type="text" className={`form-control purchasePrice`} id={`purchasePrice`}
                                                    required defaultValue={product.purchase_price}/>
+                                        ) || (
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                <Skeleton width={`100%`} height={40}/>
+                                            </SkeletonTheme>
+                                        )
+                                    }
+                                </div>
+
+                                <div className="col-md-6">
+                                    <label htmlFor="weight" className={`form-label`}>Weight</label>
+
+                                    {
+                                        product && loading === false && (
+                                            <input type="text" className={`form-control weight`} id={`weight`}
+                                                   defaultValue={product.weight}/>
                                         ) || (
                                             <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
                                                 <Skeleton width={`100%`} height={40}/>
