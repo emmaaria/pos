@@ -144,12 +144,12 @@ export default function EditPurchase({user, id}) {
 
     const removeProduct = (productId) => {
         const newProducts = purchaseProducts.filter(product => {
-            return product.id !== productId;
+            return product.product_id !== productId;
         });
         setPurchaseProducts(newProducts);
         setTotal(0);
         newProducts.map(el => {
-            setTotal(oldTotal => oldTotal + parseFloat($(`.subtotal_${el.id}`).text()));
+            setTotal(oldTotal => oldTotal + parseFloat($(`.subtotal_${el.product_id}`).text()));
         });
     }
     const calculateSubtotal = (productId) => {
@@ -197,7 +197,7 @@ export default function EditPurchase({user, id}) {
     }
     const addProduct = (data) => {
         const alreadyAdded = purchaseProducts.filter(product => {
-            return product.id === data.id.toString();
+            return product.product_id === data.product_id;
         });
         console.log(alreadyAdded);
         if (alreadyAdded.length > 0) {
@@ -273,7 +273,7 @@ export default function EditPurchase({user, id}) {
                                             products && (
                                                 products.map(el => (
                                                     <div className={`autocompleteItem`}
-                                                         key={`search-product-item-${el.id}`}
+                                                         key={`search-product-item-${el.product_id}`}
                                                          onClick={() => addProduct(el)}>{el.name}</div>
                                                 ))
                                             )
@@ -308,38 +308,38 @@ export default function EditPurchase({user, id}) {
                                 {
                                     purchaseProducts && !loading && (
                                         purchaseProducts.map((el, index) => (
-                                            <tr key={`purchase-product-item-${el.id}`}>
+                                            <tr key={`purchase-product-item-${el.product_id}`}>
                                                 <td>
                                                     {index + 1}
                                                 </td>
                                                 <td>
                                                     {el.name}
-                                                    <input type="hidden" className={`productId`} defaultValue={el.id}/>
+                                                    <input type="hidden" className={`productId`} defaultValue={el.product_id}/>
                                                 </td>
                                                 <td>
                                                     <input type="text"
-                                                           className={`form-control productPrice productPrice_${el.id}`}
+                                                           className={`form-control productPrice productPrice_${el.product_id}`}
                                                            defaultValue={el.price}
-                                                           onChange={() => calculateSubtotal(el.id)}
-                                                           onKeyUp={() => calculateSubtotal(el.id)}
-                                                           onKeyDown={() => calculateSubtotal(el.id)}/>
+                                                           onChange={() => calculateSubtotal(el.product_id)}
+                                                           onKeyUp={() => calculateSubtotal(el.product_id)}
+                                                           onKeyDown={() => calculateSubtotal(el.product_id)}/>
                                                 </td>
                                                 <td>
                                                     <input type="text"
-                                                           className={`form-control productQuantity productQuantity_${el.id}`}
+                                                           className={`form-control productQuantity productQuantity_${el.product_id}`}
                                                            defaultValue={el.quantity ? el.quantity : 1}
-                                                           onChange={() => calculateSubtotal(el.id)}
-                                                           onKeyUp={() => calculateSubtotal(el.id)}
-                                                           onKeyDown={() => calculateSubtotal(el.id)}/>
+                                                           onChange={() => calculateSubtotal(el.product_id)}
+                                                           onKeyUp={() => calculateSubtotal(el.product_id)}
+                                                           onKeyDown={() => calculateSubtotal(el.product_id)}/>
                                                 </td>
                                                 <td className={`text-end`}>
                                                     <span
-                                                        className={`subtotal subtotal_${el.id}`}>{el.total ? el.total : el.price}</span> Tk.
+                                                        className={`subtotal subtotal_${el.product_id}`}>{el.total ? el.total : el.price}</span> Tk.
                                                 </td>
                                                 <td className={`text-center`}>
                                                     <button
                                                         className={`btn btn-danger btn-sm`}
-                                                        onClick={() => removeProduct(el.id)}>
+                                                        onClick={() => removeProduct(el.product_id)}>
                                                         <i className="fa-solid fa-trash-can"/>
                                                     </button>
                                                 </td>

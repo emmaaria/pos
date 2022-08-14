@@ -124,15 +124,15 @@ export default function CreateSale({user}) {
 
     const removeProduct = (productId) => {
         const newProducts = purchaseProducts.filter(product => {
-            return product.id !== productId;
+            return product.product_id !== productId;
         });
         setPurchaseProducts(newProducts);
         setTotal(0);
         setGrandTotal(0);
         setSubTotal(0);
         newProducts.map(el => {
-            setTotal(oldTotal => oldTotal + parseFloat($(`.subtotal_${el.id}`).text()));
-            setGrandTotal(oldTotal => oldTotal + parseFloat($(`.subtotal_${el.id}`).text()));
+            setTotal(oldTotal => oldTotal + parseFloat($(`.subtotal_${el.product_id}`).text()));
+            setGrandTotal(oldTotal => oldTotal + parseFloat($(`.subtotal_${el.product_id}`).text()));
         });
     }
     const calculateSubtotal = (productId) => {
@@ -190,7 +190,7 @@ export default function CreateSale({user}) {
                 if (res.data.status === true) {
                     addProduct(res.data.product);
                     $(`.scan-barcode`).val('');
-                    calculateSubtotal(res.data.product.id);
+                    calculateSubtotal(res.data.product.product_id);
                 } else {
                     alert('No product found');
                 }
@@ -201,12 +201,12 @@ export default function CreateSale({user}) {
     }
     const addProduct = (data) => {
         const alreadyAdded = purchaseProducts.filter(product => {
-            return product.id === data.id;
+            return product.product_id === data.product_id;
         });
         if (alreadyAdded.length > 0) {
-            const oldQty = $(`.productQuantity_${data.id}`).val();
+            const oldQty = $(`.productQuantity_${data.product_id}`).val();
             const newQty = parseFloat(oldQty) + 1;
-            $(`.productQuantity_${data.id}`).val(newQty);
+            $(`.productQuantity_${data.product_id}`).val(newQty);
         } else {
             setPurchaseProducts(currentProduct => [...currentProduct, data]);
             setSubTotal(oldTotal => oldTotal + parseFloat(data.price));
@@ -291,7 +291,7 @@ export default function CreateSale({user}) {
                                             products && (
                                                 products.map(el => (
                                                     <div className={`autocompleteItem`}
-                                                         key={`search-product-item-${el.id}`}
+                                                         key={`search-product-item-${el.product_id}`}
                                                          onClick={() => addProduct(el)}>{el.name}</div>
                                                 ))
                                             )
@@ -337,39 +337,39 @@ export default function CreateSale({user}) {
                             }
                             {
                                 purchaseProducts.map((el, index) => (
-                                    <tr key={`purchase-product-item-${el.id}`}>
+                                    <tr key={`purchase-product-item-${el.product_id}`}>
                                         <td>
                                             {index + 1}
                                         </td>
                                         <td>
                                             {el.name}
                                             <input type="hidden" className={`productId`}
-                                                   defaultValue={el.id}/>
+                                                   defaultValue={el.product_id}/>
                                         </td>
                                         <td>
                                             <input type="text"
-                                                   className={`form-control productPrice productPrice_${el.id}`}
+                                                   className={`form-control productPrice productPrice_${el.product_id}`}
                                                    defaultValue={el.price}
-                                                   onChange={() => calculateSubtotal(el.id)}
-                                                   onKeyUp={() => calculateSubtotal(el.id)}
-                                                   onKeyDown={() => calculateSubtotal(el.id)}/>
+                                                   onChange={() => calculateSubtotal(el.product_id)}
+                                                   onKeyUp={() => calculateSubtotal(el.product_id)}
+                                                   onKeyDown={() => calculateSubtotal(el.product_id)}/>
                                         </td>
                                         <td>
                                             <input type="text"
-                                                   className={`form-control productQuantity productQuantity_${el.id}`}
+                                                   className={`form-control productQuantity productQuantity_${el.product_id}`}
                                                    defaultValue={1}
-                                                   onChange={() => calculateSubtotal(el.id)}
-                                                   onKeyUp={() => calculateSubtotal(el.id)}
-                                                   onKeyDown={() => calculateSubtotal(el.id)}/>
+                                                   onChange={() => calculateSubtotal(el.product_id)}
+                                                   onKeyUp={() => calculateSubtotal(el.product_id)}
+                                                   onKeyDown={() => calculateSubtotal(el.product_id)}/>
                                         </td>
                                         <td className={`text-end`}>
                                                         <span
-                                                            className={`subtotal subtotal_${el.id}`}>{el.price}</span> Tk.
+                                                            className={`subtotal subtotal_${el.product_id}`}>{el.price}</span> Tk.
                                         </td>
                                         <td className={`text-center`}>
                                             <button
                                                 className={`btn btn-danger btn-sm`}
-                                                onClick={() => removeProduct(el.id)}>
+                                                onClick={() => removeProduct(el.product_id)}>
                                                 <i className="fa-solid fa-trash-can"/>
                                             </button>
                                         </td>
