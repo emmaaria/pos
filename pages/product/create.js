@@ -54,6 +54,7 @@ export default function CreateProduct({user}) {
         const price = $('.price').val();
         const purchasePrice = $('.purchasePrice').val();
         const weight = $('.weight').val();
+        const barcode = $('.barcode').val();
         if (name === '') {
             toast.dismiss();
             toast.error('Name is required', {
@@ -75,6 +76,7 @@ export default function CreateProduct({user}) {
                 unit,
                 price,
                 weight,
+                product_id: barcode,
                 purchase_price: purchasePrice
             }, headers);
             if (res.data.status === true) {
@@ -92,16 +94,32 @@ export default function CreateProduct({user}) {
                 setLoader(false);
             } else {
                 toast.dismiss();
-                toast.success('Something went wrong', {
-                    position: "bottom-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    theme: 'dark',
-                });
-                setLoader(false);
+                console.log(res.data.errors)
+                if (typeof res.data.errors === 'object') {
+                    Object.values(res.data.errors).map(err => {
+                        toast.error(err[0], {
+                            position: "bottom-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            theme: 'dark',
+                        });
+                    })
+                    setLoader(false);
+                } else {
+                    toast.error('Something went wrong', {
+                        position: "bottom-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        theme: 'dark',
+                    });
+                    setLoader(false);
+                }
             }
         } catch (e) {
             toast.dismiss();
@@ -181,6 +199,14 @@ export default function CreateProduct({user}) {
                                 <div className="col-md-6">
                                     <label htmlFor="weight" className={`form-label`}>Weight</label>
                                     <input type="text" className={`form-control weight`} id={`weight`}/>
+                                </div>
+                            </div>
+                            <div className="row mb-3">
+                                <div className="col-md-6">
+                                    <label htmlFor="barcode" className={`form-label`}>
+                                        <i className="fa-solid fa-barcode" style={{marginRight: '10px'}}/> Barcode
+                                    </label>
+                                    <input type="text" className={`form-control barcode`} id={`barcode`}/>
                                 </div>
                             </div>
                             <button className={`btn btn-success`} type={`submit`}>Save</button>

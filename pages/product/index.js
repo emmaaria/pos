@@ -169,13 +169,13 @@ export default function Product({user}) {
                             }
                             {products && !loading &&(
                                 products.map((el, index) => (
-                                    <tr key={el.id} valign={`middle`} className={`row-id-${el.id}`}>
+                                    <tr key={el.product_id} valign={`middle`} className={`row-id-${el.product_id}`}>
                                         <td>{index + 1}</td>
                                         <td>{el.name}</td>
                                         <td>{el.price} Tk.</td>
                                         <td>{el.purchase_price} Tk.</td>
                                         <td>
-                                            <Link href={`/product/${el.id}`}>
+                                            <Link href={`/product/${el.product_id}`}>
                                                 <a className={`btn btn-warning btn-sm me-2`}>
                                                     <i className="fa-solid fa-pen-to-square"/>
                                                 </a>
@@ -188,7 +188,7 @@ export default function Product({user}) {
                                                     );
                                                 if (result) {
                                                     deleteHandler(
-                                                        el.id
+                                                        el.product_id
                                                     );
                                                 }
                                             }}>
