@@ -2,11 +2,9 @@ import Layout from "../../components/layout/Layout";
 import Head from "next/head";
 import {withIronSessionSsr} from 'iron-session/next';
 import session from "../../lib/session";
-import Link from "next/link";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import TableSkeleton from "../../components/TableSkeleton";
-import {ToastContainer, toast} from 'react-toastify';
 import $ from "jquery";
 
 export default function Stock({user}) {
@@ -42,7 +40,7 @@ export default function Stock({user}) {
                 setLoading(true);
                 const name = $('.terms').val();
                 axios.get(
-                    `${process.env.API_URL}/invoice?keyword=${name}`,
+                    `${process.env.API_URL}/stock?keyword=${name}`,
                     headers
                 ).then(res => {
                     if (res.data.status === true) {
@@ -79,7 +77,6 @@ export default function Stock({user}) {
                     Stock
                 </title>
             </Head>
-            <ToastContainer/>
             <Layout user={user} title={`Stock`}>
                 <div className="content">
                     <div className="custom-card">
