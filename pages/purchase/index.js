@@ -153,9 +153,10 @@ export default function Purchase({user}) {
                         <table className={`table mt-4`}>
                             <thead>
                             <tr>
-                                <th width={`10%`}>Sl</th>
+                                <th width={`5%`}>Sl</th>
                                 <th width={`15%`}>Purchase ID</th>
-                                <th width={`25%`}>Supplier Name</th>
+                                <th width={`15%`}>Date</th>
+                                <th width={`15%`}>Supplier Name</th>
                                 <th width={`15%`}>Amount</th>
                                 <th width={`15%`}>Note</th>
                                 <th width={`20%`}>Action</th>
@@ -174,6 +175,7 @@ export default function Purchase({user}) {
                                     <tr key={el.id} valign={`middle`} className={`row-id-${el.id}`}>
                                         <td>{index + 1}</td>
                                         <td className={`text-uppercase`}>{el.purchase_id}</td>
+                                        <td>{el.date}</td>
                                         <td>{el.supplier_name}</td>
                                         <td>{el.amount} Tk.</td>
                                         <td>{el.comment}</td>
@@ -217,7 +219,7 @@ export default function Purchase({user}) {
                             </tbody>
                             <tfoot>
                             <tr>
-                                <td colSpan={6}>
+                                <td colSpan={7}>
                                     <nav className={`float-end`}>
                                         <ul className="pagination mt-3">
                                             {

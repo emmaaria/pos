@@ -14,7 +14,7 @@ a {
 .content {
     padding: 0 24px;
     margin: 10.5rem 0 0 0;
-    width: calc(100% - 22rem);
+    width: calc(100% - 16%);
     float: right;
 }
 

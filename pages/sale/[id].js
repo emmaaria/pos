@@ -9,39 +9,46 @@ import {useEffect, useState} from "react";
 import DatePicker from "react-datepicker";
 import Loader from "../../components/Loader";
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
+import AutocompleteDefaultCustomer from "../../components/AutocompleteDefaultCustomer";
 import TableSkeleton from "../../components/TableSkeleton";
-import AutocompleteDefaultSupplier from "../../components/AutocompleteDefaultSupplier";
 
-export default function EditPurchase({user, id}) {
+export default function EditSale({user, id}) {
     const [loader, setLoader] = useState(false);
+    const [subTotal, setSubTotal] = useState(0);
     const [total, setTotal] = useState(0);
-    const [due, setDue] = useState(0);
-    const [purchase, setPurchase] = useState();
-    const [loading, setLoading] = useState(true);
+    const [grandTotal, setGrandTotal] = useState(0);
+    const [paid, setPaid] = useState(0);
+    const [discountAmount, setDiscountAmount] = useState(0);
     const [products, setProducts] = useState();
     const [timer, setTimer] = useState(null);
     const [date, setDate] = useState(new Date());
-    const [purchaseProducts, setPurchaseProducts] = useState([]);
+    const [invoiceProducts, setInvoiceProducts] = useState([]);
+    const [invoice, setInvoice] = useState();
+    const [loading, setLoading] = useState(true);
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
     useEffect(() => {
         axios.get(
-            `${process.env.API_URL}/purchase/${id}`,
+            `${process.env.API_URL}/invoice/${id}`,
             headers
         ).then(res => {
             if (res.data.status === true) {
-                setPurchase(res.data.purchase);
-                setTotal(res.data.purchase.purchaseData.amount);
-                setDate(new Date(res.data.purchase.purchaseData.date));
-                setDue(res.data.purchase.purchaseData.paid);
-                setPurchaseProducts(res.data.purchase.purchaseItems);
+                setInvoice(res.data.invoice);
+                setSubTotal(res.data.invoice.invoiceData.total);
+                setTotal(res.data.invoice.invoiceData.total);
+                setDiscountAmount(res.data.invoice.invoiceData.discountAmount);
+                setGrandTotal(res.data.invoice.invoiceData.total);
+                setDate(new Date(res.data.invoice.invoiceData.date));
+                setPaid(parseFloat(res.data.invoice.payments.cash) + parseFloat(res.data.invoice.payments.bcash) + parseFloat(res.data.invoice.payments.nagad) + parseFloat(res.data.invoice.payments.card));
+                setInvoiceProducts(res.data.invoice.invoiceItems);
+                $('.discount').val(res.data.invoice.invoiceData.discount);
                 setLoading(false);
             }
         }).catch(err => {
             console.log(err);
         });
-    }, [setPurchase, setTotal, setDate, setDue, setPurchaseProducts, setLoading]);
+    }, [setInvoice, setTotal, setDate, setPaid, setInvoiceProducts, setLoading]);
     const handleForm = async (e) => {
         e.preventDefault();
         toast.loading('Submitting', {
@@ -49,6 +56,7 @@ export default function EditPurchase({user, id}) {
             theme: 'dark'
         });
         setLoader(true);
+        hidePayment();
         const productIds = $('.productId').map(function (index, el) {
             return $(el).val();
         }).get();
@@ -60,22 +68,13 @@ export default function EditPurchase({user, id}) {
         }).get();
         const comment = $('.note').val();
         const date = $('.date').val();
-        const paid = $('.paid').val();
-        const supplier = $('.supplier-id').val();
-        if (supplier === '') {
-            setLoader(false);
-            toast.dismiss();
-            toast.error('Please select supplier', {
-                position: "bottom-right",
-                autoClose: false,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                theme: 'dark',
-            });
-            return;
-        }
+        const cash = $('.cash').val();
+        const bcash = $('.bcash').val();
+        const nagad = $('.nagad').val();
+        const card = $('.card').val();
+        const discountType = $('.discount-type').val();
+        const discount = $('.discount').val();
+        const customer = $('.customer-id').val();
         if (productIds.length <= 0) {
             setLoader(false);
             toast.dismiss();
@@ -91,16 +90,20 @@ export default function EditPurchase({user, id}) {
             return;
         }
         try {
-            const res = await axios.post(`${process.env.API_URL}/purchase/update`, {
-                purchase_id: id,
-                supplier_id: supplier,
+            const res = await axios.post(`${process.env.API_URL}/invoice/update`, {
+                customer_id: customer,
                 productIds,
                 productQuantities,
                 productPrices,
                 date,
                 comment,
-                paid,
-                total
+                cash,
+                bcash,
+                nagad,
+                card,
+                discountAmount,
+                discount,
+                discountType
             }, headers);
             if (res.data.status === true) {
                 toast.dismiss();
@@ -113,7 +116,19 @@ export default function EditPurchase({user, id}) {
                     draggable: true,
                     theme: 'dark',
                 });
+                setPaid(0);
+                setGrandTotal(0);
+                setSubTotal(0);
+                setDiscountAmount(0);
+                setInvoiceProducts([]);
+                setTotal(0);
                 setLoader(false);
+                $('.note').val('');
+                $('.cash').val('');
+                $('.bcash').val('');
+                $('.nagad').val('');
+                $('.card').val('');
+                $('.discount').val('');
             } else {
                 toast.dismiss();
                 toast.success(res.data.error, {
@@ -143,35 +158,39 @@ export default function EditPurchase({user, id}) {
     }
 
     const removeProduct = (productId) => {
-        const newProducts = purchaseProducts.filter(product => {
-            return product.id !== productId;
+        const newProducts = invoiceProducts.filter(product => {
+            return product.product_id !== productId;
         });
-        setPurchaseProducts(newProducts);
+        setInvoiceProducts(newProducts);
         setTotal(0);
+        setGrandTotal(0);
+        setSubTotal(0);
         newProducts.map(el => {
-            setTotal(oldTotal => oldTotal + parseFloat($(`.subtotal_${el.id}`).text()));
+            setTotal(oldTotal => oldTotal + parseFloat($(`.subtotal_${el.product_id}`).text()));
+            setGrandTotal(oldTotal => oldTotal + parseFloat($(`.subtotal_${el.product_id}`).text()));
         });
     }
     const calculateSubtotal = (productId) => {
         const price = parseFloat($(`.productPrice_${productId}`).val());
         const quantity = parseFloat($(`.productQuantity_${productId}`).val());
-        const subTotal = price * quantity;
-        $(`.subtotal_${productId}`).text(`${subTotal}`);
+        $(`.subtotal_${productId}`).text(price * quantity);
         calculateSum();
     }
     const calculateSum = () => {
+        setSubTotal(0);
         setTotal(0);
+        setGrandTotal(0);
         $(`.subtotal`).each(function () {
+            setSubTotal(oldTotal => oldTotal + parseFloat($(this).text()));
             setTotal(oldTotal => oldTotal + parseFloat($(this).text()));
+            setGrandTotal(oldTotal => oldTotal + parseFloat($(this).text()));
         });
     }
     const calculateDue = () => {
-        const paid = $(`.paid`).val();
-        if (paid !== ''){
-            setDue(parseFloat(paid));
-        }else {
-            setDue(0);
-        }
+        setPaid(0);
+        $(`.paid`).each(function () {
+            setPaid(oldTotal => oldTotal + parseFloat($(this).val() ? $(this).val() : 0));
+        });
     }
     const searchProduct = async () => {
         $('.autocompleteItemContainer.product').show();
@@ -195,25 +214,74 @@ export default function EditPurchase({user, id}) {
             }, 500)
         );
     }
+    const searchProductByBarcode = async (e) => {
+        e.preventDefault();
+        const id = $(`.scan-barcode`).val();
+        if (id !== '') {
+            axios.get(
+                `${process.env.API_URL}/product-by-barcode?id=${id}`,
+                headers
+            ).then(res => {
+                if (res.data.status === true) {
+                    addProduct(res.data.product);
+                    $(`.scan-barcode`).val('');
+                    calculateSubtotal(res.data.product.product_id);
+                } else {
+                    alert('No product found');
+                }
+            }).catch(err => {
+                console.log(err);
+            });
+        }
+    }
     const addProduct = (data) => {
-        const alreadyAdded = purchaseProducts.filter(product => {
-            return product.id === data.id.toString();
+        const alreadyAdded = invoiceProducts.filter(product => {
+            return product.product_id === data.product_id;
         });
-        console.log(alreadyAdded);
         if (alreadyAdded.length > 0) {
-            alert('Product already added');
+            const oldQty = $(`.productQuantity_${data.product_id}`).val();
+            const newQty = parseFloat(oldQty) + 1;
+            $(`.productQuantity_${data.product_id}`).val(newQty);
         } else {
-            setPurchaseProducts(currentProduct => [...currentProduct, data]);
-            setTotal(oldTotal => parseFloat(oldTotal) + parseFloat(data.price));
+            setInvoiceProducts(currentProduct => [...currentProduct, data]);
+            setSubTotal(oldTotal => oldTotal + parseFloat(data.price));
+            setTotal(oldTotal => oldTotal + parseFloat(data.price));
+            setGrandTotal(oldTotal => oldTotal + parseFloat(data.price));
         }
         $('.autocompleteItemContainer.product').hide();
         $(`.search-product`).val('');
+    }
+    const showPayment = () => {
+        $('.payment-modal').fadeIn();
+    }
+    const hidePayment = () => {
+        $('.payment-modal').fadeOut();
+    }
+    const addMoney = (amount) => {
+        $('.cash').val(amount);
+        calculateDue();
+    }
+    const calculateDiscount = () => {
+        const discount = $('.discount').val() ? $('.discount').val() : 0;
+        const discountType = $('.discount-type').val();
+        setTotal(0);
+        setGrandTotal(0);
+        $(`.subtotal`).each(function () {
+            setTotal(oldTotal => oldTotal + parseFloat($(this).text()));
+            setGrandTotal(oldTotal => oldTotal + parseFloat($(this).text()));
+        });
+        if (discountType === '%') {
+            const discountedAmount = (total * parseFloat(discount)) / 100;
+            setDiscountAmount(discountedAmount);
+        } else {
+            setDiscountAmount(parseFloat(discount));
+        }
     }
     return (
         <>
             <Head>
                 <title>
-                    Edit Purchase
+                    POS
                 </title>
             </Head>
             {
@@ -222,49 +290,52 @@ export default function EditPurchase({user, id}) {
                 )
             }
             <ToastContainer/>
-            <Layout user={user} title={`Edit Purchase`}>
-                <div className="content">
-                    <div className="custom-card">
-                        <form onSubmit={handleForm}>
-                            <div className="mb-3">
-                                <div className="row">
-                                    <div className="col-md-6">
-                                        <label htmlFor="supplier" className={`form-label`}>Supplier</label>
-                                        {
-                                            purchase && loading === false && (
-                                                <AutocompleteDefaultSupplier name={purchase.purchaseData.supplier_name}
-                                                                             id={purchase.purchaseData.supplier_id}
-                                                                             token={user.token}/>
-                                            ) || (
-                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
-                                                    <Skeleton width={`100%`} height={40}/>
-                                                </SkeletonTheme>
-                                            )
-                                        }
-                                    </div>
-                                    <div className="col-md-6">
-                                        <label htmlFor="date" className={`form-label`}>Date</label>
-                                        {
-                                            purchase && loading === false && (
-                                                <DatePicker
-                                                    selected={date}
-                                                    onChange={(date) => setDate(date)}
-                                                    dateFormat='yyyy-MM-dd'
-                                                    className={`form-control date`}
-                                                />
-                                            ) || (
-                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
-                                                    <Skeleton width={`100%`} height={40}/>
-                                                </SkeletonTheme>
-                                            )
-                                        }
-                                    </div>
-                                </div>
+            <Layout user={user} title={`POS`} sidebar='pos' topbar='pos'>
+                <div className="content-pos">
+                    <form onSubmit={handleForm} id='invoice'></form>
+                    <div className="custom-card mb-3">
+                        <div className="row">
+                            <div className="col-md-3">
+                                {
+                                    invoice && loading === false && (
+                                        <AutocompleteDefaultCustomer name={invoice.invoiceData.customer_name}
+                                                                     id={invoice.invoiceData.customer_id}
+                                                                     token={user.token}/>
+                                    ) || (
+                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                            <Skeleton width={`100%`} height={40}/>
+                                        </SkeletonTheme>
+                                    )
+                                }
                             </div>
-                            <div className="mb-3">
-                                <label htmlFor="product" className={`form-label`}>Choose Product</label>
+                            <div className="col-md-3">
+                                {
+                                    invoice && loading === false && (
+                                        <DatePicker
+                                            selected={date}
+                                            onChange={(date) => setDate(date)}
+                                            dateFormat='yyyy-MM-dd'
+                                            className={`form-control date`}
+                                        />
+                                    ) || (
+                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                            <Skeleton width={`100%`} height={40}/>
+                                        </SkeletonTheme>
+                                    )
+                                }
+                            </div>
+                            <div className="col-md-3">
+                                <form onSubmit={searchProductByBarcode}>
+                                    <input type="text" className={`form-control scan-barcode`}
+                                           placeholder={`Scan Barcode Here`}
+                                           id='barcode'
+                                           autoFocus/>
+                                </form>
+                            </div>
+                            <div className="col-md-3">
                                 <div className={`autocompleteWrapper product`}>
-                                    <input type="text" className={`form-control autocompleteInput search-product`}
+                                    <input type="text"
+                                           className={`form-control autocompleteInput search-product`}
                                            autoComplete={`off`} onKeyUp={searchProduct}
                                            onKeyDown={searchProduct}
                                            onChange={searchProduct} placeholder={`Search product`}/>
@@ -273,7 +344,7 @@ export default function EditPurchase({user, id}) {
                                             products && (
                                                 products.map(el => (
                                                     <div className={`autocompleteItem`}
-                                                         key={`search-product-item-${el.id}`}
+                                                         key={`search-product-item-${el.product_id}`}
                                                          onClick={() => addProduct(el)}>{el.name}</div>
                                                 ))
                                             )
@@ -281,141 +352,305 @@ export default function EditPurchase({user, id}) {
                                     </div>
                                 </div>
                             </div>
-                            <table className={`table table-bordered table-hover`}>
-                                <thead>
-                                <tr>
-                                    <th width={`5%`}>
-                                        SL
-                                    </th>
-                                    <th width={`40%`}>
-                                        Product Name
-                                    </th>
-                                    <th width={`15%`}>
-                                        Purchase Price
-                                    </th>
-                                    <th width={`15%`}>
-                                        Quantity
-                                    </th>
-                                    <th className={`text-end`} width={`20%`}>
-                                        Subtotal
-                                    </th>
-                                    <th className={`text-center`} width={`5%`}>
-                                        Action
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody>
+                        </div>
+                    </div>
+                    <div className="custom-card">
+                        <table className={`table table-bordered table-hover`}>
+                            <thead>
+                            <tr>
+                                <th width={`5%`}>
+                                    SL
+                                </th>
+                                <th width={`35%`}>
+                                    Product Name
+                                </th>
+                                <th width={`15%`}>
+                                    Price
+                                </th>
+                                <th width={`15%`}>
+                                    Quantity
+                                </th>
+                                <th className={`text-end`} width={`20%`}>
+                                    Subtotal
+                                </th>
+                                <th className={`text-center`} width={`10%`}>
+                                    Action
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody className={`border-bottom border-1 border-white`}>
+                            {
+                                invoiceProducts && invoiceProducts.length <= 0 && (
+                                    <tr>
+                                        <td colSpan={6} className={`text-center`}>
+                                            No product added
+                                        </td>
+                                    </tr>
+                                )
+                            }
+                            {
+                                invoiceProducts && !loading && (
+                                    invoiceProducts.map((el, index) => (
+                                        <tr key={`purchase-product-item-${el.product_id}`}>
+                                            <td>
+                                                {index + 1}
+                                            </td>
+                                            <td>
+                                                {el.name}
+                                                <input type="hidden" className={`productId`}
+                                                       defaultValue={el.product_id}/>
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       className={`form-control productPrice productPrice_${el.product_id}`}
+                                                       defaultValue={el.price}
+                                                       onChange={() => calculateSubtotal(el.product_id)}
+                                                       onKeyUp={() => calculateSubtotal(el.product_id)}
+                                                       onKeyDown={() => calculateSubtotal(el.product_id)}/>
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       className={`form-control productQuantity productQuantity_${el.product_id}`}
+                                                       defaultValue={1}
+                                                       onChange={() => calculateSubtotal(el.product_id)}
+                                                       onKeyUp={() => calculateSubtotal(el.product_id)}
+                                                       onKeyDown={() => calculateSubtotal(el.product_id)}/>
+                                            </td>
+                                            <td className={`text-end`}>
+                                                        <span
+                                                            className={`subtotal subtotal_${el.product_id}`}>{el.price}</span> Tk.
+                                            </td>
+                                            <td className={`text-center`}>
+                                                <button
+                                                    className={`btn btn-danger btn-sm`}
+                                                    onClick={() => removeProduct(el.product_id)}>
+                                                    <i className="fa-solid fa-trash-can"/>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                ) || (
+                                    <TableSkeleton tr={4} td={6}/>
+                                )
+                            }
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td className={`text-end`} colSpan={4}><strong>Subtotal</strong></td>
+                                <td className={`text-end d-block`}>
+                                    {
+                                        invoice && loading === false && (
+                                            <span>{subTotal} Tk.</span>
+                                        ) || (
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                <Skeleton width={`100%`} height={30}/>
+                                            </SkeletonTheme>
+                                        )
+                                    }
+                                </td>
+                                <td/>
+                            </tr>
+                            <tr>
+                                <td className={`text-end`} colSpan={4}>
+                                    <strong>Sale Discount</strong>
+                                </td>
+                                <td className={`text-end d-block`}>
+                                    {
+                                        invoice && loading === false && (
+                                            <input type="text" className={`form-control discount`}
+                                                   onKeyUp={calculateDiscount}
+                                                   onKeyDown={calculateDiscount} onChange={calculateDiscount}/>
+                                        ) || (
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                <Skeleton width={`100%`} height={30}/>
+                                            </SkeletonTheme>
+                                        )
+                                    }
+                                </td>
+                                <td>
+                                    {
+                                        invoice && loading === false && (
+                                            <select className={`form-select form-control discount-type`}
+                                                    onChange={calculateDiscount} defaultValue={invoice.invoiceData.discountType}>
+                                                <option value="%">Percent</option>
+                                                <option value="fixed">Fixed</option>
+                                            </select>
+                                        ) || (
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                <Skeleton width={`100%`} height={30}/>
+                                            </SkeletonTheme>
+                                        )
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={`text-end`} colSpan={4}><strong>Discount Amount</strong></td>
+                                <td className={`text-end d-block`}>
+                                    {
+                                        invoice && loading === false && (
+                                            <span>{discountAmount} Tk.</span>
+                                        ) || (
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                <Skeleton width={`100%`} height={30}/>
+                                            </SkeletonTheme>
+                                        )
+                                    }
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td className={`text-end`} colSpan={4}><strong>Total</strong></td>
+                                <td className={`text-end d-block`}>
+                                    {
+                                        invoice && loading === false && (
+                                            <span className='total'>{total - discountAmount} Tk.</span>
+                                        ) || (
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                <Skeleton width={`100%`} height={30}/>
+                                            </SkeletonTheme>
+                                        )
+                                    }
+                                </td>
+                                <td></td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div className="mb-3 mt-3">
+                        <textarea id="note" rows="3" className={`note form-control`} placeholder='Note'/>
+                    </div>
+                    <button className={`btn btn-success mb-5`} onClick={showPayment}>Payment</button>
+                </div>
+            </Layout>
+            <div className="payment-modal">
+                <div className="payment-modal-container">
+                    <div className="close">
+                        <span className='fa-solid fa-close' onClick={hidePayment}></span>
+                    </div>
+                    <div className="title">
+                        Payment
+                    </div>
+                    <hr/>
+                    <div className="row gx-5">
+                        <div className="col-md-8">
+                            <div className="form-group mb-3">
+                                <label className={`form-label`}>
+                                    Cash
+                                </label>
                                 {
-                                    purchaseProducts && !loading && (
-                                        purchaseProducts.map((el, index) => (
-                                            <tr key={`purchase-product-item-${el.id}`}>
-                                                <td>
-                                                    {index + 1}
-                                                </td>
-                                                <td>
-                                                    {el.name}
-                                                    <input type="hidden" className={`productId`} defaultValue={el.id}/>
-                                                </td>
-                                                <td>
-                                                    <input type="text"
-                                                           className={`form-control productPrice productPrice_${el.id}`}
-                                                           defaultValue={el.price}
-                                                           onChange={() => calculateSubtotal(el.id)}
-                                                           onKeyUp={() => calculateSubtotal(el.id)}
-                                                           onKeyDown={() => calculateSubtotal(el.id)}/>
-                                                </td>
-                                                <td>
-                                                    <input type="text"
-                                                           className={`form-control productQuantity productQuantity_${el.id}`}
-                                                           defaultValue={el.quantity ? el.quantity : 1}
-                                                           onChange={() => calculateSubtotal(el.id)}
-                                                           onKeyUp={() => calculateSubtotal(el.id)}
-                                                           onKeyDown={() => calculateSubtotal(el.id)}/>
-                                                </td>
-                                                <td className={`text-end`}>
-                                                    <span
-                                                        className={`subtotal subtotal_${el.id}`}>{el.total ? el.total : el.price}</span> Tk.
-                                                </td>
-                                                <td className={`text-center`}>
-                                                    <button
-                                                        className={`btn btn-danger btn-sm`}
-                                                        onClick={() => removeProduct(el.id)}>
-                                                        <i className="fa-solid fa-trash-can"/>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        ))
-                                    ) || (
-                                        <TableSkeleton tr={5} td={6}/>
-                                    )
-                                }
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <td className={`text-end`} colSpan={4}><strong>Total</strong></td>
-                                    <td className={`text-end border-1 border-white d-block`}>
-                                        {
-                                            purchase && loading === false && (
-                                                <span className={`total`}>{total} Tk.</span>
-                                            ) || (
-                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
-                                                    <Skeleton width={`100%`} height={30}/>
-                                                </SkeletonTheme>
-                                            )
-                                        }
-                                    </td>
-                                    <td/>
-                                </tr>
-                                <tr>
-                                    <td className={`text-end`} colSpan={4}><strong>Paid</strong></td>
-                                    <td className={`px-0`}>
-                                        {
-                                            purchase && loading === false && (
-                                                <input type="text" className={`form-control paid`} onKeyUp={calculateDue}
-                                                       onKeyDown={calculateDue} onChange={calculateDue}
-                                                       defaultValue={purchase.purchaseData.paid}/>
-                                            ) || (
-                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
-                                                    <Skeleton width={`100%`} height={30}/>
-                                                </SkeletonTheme>
-                                            )
-                                        }
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td className={`text-end`} colSpan={4}><strong>Due</strong></td>
-                                    <td className={`text-end border-1 border-white d-block`}>
-                                        {
-                                            purchase && loading === false && (
-                                                <span className={`due`}>{total - due} Tk.</span>
-                                            ) || (
-                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
-                                                    <Skeleton width={`100%`} height={30}/>
-                                                </SkeletonTheme>
-                                            )
-                                        }
-                                    </td>
-                                </tr>
-                                </tfoot>
-                            </table>
-                            <div className="mb-3 mt-3">
-                                <label htmlFor="note" className={`form-label`}>Note</label>
-                                {
-                                    purchase && !loading && (
-                                        <textarea id="note" rows="3" className={`note form-control`}
-                                                  defaultValue={purchase.purchaseData.comment}/>
+                                    invoice && loading === false && (
+                                        <input type="text" className={`form-control paid cash`}
+                                               onKeyUp={calculateDue}
+                                               onKeyDown={calculateDue} onChange={calculateDue} defaultValue={invoice.payments.cash}/>
                                     ) || (
                                         <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
-                                            <Skeleton width={`100%`} height={80}/>
+                                            <Skeleton width={`100%`} height={30}/>
                                         </SkeletonTheme>
                                     )
                                 }
                             </div>
-                            <button className={`btn btn-success`} type={`submit`}>Update</button>
-                        </form>
+                            <div className="form-group mb-3">
+                                <label className={`form-label`}>
+                                    Bkash
+                                </label>
+                                {
+                                    invoice && loading === false && (
+                                        <input type="text" className={`form-control paid bkash`}
+                                               onKeyUp={calculateDue}
+                                               onKeyDown={calculateDue} onChange={calculateDue} defaultValue={invoice.payments.bcash}/>
+                                    ) || (
+                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                            <Skeleton width={`100%`} height={30}/>
+                                        </SkeletonTheme>
+                                    )
+                                }
+                            </div>
+                            <div className="form-group mb-3">
+                                <label className={`form-label`}>
+                                    Nagad
+                                </label>
+                                {
+                                    invoice && loading === false && (
+                                        <input type="text" className={`form-control paid nagad`}
+                                               onKeyUp={calculateDue}
+                                               onKeyDown={calculateDue} onChange={calculateDue}
+                                               defaultValue={invoice.payments.nagad}/>
+                                    ) || (
+                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                            <Skeleton width={`100%`} height={30}/>
+                                        </SkeletonTheme>
+                                    )
+                                }
+                            </div>
+                            <div className="form-group mb-3">
+                                <label className={`form-label`}>
+                                    Card
+                                </label>
+                                {
+                                    invoice && loading === false && (
+                                        <input type="text" className={`form-control paid card`}
+                                               onKeyUp={calculateDue}
+                                               onKeyDown={calculateDue} onChange={calculateDue}
+                                               defaultValue={invoice.payments.card}/>
+                                    ) || (
+                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                            <Skeleton width={`100%`} height={30}/>
+                                        </SkeletonTheme>
+                                    )
+                                }
+                            </div>
+                        </div>
+                        <div className="col-md-4">
+                            <div className="notes">
+                                Notes
+                            </div>
+                            <ul className='note-list'>
+                                <li onClick={() => addMoney(50)}>
+                                    50
+                                </li>
+                                <li onClick={() => addMoney(100)}>
+                                    100
+                                </li>
+                                <li onClick={() => addMoney(200)}>
+                                    200
+                                </li>
+                                <li onClick={() => addMoney(500)}>
+                                    500
+                                </li>
+                                <li onClick={() => addMoney(1000)}>
+                                    1000
+                                </li>
+                            </ul>
+                        </div>
                     </div>
+                    <hr/>
+                    <div className="row">
+                        {
+                            invoice && loading === false && (
+                                <div className="col-md-6">
+                                    Total : {grandTotal - discountAmount} Tk.
+                                </div>
+                            ) || (
+                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                    <Skeleton width={`100%`} height={30}/>
+                                </SkeletonTheme>
+                            )
+                        }
+                        {
+                            invoice && loading === false && (
+                                <div className="col-md-6">
+                                    Change/Due : {(grandTotal - discountAmount) - paid} Tk.
+                                </div>
+                            ) || (
+                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                    <Skeleton width={`100%`} height={30}/>
+                                </SkeletonTheme>
+                            )
+                        }
+                    </div>
+                    <button className={`btn btn-success mt-3 float-end`} onClick={handleForm}>Save</button>
                 </div>
-            </Layout>
+            </div>
         </>
     )
 }

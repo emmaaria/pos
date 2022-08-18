@@ -20,7 +20,7 @@ export default function CreateSale({user}) {
     const [products, setProducts] = useState();
     const [timer, setTimer] = useState(null);
     const [date, setDate] = useState(new Date());
-    const [purchaseProducts, setPurchaseProducts] = useState([]);
+    const [invoiceProducts, setInvoiceProducts] = useState([]);
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
@@ -31,6 +31,7 @@ export default function CreateSale({user}) {
             theme: 'dark'
         });
         setLoader(true);
+        hidePayment();
         const productIds = $('.productId').map(function (index, el) {
             return $(el).val();
         }).get();
@@ -46,6 +47,8 @@ export default function CreateSale({user}) {
         const bcash = $('.bcash').val();
         const nagad = $('.nagad').val();
         const card = $('.card').val();
+        const discountType = $('.discount-type').val();
+        const discount = $('.discount').val();
         const customer = $('.customer-id').val();
         if (productIds.length <= 0) {
             setLoader(false);
@@ -73,7 +76,9 @@ export default function CreateSale({user}) {
                 bcash,
                 nagad,
                 card,
-                discountAmount
+                discountAmount,
+                discount,
+                discountType
             }, headers);
             if (res.data.status === true) {
                 toast.dismiss();
@@ -86,14 +91,19 @@ export default function CreateSale({user}) {
                     draggable: true,
                     theme: 'dark',
                 });
-                $('form').trigger('reset');
                 setPaid(0);
                 setGrandTotal(0);
                 setSubTotal(0);
                 setDiscountAmount(0);
-                setPurchaseProducts([]);
+                setInvoiceProducts([]);
                 setTotal(0);
                 setLoader(false);
+                $('.note').val('');
+                $('.cash').val('');
+                $('.bcash').val('');
+                $('.nagad').val('');
+                $('.card').val('');
+                $('.discount').val('');
             } else {
                 toast.dismiss();
                 toast.success(res.data.error, {
@@ -123,10 +133,10 @@ export default function CreateSale({user}) {
     }
 
     const removeProduct = (productId) => {
-        const newProducts = purchaseProducts.filter(product => {
+        const newProducts = invoiceProducts.filter(product => {
             return product.product_id !== productId;
         });
-        setPurchaseProducts(newProducts);
+        setInvoiceProducts(newProducts);
         setTotal(0);
         setGrandTotal(0);
         setSubTotal(0);
@@ -200,7 +210,7 @@ export default function CreateSale({user}) {
         }
     }
     const addProduct = (data) => {
-        const alreadyAdded = purchaseProducts.filter(product => {
+        const alreadyAdded = invoiceProducts.filter(product => {
             return product.product_id === data.product_id;
         });
         if (alreadyAdded.length > 0) {
@@ -208,7 +218,7 @@ export default function CreateSale({user}) {
             const newQty = parseFloat(oldQty) + 1;
             $(`.productQuantity_${data.product_id}`).val(newQty);
         } else {
-            setPurchaseProducts(currentProduct => [...currentProduct, data]);
+            setInvoiceProducts(currentProduct => [...currentProduct, data]);
             setSubTotal(oldTotal => oldTotal + parseFloat(data.price));
             setTotal(oldTotal => oldTotal + parseFloat(data.price));
             setGrandTotal(oldTotal => oldTotal + parseFloat(data.price));
@@ -227,7 +237,7 @@ export default function CreateSale({user}) {
         calculateDue();
     }
     const calculateDiscount = () => {
-        const discount = $('.discount').val();
+        const discount = $('.discount').val() ? $('.discount').val() : 0;
         const discountType = $('.discount-type').val();
         setTotal(0);
         setGrandTotal(0);
@@ -327,7 +337,7 @@ export default function CreateSale({user}) {
                             </thead>
                             <tbody className={`border-bottom border-1 border-white`}>
                             {
-                                purchaseProducts && purchaseProducts.length <= 0 && (
+                                invoiceProducts && invoiceProducts.length <= 0 && (
                                     <tr>
                                         <td colSpan={6} className={`text-center`}>
                                             No product added
@@ -336,7 +346,7 @@ export default function CreateSale({user}) {
                                 )
                             }
                             {
-                                purchaseProducts.map((el, index) => (
+                                invoiceProducts.map((el, index) => (
                                     <tr key={`purchase-product-item-${el.product_id}`}>
                                         <td>
                                             {index + 1}
@@ -498,7 +508,7 @@ export default function CreateSale({user}) {
                             Total : {grandTotal - discountAmount} Tk.
                         </div>
                         <div className="col-md-6">
-                            Change/Due : {grandTotal - paid} Tk.
+                            Change/Due : {(grandTotal - discountAmount) - paid} Tk.
                         </div>
                     </div>
                     <button className={`btn btn-success mt-3 float-end`} onClick={handleForm}>Save</button>

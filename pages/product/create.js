@@ -186,19 +186,19 @@ export default function CreateProduct({user}) {
                                     </select>
                                 </div>
                                 <div className="col-md-6">
-                                    <label htmlFor="price" className={`form-label`}>Selling Price</label>
-                                    <input type="text" className={`form-control price`} id={`price`} required/>
+                                    <label htmlFor="weight" className={`form-label`}>Weight</label>
+                                    <input type="text" className={`form-control weight`} id={`weight`}/>
                                 </div>
                             </div>
                             <div className="row mb-3">
                                 <div className="col-md-6">
+                                    <label htmlFor="price" className={`form-label`}>Selling Price</label>
+                                    <input type="text" className={`form-control price`} id={`price`} required/>
+                                </div>
+                                <div className="col-md-6">
                                     <label htmlFor="purchasePrice" className={`form-label`}>Purchase Price</label>
                                     <input type="text" className={`form-control purchasePrice`} id={`purchasePrice`}
                                            required/>
-                                </div>
-                                <div className="col-md-6">
-                                    <label htmlFor="weight" className={`form-label`}>Weight</label>
-                                    <input type="text" className={`form-control weight`} id={`weight`}/>
                                 </div>
                             </div>
                             <div className="row mb-3">

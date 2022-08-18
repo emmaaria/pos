@@ -211,6 +211,22 @@ export default function EditProduct({user, id}) {
                                     }
                                 </div>
                                 <div className="col-md-6">
+                                    <label htmlFor="weight" className={`form-label`}>Weight</label>
+
+                                    {
+                                        product && loading === false && (
+                                            <input type="text" className={`form-control weight`} id={`weight`}
+                                                   defaultValue={product.weight}/>
+                                        ) || (
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                <Skeleton width={`100%`} height={40}/>
+                                            </SkeletonTheme>
+                                        )
+                                    }
+                                </div>
+                            </div>
+                            <div className="row mb-3">
+                                <div className="col-md-6">
                                     <label htmlFor="price" className={`form-label`}>Selling Price</label>
 
                                     {
@@ -224,8 +240,6 @@ export default function EditProduct({user, id}) {
                                         )
                                     }
                                 </div>
-                            </div>
-                            <div className="row mb-3">
                                 <div className="col-md-6">
                                     <label htmlFor="purchasePrice" className={`form-label`}>Purchase Price</label>
 
@@ -241,20 +255,6 @@ export default function EditProduct({user, id}) {
                                     }
                                 </div>
 
-                                <div className="col-md-6">
-                                    <label htmlFor="weight" className={`form-label`}>Weight</label>
-
-                                    {
-                                        product && loading === false && (
-                                            <input type="text" className={`form-control weight`} id={`weight`}
-                                                   defaultValue={product.weight}/>
-                                        ) || (
-                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
-                                                <Skeleton width={`100%`} height={40}/>
-                                            </SkeletonTheme>
-                                        )
-                                    }
-                                </div>
                             </div>
                             <button className={`btn btn-success`} type={`submit`}>Save</button>
                         </form>

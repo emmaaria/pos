@@ -10,7 +10,7 @@ import {ToastContainer, toast} from 'react-toastify';
 import $ from "jquery";
 
 export default function Purchase({user}) {
-    const [purchases, setPurchases] = useState();
+    const [invoices, setInvoices] = useState();
     const [links, setLinks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [timer, setTimer] = useState(null);
@@ -20,19 +20,19 @@ export default function Purchase({user}) {
 
     useEffect(() => {
         axios.get(
-            `${process.env.API_URL}/purchase`,
+            `${process.env.API_URL}/invoice`,
             headers
         ).then(res => {
             if (res.data.status === true) {
-                setPurchases(res.data.purchases.data);
-                setLinks(res.data.purchases.links);
+                setInvoices(res.data.invoices.data);
+                setLinks(res.data.invoices.links);
                 setLoading(false);
             }
         }).catch(err => {
             console.log(err);
         });
     }, []);
-    const searchPurchase = async () => {
+    const searchInvoice = async () => {
         if (timer) {
             clearTimeout(timer);
             setTimer(null);
@@ -42,12 +42,12 @@ export default function Purchase({user}) {
                 setLoading(true);
                 const name = $('.terms').val();
                 axios.get(
-                    `${process.env.API_URL}/purchase?name=${name}`,
+                    `${process.env.API_URL}/invoice?keyword=${name}`,
                     headers
                 ).then(res => {
                     if (res.data.status === true) {
-                        setPurchases(res.data.purchases.data);
-                        setLinks(res.data.purchases.links);
+                        setInvoices(res.data.invoices.data);
+                        setLinks(res.data.invoices.links);
                         setLoading(false);
                     }
                 }).catch(err => {
@@ -64,8 +64,8 @@ export default function Purchase({user}) {
                 headers
             );
             if (res.data.status === true) {
-                setPurchases(res.data.purchases.data);
-                setLinks(res.data.purchases.links);
+                setInvoices(res.data.invoices.data);
+                setLinks(res.data.invoices.links);
                 setLoading(false);
             }
         } catch (err) {
@@ -78,7 +78,7 @@ export default function Purchase({user}) {
             theme: 'dark'
         });
         try {
-            const response = await axios.post(`${process.env.API_URL}/purchase/delete`, {
+            const response = await axios.post(`${process.env.API_URL}/invoice/delete`, {
                 id: id,
             }, headers);
             if (response.data.status === true) {
@@ -122,7 +122,7 @@ export default function Purchase({user}) {
         <>
             <Head>
                 <title>
-                    Purchase
+                    Invoices
                 </title>
             </Head>
             <ToastContainer/>
@@ -131,9 +131,9 @@ export default function Purchase({user}) {
                     <div className="custom-card">
                         <div className="row">
                             <div className="col-md-9">
-                                <Link href={`/purchase/create`}>
+                                <Link href={`/sale/create`}>
                                     <a className={`btn btn-success`}>
-                                        <i className="fa-solid fa-plus"/> Add New Purchase
+                                        <i className="fa-solid fa-plus"/> Add New Invoice
                                     </a>
                                 </Link>
                             </div>
@@ -143,8 +143,8 @@ export default function Purchase({user}) {
                                         <div className="col">
                                             <input type="text" className="form-control terms"
                                                    placeholder={`Search`}
-                                                   name="email" onKeyUp={searchPurchase} onKeyDown={searchPurchase}
-                                                   onChange={searchPurchase}/>
+                                                   name="email" onKeyUp={searchInvoice} onKeyDown={searchInvoice}
+                                                   onChange={searchInvoice}/>
                                         </div>
                                     </div>
                                 </form>
@@ -154,8 +154,8 @@ export default function Purchase({user}) {
                             <thead>
                             <tr>
                                 <th width={`10%`}>Sl</th>
-                                <th width={`15%`}>Purchase ID</th>
-                                <th width={`25%`}>Supplier Name</th>
+                                <th width={`15%`}>Invoice ID</th>
+                                <th width={`25%`}>Customer Name</th>
                                 <th width={`15%`}>Amount</th>
                                 <th width={`15%`}>Note</th>
                                 <th width={`20%`}>Action</th>
@@ -163,32 +163,27 @@ export default function Purchase({user}) {
                             </thead>
                             <tbody>
                             {
-                                purchases && purchases.length <= 0 && (
+                                invoices && invoices.length <= 0 && (
                                     <tr>
-                                        <td colSpan={6} className={`text-center`}>No Purchase Found</td>
+                                        <td colSpan={6} className={`text-center`}>No Invoice Found</td>
                                     </tr>
                                 )
                             }
-                            {purchases && !loading &&(
-                                purchases.map((el, index) => (
+                            {invoices && !loading &&(
+                                invoices.map((el, index) => (
                                     <tr key={el.id} valign={`middle`} className={`row-id-${el.id}`}>
                                         <td>{index + 1}</td>
-                                        <td className={`text-uppercase`}>{el.purchase_id}</td>
-                                        <td>{el.supplier_name}</td>
-                                        <td>{el.amount} Tk.</td>
+                                        <td className={`text-uppercase`}>{el.invoice_id}</td>
+                                        <td>{el.customer_name}</td>
+                                        <td>{el.total - el.discountAmount} Tk.</td>
                                         <td>{el.comment}</td>
                                         <td>
-                                            <Link href={`#`}>
-                                                <a className={`btn btn-success btn-sm me-2`}>
-                                                    <i className="fa-solid fa-barcode"/>
-                                                </a>
-                                            </Link>
-                                            <Link href={`/purchase/view/${el.id}`}>
+                                            <Link href={`/sale/view/${el.invoice_id}`}>
                                                 <a className={`btn btn-success btn-sm me-2`}>
                                                     <i className="fa-solid fa-eye"/>
                                                 </a>
                                             </Link>
-                                            <Link href={`/purchase/${el.id}`}>
+                                            <Link href={`/sale/${el.invoice_id}`}>
                                                 <a className={`btn btn-warning btn-sm me-2`}>
                                                     <i className="fa-solid fa-pen-to-square"/>
                                                 </a>
@@ -201,7 +196,7 @@ export default function Purchase({user}) {
                                                     );
                                                 if (result) {
                                                     deleteHandler(
-                                                        el.id
+                                                        el.invoice_id
                                                     ).then();
                                                 }
                                             }}>

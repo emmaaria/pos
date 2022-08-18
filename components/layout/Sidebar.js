@@ -108,6 +108,20 @@ export default function Sidebar({user}) {
                     </Link>
                 </li>
                 <li>
+                    <Link href={`/report/stock`}>
+                        <a className={`
+                                ${
+                            router.pathname === '/report/stock'
+                                ? styles.active
+                                : ''
+                        }
+                            `}>
+                            <i className="fa-solid fa-cubes"/>
+                            Stock
+                        </a>
+                    </Link>
+                </li>
+                <li>
                     <Link href={`/category`}>
                         <a className={`
                                 ${

@@ -181,7 +181,7 @@ export default function CreatePurchase({user}) {
             alert('Product already added');
         } else {
             setPurchaseProducts(currentProduct => [...currentProduct, data]);
-            setTotal(oldTotal => oldTotal + parseFloat(data.price));
+            setTotal(oldTotal => oldTotal + parseFloat(data.purchase_price));
         }
         $('.autocompleteItemContainer.product').hide();
         $(`.search-product`).val('');
@@ -277,7 +277,7 @@ export default function CreatePurchase({user}) {
                                             <td>
                                                 <input type="text"
                                                        className={`form-control productPrice productPrice_${el.product_id}`}
-                                                       defaultValue={el.price}
+                                                       defaultValue={el.purchase_price}
                                                        onChange={() => calculateSubtotal(el.product_id)}
                                                        onKeyUp={() => calculateSubtotal(el.product_id)}
                                                        onKeyDown={() => calculateSubtotal(el.product_id)}/>
@@ -290,7 +290,7 @@ export default function CreatePurchase({user}) {
                                                        onKeyDown={() => calculateSubtotal(el.product_id)}/>
                                             </td>
                                             <td className={`text-end`}>
-                                                <span className={`subtotal subtotal_${el.product_id}`}>{el.price}</span> Tk.
+                                                <span className={`subtotal subtotal_${el.product_id}`}>{el.purchase_price}</span> Tk.
                                             </td>
                                             <td className={`text-center`}>
                                                 <button
