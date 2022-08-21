@@ -44,7 +44,7 @@ export default function CreateSale({user}) {
         const comment = $('.note').val();
         const date = $('.date').val();
         const cash = $('.cash').val();
-        const bcash = $('.bcash').val();
+        const bkash = $('.bkash').val();
         const nagad = $('.nagad').val();
         const card = $('.card').val();
         const discountType = $('.discount-type').val();
@@ -73,12 +73,13 @@ export default function CreateSale({user}) {
                 date,
                 comment,
                 cash,
-                bcash,
+                bkash,
                 nagad,
                 card,
                 discountAmount,
                 discount,
-                discountType
+                discountType,
+                pos : 1
             }, headers);
             if (res.data.status === true) {
                 toast.dismiss();

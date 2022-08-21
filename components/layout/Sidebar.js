@@ -1,4 +1,4 @@
-import styles from './Sidebar.module.css';
+import styles from './Sidebar.module.scss';
 import CustomImage from "../CustomImage";
 import Link from "next/link";
 import {useRouter} from "next/router";

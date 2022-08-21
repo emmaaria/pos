@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import styles from '../styles/Login.module.css';
+import styles from '../styles/Login.module.scss';
 import $ from 'jquery';
 import axios from "axios";
 import {ToastContainer, toast} from 'react-toastify';
@@ -17,6 +17,7 @@ export default function Login() {
         });
         const email = $('.email').val();
         const password = $('.password').val();
+        const company_id = $('.company_id').val();
         if (email === ''){
             toast.dismiss();
             toast.error('Email is required', {
@@ -47,6 +48,7 @@ export default function Login() {
             .post(`${process.env.API_URL}/login`, {
                 email: email,
                 password: password,
+                company_id
             })
             .then((response) => {
                 if (response.data.status === true) {
@@ -122,10 +124,13 @@ export default function Login() {
                             Login
                         </h1>
                         <div className="mb-3">
-                            <input type="email" className={`form-control email`} placeholder={`Email Address`}/>
+                            <input type="text" className={`form-control email`} placeholder={`Mobile Number`} required/>
                         </div>
                         <div className="mb-3">
-                            <input type="password" className={`form-control password`} placeholder={`Password`}/>
+                            <input type="text" className={`form-control company_id`} placeholder={`Customer Number`} required/>
+                        </div>
+                        <div className="mb-3">
+                            <input type="password" className={`form-control password`} placeholder={`Password`} required/>
                         </div>
                         <button className={`btn btn-success d-block w-100`} type={`submit`}>Login</button>
                     </form>

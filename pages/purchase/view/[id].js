@@ -99,7 +99,7 @@ export default function Details({user, id}) {
                                             <td>
                                                 {el.name}
                                             </td>
-                                            <td>{el.price} Tk.</td>
+                                            <td>{el.purchase_price} Tk.</td>
                                             <td>{el.quantity}</td>
                                             <td className={`text-end`}>{el.total} Tk.</td>
                                         </tr>

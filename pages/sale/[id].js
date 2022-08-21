@@ -35,14 +35,14 @@ export default function EditSale({user, id}) {
         ).then(res => {
             if (res.data.status === true) {
                 setInvoice(res.data.invoice);
-                setSubTotal(res.data.invoice.invoiceData.total);
-                setTotal(res.data.invoice.invoiceData.total);
-                setDiscountAmount(res.data.invoice.invoiceData.discountAmount);
-                setGrandTotal(res.data.invoice.invoiceData.total);
+                setSubTotal(parseFloat(res.data.invoice.invoiceData.total));
+                setTotal(parseFloat(res.data.invoice.invoiceData.total));
+                setDiscountAmount(parseFloat(res.data.invoice.invoiceData.discountAmount));
+                setGrandTotal(parseFloat(res.data.invoice.invoiceData.total));
                 setDate(new Date(res.data.invoice.invoiceData.date));
                 setPaid(parseFloat(res.data.invoice.payments.cash) + parseFloat(res.data.invoice.payments.bcash) + parseFloat(res.data.invoice.payments.nagad) + parseFloat(res.data.invoice.payments.card));
                 setInvoiceProducts(res.data.invoice.invoiceItems);
-                $('.discount').val(res.data.invoice.invoiceData.discount);
+                $('.discount').val(parseFloat(res.data.invoice.invoiceData.discount));
                 setLoading(false);
             }
         }).catch(err => {
@@ -91,6 +91,7 @@ export default function EditSale({user, id}) {
         }
         try {
             const res = await axios.post(`${process.env.API_URL}/invoice/update`, {
+                invoice_id: id,
                 customer_id: customer,
                 productIds,
                 productQuantities,

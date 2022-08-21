@@ -166,7 +166,7 @@ export default function Purchase({user}) {
                             {
                                 purchases && purchases.length <= 0 && (
                                     <tr>
-                                        <td colSpan={6} className={`text-center`}>No Purchase Found</td>
+                                        <td colSpan={7} className={`text-center`}>No Purchase Found</td>
                                     </tr>
                                 )
                             }
@@ -213,7 +213,7 @@ export default function Purchase({user}) {
                                     </tr>
                                 ))
                             ) || (
-                                <TableSkeleton tr={3} td={6}/>
+                                <TableSkeleton tr={3} td={7}/>
                             )}
 
                             </tbody>

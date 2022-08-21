@@ -1,216 +1,229 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css');
-
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css");
 body {
-    font-family: 'Poppins', sans-serif !important;
-    font-size: 14px !important;;
-    background: #17171E !important;;
+  font-family: "Poppins", sans-serif !important;
+  font-size: 14px !important;
+  background: #17171E !important;
 }
 
 a {
-    text-decoration: none !important;;
+  text-decoration: none !important;
+}
+
+a:focus-visible {
+  outline: none;
 }
 
 .content {
-    padding: 0 24px;
-    margin: 10.5rem 0 0 0;
-    width: calc(100% - 16%);
-    float: right;
+  padding: 0 24px;
+  margin: 10.5rem 0 0 0;
+  width: 84%;
+  float: right;
 }
 
 .content-pos {
-    padding: 0 24px;
-    margin: 10.5rem 0 0 0;
-    width: calc(100% - 6rem);
-    float: right;
+  padding: 0 24px;
+  margin: 10.5rem 0 0 0;
+  width: calc(100% - 6rem);
+  float: right;
 }
 
 .custom-card {
-    background: #212130;
-    padding: 2.5rem;
-    border-radius: 1.25rem;
+  background: #212130;
+  padding: 2.5rem;
+  border-radius: 1.25rem;
 }
 
 label {
-    color: #ffffff !important;
+  color: #ffffff !important;
 }
 
 th, td {
-    color: #ffffff !important;
-    vertical-align: middle;
+  color: #ffffff !important;
+  vertical-align: middle;
 }
 
 .page-link {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .open {
-    transform: rotate(90deg);
+  transform: rotate(90deg);
 }
 
 .paid {
-    text-align: right;
+  text-align: right;
 }
 
 .barcode-item p {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .barcode-item {
-    text-align: center;
+  text-align: center;
 }
 
 .autocompleteWrapper {
-    position: relative;
+  position: relative;
 }
 
 .autocompleteItemContainer {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    z-index: 999;
-    background-color: #17171E;
-    width: 100%;
-    border-radius: .25rem;
-    overflow-x: scroll;
-    max-height: 250px;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 999;
+  background-color: #17171E;
+  width: 100%;
+  border-radius: 0.25rem;
+  overflow-x: scroll;
+  max-height: 250px;
 }
 
 .autocompleteItem {
-    font-size: 16px;
-    padding-top: 7px;
-    padding-bottom: 7px;
-    color: #ffffff;
-    padding-left: 20px;
-    padding-right: 20px;
-    border-radius: .25rem;
+  font-size: 16px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  color: #ffffff;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 0.25rem;
 }
 
 .autocompleteItem:hover {
-    background-color: rgba(249, 58, 11, 1);
-    cursor: pointer;
+  background-color: rgb(249, 58, 11);
+  cursor: pointer;
 }
 
 .page-item .page-link {
-    color: rgb(249, 58, 11) !important;
-    background: rgba(249, 58, 11, 0.1) !important;
-    border-color: rgb(249, 58, 11) !important;
+  color: rgb(249, 58, 11) !important;
+  background: rgba(249, 58, 11, 0.1) !important;
+  border-color: rgb(249, 58, 11) !important;
 }
 
 .page-item.active .page-link {
-    background-color: rgb(249, 58, 11) !important;
-    border-color: rgb(249, 58, 11) !important;
-    color: #ffffff !important;
+  background-color: rgb(249, 58, 11) !important;
+  border-color: rgb(249, 58, 11) !important;
+  color: #ffffff !important;
 }
 
 .btn-success {
-    color: #fff;
-    background-color: rgb(249, 58, 11) !important;
-    border-color: rgb(249, 58, 11) !important;
+  color: #fff;
+  background-color: rgb(249, 58, 11) !important;
+  border-color: rgb(249, 58, 11) !important;
 }
 
 .btn-success:hover {
-    color: #fff;
-    background-color: #CC2C05 !important;
-    border-color: #CC2C05 !important;
+  color: #fff;
+  background-color: #CC2C05 !important;
+  border-color: #CC2C05 !important;
 }
 
 table {
-    border-collapse: collapse;
+  border-collapse: collapse;
 }
 
 .btn-check:active + .btn-success:focus, .btn-check:checked + .btn-success:focus, .btn-success.active:focus, .btn-success:active:focus, .show > .btn-success.dropdown-toggle:focus {
-    box-shadow: none !important;
-    background-color: rgb(249, 58, 11) !important;;
-    border-color: rgb(249, 58, 11) !important;;
+  box-shadow: none !important;
+  background-color: rgb(249, 58, 11) !important;
+  border-color: rgb(249, 58, 11) !important;
 }
 
 .loader {
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 999999999;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999999999;
 }
 
 .Toastify__toast-container {
-    z-index: 9999999999 !important;
+  z-index: 9999999999 !important;
 }
 
 .btn-check:focus + .btn-success, .btn-success:focus {
-    box-shadow: none !important;
-    background-color: rgb(249, 58, 11) !important;;
-    border-color: rgb(249, 58, 11) !important;;
+  box-shadow: none !important;
+  background-color: rgb(249, 58, 11) !important;
+  border-color: rgb(249, 58, 11) !important;
 }
 
 .payment-modal {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 100%;
-    background: rgb(0, 0, 0, 0.9);
-    color: #ffffff;
-    z-index: 99999;
-    height: 100%;
-    display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  color: #ffffff;
+  z-index: 99999;
+  height: 100%;
+  display: none;
 }
 
 .payment-modal-container {
-    position: absolute;
-    background: #212130;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 50%;
-    padding: 2em 3em;
-    border-radius: 20px;
+  position: absolute;
+  background: #212130;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  padding: 2em 3em;
+  border-radius: 20px;
 }
 
 .payment-modal .title {
-    font-size: 28px;
-    font-weight: bold;
-    text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
 }
 
 .payment-modal .close {
-    position: absolute;
-    top: 15px;
-    right: 25px;
-    font-size: 25px;
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  font-size: 25px;
 }
-.notes{
-    font-size: 20px;
-    margin-bottom: 15px;
+
+.notes {
+  font-size: 20px;
+  margin-bottom: 15px;
 }
-.note-list{
-    list-style: none;
-    margin: 0;
-    padding: 0;
+
+.note-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
-.note-list li{
-    cursor: pointer;
-    background: rgba(249, 58, 11, 0.1);
-    width: 200px;
-    text-align: center;
-    display: block;
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.3);
-    font-size: 20px;
+
+.note-list li {
+  cursor: pointer;
+  background: rgba(249, 58, 11, 0.1);
+  width: 200px;
+  text-align: center;
+  display: block;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  font-size: 20px;
 }
-.note-list li:last-child{
-    border-bottom: none;
+
+.note-list li:last-child {
+  border-bottom: none;
 }
-.note-list li:hover{
-    background: rgba(249, 58, 11, 0.4);
+
+.note-list li:hover {
+  background: rgba(249, 58, 11, 0.4);
 }
-.close span{
-    cursor: pointer;
+
+.close span {
+  cursor: pointer;
 }
-.no-border{
-    border: none;
+
+.no-border {
+  border: none;
 }
-.paid{
-    text-align: left;
+
+.paid {
+  text-align: left;
 }
+
+/*# sourceMappingURL=globals.css.map */

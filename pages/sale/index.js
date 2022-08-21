@@ -153,9 +153,10 @@ export default function Purchase({user}) {
                         <table className={`table mt-4`}>
                             <thead>
                             <tr>
-                                <th width={`10%`}>Sl</th>
-                                <th width={`15%`}>Invoice ID</th>
-                                <th width={`25%`}>Customer Name</th>
+                                <th width={`5%`}>Sl</th>
+                                <th width={`10%`}>Invoice ID</th>
+                                <th width={`15%`}>Date</th>
+                                <th width={`20%`}>Customer Name</th>
                                 <th width={`15%`}>Amount</th>
                                 <th width={`15%`}>Note</th>
                                 <th width={`20%`}>Action</th>
@@ -165,14 +166,15 @@ export default function Purchase({user}) {
                             {
                                 invoices && invoices.length <= 0 && (
                                     <tr>
-                                        <td colSpan={6} className={`text-center`}>No Invoice Found</td>
+                                        <td colSpan={7} className={`text-center`}>No Invoice Found</td>
                                     </tr>
                                 )
                             }
                             {invoices && !loading &&(
                                 invoices.map((el, index) => (
-                                    <tr key={el.id} valign={`middle`} className={`row-id-${el.id}`}>
+                                    <tr key={el.invoice_id} valign={`middle`} className={`row-id-${el.invoice_id}`}>
                                         <td>{index + 1}</td>
+                                        <td>{el.date}</td>
                                         <td className={`text-uppercase`}>{el.invoice_id}</td>
                                         <td>{el.customer_name}</td>
                                         <td>{el.total - el.discountAmount} Tk.</td>
@@ -206,13 +208,13 @@ export default function Purchase({user}) {
                                     </tr>
                                 ))
                             ) || (
-                                <TableSkeleton tr={3} td={6}/>
+                                <TableSkeleton tr={3} td={7}/>
                             )}
 
                             </tbody>
                             <tfoot>
                             <tr>
-                                <td colSpan={6}>
+                                <td colSpan={7}>
                                     <nav className={`float-end`}>
                                         <ul className="pagination mt-3">
                                             {

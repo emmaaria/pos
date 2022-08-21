@@ -6,6 +6,17 @@
     width: 15%;
     background: #212130;
     z-index: 99999;
+    overflow-y: scroll;
+    scrollbar-color: transparent transparent;
+}
+.sidebar::-webkit-scrollbar{
+    width: 0;
+}
+.sidebar::-webkit-scrollbar-track{
+    background: transparent;
+}
+.sidebar::-webkit-scrollbar-thumb {
+    background: transparent;
 }
 .avatar{
     height: 5rem;
@@ -90,6 +101,9 @@
 .sidebar ul li a:hover{
     color: rgb(249, 58, 11);
     background: rgba(249, 58, 11, 0.1);
+}
+.sidebar ul li ul a{
+    padding: 0.5rem 2.1875rem;
 }
 .sidebar ul li ul a:hover{
     color: rgb(249, 58, 11);

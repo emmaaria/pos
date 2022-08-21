@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import styles from './CustomImage.module.css';
+import styles from './CustomImage.module.scss';
 export default function CustomImage({src, circle}) {
     return (
         circle === true ? (

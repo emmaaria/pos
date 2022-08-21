@@ -25,6 +25,7 @@ export default function Product({user}) {
                 setProducts(res.data.products.data);
                 setLinks(res.data.products.links);
                 setLoading(false);
+                console.log(res.data)
             }
         }).catch(err => {
             console.log(err);
