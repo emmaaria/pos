@@ -101,7 +101,7 @@ export default function CreateSale({user}) {
                 setLoader(false);
                 $('.note').val('');
                 $('.cash').val('');
-                $('.bcash').val('');
+                $('.bkash').val('');
                 $('.nagad').val('');
                 $('.card').val('');
                 $('.discount').val('');
@@ -509,7 +509,7 @@ export default function CreateSale({user}) {
                             Total : {grandTotal - discountAmount} Tk.
                         </div>
                         <div className="col-md-6">
-                            Change/Due : {(grandTotal - discountAmount) - paid} Tk.
+                            Change/Due : { Math.abs((grandTotal - discountAmount) - paid) } Tk.
                         </div>
                     </div>
                     <button className={`btn btn-success mt-3 float-end`} onClick={handleForm}>Save</button>

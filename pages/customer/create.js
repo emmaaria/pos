@@ -55,7 +55,7 @@ export default function CreateCustomer({user}) {
                 setLoader(false);
             }else {
                 toast.dismiss();
-                toast.success('Something went wrong', {
+                toast.error('Something went wrong', {
                     position: "bottom-right",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -64,7 +64,6 @@ export default function CreateCustomer({user}) {
                     draggable: true,
                     theme: 'dark',
                 });
-                $('form').trigger('reset');
                 setLoader(false);
             }
         }catch (e) {

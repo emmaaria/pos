@@ -15,6 +15,8 @@ export default function EditProduct({user, id}) {
     const [units, setUnits] = useState();
     const [loading, setLoading] = useState(true);
     const [loader, setLoader] = useState(false);
+    const [unit, setUnit] = useState(null);
+    const [category, setCategory] = useState(null);
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
@@ -30,6 +32,12 @@ export default function EditProduct({user, id}) {
             } catch (err) {
                 console.log(err);
             }
+        }
+
+        getData();
+    }, [setCategories]);
+    useEffect(() => {
+        async function getUnits() {
             try {
                 const res = await axios.get(
                     `${process.env.API_URL}/unit?allData=true`, headers
@@ -42,8 +50,8 @@ export default function EditProduct({user, id}) {
             }
         }
 
-        getData();
-    }, [setCategories, setUnits]);
+        getUnits();
+    }, [setUnits]);
     useEffect(() => {
         axios.get(
             `${process.env.API_URL}/product/${id}`,
@@ -51,6 +59,8 @@ export default function EditProduct({user, id}) {
         ).then(res => {
             if (res.data.status === true) {
                 setProduct(res.data.product);
+                setUnit(res.data.product.unit);
+                setCategory(res.data.product.category);
                 setLoading(false);
             }
         }).catch(err => {
@@ -69,6 +79,7 @@ export default function EditProduct({user, id}) {
         const unit = $('.unit').val();
         const price = $('.price').val();
         const purchasePrice = $('.purchasePrice').val();
+        const barcode = $('.barcode').val();
         const weight = $('.weight').val();
         if (name === '') {
             toast.dismiss();
@@ -87,6 +98,7 @@ export default function EditProduct({user, id}) {
         try {
             const res = await axios.post(`${process.env.API_URL}/product/update`, {
                 id: id,
+                product_id : barcode,
                 name,
                 category,
                 unit,
@@ -107,8 +119,9 @@ export default function EditProduct({user, id}) {
                 });
                 setLoader(false);
             } else {
+                console.log(res.data)
                 toast.dismiss();
-                toast.error(e.response.data.errors, {
+                toast.error(res.data.errors, {
                     position: "bottom-right",
                     autoClose: 3000,
                     hideProgressBar: false,
@@ -132,6 +145,12 @@ export default function EditProduct({user, id}) {
             });
             setLoader(false);
         }
+    }
+    const handleUnitChange = (event) => {
+        setUnit(event.target.value)
+    }
+    const handleCategoryChange = (event) => {
+        setCategory(event.target.value)
     }
     return (
         <>
@@ -165,11 +184,10 @@ export default function EditProduct({user, id}) {
                                     }
                                 </div>
                                 <div className="col-md-6">
-                                    <label htmlFor="category" className={`form-label`}>Category</label>
+                                    <label className={`form-label`}>Category</label>
                                     {
                                         product && loading === false && (
-                                            <select className="form-control category" defaultValue={product.category}
-                                                    key={`${Math.floor((Math.random() * 1000))}-min`}>
+                                            <select className="form-control category" value={category} onChange={handleCategoryChange}>
                                                 <option value="">Choose Category</option>
                                                 {
                                                     categories && (
@@ -189,11 +207,10 @@ export default function EditProduct({user, id}) {
                             </div>
                             <div className="mb-3 row">
                                 <div className="col-md-6">
-                                    <label htmlFor="unit" className={`form-label`}>Unit</label>
+                                    <label className={`form-label`}>Unit</label>
                                     {
                                         product && loading === false && (
-                                            <select className="form-control unit" required defaultValue={product.unit}
-                                                    key={`${Math.floor((Math.random() * 1000))}-min`}>
+                                            <select className="form-control unit" value={unit} onChange={handleUnitChange}>
                                                 <option value="">Choose Unit</option>
                                                 {
                                                     units && (
@@ -255,6 +272,23 @@ export default function EditProduct({user, id}) {
                                     }
                                 </div>
 
+                            </div>
+                            <div className="row mb-3">
+                                <div className="col-md-6">
+                                    <label htmlFor="barcode" className={`form-label`}>
+                                        <i className="fa-solid fa-barcode" style={{marginRight: '10px'}}/> Barcode
+                                    </label>
+                                    {
+                                        product && loading === false && (
+                                            <input type="text" className={`form-control barcode`} id={`barcode`}
+                                                   required defaultValue={product.product_id}/>
+                                        ) || (
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                <Skeleton width={`100%`} height={40}/>
+                                            </SkeletonTheme>
+                                        )
+                                    }
+                                </div>
                             </div>
                             <button className={`btn btn-success`} type={`submit`}>Save</button>
                         </form>

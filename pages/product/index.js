@@ -25,7 +25,6 @@ export default function Product({user}) {
                 setProducts(res.data.products.data);
                 setLinks(res.data.products.links);
                 setLoading(false);
-                console.log(res.data)
             }
         }).catch(err => {
             console.log(err);
@@ -81,6 +80,7 @@ export default function Product({user}) {
             const response = await axios.post(`${process.env.API_URL}/product/delete`, {
                 id: id,
             }, headers);
+            console.log(response.data)
             if (response.data.status === true) {
                 toast.dismiss();
                 toast.success('Successfully Deleted', {
@@ -95,7 +95,7 @@ export default function Product({user}) {
                 $(`.row-id-${id}`).fadeOut();
             }else {
                 toast.dismiss();
-                toast.error(response.data.error, {
+                toast.error(response.data.errors, {
                     position: "bottom-right",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -170,13 +170,13 @@ export default function Product({user}) {
                             }
                             {products && !loading &&(
                                 products.map((el, index) => (
-                                    <tr key={el.product_id} valign={`middle`} className={`row-id-${el.product_id}`}>
+                                    <tr key={el.id} valign={`middle`} className={`row-id-${el.id}`}>
                                         <td>{index + 1}</td>
                                         <td>{el.name}</td>
                                         <td>{el.price} Tk.</td>
                                         <td>{el.purchase_price} Tk.</td>
                                         <td>
-                                            <Link href={`/product/${el.product_id}`}>
+                                            <Link href={`/product/${el.id}`}>
                                                 <a className={`btn btn-warning btn-sm me-2`}>
                                                     <i className="fa-solid fa-pen-to-square"/>
                                                 </a>
@@ -189,7 +189,7 @@ export default function Product({user}) {
                                                     );
                                                 if (result) {
                                                     deleteHandler(
-                                                        el.product_id
+                                                        el.id
                                                     );
                                                 }
                                             }}>

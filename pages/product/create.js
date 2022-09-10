@@ -94,7 +94,6 @@ export default function CreateProduct({user}) {
                 setLoader(false);
             } else {
                 toast.dismiss();
-                console.log(res.data.errors)
                 if (typeof res.data.errors === 'object') {
                     Object.values(res.data.errors).map(err => {
                         toast.error(err[0], {
@@ -174,7 +173,7 @@ export default function CreateProduct({user}) {
                             <div className="mb-3 row">
                                 <div className="col-md-6">
                                     <label htmlFor="unit" className={`form-label`}>Unit</label>
-                                    <select className="form-control unit" required>
+                                    <select className="form-control unit">
                                         <option value="">Choose Unit</option>
                                         {
                                             units && (

@@ -15,12 +15,12 @@ export default function Login() {
             position: "bottom-left",
             theme: 'dark'
         });
-        const email = $('.email').val();
+        const mobile = $('.mobile').val();
         const password = $('.password').val();
         const company_id = $('.company_id').val();
-        if (email === ''){
+        if (mobile === '') {
             toast.dismiss();
-            toast.error('Email is required', {
+            toast.error('Mobile is required', {
                 position: "bottom-left",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -31,7 +31,20 @@ export default function Login() {
             });
             return;
         }
-        if (password === ''){
+        if (company_id === '') {
+            toast.dismiss();
+            toast.error('Company ID is required', {
+                position: "bottom-left",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+            });
+            return;
+        }
+        if (password === '') {
             toast.dismiss();
             toast.error('Password is required', {
                 position: "bottom-left",
@@ -46,7 +59,7 @@ export default function Login() {
         }
         axios
             .post(`${process.env.API_URL}/login`, {
-                email: email,
+                mobile: mobile,
                 password: password,
                 company_id
             })
@@ -56,7 +69,8 @@ export default function Login() {
                         .post('/api/auth/login', {
                             id: response.data.user.id,
                             name: response.data.user.name,
-                            email: response.data.user.email,
+                            mobile: response.data.user.email,
+                            role: response.data.user.role,
                             token: response.data.token,
                         })
                         .then(() => {
@@ -84,7 +98,7 @@ export default function Login() {
                                 theme: 'dark',
                             });
                         });
-                }else {
+                } else {
                     toast.dismiss();
                     toast.error(response.data.errors, {
                         position: "bottom-left",
@@ -124,13 +138,16 @@ export default function Login() {
                             Login
                         </h1>
                         <div className="mb-3">
-                            <input type="text" className={`form-control email`} placeholder={`Mobile Number`} required/>
+                            <input type="text" className={`form-control mobile`} placeholder={`Mobile Number`}
+                                   required/>
                         </div>
                         <div className="mb-3">
-                            <input type="text" className={`form-control company_id`} placeholder={`Customer Number`} required/>
+                            <input type="text" className={`form-control company_id`} placeholder={`Customer Number`}
+                                   required/>
                         </div>
                         <div className="mb-3">
-                            <input type="password" className={`form-control password`} placeholder={`Password`} required/>
+                            <input type="password" className={`form-control password`} placeholder={`Password`}
+                                   required/>
                         </div>
                         <button className={`btn btn-success d-block w-100`} type={`submit`}>Login</button>
                     </form>

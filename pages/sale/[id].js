@@ -40,9 +40,9 @@ export default function EditSale({user, id}) {
                 setDiscountAmount(parseFloat(res.data.invoice.invoiceData.discountAmount));
                 setGrandTotal(parseFloat(res.data.invoice.invoiceData.total));
                 setDate(new Date(res.data.invoice.invoiceData.date));
-                setPaid(parseFloat(res.data.invoice.payments.cash) + parseFloat(res.data.invoice.payments.bcash) + parseFloat(res.data.invoice.payments.nagad) + parseFloat(res.data.invoice.payments.card));
+                setPaid(parseFloat(res.data.invoice.invoiceData.paid_amount));
                 setInvoiceProducts(res.data.invoice.invoiceItems);
-                $('.discount').val(parseFloat(res.data.invoice.invoiceData.discount));
+                $('.discount').val(res.data.invoice.invoiceData.discount ? parseFloat(res.data.invoice.invoiceData.discount) : '');
                 setLoading(false);
             }
         }).catch(err => {
@@ -558,7 +558,7 @@ export default function EditSale({user, id}) {
                                     invoice && loading === false && (
                                         <input type="text" className={`form-control paid bkash`}
                                                onKeyUp={calculateDue}
-                                               onKeyDown={calculateDue} onChange={calculateDue} defaultValue={invoice.payments.bcash}/>
+                                               onKeyDown={calculateDue} onChange={calculateDue} defaultValue={invoice.payments.bkash}/>
                                     ) || (
                                         <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
                                             <Skeleton width={`100%`} height={30}/>
@@ -640,7 +640,7 @@ export default function EditSale({user, id}) {
                         {
                             invoice && loading === false && (
                                 <div className="col-md-6">
-                                    Change/Due : {(grandTotal - discountAmount) - paid} Tk.
+                                    Change/Due : {Math.abs((grandTotal - discountAmount) - paid)} Tk.
                                 </div>
                             ) || (
                                 <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
