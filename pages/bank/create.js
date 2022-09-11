@@ -20,13 +20,71 @@ export default function CreateBank({user}) {
             theme: 'dark'
         });
         setLoader(true);
-        const name = $('.name').val();
-        const mobile = $('.mobile').val();
-        const address = $('.address').val();
-        const due = $('.due').val();
+        const name = $('.bankName').val();
+        const account_name = $('.bankAccountName').val();
+        const account_no = $('.accountNumber').val();
+        const bank_type = $('.bankType').val();
+        const branch = $('.branch').val();
+        const balance = $('.balance').val();
         if (name === ''){
             toast.dismiss();
-            toast.error('Name is required', {
+            toast.error('Bank name is required', {
+                position: "bottom-left",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+            });
+            setLoader(false);
+            return;
+        }
+        if (account_name === ''){
+            toast.dismiss();
+            toast.error('Account name is required', {
+                position: "bottom-left",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+            });
+            setLoader(false);
+            return;
+        }
+        if (account_no === ''){
+            toast.dismiss();
+            toast.error('Bank account number is required', {
+                position: "bottom-left",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+            });
+            setLoader(false);
+            return;
+        }
+        if (branch === ''){
+            toast.dismiss();
+            toast.error('Bank branch is required', {
+                position: "bottom-left",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+            });
+            setLoader(false);
+            return;
+        }
+        if (bank_type === ''){
+            toast.dismiss();
+            toast.error('Please select bank account type', {
                 position: "bottom-left",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -39,7 +97,7 @@ export default function CreateBank({user}) {
             return;
         }
         try {
-            const res = await axios.post(`${process.env.API_URL}/customer/store`,{name,mobile,address, due}, headers);
+            const res = await axios.post(`${process.env.API_URL}/bank/store`,{name,account_name,account_no, bank_type, balance, branch}, headers);
             if (res.data.status === true){
                 toast.dismiss();
                 toast.success('Successfully Saved', {
