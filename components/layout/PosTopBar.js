@@ -1,4 +1,4 @@
-import styles from './PosTopBar.module.scss';
+import styles from './PosTopBar.module.css';
 export default function PosTopBar({title}) {
     return(
         <div className={styles.topBar}>

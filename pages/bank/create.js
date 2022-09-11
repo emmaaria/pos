@@ -114,6 +114,10 @@ export default function CreateBank({user}) {
                                 <input type="text" className={`form-control branch`} required />
                             </div>
                             <div className="mb-3">
+                                <label className={`form-label`}>Account Type</label>
+                                <input type="text" className={`form-control bank_type`} />
+                            </div>
+                            <div className="mb-3">
                                 <label className={`form-label`}>Balance</label>
                                 <input type="text" className={`form-control balance`} />
                             </div>

@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import styles from '../styles/Login.module.scss';
+import styles from '../styles/Login.module.css';
 import $ from 'jquery';
 import axios from "axios";
 import {ToastContainer, toast} from 'react-toastify';
