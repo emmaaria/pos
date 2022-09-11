@@ -226,4 +226,20 @@ table {
   text-align: left;
 }
 
+.searchWrapper {
+  background: #ffffff;
+}
+
+.chip {
+  background: rgb(249, 58, 11) !important;
+}
+
+.highlightOption {
+  background: rgb(249, 58, 11) !important;
+}
+
+.multiSelectContainer li:hover {
+  background: #212130 !important;
+}
+
 /*# sourceMappingURL=globals.css.map */

@@ -8,30 +8,30 @@ import axios from "axios";
 import TableSkeleton from "../../components/TableSkeleton";
 import $ from 'jquery';
 import {ToastContainer, toast} from 'react-toastify';
-export default function Product({user}) {
+
+export default function Customer({user}) {
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
-    const [products, setProducts] = useState();
+    const [customers, setCustomers] = useState();
     const [links, setLinks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [timer, setTimer] = useState(null);
     useEffect(() => {
         axios.get(
-            `${process.env.API_URL}/product`,
+            `${process.env.API_URL}/customer`,
             headers
         ).then(res => {
             if (res.data.status === true) {
-                setProducts(res.data.products.data);
-                setLinks(res.data.products.links);
+                setCustomers(res.data.customers.data);
+                setLinks(res.data.customers.links);
                 setLoading(false);
             }
         }).catch(err => {
             console.log(err);
         });
     }, []);
-
-    const searchProduct = async () => {
+    const searchCustomer = async () => {
         if (timer) {
             clearTimeout(timer);
             setTimer(null);
@@ -41,12 +41,12 @@ export default function Product({user}) {
                 setLoading(true);
                 const name = $('.terms').val();
                 axios.get(
-                    `${process.env.API_URL}/product?name=${name}`,
+                    `${process.env.API_URL}/customer?name=${name}`,
                     headers
                 ).then(res => {
                     if (res.data.status === true) {
-                        setProducts(res.data.products.data);
-                        setLinks(res.data.products.links);
+                        setCustomers(res.data.customers.data);
+                        setLinks(res.data.customers.links);
                         setLoading(false);
                     }
                 }).catch(err => {
@@ -63,8 +63,8 @@ export default function Product({user}) {
                 headers
             );
             if (res.data.status === true) {
-                setProducts(res.data.products.data);
-                setLinks(res.data.products.links);
+                setCustomers(res.data.customers.data);
+                setLinks(res.data.customers.links);
                 setLoading(false);
             }
         } catch (err) {
@@ -77,7 +77,7 @@ export default function Product({user}) {
             theme: 'dark'
         });
         try {
-            const response = await axios.post(`${process.env.API_URL}/product/delete`, {
+            const response = await axios.post(`${process.env.API_URL}/customer/delete`, {
                 id: id,
             }, headers);
             if (response.data.status === true) {
@@ -94,7 +94,7 @@ export default function Product({user}) {
                 $(`.row-id-${id}`).fadeOut();
             }else {
                 toast.dismiss();
-                toast.error(response.data.errors, {
+                toast.error(response.data.error, {
                     position: "bottom-right",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -121,18 +121,18 @@ export default function Product({user}) {
         <>
             <Head>
                 <title>
-                    Products
+                    Customers
                 </title>
             </Head>
             <ToastContainer/>
-            <Layout user={user} title={`Products`}>
+            <Layout user={user} title={`Customers`}>
                 <div className="content">
                     <div className="custom-card">
                         <div className="row">
                             <div className="col-md-9">
-                                <Link href={`/product/create`}>
+                                <Link href={`/customer/create`}>
                                     <a className={`btn btn-success`}>
-                                        <i className="fa-solid fa-plus"/> Add New Product
+                                        <i className="fa-solid fa-plus"/> Add New Customer
                                     </a>
                                 </Link>
                             </div>
@@ -141,9 +141,9 @@ export default function Product({user}) {
                                     <div className="row">
                                         <div className="col">
                                             <input type="text" className="form-control terms"
-                                                   placeholder={`Search product`}
-                                                   name="email" onKeyUp={searchProduct} onKeyDown={searchProduct}
-                                                   onChange={searchProduct}/>
+                                                   placeholder={`Search customer`}
+                                                   name="email" onKeyUp={searchCustomer} onKeyDown={searchCustomer}
+                                                   onChange={searchCustomer}/>
                                         </div>
                                     </div>
                                 </form>
@@ -152,30 +152,36 @@ export default function Product({user}) {
                         <table className={`table mt-4`}>
                             <thead>
                             <tr>
-                                <th width={`10%`}>Sl</th>
-                                <th width={`40%`}>Name</th>
-                                <th width={`20%`}>Sale Price</th>
-                                <th width={`20%`}>Purchase Price</th>
+                                <th width={`5%`}>Sl</th>
+                                <th width={`30%`}>Name</th>
+                                <th width={`15%`}>Mobile</th>
+                                <th width={`20%`}>Address</th>
+                                <th width={`20%`}>Balance</th>
                                 <th width={`10%`}>Action</th>
                             </tr>
                             </thead>
                             <tbody>
                             {
-                                products && products.length <= 0 && (
+                                customers && customers.length <= 0 && (
                                     <tr>
-                                        <td colSpan={5} className={`text-center`}>No Product Found</td>
+                                        <td colSpan={6} className={`text-center`}>No Customer Found</td>
                                     </tr>
                                 )
                             }
-                            {products && !loading &&(
-                                products.map((el, index) => (
+                            {customers && !loading && (
+                                customers.map((el, index) => (
                                     <tr key={el.id} valign={`middle`} className={`row-id-${el.id}`}>
                                         <td>{index + 1}</td>
                                         <td>{el.name}</td>
-                                        <td>{el.price} Tk.</td>
-                                        <td>{el.purchase_price} Tk.</td>
+                                        <td>{el.mobile}</td>
+                                        <td>{el.address}</td>
                                         <td>
-                                            <Link href={`/product/${el.id}`}>
+                                            {
+                                                el.balance ? el.balance : 0
+                                            } Tk.
+                                        </td>
+                                        <td>
+                                            <Link href={`/customer/${el.id}`}>
                                                 <a className={`btn btn-warning btn-sm me-2`}>
                                                     <i className="fa-solid fa-pen-to-square"/>
                                                 </a>
@@ -198,7 +204,7 @@ export default function Product({user}) {
                                     </tr>
                                 ))
                             ) || (
-                                <TableSkeleton tr={3} td={5}/>
+                                <TableSkeleton tr={3} td={6}/>
                             )}
                             </tbody>
                             <tfoot>

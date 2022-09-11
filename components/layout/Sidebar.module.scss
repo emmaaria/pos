@@ -9,9 +9,6 @@
     overflow-y: scroll;
     scrollbar-color: transparent transparent;
 }
-.sidebar::-webkit-scrollbar{
-    width: 0;
-}
 .sidebar::-webkit-scrollbar-track{
     background: transparent;
 }
@@ -74,9 +71,9 @@
 }
 .sidebar ul li a{
     color: #ffffff;
-    padding: 1.375rem 2.1875rem;
+    padding: 1rem 2.1875rem;
     display: block;
-    font-size: 1rem;
+    font-size: 0.9rem;
     margin-bottom: 5px;
     font-weight: 600;
     position: relative;
@@ -118,7 +115,7 @@
 }
 .sidebar ul li a i{
     margin-right: 1.25rem;
-    font-size: 20px;
+    font-size: 18px;
 }
 .dropdownIcon{
     margin-top: 3px;

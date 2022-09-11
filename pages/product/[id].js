@@ -8,6 +8,7 @@ import $ from 'jquery';
 import {useEffect, useState} from "react";
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 import Loader from "../../components/Loader";
+import Multiselect from "multiselect-react-dropdown";
 
 export default function EditProduct({user, id}) {
     const [product, setProduct] = useState();
@@ -17,6 +18,9 @@ export default function EditProduct({user, id}) {
     const [loader, setLoader] = useState(false);
     const [unit, setUnit] = useState(null);
     const [category, setCategory] = useState(null);
+    const [suppliers, setSuppliers] = useState(null);
+    const [selectedSupplier, setSelectedSupplier] = useState(null);
+    const [previousSuppliers, setPreviousSuppliers] = useState(null);
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
@@ -32,12 +36,16 @@ export default function EditProduct({user, id}) {
             } catch (err) {
                 console.log(err);
             }
-        }
-
-        getData();
-    }, [setCategories]);
-    useEffect(() => {
-        async function getUnits() {
+            try {
+                const res = await axios.get(
+                    `${process.env.API_URL}/supplier?allData=true`, headers
+                );
+                if (res.data.status === true) {
+                    setSuppliers(res.data.suppliers);
+                }
+            } catch (err) {
+                console.log(err);
+            }
             try {
                 const res = await axios.get(
                     `${process.env.API_URL}/unit?allData=true`, headers
@@ -50,8 +58,8 @@ export default function EditProduct({user, id}) {
             }
         }
 
-        getUnits();
-    }, [setUnits]);
+        getData();
+    }, [setCategories, setUnits, setSuppliers]);
     useEffect(() => {
         axios.get(
             `${process.env.API_URL}/product/${id}`,
@@ -61,6 +69,7 @@ export default function EditProduct({user, id}) {
                 setProduct(res.data.product);
                 setUnit(res.data.product.unit);
                 setCategory(res.data.product.category);
+                setPreviousSuppliers(res.data.suppliers);
                 setLoading(false);
             }
         }).catch(err => {
@@ -79,7 +88,6 @@ export default function EditProduct({user, id}) {
         const unit = $('.unit').val();
         const price = $('.price').val();
         const purchasePrice = $('.purchasePrice').val();
-        const barcode = $('.barcode').val();
         const weight = $('.weight').val();
         if (name === '') {
             toast.dismiss();
@@ -98,13 +106,13 @@ export default function EditProduct({user, id}) {
         try {
             const res = await axios.post(`${process.env.API_URL}/product/update`, {
                 id: id,
-                product_id : barcode,
                 name,
                 category,
                 unit,
                 price,
                 weight,
-                purchase_price: purchasePrice
+                purchase_price: purchasePrice,
+                suppliers : selectedSupplier,
             }, headers);
             if (res.data.status === true) {
                 toast.dismiss();
@@ -151,6 +159,12 @@ export default function EditProduct({user, id}) {
     }
     const handleCategoryChange = (event) => {
         setCategory(event.target.value)
+    }
+    const handleSupplierSelect = (selectedList) => {
+        setSelectedSupplier(selectedList);
+    }
+    const handleSupplierRemove = (selectedList) => {
+        setSelectedSupplier(selectedList);
     }
     return (
         <>
@@ -274,14 +288,18 @@ export default function EditProduct({user, id}) {
 
                             </div>
                             <div className="row mb-3">
-                                <div className="col-md-6">
-                                    <label htmlFor="barcode" className={`form-label`}>
-                                        <i className="fa-solid fa-barcode" style={{marginRight: '10px'}}/> Barcode
-                                    </label>
+                                <div className="col-md-12">
+                                    <label htmlFor="suppliers" className={`form-label`}>Suppliers</label>
                                     {
-                                        product && loading === false && (
-                                            <input type="text" className={`form-control barcode`} id={`barcode`}
-                                                   required defaultValue={product.product_id}/>
+                                        suppliers && (
+                                            <Multiselect
+                                                options={suppliers}
+                                                onSelect={handleSupplierSelect}
+                                                onRemove={handleSupplierRemove}
+                                                displayValue="name"
+                                                placeholder={``}
+                                                selectedValues={previousSuppliers}
+                                            />
                                         ) || (
                                             <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
                                                 <Skeleton width={`100%`} height={40}/>

@@ -7,11 +7,15 @@ import axios from "axios";
 import $ from 'jquery';
 import {useEffect, useState} from "react";
 import Loader from "../../components/Loader";
+import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
+import Multiselect from 'multiselect-react-dropdown';
 
 export default function CreateProduct({user}) {
     const [loader, setLoader] = useState(false);
-    const [categories, setCategories] = useState();
-    const [units, setUnits] = useState();
+    const [categories, setCategories] = useState(null);
+    const [units, setUnits] = useState(null);
+    const [suppliers, setSuppliers] = useState(null);
+    const [selectedSupplier, setSelectedSupplier] = useState(null);
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
@@ -37,6 +41,16 @@ export default function CreateProduct({user}) {
             } catch (err) {
                 console.log(err);
             }
+            try {
+                const res = await axios.get(
+                    `${process.env.API_URL}/supplier?allData=true`, headers
+                );
+                if (res.data.status === true) {
+                    setSuppliers(res.data.suppliers);
+                }
+            } catch (err) {
+                console.log(err);
+            }
         }
 
         getData();
@@ -54,7 +68,6 @@ export default function CreateProduct({user}) {
         const price = $('.price').val();
         const purchasePrice = $('.purchasePrice').val();
         const weight = $('.weight').val();
-        const barcode = $('.barcode').val();
         if (name === '') {
             toast.dismiss();
             toast.error('Name is required', {
@@ -72,13 +85,14 @@ export default function CreateProduct({user}) {
         try {
             const res = await axios.post(`${process.env.API_URL}/product/store`, {
                 name,
+                suppliers : selectedSupplier,
                 category,
                 unit,
                 price,
                 weight,
-                product_id: barcode,
                 purchase_price: purchasePrice
             }, headers);
+            console.log(res.data)
             if (res.data.status === true) {
                 toast.dismiss();
                 toast.success('Successfully Saved', {
@@ -92,6 +106,7 @@ export default function CreateProduct({user}) {
                 });
                 $('form').trigger('reset');
                 setLoader(false);
+                setSelectedSupplier([]);
             } else {
                 toast.dismiss();
                 if (typeof res.data.errors === 'object') {
@@ -134,6 +149,12 @@ export default function CreateProduct({user}) {
             setLoader(false);
         }
     }
+    const handleSupplierSelect = (selectedList) => {
+      setSelectedSupplier(selectedList);
+    }
+    const handleSupplierRemove = (selectedList) => {
+        setSelectedSupplier(selectedList);
+    }
     return (
         <>
             <Head>
@@ -158,31 +179,43 @@ export default function CreateProduct({user}) {
                                 </div>
                                 <div className="col-md-6">
                                     <label htmlFor="category" className={`form-label`}>Category</label>
-                                    <select className="form-control category">
-                                        <option value="">Choose Category</option>
-                                        {
-                                            categories && (
-                                                categories.map(el => (
-                                                    <option value={el.id} key={el.id}>{el.name}</option>
-                                                ))
-                                            )
-                                        }
-                                    </select>
+                                    {
+                                        categories && (
+                                            <select className="form-control category">
+                                                <option value="">Choose Category</option>
+                                                {
+                                                    categories.map(el => (
+                                                        <option value={el.id} key={el.id}>{el.name}</option>
+                                                    ))
+                                                }
+                                            </select>
+                                        ) || (
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                <Skeleton width={`100%`} height={40}/>
+                                            </SkeletonTheme>
+                                        )
+                                    }
                                 </div>
                             </div>
                             <div className="mb-3 row">
                                 <div className="col-md-6">
                                     <label htmlFor="unit" className={`form-label`}>Unit</label>
-                                    <select className="form-control unit">
-                                        <option value="">Choose Unit</option>
-                                        {
-                                            units && (
-                                                units.map(el => (
-                                                    <option value={el.id} key={el.id}>{el.name}</option>
-                                                ))
-                                            )
-                                        }
-                                    </select>
+                                    {
+                                        units && (
+                                            <select className="form-control unit">
+                                                <option value="">Choose Unit</option>
+                                                {
+                                                    units.map(el => (
+                                                        <option value={el.id} key={el.id}>{el.name}</option>
+                                                    ))
+                                                }
+                                            </select>
+                                        ) || (
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                <Skeleton width={`100%`} height={40}/>
+                                            </SkeletonTheme>
+                                        )
+                                    }
                                 </div>
                                 <div className="col-md-6">
                                     <label htmlFor="weight" className={`form-label`}>Weight</label>
@@ -201,11 +234,24 @@ export default function CreateProduct({user}) {
                                 </div>
                             </div>
                             <div className="row mb-3">
-                                <div className="col-md-6">
-                                    <label htmlFor="barcode" className={`form-label`}>
-                                        <i className="fa-solid fa-barcode" style={{marginRight: '10px'}}/> Barcode
-                                    </label>
-                                    <input type="text" className={`form-control barcode`} id={`barcode`}/>
+                                <div className="col-md-12">
+                                    <label htmlFor="suppliers" className={`form-label`}>Suppliers</label>
+                                    {
+                                        suppliers && (
+                                            <Multiselect
+                                                options={suppliers}
+                                                onSelect={handleSupplierSelect}
+                                                onRemove={handleSupplierRemove}
+                                                displayValue="name"
+                                                placeholder={``}
+                                                selectedValues={null}
+                                            />
+                                        ) || (
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                <Skeleton width={`100%`} height={40}/>
+                                            </SkeletonTheme>
+                                        )
+                                    }
                                 </div>
                             </div>
                             <button className={`btn btn-success`} type={`submit`}>Save</button>

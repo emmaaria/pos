@@ -10,6 +10,11 @@ export default function Sidebar({user}) {
         $('.customerMenu').slideToggle();
         $('.ci').toggleClass('open');
     };
+    const showBankMenu = (e) => {
+        e.preventDefault();
+        $('.bankMenu').slideToggle();
+        $('.bank').toggleClass('open');
+    };
     const showSupplierMenu = (e) => {
         e.preventDefault();
         $('.supplierMenu').slideToggle();
@@ -291,6 +296,54 @@ export default function Sidebar({user}) {
                             Purchase
                         </a>
                     </Link>
+                </li>
+                <li>
+                    <Link href={`/bank`}>
+                        <a
+                            onClick={showBankMenu}
+                            className={`
+                                ${
+                                router.pathname === '/bank' ||
+                                router.pathname === '/bank/create' ||
+                                router.pathname === '/bank/[id]'
+                                    ? styles.active
+                                    : ''
+                            }
+                            `}>
+                            <i className="fa-solid fa-building-columns" />
+                            Bank
+                            <span className={`fa-solid fa-caret-right float-end ${styles.dropdownIcon} bank`}/>
+                        </a>
+                    </Link>
+                    <ul className={`bankMenu ${styles.subMenu}`}>
+                        <li>
+                            <Link href={`/bank`}>
+                                <a className={`
+                                ${
+                                    router.pathname === '/bank' ||
+                                    router.pathname === '/bank/[id]'
+                                        ? styles.active
+                                        : ''
+                                }
+                            `}>
+                                    Bank List
+                                </a>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href={`/bank/create`}>
+                                <a className={`
+                                ${
+                                    router.pathname === '/bank/create'
+                                        ? styles.active
+                                        : ''
+                                }
+                            `}>
+                                    Add Bank
+                                </a>
+                            </Link>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </div>
