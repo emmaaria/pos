@@ -25,6 +25,7 @@ export default function EditBank({user, id}) {
             console.log(res.data);
             if (res.data.status === true) {
                 setBank(res.data.bank);
+                setType(res.data.bank.bank_type);
                 setLoading(false);
             }
         }).catch(err => {
@@ -156,6 +157,9 @@ export default function EditBank({user, id}) {
             setLoader(false);
         }
     }
+    const handleTypeChange = (event) => {
+        setType(event.target.value)
+    }
     return (
         <>
             <Head>
@@ -194,6 +198,55 @@ export default function EditBank({user, id}) {
                                     bank && loading === false && (
                                         <div className="mb-3">
                                             <input type="text" className={`form-control bankAccountName`} required defaultValue={bank.account_name} />
+                                        </div>
+                                    ) || (
+                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                            <Skeleton width={`100%`} height={40}/>
+                                        </SkeletonTheme>
+                                    )
+                                }
+                            </div>
+
+                            <div className="mb-3">
+                                <label className={`form-label`}>Account Number</label>
+                                {
+                                    bank && loading === false && (
+                                        <div className="mb-3">
+                                            <input type="text" className={`form-control accountNumber`} required defaultValue={bank.account_no} />
+                                        </div>
+                                    ) || (
+                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                            <Skeleton width={`100%`} height={40}/>
+                                        </SkeletonTheme>
+                                    )
+                                }
+                            </div>
+
+                            <div className="mb-3">
+                                <label className={`form-label`}>Branch</label>
+                                {
+                                    bank && loading === false && (
+                                        <div className="mb-3">
+                                            <input type="text" className={`form-control branch`} required defaultValue={bank.branch} />
+                                        </div>
+                                    ) || (
+                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                            <Skeleton width={`100%`} height={40}/>
+                                        </SkeletonTheme>
+                                    )
+                                }
+                            </div>
+
+                            <div className="mb-3">
+                                <label className={`form-label`}>Account Type</label>
+                                {
+                                    bank && loading === false && (
+                                        <div className="mb-3">
+                                            <select className={`form-control bankType`} required value={type} onChange={handleTypeChange}>
+                                                <option value="">Select Account Type</option>
+                                                <option value="saving">Savings</option>
+                                                <option value="loan">Loan</option>
+                                            </select>
                                         </div>
                                     ) || (
                                         <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
