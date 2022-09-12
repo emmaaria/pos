@@ -127,7 +127,6 @@ export default function EditBank({user, id}) {
                     draggable: true,
                     theme: 'dark',
                 });
-                $('form').trigger('reset');
                 setLoader(false);
             }else {
                 toast.dismiss();
