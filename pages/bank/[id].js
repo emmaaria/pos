@@ -44,7 +44,6 @@ export default function EditBank({user, id}) {
         const account_no = $('.accountNumber').val();
         const bank_type = $('.bankType').val();
         const branch = $('.branch').val();
-        const balance = $('.balance').val();
         if (name === ''){
             toast.dismiss();
             toast.error('Bank name is required', {
@@ -116,7 +115,7 @@ export default function EditBank({user, id}) {
             return;
         }
         try {
-            const res = await axios.post(`${process.env.API_URL}/bank/update`,{name,account_name,account_no, bank_type, balance, branch}, headers, id);
+            const res = await axios.post(`${process.env.API_URL}/bank/update`,{name,account_name,account_no, bank_type, branch, id}, headers);
             if (res.data.status === true){
                 toast.dismiss();
                 toast.success('Successfully Saved', {
