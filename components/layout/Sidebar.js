@@ -49,7 +49,7 @@ export default function Sidebar({user}) {
                     </Link>
                 </li>
                 <li>
-                    <Link href={`/supplier`}>
+                    <Link href={`#`}>
                         <a
                             onClick={showSaleMenu}
                             className={`

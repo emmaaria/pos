@@ -9,29 +9,29 @@ import TableSkeleton from "../../components/TableSkeleton";
 import $ from 'jquery';
 import {ToastContainer, toast} from 'react-toastify';
 
-export default function Customer({user}) {
+export default function Bank({user}) {
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
-    const [customers, setCustomers] = useState();
+    const [banks, setBanks] = useState();
     const [links, setLinks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [timer, setTimer] = useState(null);
     useEffect(() => {
         axios.get(
-            `${process.env.API_URL}/customer`,
+            `${process.env.API_URL}/bank`,
             headers
         ).then(res => {
             if (res.data.status === true) {
-                setCustomers(res.data.customers.data);
-                setLinks(res.data.customers.links);
+                setBanks(res.data.banks.data);
+                setLinks(res.data.banks.links);
                 setLoading(false);
             }
         }).catch(err => {
             console.log(err);
         });
     }, []);
-    const searchCustomer = async () => {
+    const searchBank = async () => {
         if (timer) {
             clearTimeout(timer);
             setTimer(null);
@@ -41,12 +41,12 @@ export default function Customer({user}) {
                 setLoading(true);
                 const name = $('.terms').val();
                 axios.get(
-                    `${process.env.API_URL}/customer?name=${name}`,
+                    `${process.env.API_URL}/bank?name=${name}`,
                     headers
                 ).then(res => {
                     if (res.data.status === true) {
-                        setCustomers(res.data.customers.data);
-                        setLinks(res.data.customers.links);
+                        setBanks(res.data.banks.data);
+                        setLinks(res.data.banks.links);
                         setLoading(false);
                     }
                 }).catch(err => {
@@ -63,8 +63,8 @@ export default function Customer({user}) {
                 headers
             );
             if (res.data.status === true) {
-                setCustomers(res.data.customers.data);
-                setLinks(res.data.customers.links);
+                setBanks(res.data.banks.data);
+                setLinks(res.data.banks.links);
                 setLoading(false);
             }
         } catch (err) {
@@ -77,7 +77,7 @@ export default function Customer({user}) {
             theme: 'dark'
         });
         try {
-            const response = await axios.post(`${process.env.API_URL}/customer/delete`, {
+            const response = await axios.post(`${process.env.API_URL}/bank/delete`, {
                 id: id,
             }, headers);
             if (response.data.status === true) {
@@ -121,18 +121,18 @@ export default function Customer({user}) {
         <>
             <Head>
                 <title>
-                    Customers
+                    Banks
                 </title>
             </Head>
             <ToastContainer/>
-            <Layout user={user} title={`Customers`}>
+            <Layout user={user} title={`Banks`}>
                 <div className="content">
                     <div className="custom-card">
                         <div className="row">
                             <div className="col-md-9">
-                                <Link href={`/customer/create`}>
+                                <Link href={`/bank/create`}>
                                     <a className={`btn btn-success`}>
-                                        <i className="fa-solid fa-plus"/> Add New Customer
+                                        <i className="fa-solid fa-plus"/> Add New Bank
                                     </a>
                                 </Link>
                             </div>
@@ -141,9 +141,9 @@ export default function Customer({user}) {
                                     <div className="row">
                                         <div className="col">
                                             <input type="text" className="form-control terms"
-                                                   placeholder={`Search customer`}
-                                                   name="email" onKeyUp={searchCustomer} onKeyDown={searchCustomer}
-                                                   onChange={searchCustomer}/>
+                                                   placeholder={`Search bank`}
+                                                   name="email" onKeyUp={searchBank} onKeyDown={searchBank}
+                                                   onChange={searchBank}/>
                                         </div>
                                     </div>
                                 </form>
@@ -152,36 +152,36 @@ export default function Customer({user}) {
                         <table className={`table mt-4`}>
                             <thead>
                             <tr>
-                                <th width={`5%`}>Sl</th>
-                                <th width={`30%`}>Name</th>
-                                <th width={`15%`}>Mobile</th>
-                                <th width={`20%`}>Address</th>
+                                <th width={`20%`}>Bank Name</th>
+                                <th width={`15%`}>Account Name</th>
+                                <th width={`20%`}>Account Number</th>
+                                <th width={`10%`}>Account Type</th>
                                 <th width={`20%`}>Balance</th>
-                                <th width={`10%`}>Action</th>
+                                <th width={`15%`}>Action</th>
                             </tr>
                             </thead>
                             <tbody>
                             {
-                                customers && customers.length <= 0 && (
+                                banks && banks.length <= 0 && (
                                     <tr>
                                         <td colSpan={6} className={`text-center`}>No Customer Found</td>
                                     </tr>
                                 )
                             }
-                            {customers && !loading && (
-                                customers.map((el, index) => (
+                            {banks && !loading && (
+                                banks.map((el) => (
                                     <tr key={el.id} valign={`middle`} className={`row-id-${el.id}`}>
-                                        <td>{index + 1}</td>
                                         <td>{el.name}</td>
-                                        <td>{el.mobile}</td>
-                                        <td>{el.address}</td>
+                                        <td>{el.account_name}</td>
+                                        <td>{el.account_no}</td>
+                                        <td>{el.bank_type.toUpperCase()}</td>
                                         <td>
                                             {
                                                 el.balance ? el.balance : 0
                                             } Tk.
                                         </td>
                                         <td>
-                                            <Link href={`/customer/${el.id}`}>
+                                            <Link href={`/bank/${el.id}`}>
                                                 <a className={`btn btn-warning btn-sm me-2`}>
                                                     <i className="fa-solid fa-pen-to-square"/>
                                                 </a>

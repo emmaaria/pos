@@ -9,8 +9,9 @@ import {useEffect, useState} from "react";
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 import Loader from "../../components/Loader";
 
-export default function EditCustomer({user, id}) {
-    const [customer, setCustomer] = useState();
+export default function EditBank({user, id}) {
+    const [bank, setBank] = useState();
+    const [type, setType] = useState(null);
     const [loader, setLoader] = useState(false);
     const [loading, setLoading] = useState(true);
     const headers = {
@@ -18,12 +19,12 @@ export default function EditCustomer({user, id}) {
     };
     useEffect(() => {
         axios.get(
-            `${process.env.API_URL}/customer/${id}`,
+            `${process.env.API_URL}/bank/${id}`,
             headers
         ).then(res => {
             console.log(res.data);
             if (res.data.status === true) {
-                setCustomer(res.data.customer);
+                setBank(res.data.bank);
                 setLoading(false);
             }
         }).catch(err => {
@@ -37,12 +38,71 @@ export default function EditCustomer({user, id}) {
             theme: 'dark'
         });
         setLoader(true);
-        const name = $('.name').val();
-        const mobile = $('.mobile').val();
-        const address = $('.address').val();
-        if (name === '') {
+        const name = $('.bankName').val();
+        const account_name = $('.bankAccountName').val();
+        const account_no = $('.accountNumber').val();
+        const bank_type = $('.bankType').val();
+        const branch = $('.branch').val();
+        const balance = $('.balance').val();
+        if (name === ''){
             toast.dismiss();
-            toast.error('Name is required', {
+            toast.error('Bank name is required', {
+                position: "bottom-left",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+            });
+            setLoader(false);
+            return;
+        }
+        if (account_name === ''){
+            toast.dismiss();
+            toast.error('Account name is required', {
+                position: "bottom-left",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+            });
+            setLoader(false);
+            return;
+        }
+        if (account_no === ''){
+            toast.dismiss();
+            toast.error('Bank account number is required', {
+                position: "bottom-left",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+            });
+            setLoader(false);
+            return;
+        }
+        if (branch === ''){
+            toast.dismiss();
+            toast.error('Bank branch is required', {
+                position: "bottom-left",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+            });
+            setLoader(false);
+            return;
+        }
+        if (bank_type === ''){
+            toast.dismiss();
+            toast.error('Please select bank account type', {
                 position: "bottom-left",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -55,12 +115,23 @@ export default function EditCustomer({user, id}) {
             return;
         }
         try {
-            const res = await axios.post(`${process.env.API_URL}/customer/update`, {
-                name, mobile, address, id: id
-            }, headers);
-            if (res.data.status === true) {
+            const res = await axios.post(`${process.env.API_URL}/bank/update`,{name,account_name,account_no, bank_type, balance, branch}, headers, id);
+            if (res.data.status === true){
                 toast.dismiss();
-                toast.success('Successfully Updated', {
+                toast.success('Successfully Saved', {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: 'dark',
+                });
+                $('form').trigger('reset');
+                setLoader(false);
+            }else {
+                toast.dismiss();
+                toast.error('Something went wrong', {
                     position: "bottom-right",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -70,22 +141,10 @@ export default function EditCustomer({user, id}) {
                     theme: 'dark',
                 });
                 setLoader(false);
-            } else {
-                toast.dismiss();
-                toast.error(e.response.data.errors, {
-                    position: "bottom-right",
-                    autoClose: 3000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    theme: 'dark',
-                });
-                setLoader(false);
             }
-        } catch (e) {
+        }catch (e) {
             toast.dismiss();
-            toast.error(e.response.data, {
+            toast.error(e.response.statusText, {
                 position: "bottom-right",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -101,7 +160,7 @@ export default function EditCustomer({user, id}) {
         <>
             <Head>
                 <title>
-                    Edit Customer
+                    Edit Bank
                 </title>
             </Head>
             <ToastContainer/>
@@ -110,16 +169,17 @@ export default function EditCustomer({user, id}) {
                     <Loader/>
                 )
             }
-            <Layout user={user} title={`Edit Customer`}>
+            <Layout user={user} title={`Edit Bank`}>
                 <div className="content">
                     <div className="custom-card">
                         <form onSubmit={handleForm}>
                             <div className="mb-3">
-                                <label htmlFor="name" className={`form-label`}>Customer Name</label>
+                                <label className={`form-label`}>Bank Name</label>
                                 {
-                                    customer && loading === false && (
-                                        <input type="text" className={`form-control name`} id={`name`} required
-                                               defaultValue={customer.name}/>
+                                    bank && loading === false && (
+                                        <div className="mb-3">
+                                            <input type="text" className={`form-control bankName`} defaultValue={bank.name} required/>
+                                        </div>
                                     ) || (
                                         <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
                                             <Skeleton width={`100%`} height={40}/>
@@ -127,27 +187,14 @@ export default function EditCustomer({user, id}) {
                                     )
                                 }
                             </div>
-                            <div className="mb-3">
-                                <label htmlFor="mobile" className={`form-label`}>Customer Mobile</label>
 
-                                {
-                                    customer && loading === false && (
-                                        <input type="text" className={`form-control mobile`} id={`mobile`}
-                                               defaultValue={customer.mobile}/>
-                                    ) || (
-                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
-                                            <Skeleton width={`100%`} height={40}/>
-                                        </SkeletonTheme>
-                                    )
-                                }
-                            </div>
                             <div className="mb-3">
-                                <label htmlFor="address" className={`form-label`}>Customer Address</label>
-
+                                <label className={`form-label`}>Account Name</label>
                                 {
-                                    customer && loading === false && (
-                                        <input type="text" className={`form-control address`} id={`address`}
-                                               defaultValue={customer.address}/>
+                                    bank && loading === false && (
+                                        <div className="mb-3">
+                                            <input type="text" className={`form-control bankAccountName`} required defaultValue={bank.account_name} />
+                                        </div>
                                     ) || (
                                         <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
                                             <Skeleton width={`100%`} height={40}/>

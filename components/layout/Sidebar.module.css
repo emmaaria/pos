@@ -5,7 +5,7 @@
     bottom: 0;
     width: 15%;
     background: #212130;
-    z-index: 99999;
+    z-index: 9999;
     overflow-y: scroll;
     scrollbar-color: transparent transparent;
 }
