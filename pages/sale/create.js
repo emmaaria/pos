@@ -5,7 +5,7 @@ import session from "../../lib/session"
 import {ToastContainer, toast} from 'react-toastify'
 import axios from "axios"
 import $ from 'jquery'
-import {useEffect, useState} from "react"
+import {useState} from "react"
 import DatePicker from "react-datepicker"
 import AutocompleteInput from "../../components/AutocompleteInput"
 import Loader from "../../components/Loader"
