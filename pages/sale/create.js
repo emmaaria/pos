@@ -15,6 +15,8 @@ import 'swiper/css/virtual'
 import PosMenu from "../../components/PosMenu";
 import PosCategories from "../../components/PosCategories";
 import PosProducts from "../../components/PosProducts";
+import PosCartList from "../../components/PosCartList";
+import PosPaymentModal from "../../components/PosPaymentModal";
 
 export default function CreateSale({user}) {
     const [loader, setLoader] = useState(false)
@@ -372,86 +374,8 @@ export default function CreateSale({user}) {
                             <div className="row">
                                 <div className="col-md-12">
                                     <div className="custom-card right-card">
-                                        <div className="product-table">
-                                            <table className={`table`}>
-                                                <thead>
-                                                <tr>
-                                                    <th width={`5%`}>
-                                                        SL
-                                                    </th>
-                                                    <th width={`35%`}>
-                                                        Product
-                                                    </th>
-                                                    <th width={`15%`}>
-                                                        Price
-                                                    </th>
-                                                    <th width={`15%`}>
-                                                        Qty
-                                                    </th>
-                                                    <th className={`text-end`} width={`20%`}>
-                                                        Subtotal
-                                                    </th>
-                                                    <th className={`text-center`} width={`10%`}>
-                                                        Action
-                                                    </th>
-                                                </tr>
-                                                </thead>
-                                                <tbody className={`border-bottom border-1 border-white`}>
-                                                {
-                                                    invoiceProducts && invoiceProducts.length <= 0 && (
-                                                        <tr>
-                                                            <td colSpan={6} className={`text-center`}>
-                                                                No product added
-                                                            </td>
-                                                        </tr>
-                                                    )
-                                                }
-                                                {
-                                                    invoiceProducts.map((el, index) => (
-                                                        <tr key={`purchase-product-item-${el.product_id}`}>
-                                                            <td>
-                                                                {index + 1}
-                                                            </td>
-                                                            <td className={`bold`}>
-                                                                {el.name}
-                                                                <input type="hidden" className={`productId`}
-                                                                       defaultValue={el.product_id}/>
-                                                            </td>
-                                                            <td>
-                                                                {el.price} Tk.
-                                                                <input type="hidden"
-                                                                       className={`form-control productPrice productPrice_${el.product_id}`}
-                                                                       defaultValue={el.price}/>
-                                                            </td>
-                                                            <td>
-                                                                <div className="product-qry-container">
-
-                                                                </div>
-                                                                <input type="text"
-                                                                       className={`form-control productQuantity productQuantity_${el.product_id}`}
-                                                                       defaultValue={1}
-                                                                       onChange={() => calculateSubtotal(el.product_id)}
-                                                                       onKeyUp={() => calculateSubtotal(el.product_id)}
-                                                                       onKeyDown={() => calculateSubtotal(el.product_id)}/>
-                                                            </td>
-                                                            <td className={`text-end`}>
-                                                                <span className={`subtotal subtotal_${el.product_id}`}>
-                                                                    {el.price}
-                                                                </span> Tk.
-                                                            </td>
-                                                            <td className={`text-center`}>
-                                                                <button
-                                                                    className={`btn btn-danger btn-sm`}
-                                                                    onClick={() => removeProduct(el.product_id)}>
-                                                                    <i className="fa-solid fa-trash-can"/>
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                    ))
-                                                }
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                        <PosCartList calculateSubtotal={calculateSubtotal}
+                                                     invoiceProducts={invoiceProducts} removeProduct={removeProduct}/>
                                         <div className="subtotal-area">
                                             <div className="row">
                                                 <div className="col-md-6">
@@ -508,88 +432,9 @@ export default function CreateSale({user}) {
                     </div>
                 </div>
             </Layout>
-            <div className="payment-modal">
-                <div className="payment-modal-container">
-                    <div className="close">
-                        <span className='fa-solid fa-close' onClick={hidePayment}></span>
-                    </div>
-                    <div className="title">
-                        Payment
-                    </div>
-                    <hr/>
-                    <div className="row gx-5">
-                        <div className="col-md-8">
-                            <div className="mb-3 mt-3">
-                                <textarea id="note" rows="3" className={`note form-control`} placeholder='Note'/>
-                            </div>
-                            <div className="form-group mb-3">
-                                <label className={`form-label`}>
-                                    Cash
-                                </label>
-                                <input type="text" className={`form-control paid cash`}
-                                       onKeyUp={calculateDue}
-                                       onKeyDown={calculateDue} onChange={calculateDue}/>
-                            </div>
-                            <div className="form-group mb-3">
-                                <label className={`form-label`}>
-                                    Bkash
-                                </label>
-                                <input type="text" className={`form-control paid bkash`}
-                                       onKeyUp={calculateDue}
-                                       onKeyDown={calculateDue} onChange={calculateDue}/>
-                            </div>
-                            <div className="form-group mb-3">
-                                <label className={`form-label`}>
-                                    Nagad
-                                </label>
-                                <input type="text" className={`form-control paid nagad`}
-                                       onKeyUp={calculateDue}
-                                       onKeyDown={calculateDue} onChange={calculateDue}/>
-                            </div>
-                            <div className="form-group mb-3">
-                                <label className={`form-label`}>
-                                    Card
-                                </label>
-                                <input type="text" className={`form-control paid card`}
-                                       onKeyUp={calculateDue}
-                                       onKeyDown={calculateDue} onChange={calculateDue}/>
-                            </div>
-                        </div>
-                        <div className="col-md-4">
-                            <div className="notes">
-                                Notes
-                            </div>
-                            <ul className='note-list'>
-                                <li onClick={() => addMoney(50)}>
-                                    50
-                                </li>
-                                <li onClick={() => addMoney(100)}>
-                                    100
-                                </li>
-                                <li onClick={() => addMoney(200)}>
-                                    200
-                                </li>
-                                <li onClick={() => addMoney(500)}>
-                                    500
-                                </li>
-                                <li onClick={() => addMoney(1000)}>
-                                    1000
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <hr/>
-                    <div className="row">
-                        <div className="col-md-6">
-                            Total : {grandTotal - discountAmount} Tk.
-                        </div>
-                        <div className="col-md-6">
-                            Change/Due : {Math.abs((grandTotal - discountAmount) - paid)} Tk.
-                        </div>
-                    </div>
-                    <button className={`btn btn-success mt-3 float-end`} onClick={handleForm}>Save</button>
-                </div>
-            </div>
+            <PosPaymentModal hidePayment={hidePayment} addMoney={addMoney} calculateDue={calculateDue}
+                             discountAmount={discountAmount} grandTotal={grandTotal} handleForm={handleForm}
+                             paid={paid}/>
         </>
     )
 }
