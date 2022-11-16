@@ -94,7 +94,7 @@ export default function Bank({user}) {
                 $(`.row-id-${id}`).fadeOut();
             }else {
                 toast.dismiss();
-                toast.error(response.data.error, {
+                toast.error(response.data.errors, {
                     position: "bottom-right",
                     autoClose: 5000,
                     hideProgressBar: false,

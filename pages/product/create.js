@@ -106,7 +106,7 @@ export default function CreateProduct({user}) {
                 });
                 $('form').trigger('reset');
                 setLoader(false);
-                setSelectedSupplier([]);
+                setSelectedSupplier(null);
             } else {
                 toast.dismiss();
                 if (typeof res.data.errors === 'object') {
@@ -190,7 +190,7 @@ export default function CreateProduct({user}) {
                                                 }
                                             </select>
                                         ) || (
-                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
                                                 <Skeleton width={`100%`} height={40}/>
                                             </SkeletonTheme>
                                         )
@@ -211,7 +211,7 @@ export default function CreateProduct({user}) {
                                                 }
                                             </select>
                                         ) || (
-                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
                                                 <Skeleton width={`100%`} height={40}/>
                                             </SkeletonTheme>
                                         )
@@ -247,7 +247,7 @@ export default function CreateProduct({user}) {
                                                 selectedValues={null}
                                             />
                                         ) || (
-                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
                                                 <Skeleton width={`100%`} height={40}/>
                                             </SkeletonTheme>
                                         )

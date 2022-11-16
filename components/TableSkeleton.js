@@ -14,7 +14,7 @@ export default function TableSkeleton({td, tr}) {
             {
                 countTd.map((el, index) => (
                     <td key={index}>
-                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
                             <p>
                                 <Skeleton width={`100%`} height={30}/>
                             </p>

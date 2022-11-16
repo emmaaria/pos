@@ -3,36 +3,56 @@ import CustomImage from "../CustomImage";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import $ from 'jquery';
+
 export default function Sidebar({user}) {
     const router = useRouter();
     const showCustomerMenu = (e) => {
         e.preventDefault();
         $('.customerMenu').slideToggle();
         $('.ci').toggleClass('open');
+        $('.customerParent').toggleClass(styles.opened);
     };
     const showBankMenu = (e) => {
         e.preventDefault();
         $('.bankMenu').slideToggle();
         $('.bank').toggleClass('open');
+        $('.bankParent').toggleClass(styles.opened);
+    };
+    const showSettingMenu = (e) => {
+        e.preventDefault();
+        $('.settingMenu').slideToggle();
+        $('.setting').toggleClass('open');
+        $('.settingParent').toggleClass(styles.opened);
     };
     const showSupplierMenu = (e) => {
         e.preventDefault();
         $('.supplierMenu').slideToggle();
         $('.si').toggleClass('open');
+        $('.supplierParent').toggleClass(styles.opened);
     };
     const showSaleMenu = (e) => {
         e.preventDefault();
         $('.saleMenu').slideToggle();
         $('.sales').toggleClass('open');
+        $('.salesParent').toggleClass(styles.opened);
+    };
+
+    const showPurchaseMenu = (e) => {
+        e.preventDefault();
+        $('.purchaseMenu').slideToggle();
+        $('.purchase').toggleClass('open');
+        $('.purchaseParent').toggleClass(styles.opened);
     };
     return (
         <div className={styles.sidebar}>
-            <div className={styles.avatar}>
-                <CustomImage src={`/avatar.jpg`} circle={true}/>
+            <div className={styles.avatarArea}>
+                <div className={styles.avatar}>
+                    <CustomImage src={`/avatar.jpg`} circle={true}/>
+                </div>
+                <p className={styles.userName}>
+                    {user.name}
+                </p>
             </div>
-            <p className={styles.userName}>
-                {user.name}
-            </p>
             <ul>
                 <li>
                     <Link href={`/dashboard`}>
@@ -52,7 +72,7 @@ export default function Sidebar({user}) {
                     <Link href={`#`}>
                         <a
                             onClick={showSaleMenu}
-                            className={`
+                            className={`salesParent 
                                 ${
                                 router.pathname === '/sale' ||
                                 router.pathname === '/sale/create' ||
@@ -146,14 +166,14 @@ export default function Sidebar({user}) {
                     <Link href={`/customer`}>
                         <a
                             onClick={showCustomerMenu}
-                            className={`
+                            className={`customerParent 
                                 ${
-                            router.pathname === '/customer' ||
-                            router.pathname === '/customer/create' ||
-                            router.pathname === '/customer/[id]'
-                                ? styles.active
-                                : ''
-                        }
+                                router.pathname === '/customer' ||
+                                router.pathname === '/customer/create' ||
+                                router.pathname === '/customer/[id]'
+                                    ? styles.active
+                                    : ''
+                            }
                             `}>
                             <i className="fa-solid fa-user-group"/>
                             Customer
@@ -207,7 +227,7 @@ export default function Sidebar({user}) {
                     <Link href={`/supplier`}>
                         <a
                             onClick={showSupplierMenu}
-                            className={`
+                            className={`supplierParent 
                                 ${
                                 router.pathname === '/supplier' ||
                                 router.pathname === '/supplier/create' ||
@@ -281,27 +301,58 @@ export default function Sidebar({user}) {
                     </Link>
                 </li>
                 <li>
-                    <Link href={`/purchase`}>
-                        <a className={`
+                    <Link href={`#`}>
+                        <a
+                            onClick={showPurchaseMenu}
+                            className={`purchaseParent 
                                 ${
-                            router.pathname === '/purchase' ||
-                            router.pathname === '/purchase/create' ||
-                            router.pathname === '/purchase/[id]' ||
-                            router.pathname === '/purchase/view/[id]'
-                                ? styles.active
-                                : ''
-                        }
+                                router.pathname === '/purchase' ||
+                                router.pathname === '/purchase/create' ||
+                                router.pathname === '/purchase/[id]'
+                                    ? styles.active
+                                    : ''
+                            }
                             `}>
                             <i className="fa-solid fa-cart-plus"/>
                             Purchase
+                            <span className={`fa-solid fa-caret-right float-end ${styles.dropdownIcon} sale`}/>
                         </a>
                     </Link>
+                    <ul className={`purchaseMenu ${styles.subMenu}`}>
+                        <li>
+                            <Link href={`/purchase`}>
+                                <a className={`
+                                ${
+                                    router.pathname === '/purchase' ||
+                                    router.pathname === '/purchase/[id]'
+                                        ? styles.active
+                                        : ''
+                                }
+                            `}>
+                                    Purchase List
+                                </a>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href={`/purchase/create`}>
+                                <a className={`
+                                ${
+                                    router.pathname === '/purchase/create'
+                                        ? styles.active
+                                        : ''
+                                }
+                            `}>
+                                    Add Purchase
+                                </a>
+                            </Link>
+                        </li>
+                    </ul>
                 </li>
                 <li>
                     <Link href={`/bank`}>
                         <a
                             onClick={showBankMenu}
-                            className={`
+                            className={`bankParent 
                                 ${
                                 router.pathname === '/bank' ||
                                 router.pathname === '/bank/create' ||
@@ -310,7 +361,7 @@ export default function Sidebar({user}) {
                                     : ''
                             }
                             `}>
-                            <i className="fa-solid fa-building-columns" />
+                            <i className="fa-solid fa-building-columns"/>
                             Bank
                             <span className={`fa-solid fa-caret-right float-end ${styles.dropdownIcon} bank`}/>
                         </a>
@@ -340,6 +391,39 @@ export default function Sidebar({user}) {
                                 }
                             `}>
                                     Add Bank
+                                </a>
+                            </Link>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <Link href={`#`}>
+                        <a
+                            onClick={showSettingMenu}
+                            className={`settingParent 
+                                ${
+                                router.pathname === '/setting/company'
+                                    ? styles.active
+                                    : ''
+                            }
+                            `}>
+                            <i className="fa-solid fa-gear"/>
+                            Settings
+                            <span className={`fa-solid fa-caret-right float-end ${styles.dropdownIcon} setting`}/>
+                        </a>
+                    </Link>
+                    <ul className={`settingMenu ${styles.subMenu}`}>
+                        <li>
+                            <Link href={`/setting/company`}>
+                                <a className={`
+                                ${
+                                    router.pathname === '/setting/company'
+                                        ? styles.active
+                                        : ''
+                                }
+                            `}>
+                                    Company Information
                                 </a>
                             </Link>
                         </li>

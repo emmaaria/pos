@@ -8,6 +8,7 @@ import axios from "axios";
 import TableSkeleton from "../../components/TableSkeleton";
 import $ from 'jquery';
 import {ToastContainer, toast} from 'react-toastify';
+
 export default function Product({user}) {
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
@@ -92,7 +93,7 @@ export default function Product({user}) {
                     theme: 'dark',
                 });
                 $(`.row-id-${id}`).fadeOut();
-            }else {
+            } else {
                 toast.dismiss();
                 toast.error(response.data.errors, {
                     position: "bottom-right",
@@ -167,7 +168,7 @@ export default function Product({user}) {
                                     </tr>
                                 )
                             }
-                            {products && !loading &&(
+                            {products && !loading && (
                                 products.map((el, index) => (
                                     <tr key={el.id} valign={`middle`} className={`row-id-${el.id}`}>
                                         <td>{index + 1}</td>

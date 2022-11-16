@@ -83,7 +83,7 @@ export default function AutocompleteInput({type, token, placeholder}) {
                         data && (
                             data.map(el => (
                                 <div className={`autocompleteItem`} key={`supplier-${el.id}`}
-                                     onClick={() => setValue(el.name, el.id)}>{el.name}</div>
+                                     onClick={() => setValue(el.name, el.id)}>{el.name} ({el.address})</div>
                             ))
                         )
                     }
