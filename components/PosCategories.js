@@ -2,8 +2,9 @@ import {Swiper, SwiperSlide} from "swiper/react";
 import {FreeMode, Virtual} from "swiper";
 import {useEffect, useState} from "react";
 import axios from "axios";
+import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 
-export default function PosCategories({token}){
+export default function PosCategories({token}) {
     const headers = {
         headers: {Authorization: `Bearer ${token}`},
     }
@@ -22,25 +23,32 @@ export default function PosCategories({token}){
     const [categories, setCategories] = useState()
     return (
         <div className="category-wrapper">
-            <Swiper
-                modules={[Virtual, FreeMode]}
-                spaceBetween={10}
-                slidesPerView={8.2}
-                virtual
-                freeMode={true}
-            >
-                {
-                    categories && (
-                        categories.map((cat, index) => (
-                            <SwiperSlide key={cat.id} virtualIndex={index}>
-                                <div className="cat-item">
-                                    <a className={`btn`}>{cat.name}</a>
-                                </div>
-                            </SwiperSlide>
-                        ))
-                    )
-                }
-            </Swiper>
+            {
+                categories && (
+                    <Swiper
+                        modules={[Virtual, FreeMode]}
+                        spaceBetween={10}
+                        slidesPerView={8.2}
+                        virtual
+                        freeMode={true}
+                    >
+                        {
+                            categories.map((cat, index) => (
+                                <SwiperSlide key={cat.id} virtualIndex={index}>
+                                    <div className="cat-item">
+                                        <a className={`btn`}>{cat.name}</a>
+                                    </div>
+                                </SwiperSlide>
+                            ))
+                        }
+                    </Swiper>
+                ) || (
+                    <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                        <Skeleton width={`100%`} height={40}/>
+                    </SkeletonTheme>
+                )
+            }
+
         </div>
     )
 }

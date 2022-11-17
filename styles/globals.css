@@ -381,11 +381,11 @@ table {
     border-right: 1px solid;
 }
 
-.customer-input, .date-input, .barcode-scanner {
+.customer-input, .date-input, .barcode-scanner, .search-product-input-wrapper {
     position: relative;
 }
 
-.customer-input .customer-icon, .date-input .date-icon, .barcode-scanner .barcode-icon {
+.customer-input .customer-icon, .date-input .date-icon, .barcode-scanner .barcode-icon, .search-product-input-wrapper .search-icon {
     position: absolute;
     top: 49%;
     left: 0;
@@ -397,9 +397,9 @@ table {
     justify-content: center;
     align-items: center;
 }
-.customer-input .autocompleteInput, .date-input input, .barcode-scanner input, .product input{
+.customer-input .autocompleteInput, .date-input input, .barcode-scanner input, .product input, .search-product-input-wrapper input{
     border: none;
-    padding-left: 40px;
+    padding-left: 40px !important;
     height: 60px;
     border-radius: 15px;
 }
@@ -522,4 +522,10 @@ table {
 .btn{
     outline: transparent !important;
     box-shadow: none !important;
+}
+.productQuantity{
+    text-align: center;
+}
+.payment-modal label{
+    color: #ffffff !important;
 }

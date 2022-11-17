@@ -1,29 +1,14 @@
-import {useEffect, useState} from "react";
-import axios from "axios";
+import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 
-export default function PosProducts({token, addProduct}){
-    const [staticProducts, setStaticProducts] = useState()
-    const headers = {
-        headers: {Authorization: `Bearer ${token}`},
-    }
-    useEffect(() => {
-        axios.get(
-            `${process.env.API_URL}/products-with-stock`,
-            headers
-        ).then(res => {
-            if (res.data.status === true) {
-                setStaticProducts(res.data.products)
-            }
-        }).catch(err => {
-            console.log(err)
-        })
-    }, [])
+export default function PosProducts({addProduct, staticProducts, searchText}) {
     return (
         <div className="products-wrapper">
             <div className="product-grid">
                 {
                     staticProducts && (
-                        staticProducts.map(pr => (
+                        staticProducts.filter((item) => {
+                            return searchText.toLowerCase() === '' ? item : item.name.toLowerCase().includes(searchText) || item.product_id.includes(searchText)
+                        }).map(pr => (
                             <div className={`product-item`} key={pr.product_id}
                                  onClick={() => addProduct(pr)}>
                                 <p className={`name`}>{pr.name}</p>
@@ -31,6 +16,39 @@ export default function PosProducts({token, addProduct}){
                                 <p>Stock: {pr.purchase - pr.sell}</p>
                             </div>
                         ))
+                    ) || (
+                        <>
+                            <div className={`product-item`}>
+                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                    <Skeleton width={`100px`} height={60}/>
+                                </SkeletonTheme>
+                            </div>
+                            <div className={`product-item`}>
+                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                    <Skeleton width={`100px`} height={60}/>
+                                </SkeletonTheme>
+                            </div>
+                            <div className={`product-item`}>
+                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                    <Skeleton width={`100px`} height={60}/>
+                                </SkeletonTheme>
+                            </div>
+                            <div className={`product-item`}>
+                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                    <Skeleton width={`100px`} height={60}/>
+                                </SkeletonTheme>
+                            </div>
+                            <div className={`product-item`}>
+                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                    <Skeleton width={`100px`} height={60}/>
+                                </SkeletonTheme>
+                            </div>
+                            <div className={`product-item`}>
+                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                    <Skeleton width={`100px`} height={60}/>
+                                </SkeletonTheme>
+                            </div>
+                        </>
                     )
                 }
             </div>

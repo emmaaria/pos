@@ -5,7 +5,7 @@ import session from "../../lib/session"
 import {ToastContainer, toast} from 'react-toastify'
 import axios from "axios"
 import $ from 'jquery'
-import {useState} from "react"
+import {useEffect, useState} from "react"
 import DatePicker from "react-datepicker"
 import AutocompleteInput from "../../components/AutocompleteInput"
 import Loader from "../../components/Loader"
@@ -23,15 +23,27 @@ export default function CreateSale({user}) {
     const [subTotal, setSubTotal] = useState(0)
     const [total, setTotal] = useState(0)
     const [grandTotal, setGrandTotal] = useState(0)
+    const [search, setSearch] = useState('')
     const [paid, setPaid] = useState(0)
     const [discountAmount, setDiscountAmount] = useState(0)
-    const [products, setProducts] = useState()
-    const [timer, setTimer] = useState(null)
     const [date, setDate] = useState(new Date())
     const [invoiceProducts, setInvoiceProducts] = useState([])
+    const [staticProducts, setStaticProducts] = useState()
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     }
+    useEffect(() => {
+        axios.get(
+            `${process.env.API_URL}/products-with-stock`,
+            headers
+        ).then(res => {
+            if (res.data.status === true) {
+                setStaticProducts(res.data.products)
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+    }, [])
     const handleForm = async (e) => {
         e.preventDefault()
         toast.loading('Submitting', {
@@ -176,45 +188,16 @@ export default function CreateSale({user}) {
             setPaid(oldTotal => oldTotal + parseFloat($(this).val() ? $(this).val() : 0))
         })
     }
-    const searchProduct = async () => {
-        $('.autocompleteItemContainer.product').show()
-        if (timer) {
-            clearTimeout(timer)
-            setTimer(null)
-        }
-        const name = $(`.search-product`).val()
-        setTimer(
-            setTimeout(() => {
-                axios.get(
-                    `${process.env.API_URL}/product?name=${name}`,
-                    headers
-                ).then(res => {
-                    if (res.data.status === true) {
-                        setProducts(res.data.products.data)
-                    }
-                }).catch(err => {
-                    console.log(err)
-                })
-            }, 500)
-        )
-    }
-    const searchProductByBarcode = async (e) => {
+    const searchProductByBarcode = (e) => {
         e.preventDefault()
         const id = $(`.scan-barcode`).val()
         if (id !== '') {
-            axios.get(
-                `${process.env.API_URL}/product-by-barcode?id=${id}`,
-                headers
-            ).then(res => {
-                if (res.data.status === true) {
-                    addProduct(res.data.product)
+            staticProducts.filter((item) => {
+                if (item.product_id === id) {
+                    addProduct(item)
                     $(`.scan-barcode`).val('')
-                    calculateSubtotal(res.data.product.product_id)
-                } else {
-                    alert('No product found')
+                    calculateSubtotal(item.product_id)
                 }
-            }).catch(err => {
-                console.log(err)
             })
         }
     }
@@ -241,10 +224,7 @@ export default function CreateSale({user}) {
     const hidePayment = () => {
         $('.payment-modal').fadeOut()
     }
-    const addMoney = (amount) => {
-        $('.cash').val(amount)
-        calculateDue()
-    }
+
     const calculateDiscount = () => {
         const discount = $('.discount').val() ? $('.discount').val() : 0
         const discountType = $('.discount-type').val()
@@ -297,21 +277,16 @@ export default function CreateSale({user}) {
                             <div className="d-flex gap-3 justify-content-between">
                                 <PosMenu/>
                                 <div className={`autocompleteWrapper product flex-grow-1`}>
-                                    <input type="text"
-                                           className={`form-control autocompleteInput search-product`}
-                                           autoComplete={`off`} onKeyUp={searchProduct}
-                                           onKeyDown={searchProduct}
-                                           onChange={searchProduct} placeholder={`Search product by name`}/>
-                                    <div className={`autocompleteItemContainer product`}>
-                                        {
-                                            products && (
-                                                products.map(el => (
-                                                    <div className={`autocompleteItem`}
-                                                         key={`search-product-item-${el.product_id}`}
-                                                         onClick={() => addProduct(el)}>{el.name}</div>
-                                                ))
-                                            )
-                                        }
+                                    <div className="search-product-input-wrapper">
+                                        <div className="search-icon">
+                                            <i className="fa-solid fa-magnifying-glass"></i>
+                                        </div>
+                                        <input type="text"
+                                               className={`form-control autocompleteInput search-product`}
+                                               autoComplete={`off`} onKeyUp={(e) => setSearch(e.target.value)}
+                                               onKeyDown={(e) => setSearch(e.target.value)}
+                                               onChange={(e) => setSearch(e.target.value)}
+                                               placeholder={`Search product by name`}/>
                                     </div>
                                 </div>
                                 <div className="barcode-scanner flex-grow-1">
@@ -321,6 +296,7 @@ export default function CreateSale({user}) {
                                         </div>
                                         <input type="text" className={`form-control scan-barcode`}
                                                placeholder={`Scan Barcode Here`}
+                                               autoComplete={`off`}
                                                id='barcode'
                                                autoFocus/>
                                     </form>
@@ -365,7 +341,8 @@ export default function CreateSale({user}) {
                                 <div className="col-md-12">
                                     <div className="custom-card left-card">
                                         <PosCategories token={user.token}/>
-                                        <PosProducts token={user.token} addProduct={addProduct}/>
+                                        <PosProducts staticProducts={staticProducts} addProduct={addProduct}
+                                                     searchText={search}/>
                                     </div>
                                 </div>
                             </div>
@@ -414,17 +391,23 @@ export default function CreateSale({user}) {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="payment-area">
-                                            <div className="d-flex justify-content-between align-items-center gap-4">
-                                                <button className={`btn btn-danger d-block w-100 py-3`} onClick={reset}>
-                                                    Reset <i className="fa-solid fa-rotate-right"></i>
-                                                </button>
-                                                <button className={`btn btn-success d-block w-100 py-3 pay-btn`}
-                                                        onClick={showPayment}>
-                                                    Pay Now <i className="fa-solid fa-money-bill"></i>
-                                                </button>
-                                            </div>
-                                        </div>
+                                        {
+                                            invoiceProducts && invoiceProducts.length > 0 && (
+                                                <div className="payment-area">
+                                                    <div
+                                                        className="d-flex justify-content-between align-items-center gap-4">
+                                                        <button className={`btn btn-danger d-block w-100 py-3`}
+                                                                onClick={reset}>
+                                                            Reset <i className="fa-solid fa-rotate-right"></i>
+                                                        </button>
+                                                        <button className={`btn btn-success d-block w-100 py-3 pay-btn`}
+                                                                onClick={showPayment}>
+                                                            Pay Now <i className="fa-solid fa-money-bill"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            )
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -432,9 +415,9 @@ export default function CreateSale({user}) {
                     </div>
                 </div>
             </Layout>
-            <PosPaymentModal hidePayment={hidePayment} addMoney={addMoney} calculateDue={calculateDue}
+            <PosPaymentModal hidePayment={hidePayment} calculateDue={calculateDue}
                              discountAmount={discountAmount} grandTotal={grandTotal} handleForm={handleForm}
-                             paid={paid}/>
+                             paid={paid} token={user.token}/>
         </>
     )
 }
