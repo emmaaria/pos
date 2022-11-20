@@ -5,7 +5,7 @@ import session from "../../lib/session"
 import {ToastContainer, toast} from 'react-toastify'
 import axios from "axios"
 import $ from 'jquery'
-import {useEffect, useState} from "react"
+import {useEffect, useState, lazy, Suspense} from "react"
 import DatePicker from "react-datepicker"
 import AutocompleteInput from "../../components/AutocompleteInput"
 import Loader from "../../components/Loader"
@@ -13,11 +13,12 @@ import 'swiper/css'
 import 'swiper/css/free-mode'
 import 'swiper/css/virtual'
 import PosMenu from "../../components/PosMenu";
-import PosCategories from "../../components/PosCategories";
-import PosProducts from "../../components/PosProducts";
+const PosCategories = lazy(() => import("../../components/PosCategories"))
+const PosProducts = lazy(() => import("../../components/PosProducts"))
 import PosCartList from "../../components/PosCartList";
 import PosPaymentModal from "../../components/PosPaymentModal";
 import PosInvoicePrint from "../../components/PosInvoicePrint";
+import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 
 export default function CreateSale({user}) {
     const [loader, setLoader] = useState(false)
@@ -375,9 +376,44 @@ export default function CreateSale({user}) {
                             <div className="row">
                                 <div className="col-md-12">
                                     <div className="custom-card left-card">
-                                        <PosCategories token={user.token}/>
-                                        <PosProducts staticProducts={staticProducts} addProduct={addProduct}
-                                                     searchText={search}/>
+                                        <Suspense fallback={<SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd"><Skeleton width={`100%`} height={40}/></SkeletonTheme>}>
+                                            <PosCategories token={user.token}/>
+                                        </Suspense>
+                                        <Suspense fallback={<>
+                                            <div className={`product-item`}>
+                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                                    <Skeleton width={`100px`} height={60}/>
+                                                </SkeletonTheme>
+                                            </div>
+                                            <div className={`product-item`}>
+                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                                    <Skeleton width={`100px`} height={60}/>
+                                                </SkeletonTheme>
+                                            </div>
+                                            <div className={`product-item`}>
+                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                                    <Skeleton width={`100px`} height={60}/>
+                                                </SkeletonTheme>
+                                            </div>
+                                            <div className={`product-item`}>
+                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                                    <Skeleton width={`100px`} height={60}/>
+                                                </SkeletonTheme>
+                                            </div>
+                                            <div className={`product-item`}>
+                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                                    <Skeleton width={`100px`} height={60}/>
+                                                </SkeletonTheme>
+                                            </div>
+                                            <div className={`product-item`}>
+                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                                    <Skeleton width={`100px`} height={60}/>
+                                                </SkeletonTheme>
+                                            </div>
+                                        </>}>
+                                            <PosProducts staticProducts={staticProducts} addProduct={addProduct}
+                                                         searchText={search}/>
+                                        </Suspense>
                                     </div>
                                 </div>
                             </div>

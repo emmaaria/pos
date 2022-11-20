@@ -16,7 +16,7 @@ export default function PosSaleListPopup({token, setShowSales}){
     };
     useEffect(() => {
         axios.get(
-            `${process.env.API_URL}/invoice`,
+            `${process.env.API_URL}/today-invoices`,
             headers
         ).then(res => {
             if (res.data.status === true) {
@@ -38,7 +38,7 @@ export default function PosSaleListPopup({token, setShowSales}){
                 setLoading(true);
                 const name = $('.terms').val();
                 axios.get(
-                    `${process.env.API_URL}/invoice?keyword=${name}`,
+                    `${process.env.API_URL}/today-invoices?keyword=${name}`,
                     headers
                 ).then(res => {
                     if (res.data.status === true) {
@@ -122,7 +122,9 @@ export default function PosSaleListPopup({token, setShowSales}){
                 </div>
                 <div className="custom-card">
                     <div className="row">
-                        <div className="col-md-9"></div>
+                        <div className="col-md-9">
+                            <h3>Today Invoices</h3>
+                        </div>
                         <div className="col-md-3">
                             <form>
                                 <div className="row">
@@ -160,8 +162,8 @@ export default function PosSaleListPopup({token, setShowSales}){
                             sales.map((el, index) => (
                                 <tr key={el.invoice_id} valign={`middle`} className={`row-id-${el.invoice_id}`}>
                                     <td>{index + 1}</td>
-                                    <td>{el.date}</td>
                                     <td className={`text-uppercase`}>{el.invoice_id}</td>
+                                    <td>{el.date}</td>
                                     <td>{el.customer_name}</td>
                                     <td>{el.total - el.discountAmount} Tk.</td>
                                     <td>{el.comment}</td>

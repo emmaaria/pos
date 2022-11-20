@@ -16,6 +16,12 @@
     transform: translate(-50%, -50%);
     overflow-y: scroll;
     border-radius: 1.25rem;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.saleListPopupInner::-webkit-scrollbar {
+    display: none;
+    width: 0 !important;
 }
 .close{
     position: absolute;
