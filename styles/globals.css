@@ -610,6 +610,25 @@ table {
     color: rgb(249, 58, 11) !important;
 }
 
+.product-qty-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.border-radius-0{
+    border-radius: 0;
+}
+.product-increment button{
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    padding: .376rem .75rem;
+}
+.product-decrement button{
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    padding: .376rem .75rem;
+}
 @media print {
     .no-print {
         display: none !important;

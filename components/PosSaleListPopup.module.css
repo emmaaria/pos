@@ -1,0 +1,26 @@
+.saleListPopup{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(0, 0, 0, 0.9);
+    z-index: 99999;
+}
+.saleListPopupInner{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 60%;
+    height: 90%;
+    transform: translate(-50%, -50%);
+    overflow-y: scroll;
+    border-radius: 1.25rem;
+}
+.close{
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}

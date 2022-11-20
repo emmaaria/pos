@@ -310,7 +310,7 @@ export default function CreateSale({user}) {
                         <div className="col-md-7">
                             <form onSubmit={handleForm} id='invoice'></form>
                             <div className="d-flex gap-3 justify-content-between">
-                                <PosMenu/>
+                                <PosMenu token={user.token}/>
                                 <div className={`autocompleteWrapper product flex-grow-1`}>
                                     <div className="search-product-input-wrapper">
                                         <div className="search-icon">

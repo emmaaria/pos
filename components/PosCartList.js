@@ -1,4 +1,17 @@
+import $ from 'jquery'
 export default function PosCartList({invoiceProducts, calculateSubtotal, removeProduct}) {
+    const handleQty = (row, type) => {
+        const oldVal = parseFloat($(`.productQuantity_${row}`).val())
+        if (type === 'inc'){
+            $(`.productQuantity_${row}`).val(oldVal + 1)
+            calculateSubtotal(row)
+        }else {
+            if (oldVal > 0){
+                $(`.productQuantity_${row}`).val(oldVal - 1)
+                calculateSubtotal(row)
+            }
+        }
+    }
     return (
         <div className="product-table">
             <table className={`table`}>
@@ -7,19 +20,19 @@ export default function PosCartList({invoiceProducts, calculateSubtotal, removeP
                     <th width={`5%`}>
                         SL
                     </th>
-                    <th width={`35%`}>
+                    <th width={`30%`}>
                         Product
                     </th>
                     <th width={`15%`}>
                         Price
                     </th>
-                    <th width={`15%`}>
+                    <th width={`25%`} className={`text-center`}>
                         Qty
                     </th>
                     <th className={`text-end`} width={`20%`}>
                         Subtotal
                     </th>
-                    <th className={`text-center`} width={`10%`}>
+                    <th className={`text-center`} width={`5%`}>
                         Action
                     </th>
                 </tr>
@@ -52,15 +65,26 @@ export default function PosCartList({invoiceProducts, calculateSubtotal, removeP
                                        defaultValue={el.price}/>
                             </td>
                             <td>
-                                <div className="product-qry-container">
-
+                                <div className="product-qty-container">
+                                    <div className="product-decrement qty-control">
+                                        <button className={`btn btn-danger`} onClick={() => handleQty(el.product_id, 'dec')}>
+                                            <i className="fa-solid fa-minus"></i>
+                                        </button>
+                                    </div>
+                                    <div className="product-qty-field">
+                                        <input type="text"
+                                               className={`form-control productQuantity productQuantity_${el.product_id} border-radius-0`}
+                                               defaultValue={1}
+                                               onChange={() => calculateSubtotal(el.product_id)}
+                                               onKeyUp={() => calculateSubtotal(el.product_id)}
+                                               onKeyDown={() => calculateSubtotal(el.product_id)}/>
+                                    </div>
+                                    <div className="product-increment qty-control">
+                                        <button className={`btn btn-warning`} onClick={() => handleQty(el.product_id, 'inc')}>
+                                            <i className="fa-solid fa-plus"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                                <input type="text"
-                                       className={`form-control productQuantity productQuantity_${el.product_id}`}
-                                       defaultValue={1}
-                                       onChange={() => calculateSubtotal(el.product_id)}
-                                       onKeyUp={() => calculateSubtotal(el.product_id)}
-                                       onKeyDown={() => calculateSubtotal(el.product_id)}/>
                             </td>
                             <td className={`text-end`}>
                                                                 <span className={`subtotal subtotal_${el.product_id}`}>
