@@ -444,9 +444,6 @@ export default function CreateSale({user}) {
                                                 </div>
                                                 <div className="col-md-6 text-end">
                                                     <p>
-                                                        <strong>Total Qty</strong> : <span>{subTotal} Tk.</span>
-                                                    </p>
-                                                    <p>
                                                         <strong>Subtotal</strong> : <span>{subTotal} Tk.</span>
                                                     </p>
                                                     <p>
