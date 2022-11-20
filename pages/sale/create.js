@@ -219,7 +219,7 @@ export default function CreateSale({user}) {
         const alreadyAdded = invoiceProducts.filter(product => {
             return product.product_id === data.product_id
         })
-        const stock = data.purchase - data.sell;
+        const stock = data.purchase - data.sale;
         if (stock <= 0){
             toast.dismiss()
             toast.error('You don\'t have stock. Please purchase product first.', {
