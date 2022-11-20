@@ -191,7 +191,7 @@ export default function PosPaymentModal({
                                             }
                                         </strong>
                                     </td>
-                                    <td className={`text-success`}>{Math.abs((grandTotal - discountAmount) - paid)} Tk.</td>
+                                    <td className={`text-success`}>{Math.abs((grandTotal - discountAmount) - paid).toFixed(2)} Tk.</td>
                                 </tr>
                                 </tbody>
                             </table>

@@ -238,13 +238,12 @@ export default function CreateSale({user}) {
             const newQty = parseFloat(oldQty) + 1
             $(`.productQuantity_${data.product_id}`).val(newQty)
             calculateSubtotal(data.product_id)
-            calculateSum()
         } else {
             setInvoiceProducts(currentProduct => [...currentProduct, data])
-            calculateSubtotal(data.product_id)
-            calculateSum()
+            setSubTotal(oldTotal => oldTotal + parseFloat(data.price))
+            setTotal(oldTotal => oldTotal + parseFloat(data.price))
+            setGrandTotal(oldTotal => oldTotal + parseFloat(data.price))
         }
-        $('.autocompleteItemContainer.product').hide()
         $(`.search-product`).val('')
     }
     const showPayment = () => {
