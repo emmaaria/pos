@@ -17,15 +17,20 @@ import PosCategories from "../../components/PosCategories";
 import PosProducts from "../../components/PosProducts";
 import PosCartList from "../../components/PosCartList";
 import PosPaymentModal from "../../components/PosPaymentModal";
+import PosInvoicePrint from "../../components/PosInvoicePrint";
 
 export default function CreateSale({user}) {
     const [loader, setLoader] = useState(false)
     const [subTotal, setSubTotal] = useState(0)
+    const [showInvoice, setShowInvoice] = useState(false)
     const [total, setTotal] = useState(0)
     const [grandTotal, setGrandTotal] = useState(0)
     const [search, setSearch] = useState('')
     const [paid, setPaid] = useState(0)
     const [discountAmount, setDiscountAmount] = useState(0)
+    const [invoice, setInvoice] = useState()
+    const [discount, setDiscount] = useState(0)
+    const [discountType, setDiscountType] = useState('Tk.')
     const [date, setDate] = useState(new Date())
     const [invoiceProducts, setInvoiceProducts] = useState([])
     const [staticProducts, setStaticProducts] = useState()
@@ -67,6 +72,8 @@ export default function CreateSale({user}) {
         const bkash = $('.bkash').val()
         const nagad = $('.nagad').val()
         const card = $('.card').val()
+        const bank = $('.bank').val()
+        const bankId = $('.bankId').val()
         const discountType = $('.discount-type').val()
         const discount = $('.discount').val()
         const customer = $('.customer-id').val()
@@ -94,6 +101,8 @@ export default function CreateSale({user}) {
                 comment,
                 cash,
                 bkash,
+                bank,
+                bankId,
                 nagad,
                 card,
                 discountAmount,
@@ -101,6 +110,7 @@ export default function CreateSale({user}) {
                 discountType,
                 pos: 1
             }, headers)
+            console.log(res.data)
             if (res.data.status === true) {
                 toast.dismiss()
                 toast.success('Successfully Saved', {
@@ -112,6 +122,8 @@ export default function CreateSale({user}) {
                     draggable: true,
                     theme: 'dark',
                 })
+                setShowInvoice(true)
+                setInvoice(res.data.invoice)
                 setPaid(0)
                 setGrandTotal(0)
                 setSubTotal(0)
@@ -127,7 +139,7 @@ export default function CreateSale({user}) {
                 $('.discount').val('')
             } else {
                 toast.dismiss()
-                toast.success(res.data.error, {
+                toast.success(res.data.errors, {
                     position: "bottom-right",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -197,6 +209,7 @@ export default function CreateSale({user}) {
                     addProduct(item)
                     $(`.scan-barcode`).val('')
                     calculateSubtotal(item.product_id)
+                    calculateSum()
                 }
             })
         }
@@ -205,15 +218,31 @@ export default function CreateSale({user}) {
         const alreadyAdded = invoiceProducts.filter(product => {
             return product.product_id === data.product_id
         })
+        const stock = data.purchase - data.sell;
+        if (stock <= 0){
+            toast.dismiss()
+            toast.error('You don\'t have stock. Please purchase product first.', {
+                position: "bottom-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+            })
+            return;
+        }
+        toast.dismiss()
         if (alreadyAdded.length > 0) {
             const oldQty = $(`.productQuantity_${data.product_id}`).val()
             const newQty = parseFloat(oldQty) + 1
             $(`.productQuantity_${data.product_id}`).val(newQty)
+            calculateSubtotal(data.product_id)
+            calculateSum()
         } else {
             setInvoiceProducts(currentProduct => [...currentProduct, data])
-            setSubTotal(oldTotal => oldTotal + parseFloat(data.price))
-            setTotal(oldTotal => oldTotal + parseFloat(data.price))
-            setGrandTotal(oldTotal => oldTotal + parseFloat(data.price))
+            calculateSubtotal(data.product_id)
+            calculateSum()
         }
         $('.autocompleteItemContainer.product').hide()
         $(`.search-product`).val('')
@@ -225,9 +254,16 @@ export default function CreateSale({user}) {
         $('.payment-modal').fadeOut()
     }
 
+    const closeInvoice = () => {
+        setShowInvoice(false);
+        setInvoice(null);
+    }
+
     const calculateDiscount = () => {
         const discount = $('.discount').val() ? $('.discount').val() : 0
         const discountType = $('.discount-type').val()
+        setDiscountType(discountType)
+        setDiscount(discount)
         setTotal(0)
         setGrandTotal(0)
         $(`.subtotal`).each(function () {
@@ -417,7 +453,12 @@ export default function CreateSale({user}) {
             </Layout>
             <PosPaymentModal hidePayment={hidePayment} calculateDue={calculateDue}
                              discountAmount={discountAmount} grandTotal={grandTotal} handleForm={handleForm}
-                             paid={paid} token={user.token}/>
+                             paid={paid} token={user.token} discountType={discountType} discount={discount}/>
+            {
+                showInvoice && (
+                    <PosInvoicePrint companyName={user.companyName} companyAddress={user.companyAddress} companyMobile={user.companyMobile} invoice={invoice} closeInvoice={closeInvoice}/>
+                )
+            }
         </>
     )
 }

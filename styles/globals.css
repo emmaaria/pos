@@ -248,9 +248,31 @@ table {
     display: none;
 }
 
+.invoiceModal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    background: rgb(0, 0, 0, 0.4);
+    color: #ffffff;
+    z-index: 99999;
+    height: 100%;
+}
+
+.invoiceModalContainer {
+    position: absolute;
+    background: #ffffff;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80mm;
+    padding: 2em 10px;
+    border-radius: 20px;
+}
+
 .payment-modal-container {
     position: absolute;
-    background: #212130;
+    background: #ffffff;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -259,10 +281,51 @@ table {
     border-radius: 20px;
 }
 
+.invoiceModal{
+    color: #000000;
+}
+.invoiceModal h3{
+    font-size: 16px;
+    margin-bottom: 0;
+}
+
+.invoiceModal p{
+    margin-bottom: 0;
+}
+.invoiceModal .invoiceRow{
+    margin-top: 10px;
+    border-bottom: 1px solid #dddddd;
+    padding-bottom: 5px;
+}
+.invoiceModal .invoiceRow .date{
+    width: 60%;
+    float: left;
+    display: block;
+    overflow: hidden;
+    text-align: left;
+}
+.invoiceModal .invoiceRow .invNum{
+    width: 40%;
+    display: block;
+    text-align: right;
+    overflow: hidden;
+}
+
+.invoiceModal th{
+    font-size: 13px;
+    font-weight: normal;
+    padding-right: 0;
+}
+.invoiceModal td{
+    font-size: 12px;
+    padding-right: 0;
+}
+
 .payment-modal .title {
     font-size: 28px;
     font-weight: bold;
     text-align: center;
+    color: #212130;
 }
 
 .payment-modal .close {
@@ -270,36 +333,7 @@ table {
     top: 15px;
     right: 25px;
     font-size: 25px;
-}
-
-.notes {
-    font-size: 20px;
-    margin-bottom: 15px;
-}
-
-.note-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.note-list li {
-    cursor: pointer;
-    background: rgba(249, 58, 11, 0.1);
-    width: 200px;
-    text-align: center;
-    display: block;
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-    font-size: 20px;
-}
-
-.note-list li:last-child {
-    border-bottom: none;
-}
-
-.note-list li:hover {
-    background: rgba(249, 58, 11, 0.4);
+    color: #212130;
 }
 
 .close span {
@@ -397,16 +431,19 @@ table {
     justify-content: center;
     align-items: center;
 }
-.customer-input .autocompleteInput, .date-input input, .barcode-scanner input, .product input, .search-product-input-wrapper input{
+
+.customer-input .autocompleteInput, .date-input input, .barcode-scanner input, .product input, .search-product-input-wrapper input {
     border: none;
     padding-left: 40px !important;
     height: 60px;
     border-radius: 15px;
 }
-.product input{
+
+.product input {
     padding-left: 15px;
 }
-.pb-15{
+
+.pb-15 {
     padding-bottom: 15px;
 }
 
@@ -426,14 +463,16 @@ table {
     cursor: pointer;
     color: #ffffff;
 }
-.pos-icon-list{
+
+.pos-icon-list {
     list-style: none;
     display: flex;
     gap: 10px;
     padding-left: 0;
     margin-bottom: 0;
 }
-.pos-icon-list li a{
+
+.pos-icon-list li a {
     background: rgb(249, 58, 11);
     color: #ffffff;
     height: 60px;
@@ -444,88 +483,132 @@ table {
     align-items: center;
     font-size: 22px;
 }
-.cat-item{
+
+.cat-item {
     min-width: 100px;
 }
-.cat-item a{
+
+.cat-item a {
     display: block;
     white-space: nowrap;
     background: #eff3f6;
 }
-.cat-item a:hover{
+
+.cat-item a:hover {
     background: rgb(249, 58, 11);
     color: #ffffff;
 }
-.swiper-slide{
+
+.swiper-slide {
     width: auto !important;
 }
-.products-wrapper{
+
+.products-wrapper {
     margin-top: 20px;
     text-align: center;
     height: 95%;
     overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
-.product-grid{
+.products-wrapper::-webkit-scrollbar {
+    display: none;
+    width: 0 !important;
+}
+
+.product-grid {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
 }
-.product-item{
+
+.product-item {
+    width: calc(20% - 10px);
     background: #EEF2F7;
     padding: 10px 20px;
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.5s;
 }
-.product-item:hover{
+
+.product-item:hover {
     background: rgb(249, 58, 11);
     color: #ffffff;
 }
-.product-item p{
+
+.product-item p {
     margin-bottom: 0;
 }
-.product-item .name{
+
+.product-item .name {
     font-weight: bold;
     margin-bottom: 0;
 }
-.bold{
+
+.bold {
     font-weight: bold;
 }
-.left-card, .right-card{
+
+.left-card, .right-card {
     height: 88vh;
 }
-.product-table{
+
+.product-table {
     height: 68%;
     overflow-y: scroll;
 }
-.product-table tr{
+
+.product-table tr {
     border-bottom: 1px solid #eeeeee;
 }
-.subtotal-area{
+
+.subtotal-area {
     padding-top: 2rem;
 }
-.pay-btn{
+
+.pay-btn {
     background: #0ac074 !important;
     border-color: #0ac074 !important;
 }
-.pay-btn:hover{
+
+.pay-btn:hover {
     background-color: #2fc989 !important;
     border-color: #23c682 !important;
 }
-.payment-area .btn{
+
+.payment-area .btn {
     border-radius: .625rem !important;
 }
-.ttl{
-    font-size: 22px;
-    color: rgb(249, 58, 11);
-}
-.btn{
+
+.btn {
     outline: transparent !important;
     box-shadow: none !important;
 }
-.productQuantity{
+
+.productQuantity {
     text-align: center;
 }
-.payment-modal label{
-    color: #ffffff !important;
+
+.payment-modal label {
+    color: #212130 !important;
+    font-size: 20px;
+}
+.payment-modal td{
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.ttl, .ttl td {
+    font-size: 22px !important;
+    color: rgb(249, 58, 11) !important;
+}
+
+@media only screen and (max-width: 1200px) {
+    .product-item{
+        width: calc(25% - 10px);
+        padding: 10px;
+    }
+    .product-item p {
+        font-size: 13px;
+    }
 }

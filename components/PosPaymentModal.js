@@ -1,16 +1,18 @@
 import {useState} from "react";
 import axios from "axios";
 import {toast} from "react-toastify";
+import $ from "jquery";
 
 export default function PosPaymentModal({
                                             hidePayment,
                                             calculateDue,
-                                            addMoney,
+                                            discountType,
                                             grandTotal,
                                             discountAmount,
                                             paid,
                                             handleForm,
-                                            token
+                                            token,
+                                            discount
                                         }) {
     const [banks, setBanks] = useState([]);
     const [paymentMethod, setPaymentMethod] = useState('cash');
@@ -18,6 +20,9 @@ export default function PosPaymentModal({
         headers: {Authorization: `Bearer ${token}`},
     };
     const handlePaymentMethod = (event) => {
+        $(`.paid`).each(function () {
+            $(this).val('')
+        })
         if (event.target.value === 'bank' || event.target.value === 'multiple') {
             axios.get(
                 `${process.env.API_URL}/bank?allData=true`,
@@ -54,7 +59,7 @@ export default function PosPaymentModal({
                 </div>
                 <hr/>
                 <div className="row gx-5">
-                    <div className="col-md-8">
+                    <div className="col-md-7">
                         <div className="form-group mb-3">
                             <label className={`form-label`}>
                                 Payment Method
@@ -150,38 +155,50 @@ export default function PosPaymentModal({
                             <textarea id="note" rows="3" className={`note form-control`} placeholder='Note'/>
                         </div>
                     </div>
-                    <div className="col-md-4">
-                        <div className="notes">
-                            Notes
+                    <div className="col-md-5">
+                        <div className="card">
+                            <table className={`table table-bordered mb-0`}>
+                                <tbody>
+                                <tr>
+                                    <td><strong>Subtotal</strong></td>
+                                    <td>{grandTotal} Tk.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Discount</strong></td>
+                                    <td>{discount} {discountType}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Discounted Amount</strong></td>
+                                    <td>{discountAmount} Tk.</td>
+                                </tr>
+                                <tr className={`ttl`}>
+                                    <td><strong>Grand Total</strong></td>
+                                    <td>{grandTotal - discountAmount} Tk.</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong className={`text-success`}>
+                                            {
+                                                (grandTotal - discountAmount) - paid < 0 && (
+                                                    <>
+                                                        Change
+                                                    </>
+                                                ) || (
+                                                    <>
+                                                        Due
+                                                    </>
+                                                )
+                                            }
+                                        </strong>
+                                    </td>
+                                    <td className={`text-success`}>{Math.abs((grandTotal - discountAmount) - paid)} Tk.</td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <ul className='note-list'>
-                            <li onClick={() => addMoney(50)}>
-                                50
-                            </li>
-                            <li onClick={() => addMoney(100)}>
-                                100
-                            </li>
-                            <li onClick={() => addMoney(200)}>
-                                200
-                            </li>
-                            <li onClick={() => addMoney(500)}>
-                                500
-                            </li>
-                            <li onClick={() => addMoney(1000)}>
-                                1000
-                            </li>
-                        </ul>
                     </div>
                 </div>
                 <hr/>
-                <div className="row">
-                    <div className="col-md-6">
-                        Total : {grandTotal - discountAmount} Tk.
-                    </div>
-                    <div className="col-md-6">
-                        Change/Due : {Math.abs((grandTotal - discountAmount) - paid)} Tk.
-                    </div>
-                </div>
                 <button className={`btn btn-success mt-3 float-end`} onClick={handleForm}>Save</button>
             </div>
         </div>

@@ -117,10 +117,10 @@ export default function Stock({user}) {
                                 products.map((el, index) => (
                                     <tr key={el.product_id} valign={`middle`}>
                                         <td>{index + 1}</td>
-                                        <td>{el.product_name}</td>
-                                        <td>{el.totalPurchaseQuantity ? el.totalPurchaseQuantity : 0}</td>
-                                        <td>{el.totalSaleQuantity ? el.totalSaleQuantity : 0}</td>
-                                        <td>{ el.totalPurchaseQuantity - el.totalSaleQuantity}</td>
+                                        <td>{el.name}</td>
+                                        <td>{el.purchase ? el.purchase : 0}</td>
+                                        <td>{el.sale ? el.sale : 0}</td>
+                                        <td>{ el.purchase - el.sale}</td>
                                     </tr>
                                 ))
                             ) || (
