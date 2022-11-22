@@ -308,6 +308,7 @@ export default function Sidebar({user}) {
                                 ${
                                 router.pathname === '/purchase' ||
                                 router.pathname === '/purchase/create' ||
+                                router.pathname === '/purchase/barcode/[id]' ||
                                 router.pathname === '/purchase/[id]'
                                     ? styles.active
                                     : ''

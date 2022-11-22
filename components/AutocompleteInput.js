@@ -2,7 +2,7 @@ import axios from "axios";
 import $ from "jquery";
 import {useState} from "react";
 
-export default function AutocompleteInput({type, token, placeholder}) {
+export default function AutocompleteInput({type, token, placeholder, className}) {
     const headers = {
         headers: {Authorization: `Bearer ${token}`},
     };
@@ -62,7 +62,7 @@ export default function AutocompleteInput({type, token, placeholder}) {
     return (
         <>
             <div className={`autocompleteWrapper`}>
-                <input type="text" className={`form-control autocompleteInput supplier-input`} autoComplete={`off`}
+                <input type="text" className={`form-control autocompleteInput supplier-input ${className}`} autoComplete={`off`}
                        onKeyUp={search}
                        onKeyDown={search}
                        onChange={search}
@@ -83,7 +83,13 @@ export default function AutocompleteInput({type, token, placeholder}) {
                         data && (
                             data.map(el => (
                                 <div className={`autocompleteItem`} key={`supplier-${el.id}`}
-                                     onClick={() => setValue(el.name, el.id)}>{el.name} ({el.address})</div>
+                                     onClick={() => setValue(el.name, el.id)}>
+                                    {el.name}
+                                    { type !== 'supplier' && (
+                                        `(${el.address})`
+                                    )
+                                    }
+                                </div>
                             ))
                         )
                     }

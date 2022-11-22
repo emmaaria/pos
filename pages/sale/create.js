@@ -19,6 +19,7 @@ import PosCartList from "../../components/PosCartList";
 import PosPaymentModal from "../../components/PosPaymentModal";
 import PosInvoicePrint from "../../components/PosInvoicePrint";
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
+import styles from '../../styles/CreateSale.module.css'
 
 export default function CreateSale({user}) {
     const [loader, setLoader] = useState(false)
@@ -318,7 +319,7 @@ export default function CreateSale({user}) {
                                             <i className="fa-solid fa-magnifying-glass"></i>
                                         </div>
                                         <input type="text"
-                                               className={`form-control autocompleteInput search-product`}
+                                               className={`form-control autocompleteInput search-product ${styles.posInput}`}
                                                autoComplete={`off`} onKeyUp={(e) => setSearch(e.target.value)}
                                                onKeyDown={(e) => setSearch(e.target.value)}
                                                onChange={(e) => setSearch(e.target.value)}
@@ -330,7 +331,7 @@ export default function CreateSale({user}) {
                                         <div className="barcode-icon">
                                             <i className="fa-solid fa-barcode"></i>
                                         </div>
-                                        <input type="text" className={`form-control scan-barcode`}
+                                        <input type="text" className={`form-control scan-barcode ${styles.posInput}`}
                                                placeholder={`Scan Barcode Here`}
                                                autoComplete={`off`}
                                                id='barcode'
@@ -347,7 +348,7 @@ export default function CreateSale({user}) {
                                             <i className="fa-regular fa-user"></i>
                                         </div>
                                         <AutocompleteInput type='customer' token={user.token}
-                                                           placeholder='Search customer'/>
+                                                           placeholder='Search customer' className={styles.posInput}/>
                                         <div className="customer-add-icon">
                                             <a>
                                                 <i className="fa-solid fa-user-plus"></i>
@@ -364,7 +365,7 @@ export default function CreateSale({user}) {
                                             selected={date}
                                             onChange={(date) => setDate(date)}
                                             dateFormat='yyyy-MM-dd'
-                                            className={`form-control date`}
+                                            className={`form-control date ${styles.posInput}`}
                                         />
                                     </div>
                                 </div>
