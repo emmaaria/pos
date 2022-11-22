@@ -76,6 +76,7 @@ export default function Sidebar({user}) {
                                 ${
                                 router.pathname === '/sale' ||
                                 router.pathname === '/sale/create' ||
+                                router.pathname === '/sale/view/[id]' ||
                                 router.pathname === '/sale/[id]'
                                     ? styles.active
                                     : ''

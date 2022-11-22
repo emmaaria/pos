@@ -35,7 +35,7 @@ export default function Details({user, id}) {
             </Head>
             <Layout user={user} title={`Purchase Details`}>
                 <div className="content">
-                    <div className="custom-card text-light">
+                    <div className="custom-card">
                         <p>
                             <strong>Supplier Name</strong> : {
                             purchase && loading === false && (

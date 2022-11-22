@@ -8,18 +8,18 @@ import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 import TableSkeleton from "../../../components/TableSkeleton";
 
 export default function Details({user, id}) {
-    const [purchase, setPurchase] = useState();
+    const [invoice, setInvoice] = useState();
     const [loading, setLoading] = useState(true);
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
     useEffect(() => {
         axios.get(
-            `${process.env.API_URL}/purchase/${id}`,
+            `${process.env.API_URL}/invoice/${id}`,
             headers
         ).then(res => {
             if (res.data.status === true) {
-                setPurchase(res.data.purchase);
+                setInvoice(res.data.invoice);
                 setLoading(false);
             }
         }).catch(err => {
@@ -30,16 +30,16 @@ export default function Details({user, id}) {
         <>
             <Head>
                 <title>
-                    Purchase Details
+                    Invoice Details
                 </title>
             </Head>
-            <Layout user={user} title={`Purchase Details`}>
+            <Layout user={user} title={`Invoice Details`}>
                 <div className="content">
-                    <div className="custom-card text-light">
+                    <div className="custom-card">
                         <p>
-                            <strong>Supplier Name</strong> : {
-                            purchase && loading === false && (
-                                purchase.purchaseData.supplier_name
+                            <strong>Customer Name</strong> : {
+                            invoice && loading === false && (
+                                invoice.invoiceData.customer_name
                             ) || (
                                 <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
                                     <Skeleton width={`100%`} height={20}/>
@@ -49,8 +49,8 @@ export default function Details({user, id}) {
                         </p>
                         <p>
                             <strong>Purchase ID</strong> : {
-                            purchase && loading === false && (
-                                purchase.purchaseData.purchase_id
+                            invoice && loading === false && (
+                                invoice.invoiceData.invoice_id
                             ) || (
                                 <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
                                     <Skeleton width={`100%`} height={20}/>
@@ -59,9 +59,9 @@ export default function Details({user, id}) {
                         }
                         </p>
                         <p>
-                            <strong>Purchase Date</strong> : {
-                            purchase && loading === false && (
-                                purchase.purchaseData.date
+                            <strong>Invoice Date</strong> : {
+                            invoice && loading === false && (
+                                invoice.invoiceData.date
                             ) || (
                                 <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
                                     <Skeleton width={`100%`} height={20}/>
@@ -92,8 +92,8 @@ export default function Details({user, id}) {
                             </thead>
                             <tbody>
                             {
-                                purchase && purchase.purchaseItems && !loading && (
-                                    purchase.purchaseItems.map((el, index) => (
+                                invoice && invoice.invoiceItems && !loading && (
+                                    invoice.invoiceItems.map((el, index) => (
                                         <tr key={`product-${el.id}`}>
                                             <td>{index + 1}</td>
                                             <td>
@@ -114,8 +114,8 @@ export default function Details({user, id}) {
                                     <td colSpan={4} className={`text-end`}>Total</td>
                                     <td className={`text-end`}>
                                         {
-                                            purchase && loading === false && (
-                                                purchase.purchaseData.amount+ ' Tk.'
+                                            invoice && loading === false && (
+                                                invoice.invoiceData.total+ ' Tk.'
                                             ) || (
                                                 <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
                                                     <Skeleton width={`100%`} height={20}/>
@@ -128,8 +128,8 @@ export default function Details({user, id}) {
                                     <td colSpan={4} className={`text-end`}>Paid</td>
                                     <td className={`text-end`}>
                                         {
-                                            purchase && loading === false && (
-                                                purchase.purchaseData.paid ? purchase.purchaseData.paid : 0 + ' Tk.'
+                                            invoice && loading === false && (
+                                                invoice.paid_amount ? invoice.paid_amount : 0 + ' Tk.'
                                             ) || (
                                                 <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
                                                     <Skeleton width={`100%`} height={20}/>
