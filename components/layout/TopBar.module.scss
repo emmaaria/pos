@@ -49,6 +49,10 @@
   display: block;
   cursor: pointer;
 }
+.avatar img{
+  width: 100% !important;
+  height: 100% !important;
+}
 .avatar::before {
   content: '';
   position: absolute;
@@ -116,4 +120,21 @@
 }
 .userMenuContainer ul li a:hover{
   color: rgb(249, 58, 11);
+}
+.sidebarToggler{
+  font-size: 20px;
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 1200px) {
+  .topBar{
+    padding-left: 3rem;
+    justify-content: flex-start;
+  }
+  .rightSide{
+    margin-left: auto;
+  }
+  .pageTitle{
+    margin-left: 2rem;
+  }
 }

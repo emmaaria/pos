@@ -44,7 +44,7 @@ export default function Sidebar({user}) {
         $('.purchaseParent').toggleClass(styles.opened);
     };
     return (
-        <div className={styles.sidebar}>
+        <div className={`sidebar ${styles.sidebar}`}>
             <div className={styles.avatarArea}>
                 <div className={styles.avatar}>
                     <CustomImage src={`/avatar.jpg`} circle={true}/>

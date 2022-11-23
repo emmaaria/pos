@@ -13,6 +13,10 @@ export default function TopBar({title, handle}) {
         e.preventDefault();
         $('.topMenu').slideToggle();
     };
+    const showSidebar = (e) => {
+        e.preventDefault();
+        $('.sidebar').toggleClass('sidebar-show');
+    };
     const logout = (e) => {
         e.preventDefault();
         axios
@@ -44,6 +48,11 @@ export default function TopBar({title, handle}) {
     }
     return (
         <div className={styles.topBar}>
+            <div className={styles.sidebarToggler}>
+                <a onClick={showSidebar}>
+                    <i className="fa-solid fa-bars-staggered"></i>
+                </a>
+            </div>
             <h4 className={styles.pageTitle}>
                 {title}
             </h4>

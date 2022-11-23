@@ -677,4 +677,16 @@ table {
     .product-item p {
         font-size: 13px;
     }
+
+    .sidebar{
+        left: -100%;
+        transition: all 0.3s;
+    }
+    .sidebar.sidebar-show{
+        left: 0;
+    }
+    .content{
+        margin: 10.5rem auto 0;
+        width: calc(100% - 3rem);
+    }
 }

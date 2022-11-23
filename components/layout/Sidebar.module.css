@@ -157,3 +157,8 @@
 .sidebar li a.active + ul {
     display: block
 }
+@media only screen and (max-width: 1200px) {
+    .sidebar{
+        width: 22%;
+    }
+}
