@@ -10,6 +10,7 @@ import TableSkeleton from "../../../components/TableSkeleton";
 export default function Details({user, id}) {
     const [invoice, setInvoice] = useState();
     const [loading, setLoading] = useState(true);
+    const [changeOrDue, setChangeOrDue] = useState(0);
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
@@ -20,6 +21,11 @@ export default function Details({user, id}) {
         ).then(res => {
             if (res.data.status === true) {
                 setInvoice(res.data.invoice);
+                if (res.data.invoice.invoiceData.discountAmount) {
+                    setChangeOrDue(res.data.invoice.invoiceData.total - res.data.invoice.invoiceData.discountAmount - res.data.invoice.invoiceData.paid_amount)
+                }else {
+                    setChangeOrDue(res.data.invoice.invoiceData.total - res.data.invoice.invoiceData.paid_amount)
+                }
                 setLoading(false);
             }
         }).catch(err => {
@@ -80,7 +86,7 @@ export default function Details({user, id}) {
                                     Product Name
                                 </th>
                                 <th width={`15%`}>
-                                    Purchase Price
+                                    Unit Price
                                 </th>
                                 <th width={`15%`}>
                                     Quantity
@@ -110,34 +116,100 @@ export default function Details({user, id}) {
                             }
                             </tbody>
                             <tfoot>
-                                <tr>
-                                    <td colSpan={4} className={`text-end`}>Total</td>
-                                    <td className={`text-end`}>
-                                        {
-                                            invoice && loading === false && (
-                                                invoice.invoiceData.total+ ' Tk.'
-                                            ) || (
-                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
-                                                    <Skeleton width={`100%`} height={20}/>
-                                                </SkeletonTheme>
-                                            )
-                                        }
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colSpan={4} className={`text-end`}>Paid</td>
-                                    <td className={`text-end`}>
-                                        {
-                                            invoice && loading === false && (
-                                                invoice.paid_amount ? invoice.paid_amount : 0 + ' Tk.'
-                                            ) || (
-                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
-                                                    <Skeleton width={`100%`} height={20}/>
-                                                </SkeletonTheme>
-                                            )
-                                        }
-                                    </td>
-                                </tr>
+                            <tr>
+                                <td colSpan={4} className={`text-end`}>Total</td>
+                                <td className={`text-end`}>
+                                    {
+                                        invoice && loading === false && (
+                                            invoice.invoiceData.total + ' Tk.'
+                                        ) || (
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                <Skeleton width={`100%`} height={20}/>
+                                            </SkeletonTheme>
+                                        )
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan={4} className={`text-end`}>Discount</td>
+                                <td className={`text-end`}>
+                                    {
+                                        invoice && loading === false && (
+                                            `${invoice.invoiceData.discount ? invoice.invoiceData.discount : '0'}${invoice.invoiceData.discountType}`
+                                        ) || (
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                <Skeleton width={`100%`} height={20}/>
+                                            </SkeletonTheme>
+                                        )
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan={4} className={`text-end`}>Discount Amount</td>
+                                <td className={`text-end`}>
+                                    {
+                                        invoice && loading === false && (
+                                            `${invoice.invoiceData.discountAmount ? invoice.invoiceData.discountAmount : '0'}Tk.`
+                                        ) || (
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                <Skeleton width={`100%`} height={20}/>
+                                            </SkeletonTheme>
+                                        )
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan={4} className={`text-end`}>Grand Total</td>
+                                <td className={`text-end`}>
+                                    {
+                                        invoice && loading === false && (
+                                            `${invoice.invoiceData.total - invoice.invoiceData.discountAmount}`
+                                        ) || (
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                <Skeleton width={`100%`} height={20}/>
+                                            </SkeletonTheme>
+                                        )
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan={4} className={`text-end`}>Paid</td>
+                                <td className={`text-end`}>
+                                    {
+                                        invoice && loading === false && (
+                                            invoice.invoiceData.paid_amount ? invoice.invoiceData.paid_amount + 'Tk.' : 0 + ' Tk.'
+                                        ) || (
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                <Skeleton width={`100%`} height={20}/>
+                                            </SkeletonTheme>
+                                        )
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan={4} className={`text-end`}>
+                                    {
+                                        invoice && loading === false && (
+                                            invoice.invoiceData.total < invoice.invoiceData.paid_amount ? 'Due' : 'Change'
+                                        ) || (
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                <Skeleton width={`100%`} height={20}/>
+                                            </SkeletonTheme>
+                                        )
+                                    }
+                                </td>
+                                <td className={`text-end`}>
+                                    {
+                                        invoice && loading === false && (
+                                            Math.abs(changeOrDue)
+                                        ) || (
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                <Skeleton width={`100%`} height={20}/>
+                                            </SkeletonTheme>
+                                        )
+                                    }
+                                </td>
+                            </tr>
                             </tfoot>
                         </table>
                     </div>

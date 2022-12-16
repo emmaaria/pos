@@ -43,6 +43,12 @@ export default function Sidebar({user}) {
         $('.purchase').toggleClass('open');
         $('.purchaseParent').toggleClass(styles.opened);
     };
+    const showProductMenu = (e) => {
+        e.preventDefault();
+        $('.productMenu').slideToggle();
+        $('.product').toggleClass('open');
+        $('.productParent').toggleClass(styles.opened);
+    };
     return (
         <div className={`sidebar ${styles.sidebar}`}>
             <div className={styles.avatarArea}>
@@ -93,7 +99,8 @@ export default function Sidebar({user}) {
                                 <a className={`
                                 ${
                                     router.pathname === '/sale' ||
-                                    router.pathname === '/sale/[id]'
+                                    router.pathname === '/sale/[id]' ||
+                                    router.pathname === '/sale/view/[id]'
                                         ? styles.active
                                         : ''
                                 }
@@ -119,19 +126,68 @@ export default function Sidebar({user}) {
                 </li>
                 <li>
                     <Link href={`/product`}>
-                        <a className={`
+                        <a
+                            onClick={showProductMenu}
+                            className={`productParent 
                                 ${
-                            router.pathname === '/product' ||
-                            router.pathname === '/product/create' ||
-                            router.pathname === '/product/[id]'
-                                ? styles.active
-                                : ''
-                        }
+                                router.pathname === '/product' ||
+                                router.pathname === '/product/create' ||
+                                router.pathname === '/product/[id]' ||
+                                router.pathname === '/category' ||
+                                router.pathname === '/category/create' ||
+                                router.pathname === '/category/[id]'
+                                    ? styles.active
+                                    : ''
+                            }
                             `}>
                             <i className="fa-solid fa-bag-shopping"/>
-                            Products
+                            Product
+                            <span className={`fa-solid fa-caret-right float-end ${styles.dropdownIcon} product`}/>
                         </a>
                     </Link>
+                    <ul className={`productMenu ${styles.subMenu}`}>
+                        <li>
+                            <Link href={`/product`}>
+                                <a className={`
+                                ${
+                                    router.pathname === '/product' ||
+                                    router.pathname === '/product/[id]'
+                                        ? styles.active
+                                        : ''
+                                }
+                            `}>
+                                    Manage Products
+                                </a>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href={`/product/create`}>
+                                <a className={`
+                                ${
+                                    router.pathname === '/product/create'
+                                        ? styles.active
+                                        : ''
+                                }
+                            `}>
+                                    Add New Product
+                                </a>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href={`/category`}>
+                                <a className={`
+                                ${
+                                    router.pathname === '/category' ||
+                                    router.pathname === '/category/create'
+                                        ? styles.active
+                                        : ''
+                                }
+                            `}>
+                                    Manage Category
+                                </a>
+                            </Link>
+                        </li>
+                    </ul>
                 </li>
                 <li>
                     <Link href={`/report/stock`}>
@@ -144,22 +200,6 @@ export default function Sidebar({user}) {
                             `}>
                             <i className="fa-solid fa-cubes"/>
                             Stock
-                        </a>
-                    </Link>
-                </li>
-                <li>
-                    <Link href={`/category`}>
-                        <a className={`
-                                ${
-                            router.pathname === '/category' ||
-                            router.pathname === '/category/create' ||
-                            router.pathname === '/category/[id]'
-                                ? styles.active
-                                : ''
-                        }
-                            `}>
-                            <i className="fa-solid fa-book"/>
-                            Category
                         </a>
                     </Link>
                 </li>

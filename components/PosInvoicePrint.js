@@ -89,6 +89,9 @@ export default function PosInvoicePrint({companyName, companyAddress, companyMob
                             <tr style={{textAlign: 'right'}}>
                                 <td colSpan={4}><strong>Grand Total : {invoice.grandTotal} Tk.</strong></td>
                             </tr>
+                            <tr style={{textAlign: 'right'}}>
+                                <td colSpan={4}><strong>Paid : {invoice.paid} Tk.</strong></td>
+                            </tr>
                             <tr>
                                 <td className={`p-0`} colSpan={4}></td>
                             </tr>
