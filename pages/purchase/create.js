@@ -20,6 +20,8 @@ export default function CreatePurchase({user}) {
     const [timer, setTimer] = useState(null);
     const [date, setDate] = useState(new Date());
     const [purchaseProducts, setPurchaseProducts] = useState([]);
+    const [keyword, setKeyword] = useState();
+    const [searching, setSearching] = useState(false);
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
@@ -166,7 +168,10 @@ export default function CreatePurchase({user}) {
         });
         setDue(parseFloat(paid));
     }
-    const searchProduct = async () => {
+    const searchProduct = async (value) => {
+        setKeyword(value);
+        setSearching(true)
+        setProducts(null)
         $('.autocompleteItemContainer.product').show();
         if (timer) {
             clearTimeout(timer);
@@ -179,6 +184,7 @@ export default function CreatePurchase({user}) {
                     `${process.env.API_URL}/product?name=${name}`,
                     headers
                 ).then(res => {
+                    setSearching(false)
                     if (res.data.status === true) {
                         setProducts(res.data.products.data);
                     }
@@ -271,18 +277,36 @@ export default function CreatePurchase({user}) {
                                     <input type="text" className={`form-control autocompleteInput search-product`}
                                            autoComplete={`off`} onKeyUp={searchProduct}
                                            onKeyDown={searchProduct}
+                                           onBlur={() => setKeyword(null)}
                                            onChange={searchProduct} placeholder={`Search product`}/>
-                                    <div className={`autocompleteItemContainer product`}>
-                                        {
-                                            products && (
-                                                products.map(el => (
-                                                    <div className={`autocompleteItem`}
-                                                         key={`search-product-item-${el.product_id}`}
-                                                         onClick={() => addProduct(el)}>{el.name}</div>
-                                                ))
-                                            )
-                                        }
-                                    </div>
+                                    {
+                                        keyword && (
+                                            <div className={`autocompleteItemContainer product`}>
+                                                {
+                                                    products && (
+                                                        products.length > 0 && (
+                                                            products.map(el => (
+                                                                <div className={`autocompleteItem`}
+                                                                     key={`search-product-item-${el.product_id}`}
+                                                                     onClick={() => addProduct(el)}>{el.name}</div>
+                                                            ))
+                                                        ) || (
+                                                            <div className={`autocompleteItem`}>
+                                                                No result found
+                                                            </div>
+                                                        )
+                                                    )
+                                                }
+                                                {
+                                                    searching && (
+                                                        <div className={`autocompleteItem`}>
+                                                            Searching...
+                                                        </div>
+                                                    )
+                                                }
+                                            </div>
+                                        )
+                                    }
                                 </div>
                             </div>
                             <table className={`table table-bordered table-hover`}>

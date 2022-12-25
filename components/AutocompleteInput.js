@@ -8,7 +8,12 @@ export default function AutocompleteInput({type, token, placeholder, className})
     };
     const [timer, setTimer] = useState(null);
     const [data, setData] = useState();
-    const search = async () => {
+    const [keyword, setKeyword] = useState();
+    const [searching, setSearching] = useState(false);
+    const search = async (value) => {
+        setKeyword(value);
+        setSearching(true)
+        setData(null)
         $('.autocompleteItemContainer.supplier').show();
         if (timer) {
             clearTimeout(timer);
@@ -22,6 +27,7 @@ export default function AutocompleteInput({type, token, placeholder, className})
                         `${process.env.API_URL}/supplier?name=${name}`,
                         headers
                     ).then(res => {
+                        setSearching(false)
                         if (res.data.status === true) {
                             setData(res.data.suppliers.data);
                         }
@@ -39,6 +45,7 @@ export default function AutocompleteInput({type, token, placeholder, className})
                         `${process.env.API_URL}/customer?name=${name}`,
                         headers
                     ).then(res => {
+                        setSearching(false)
                         if (res.data.status === true) {
                             setData(res.data.customers.data);
                         }
@@ -63,9 +70,10 @@ export default function AutocompleteInput({type, token, placeholder, className})
         <>
             <div className={`autocompleteWrapper`}>
                 <input type="text" className={`form-control autocompleteInput supplier-input ${className}`} autoComplete={`off`}
-                       onKeyUp={search}
-                       onKeyDown={search}
-                       onChange={search}
+                       onKeyUp={(e) => search(e.target.value)}
+                       onKeyDown={(e) => search(e.target.value)}
+                       onChange={(e) => search(e.target.value)}
+                       onBlur={() => setKeyword(null)}
                        placeholder={placeholder ? placeholder : ''}
                 />
                 {
@@ -78,22 +86,39 @@ export default function AutocompleteInput({type, token, placeholder, className})
                         <input type="hidden" className={`customer-id`}/>
                     )
                 }
-                <div className={`autocompleteItemContainer supplier`}>
-                    {
-                        data && (
-                            data.map(el => (
-                                <div className={`autocompleteItem`} key={`supplier-${el.id}`}
-                                     onClick={() => setValue(el.name, el.id)}>
-                                    {el.name}
-                                    { type !== 'supplier' && (
-                                        `(${el.address})`
+                {
+                    keyword && (
+                        <div className={`autocompleteItemContainer supplier`}>
+                            {
+                                data && (
+                                    data.length > 0 && (
+                                        data.map(el => (
+                                            <div className={`autocompleteItem`} key={`supplier-${el.id}`}
+                                                 onClick={() => setValue(el.name, el.id)}>
+                                                {el.name}
+                                                { type !== 'supplier' && (
+                                                    `(${el.address})`
+                                                )
+                                                }
+                                            </div>
+                                        )
+                                    )) || (
+                                        <div className={`autocompleteItem`}>
+                                            No result found
+                                        </div>
                                     )
-                                    }
-                                </div>
-                            ))
-                        )
-                    }
-                </div>
+                                )
+                            }
+                            {
+                                searching && (
+                                    <div className={`autocompleteItem`}>
+                                        Searching...
+                                    </div>
+                                )
+                            }
+                        </div>
+                    )
+                }
             </div>
         </>
     );
