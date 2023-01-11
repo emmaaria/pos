@@ -13,6 +13,7 @@ import 'swiper/css'
 import 'swiper/css/free-mode'
 import 'swiper/css/virtual'
 import PosMenu from "../../components/PosMenu";
+
 const PosCategories = lazy(() => import("../../components/PosCategories"))
 const PosProducts = lazy(() => import("../../components/PosProducts"))
 import PosCartList from "../../components/PosCartList";
@@ -20,6 +21,7 @@ import PosPaymentModal from "../../components/PosPaymentModal";
 import PosInvoicePrint from "../../components/PosInvoicePrint";
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 import styles from '../../styles/CreateSale.module.css'
+import EditProductPopup from "../../components/EditProductPopup";
 
 export default function CreateSale({user}) {
     const [loader, setLoader] = useState(false)
@@ -36,6 +38,8 @@ export default function CreateSale({user}) {
     const [date, setDate] = useState(new Date())
     const [invoiceProducts, setInvoiceProducts] = useState([])
     const [staticProducts, setStaticProducts] = useState()
+    const [editProduct, setEditProduct] = useState()
+    const [showEditProductPopup, setShowEditProduct] = useState(false)
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     }
@@ -221,7 +225,7 @@ export default function CreateSale({user}) {
             return product.product_id === data.product_id
         })
         const stock = data.purchase - data.sale;
-        if (stock <= 0){
+        if (stock <= 0) {
             toast.dismiss()
             toast.error('You don\'t have stock. Please purchase product first.', {
                 position: "bottom-right",
@@ -293,6 +297,29 @@ export default function CreateSale({user}) {
         $('.card').val('')
         $('.discount').val('')
     }
+    const handleProductDiscountPopup = (id) => {
+        const editProduct = invoiceProducts.find((item) => item.product_id == id)
+        if (editProduct) {
+            setEditProduct(editProduct)
+            setShowEditProduct(true)
+        }
+    }
+    const cancelDiscount = () => {
+        setEditProduct(null)
+        setShowEditProduct(false)
+    }
+    const saveDiscount = (id, discount) => {
+        const newCartProduct = invoiceProducts.map((item) => {
+            if (item.product_id == id) {
+                return {...item, discount: discount}
+            } else {
+                return item
+            }
+        })
+        setInvoiceProducts(newCartProduct)
+        setEditProduct(null)
+        setShowEditProduct(false)
+    }
     return (
         <>
             <Head>
@@ -309,7 +336,7 @@ export default function CreateSale({user}) {
             <Layout user={user} title={`POS`} sidebar={false} topbar={false}>
                 <div className="content-pos">
                     <div className="row pb-15">
-                        <div className="col-md-7">
+                        <div className="col-md-6">
                             <form onSubmit={handleForm} id='invoice'></form>
                             <div className="d-flex gap-3 justify-content-between">
                                 <PosMenu token={user.token}/>
@@ -340,7 +367,7 @@ export default function CreateSale({user}) {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-5">
+                        <div className="col-md-6">
                             <div className="row">
                                 <div className="col-md-6">
                                     <div className="customer-input">
@@ -373,41 +400,19 @@ export default function CreateSale({user}) {
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col-md-7">
+                        <div className="col-md-6">
                             <div className="row">
                                 <div className="col-md-12">
                                     <div className="custom-card left-card">
-                                        <Suspense fallback={<SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd"><Skeleton width={`100%`} height={40}/></SkeletonTheme>}>
+                                        <Suspense fallback={<SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)"
+                                                                           highlightColor="#dddddd"><Skeleton
+                                            width={`100%`} height={40}/></SkeletonTheme>}>
                                             <PosCategories token={user.token}/>
                                         </Suspense>
                                         <Suspense fallback={<>
                                             <div className={`product-item`}>
-                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
-                                                    <Skeleton width={`100px`} height={60}/>
-                                                </SkeletonTheme>
-                                            </div>
-                                            <div className={`product-item`}>
-                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
-                                                    <Skeleton width={`100px`} height={60}/>
-                                                </SkeletonTheme>
-                                            </div>
-                                            <div className={`product-item`}>
-                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
-                                                    <Skeleton width={`100px`} height={60}/>
-                                                </SkeletonTheme>
-                                            </div>
-                                            <div className={`product-item`}>
-                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
-                                                    <Skeleton width={`100px`} height={60}/>
-                                                </SkeletonTheme>
-                                            </div>
-                                            <div className={`product-item`}>
-                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
-                                                    <Skeleton width={`100px`} height={60}/>
-                                                </SkeletonTheme>
-                                            </div>
-                                            <div className={`product-item`}>
-                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)"
+                                                               highlightColor="#dddddd">
                                                     <Skeleton width={`100px`} height={60}/>
                                                 </SkeletonTheme>
                                             </div>
@@ -419,12 +424,13 @@ export default function CreateSale({user}) {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-5">
+                        <div className="col-md-6">
                             <div className="row">
                                 <div className="col-md-12">
                                     <div className="custom-card right-card">
                                         <PosCartList calculateSubtotal={calculateSubtotal}
-                                                     invoiceProducts={invoiceProducts} removeProduct={removeProduct}/>
+                                                     invoiceProducts={invoiceProducts} removeProduct={removeProduct}
+                                                     handleProductDiscountPopup={handleProductDiscountPopup}/>
                                         <div className="subtotal-area">
                                             <div className="row">
                                                 <div className="col-md-6">
@@ -489,7 +495,13 @@ export default function CreateSale({user}) {
                              paid={paid} token={user.token} discountType={discountType} discount={discount}/>
             {
                 showInvoice && (
-                    <PosInvoicePrint companyName={user.companyName} companyAddress={user.companyAddress} companyMobile={user.companyMobile} invoice={invoice} closeInvoice={closeInvoice}/>
+                    <PosInvoicePrint companyName={user.companyName} companyAddress={user.companyAddress}
+                                     companyMobile={user.companyMobile} invoice={invoice} closeInvoice={closeInvoice}/>
+                )
+            }
+            {
+                showEditProductPopup && (
+                    <EditProductPopup product={editProduct} cancelDiscount={cancelDiscount} saveDiscount={saveDiscount}/>
                 )
             }
         </>

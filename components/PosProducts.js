@@ -48,6 +48,26 @@ export default function PosProducts({addProduct, staticProducts, searchText}) {
                                     <Skeleton width={`100px`} height={60}/>
                                 </SkeletonTheme>
                             </div>
+                            <div className={`product-item`}>
+                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                    <Skeleton width={`100px`} height={60}/>
+                                </SkeletonTheme>
+                            </div>
+                            <div className={`product-item`}>
+                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                    <Skeleton width={`100px`} height={60}/>
+                                </SkeletonTheme>
+                            </div>
+                            <div className={`product-item`}>
+                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                    <Skeleton width={`100px`} height={60}/>
+                                </SkeletonTheme>
+                            </div>
+                            <div className={`product-item`}>
+                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                    <Skeleton width={`100px`} height={60}/>
+                                </SkeletonTheme>
+                            </div>
                         </>
                     )
                 }

@@ -5,7 +5,7 @@ import session from "../../lib/session";
 import {ToastContainer, toast} from 'react-toastify';
 import axios from "axios";
 import $ from 'jquery';
-import {useEffect, useState} from "react";
+import {useEffect, useState, useRef} from "react";
 import Loader from "../../components/Loader";
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 import Multiselect from 'multiselect-react-dropdown';
@@ -13,12 +13,27 @@ import Multiselect from 'multiselect-react-dropdown';
 export default function CreateProduct({user}) {
     const [loader, setLoader] = useState(false);
     const [categories, setCategories] = useState(null);
+    const [sellingPrice, setSellingPrice] = useState('');
+    const [purchasePrice, setPurchasePrice] = useState('');
     const [units, setUnits] = useState(null);
     const [suppliers, setSuppliers] = useState(null);
     const [selectedSupplier, setSelectedSupplier] = useState(null);
+    const supplierRef = useRef();
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
+    const handlePurchasePrice = (e) => {
+        const re = /^[0-9]*[.]?[0-9]*$/;
+        if (e.target.value === '' || re.test(e.target.value)) {
+            setPurchasePrice(e.target.value)
+        }
+    }
+    const handleSellingPrice = (e) => {
+        const re = /^[0-9]*[.]?[0-9]*$/;
+        if (e.target.value === '' || re.test(e.target.value)) {
+            setSellingPrice(e.target.value)
+        }
+    }
     useEffect(() => {
         async function getData() {
             try {
@@ -92,7 +107,6 @@ export default function CreateProduct({user}) {
                 weight,
                 purchase_price: purchasePrice
             }, headers);
-            console.log(res.data)
             if (res.data.status === true) {
                 toast.dismiss();
                 toast.success('Successfully Saved', {
@@ -106,7 +120,10 @@ export default function CreateProduct({user}) {
                 });
                 $('form').trigger('reset');
                 setLoader(false);
-                setSelectedSupplier(null);
+                setSelectedSupplier([]);
+                setSellingPrice('')
+                setPurchasePrice('')
+                supplierRef.current.resetSelectedValues()
             } else {
                 toast.dismiss();
                 if (typeof res.data.errors === 'object') {
@@ -225,12 +242,11 @@ export default function CreateProduct({user}) {
                             <div className="row mb-3">
                                 <div className="col-md-6">
                                     <label htmlFor="price" className={`form-label`}>Selling Price</label>
-                                    <input type="text" className={`form-control price`} id={`price`} required/>
+                                    <input type="text" className={`form-control price`} id={`price`} value={sellingPrice} onChange={handleSellingPrice} required/>
                                 </div>
                                 <div className="col-md-6">
                                     <label htmlFor="purchasePrice" className={`form-label`}>Purchase Price</label>
-                                    <input type="text" className={`form-control purchasePrice`} id={`purchasePrice`}
-                                           required/>
+                                    <input value={purchasePrice} onChange={handlePurchasePrice} type="text" className={`form-control purchasePrice`} id={`purchasePrice`} required/>
                                 </div>
                             </div>
                             <div className="row mb-3">
@@ -245,6 +261,7 @@ export default function CreateProduct({user}) {
                                                 displayValue="name"
                                                 placeholder={``}
                                                 selectedValues={null}
+                                                ref={supplierRef}
                                             />
                                         ) || (
                                             <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">

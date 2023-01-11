@@ -1,5 +1,5 @@
 import $ from 'jquery'
-export default function PosCartList({invoiceProducts, calculateSubtotal, removeProduct}) {
+export default function PosCartList({invoiceProducts, calculateSubtotal, removeProduct, handleProductDiscountPopup}) {
     const handleQty = (row, type) => {
         const oldVal = parseFloat($(`.productQuantity_${row}`).val())
         if (type === 'inc'){
@@ -55,6 +55,7 @@ export default function PosCartList({invoiceProducts, calculateSubtotal, removeP
                             </td>
                             <td className={`bold`}>
                                 {el.name}
+                                <button className="btn" onClick={() => handleProductDiscountPopup(el.product_id)}><i className="fa-solid fa-pen-to-square"></i></button>
                                 <input type="hidden" className={`productId`}
                                        defaultValue={el.product_id}/>
                             </td>
