@@ -8,8 +8,11 @@ export default function AutocompleteDefaultSupplier({name, id, token}) {
     };
     const [timer, setTimer] = useState(null);
     const [data, setData] = useState();
-    const search = async () => {
-        $('.autocompleteItemContainer.supplier').show();
+    const [keyword, setKeyword] = useState();
+    const [searching, setSearching] = useState(false);
+    const search = async (value) => {
+        setKeyword(value);
+        setSearching(true)
         if (timer) {
             clearTimeout(timer);
             setTimer(null);
@@ -33,27 +36,46 @@ export default function AutocompleteDefaultSupplier({name, id, token}) {
     const setValue = (label, value) => {
         $('.supplier-input').val(label);
         $('.supplier-id').val(value);
-        $('.autocompleteItemContainer.supplier').hide();
+        setKeyword(null)
     }
     return (
         <>
             <div className={`autocompleteWrapper`}>
                 <input type="text" className={`form-control autocompleteInput supplier-input`} autoComplete={`off`}
                        defaultValue={name}
-                       onKeyUp={search}
-                       onKeyDown={search}
-                       onChange={search}/>
+                       onKeyUp={(e) => search(e.target.value)}
+                       onKeyDown={(e) => search(e.target.value)}
+                       onChange={(e) => search(e.target.value)}/>
                 <input type="hidden" className={`supplier-id`} defaultValue={id}/>
-                <div className={`autocompleteItemContainer supplier`}>
-                    {
-                        data && (
-                            data.map(el => (
-                                <div className={`autocompleteItem`} key={`supplier-${el.id}`}
-                                     onClick={() => setValue(el.name, el.id)}>{el.name}</div>
-                            ))
-                        )
-                    }
-                </div>
+                {
+                    keyword && (
+                        <div className={`autocompleteItemContainer supplier`}>
+                            {
+                                data && (
+                                    data.length > 0 && (
+                                        data.map(el => (
+                                                <div className={`autocompleteItem`} key={`supplier-${el.id}`}
+                                                     onClick={() => setValue(el.name, el.id)}>
+                                                    {el.name}
+                                                </div>
+                                            )
+                                        )) || (
+                                        <div className={`autocompleteItem`}>
+                                            No result found
+                                        </div>
+                                    )
+                                )
+                            }
+                            {
+                                searching && (
+                                    <div className={`autocompleteItem`}>
+                                        Searching...
+                                    </div>
+                                )
+                            }
+                        </div>
+                    )
+                }
             </div>
         </>
     );

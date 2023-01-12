@@ -64,16 +64,16 @@ export default function AutocompleteInput({type, token, placeholder, className})
         if (type === 'customer') {
             $('.customer-id').val(value);
         }
-        $('.autocompleteItemContainer.supplier').hide();
+        setKeyword(null)
     }
     return (
         <>
             <div className={`autocompleteWrapper`}>
-                <input type="text" className={`form-control autocompleteInput supplier-input ${className}`} autoComplete={`off`}
+                <input type="text" className={`form-control autocompleteInput supplier-input ${className}`}
+                       autoComplete={`off`}
                        onKeyUp={(e) => search(e.target.value)}
                        onKeyDown={(e) => search(e.target.value)}
                        onChange={(e) => search(e.target.value)}
-                       onBlur={() => setKeyword(null)}
                        placeholder={placeholder ? placeholder : ''}
                 />
                 {
@@ -93,16 +93,16 @@ export default function AutocompleteInput({type, token, placeholder, className})
                                 data && (
                                     data.length > 0 && (
                                         data.map(el => (
-                                            <div className={`autocompleteItem`} key={`supplier-${el.id}`}
-                                                 onClick={() => setValue(el.name, el.id)}>
-                                                {el.name}
-                                                { type !== 'supplier' && (
-                                                    `(${el.address})`
-                                                )
-                                                }
-                                            </div>
-                                        )
-                                    )) || (
+                                                <div className={`autocompleteItem`} key={`supplier-${el.id}`}
+                                                     onClick={() => setValue(el.name, el.id)}>
+                                                    {el.name}
+                                                    {type !== 'supplier' && (
+                                                        `(${el.address})`
+                                                    )
+                                                    }
+                                                </div>
+                                            )
+                                        )) || (
                                         <div className={`autocompleteItem`}>
                                             No result found
                                         </div>

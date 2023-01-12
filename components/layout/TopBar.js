@@ -6,8 +6,18 @@ import $ from 'jquery';
 import axios from "axios";
 import {useRouter} from "next/router";
 import {toast} from "react-toastify";
+import {useState, useEffect} from "react";
 
 export default function TopBar({title, handle}) {
+    const [time, setTime] = useState('');
+    const clock = () => {
+        const today = new Date().toLocaleTimeString('en-US');
+        setTime(today)
+        setTimeout(clock, 1000)
+    }
+    useEffect(() => {
+        clock()
+    }, [])
     const router = useRouter();
     const showUserMenu = (e) => {
         e.preventDefault();
@@ -46,6 +56,7 @@ export default function TopBar({title, handle}) {
                 });
             });
     }
+    
     return (
         <div className={styles.topBar}>
             <div className={styles.sidebarToggler}>
@@ -57,6 +68,11 @@ export default function TopBar({title, handle}) {
                 {title}
             </h4>
             <ul className={styles.rightSide}>
+                <li>
+                    <div className={styles.clock}>
+                        {time}
+                    </div>
+                </li>
                 <li>
                     <button className={styles.fullScreen} onClick={handle.enter}>
                         <Image src={`/full-screen.svg`} width={25} height={25}/>

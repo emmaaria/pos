@@ -16,15 +16,21 @@ export default function EditPurchase({user, id}) {
     const [loader, setLoader] = useState(false);
     const [total, setTotal] = useState(0);
     const [due, setDue] = useState(0);
+    const [openingStock, setOpeningStock] = useState();
     const [purchase, setPurchase] = useState();
     const [loading, setLoading] = useState(true);
     const [products, setProducts] = useState();
     const [timer, setTimer] = useState(null);
     const [date, setDate] = useState(new Date());
     const [purchaseProducts, setPurchaseProducts] = useState([]);
+    const [keyword, setKeyword] = useState();
+    const [searching, setSearching] = useState(false);
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
+    const handleOpeningStockChange = (event) => {
+        setOpeningStock(event.target.value)
+    }
     useEffect(() => {
         axios.get(
             `${process.env.API_URL}/purchase/${id}`,
@@ -36,6 +42,7 @@ export default function EditPurchase({user, id}) {
                 setDate(new Date(res.data.purchase.purchaseData.date));
                 setDue(res.data.purchase.purchaseData.paid);
                 setPurchaseProducts(res.data.purchase.purchaseItems);
+                setOpeningStock(res.data.purchase.purchaseData.opening)
                 setLoading(false);
             }
         }).catch(err => {
@@ -167,14 +174,16 @@ export default function EditPurchase({user, id}) {
     }
     const calculateDue = () => {
         const paid = $(`.paid`).val();
-        if (paid !== ''){
+        if (paid !== '') {
             setDue(parseFloat(paid));
-        }else {
+        } else {
             setDue(0);
         }
     }
-    const searchProduct = async () => {
-        $('.autocompleteItemContainer.product').show();
+    const searchProduct = async (value) => {
+        setKeyword(value);
+        setSearching(true)
+        setProducts(null)
         if (timer) {
             clearTimeout(timer);
             setTimer(null);
@@ -206,8 +215,8 @@ export default function EditPurchase({user, id}) {
             setPurchaseProducts(currentProduct => [...currentProduct, data]);
             setTotal(oldTotal => parseFloat(oldTotal) + parseFloat(data.purchase_price));
         }
-        $('.autocompleteItemContainer.product').hide();
         $(`.search-product`).val('');
+        setKeyword(null)
     }
     return (
         <>
@@ -265,20 +274,38 @@ export default function EditPurchase({user, id}) {
                                 <label htmlFor="product" className={`form-label`}>Choose Product</label>
                                 <div className={`autocompleteWrapper product`}>
                                     <input type="text" className={`form-control autocompleteInput search-product`}
-                                           autoComplete={`off`} onKeyUp={searchProduct}
-                                           onKeyDown={searchProduct}
-                                           onChange={searchProduct} placeholder={`Search product`}/>
-                                    <div className={`autocompleteItemContainer product`}>
-                                        {
-                                            products && (
-                                                products.map(el => (
-                                                    <div className={`autocompleteItem`}
-                                                         key={`search-product-item-${el.product_id}`}
-                                                         onClick={() => addProduct(el)}>{el.name}</div>
-                                                ))
-                                            )
-                                        }
-                                    </div>
+                                           autoComplete={`off`} onKeyUp={(e) => searchProduct(e.target.value)}
+                                           onKeyDown={(e) => searchProduct(e.target.value)}
+                                           onChange={(e) => searchProduct(e.target.value)}
+                                           placeholder={`Search product`}/>
+                                    {
+                                        keyword && (
+                                            <div className={`autocompleteItemContainer product`}>
+                                                {
+                                                    products && (
+                                                        products.length > 0 && (
+                                                            products.map(el => (
+                                                                <div className={`autocompleteItem`}
+                                                                     key={`search-product-item-${el.product_id}`}
+                                                                     onClick={() => addProduct(el)}>{el.name}</div>
+                                                            ))
+                                                        ) || (
+                                                            <div className={`autocompleteItem`}>
+                                                                No result found
+                                                            </div>
+                                                        )
+                                                    )
+                                                }
+                                                {
+                                                    searching && (
+                                                        <div className={`autocompleteItem`}>
+                                                            Searching...
+                                                        </div>
+                                                    )
+                                                }
+                                            </div>
+                                        )
+                                    }
                                 </div>
                             </div>
                             <table className={`table table-bordered table-hover`}>
@@ -314,7 +341,8 @@ export default function EditPurchase({user, id}) {
                                                 </td>
                                                 <td>
                                                     {el.name}
-                                                    <input type="hidden" className={`productId`} defaultValue={el.product_id}/>
+                                                    <input type="hidden" className={`productId`}
+                                                           defaultValue={el.product_id}/>
                                                 </td>
                                                 <td>
                                                     <input type="text"
@@ -368,7 +396,7 @@ export default function EditPurchase({user, id}) {
                                 </tr>
                                 <tr>
                                     <td className={`text-end`} colSpan={4}><strong>Paid</strong></td>
-                                    <td className={`px-0`}>
+                                    <td>
                                         {
                                             purchase && loading === false && (
                                                 <input type="text" className={`form-control paid`} onKeyUp={calculateDue}
@@ -381,6 +409,7 @@ export default function EditPurchase({user, id}) {
                                             )
                                         }
                                     </td>
+                                    <td></td>
                                 </tr>
                                 <tr>
                                     <td className={`text-end`} colSpan={4}><strong>Due</strong></td>
@@ -398,6 +427,24 @@ export default function EditPurchase({user, id}) {
                                 </tr>
                                 </tfoot>
                             </table>
+                            <div className="mb-3 mt-3">
+                                <label className={`form-label`}>Opening Stock</label>
+                                {
+                                    user.role === 'super-admin' && (
+                                        purchase && loading === false && (
+                                            <select className="form-control opening" value={openingStock}
+                                                    onChange={handleOpeningStockChange}>
+                                                <option value='0'>No</option>
+                                                <option value='1'>Yes</option>
+                                            </select>
+                                        ) || (
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                <Skeleton width={`100%`} height={40}/>
+                                            </SkeletonTheme>
+                                        )
+                                    )
+                                }
+                            </div>
                             <div className="mb-3 mt-3">
                                 <label htmlFor="note" className={`form-label`}>Note</label>
                                 {

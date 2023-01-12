@@ -40,7 +40,7 @@ export default function Stock({user}) {
                 setLoading(true);
                 const name = $('.terms').val();
                 axios.get(
-                    `${process.env.API_URL}/stock?keyword=${name}`,
+                    `${process.env.API_URL}/stock?name=${name}`,
                     headers
                 ).then(res => {
                     if (res.data.status === true) {

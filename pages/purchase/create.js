@@ -48,6 +48,7 @@ export default function CreatePurchase({user}) {
         const nagad = $('.nagad').val();
         const bankId = $('.bankId').val();
         const bank = $('.bank').val();
+        const openingStock = $('.opening').val();
         const supplier = $('.supplier-id').val();
         if (supplier === '') {
             setLoader(false);
@@ -91,9 +92,9 @@ export default function CreatePurchase({user}) {
                 bankId,
                 bank,
                 paymentMethod,
-                total
+                total,
+                openingStock
             }, headers);
-            console.log(res.data)
             if (res.data.status === true) {
                 toast.dismiss();
                 toast.success('Successfully Saved', {
@@ -204,8 +205,8 @@ export default function CreatePurchase({user}) {
             setPurchaseProducts(currentProduct => [...currentProduct, data]);
             setTotal(oldTotal => oldTotal + parseFloat(data.purchase_price));
         }
-        $('.autocompleteItemContainer.product').hide();
         $(`.search-product`).val('');
+        setKeyword(null)
     }
     const handlePaymentMethod = (event) => {
         if (event.target.value === 'bank' || event.target.value === 'multiple') {
@@ -275,10 +276,9 @@ export default function CreatePurchase({user}) {
                                 <label htmlFor="product" className={`form-label`}>Choose Product</label>
                                 <div className={`autocompleteWrapper product`}>
                                     <input type="text" className={`form-control autocompleteInput search-product`}
-                                           autoComplete={`off`} onKeyUp={searchProduct}
-                                           onKeyDown={searchProduct}
-                                           onBlur={() => setKeyword(null)}
-                                           onChange={searchProduct} placeholder={`Search product`}/>
+                                           autoComplete={`off`} onKeyUp={(e) => searchProduct(e.target.value)}
+                                           onKeyDown={(e) => searchProduct(e.target.value)}
+                                           onChange={(e) => searchProduct(e.target.value)} placeholder={`Search product`}/>
                                     {
                                         keyword && (
                                             <div className={`autocompleteItemContainer product`}>
@@ -560,6 +560,17 @@ export default function CreatePurchase({user}) {
                                 </tr>
                                 </tfoot>
                             </table>
+                            {
+                                user.role === 'super-admin' && (
+                                    <div className="mb-3 mt-3">
+                                        <label htmlFor="opening" className={`form-label`}>Opening Purchase</label>
+                                        <select className="form-control form-select opening" id="opening">
+                                            <option value="0">No</option>
+                                            <option value="1">Yes</option>
+                                        </select>
+                                    </div>
+                                )
+                            }
                             <div className="mb-3 mt-3">
                                 <label htmlFor="note" className={`form-label`}>Note</label>
                                 <textarea id="note" rows="3" className={`note form-control`}/>
