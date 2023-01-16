@@ -13,6 +13,7 @@ import Loader from "../../components/Loader";
 export default function CreatePurchase({user}) {
     const [loader, setLoader] = useState(false);
     const [banks, setBanks] = useState([]);
+    const [bank, setBank] = useState();
     const [total, setTotal] = useState(0);
     const [due, setDue] = useState(0);
     const [paymentMethod, setPaymentMethod] = useState('cash');
@@ -25,6 +26,10 @@ export default function CreatePurchase({user}) {
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
+    const handleBankPaid = (event) => {
+        setBank(event.target.value)
+        calculateDue()
+    }
     const handleForm = async (e) => {
         e.preventDefault();
         toast.loading('Submitting', {
@@ -47,7 +52,6 @@ export default function CreatePurchase({user}) {
         const bkash = $('.bkash').val();
         const nagad = $('.nagad').val();
         const bankId = $('.bankId').val();
-        const bank = $('.bank').val();
         const openingStock = $('.opening').val();
         const supplier = $('.supplier-id').val();
         if (supplier === '') {
@@ -164,7 +168,7 @@ export default function CreatePurchase({user}) {
     }
     const calculateDue = () => {
         let paid = 0;
-        $('.paid').each(function() {
+        $('.paid').each(function () {
             paid += Number($(this).val());
         });
         setDue(parseFloat(paid));
@@ -278,7 +282,8 @@ export default function CreatePurchase({user}) {
                                     <input type="text" className={`form-control autocompleteInput search-product`}
                                            autoComplete={`off`} onKeyUp={(e) => searchProduct(e.target.value)}
                                            onKeyDown={(e) => searchProduct(e.target.value)}
-                                           onChange={(e) => searchProduct(e.target.value)} placeholder={`Search product`}/>
+                                           onChange={(e) => searchProduct(e.target.value)}
+                                           placeholder={`Search product`}/>
                                     {
                                         keyword && (
                                             <div className={`autocompleteItemContainer product`}>
@@ -472,8 +477,8 @@ export default function CreatePurchase({user}) {
                                                 </td>
                                                 <td>
                                                     <input type="text" className={`form-control paid bank`}
-                                                           onKeyUp={calculateDue}
-                                                           onKeyDown={calculateDue} onChange={calculateDue}/>
+                                                           onKeyUp={handleBankPaid}
+                                                           onKeyDown={handleBankPaid} onChange={handleBankPaid}/>
                                                 </td>
                                                 <td></td>
                                             </tr>
@@ -521,7 +526,7 @@ export default function CreatePurchase({user}) {
                                                             <td className={`text-end`} colSpan={4}><strong>Bank</strong>
                                                             </td>
                                                             <td>
-                                                                <select className={`form-control form-select`} required>
+                                                                <select className={`form-control form-select bankId`} required>
                                                                     <option value="">Select Bank</option>
                                                                     {
                                                                         banks.map(bank => (
@@ -535,12 +540,13 @@ export default function CreatePurchase({user}) {
                                                             <td></td>
                                                         </tr>
                                                         <tr>
-                                                            <td className={`text-end`} colSpan={4}><strong>Bank Paid Amount</strong>
+                                                            <td className={`text-end`} colSpan={4}><strong>Bank Paid
+                                                                Amount</strong>
                                                             </td>
                                                             <td>
-                                                                <input type="text" className={`form-control paid nagad`}
-                                                                       onKeyUp={calculateDue}
-                                                                       onKeyDown={calculateDue} onChange={calculateDue}/>
+                                                                <input type="text" className={`form-control paid bank`}
+                                                                       onKeyUp={handleBankPaid}
+                                                                       onKeyDown={handleBankPaid} onChange={handleBankPaid}/>
                                                             </td>
                                                             <td></td>
                                                         </tr>
@@ -554,7 +560,7 @@ export default function CreatePurchase({user}) {
                                 <tr>
                                     <td className={`text-end`} colSpan={4}><strong>Due</strong></td>
                                     <td className={`text-end border-left-none border-right-none border-white d-block`}>
-                                        <span className={`due`}>{total - due}</span> Tk.
+                                        <span className={`due`}>{(total - due).toFixed(2)}</span> Tk.
                                     </td>
                                     <td></td>
                                 </tr>

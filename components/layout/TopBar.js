@@ -11,9 +11,12 @@ import {useState, useEffect} from "react";
 export default function TopBar({title, handle}) {
     const [time, setTime] = useState('');
     const clock = () => {
-        const today = new Date().toLocaleTimeString('en-US');
+        const today = new Date().toLocaleTimeString('en-US',{
+            hour: '2-digit',
+            minute:'2-digit'
+        });
         setTime(today)
-        setTimeout(clock, 1000)
+        setTimeout(clock, 3000)
     }
     useEffect(() => {
         clock()

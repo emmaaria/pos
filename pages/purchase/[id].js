@@ -14,9 +14,13 @@ import AutocompleteDefaultSupplier from "../../components/AutocompleteDefaultSup
 
 export default function EditPurchase({user, id}) {
     const [loader, setLoader] = useState(false);
+    const [paymentMethod, setPaymentMethod] = useState();
+    const [paymentData, setPaymentData] = useState([]);
     const [total, setTotal] = useState(0);
     const [due, setDue] = useState(0);
     const [openingStock, setOpeningStock] = useState();
+    const [bankId, setBankId] = useState();
+    const [bank, setBank] = useState();
     const [purchase, setPurchase] = useState();
     const [loading, setLoading] = useState(true);
     const [products, setProducts] = useState();
@@ -25,11 +29,38 @@ export default function EditPurchase({user, id}) {
     const [purchaseProducts, setPurchaseProducts] = useState([]);
     const [keyword, setKeyword] = useState();
     const [searching, setSearching] = useState(false);
+    const [banks, setBanks] = useState([]);
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
     const handleOpeningStockChange = (event) => {
         setOpeningStock(event.target.value)
+    }
+    const getBankAccounts = () => {
+        axios.get(
+            `${process.env.API_URL}/bank?allData=true`,
+            headers
+        ).then(res => {
+            if (res.data.status === true) {
+                setBanks(res.data.banks);
+                calculateDue();
+                calculateSum();
+                setLoader(false);
+            } else {
+                setLoader(false);
+                toast.error('No bank account fround. Please add bank first.', {
+                    position: "bottom-right",
+                    autoClose: false,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: 'dark',
+                });
+            }
+        }).catch(err => {
+            console.log(err);
+        });
     }
     useEffect(() => {
         axios.get(
@@ -43,12 +74,26 @@ export default function EditPurchase({user, id}) {
                 setDue(res.data.purchase.purchaseData.paid);
                 setPurchaseProducts(res.data.purchase.purchaseItems);
                 setOpeningStock(res.data.purchase.purchaseData.opening)
+                setPaymentMethod(res.data.purchase.purchaseData.payment_method ? res.data.purchase.purchaseData.payment_method : 'cash')
+                setPaymentData(res.data.purchase.paymentData)
+                if (res.data.purchase.paymentData.bank) {
+                    getBankAccounts()
+                    setBankId(res.data.purchase.paymentData.bank.bank_id)
+                    setBank(res.data.purchase.paymentData.bank.withdraw)
+                }
                 setLoading(false);
             }
         }).catch(err => {
             console.log(err);
         });
     }, [setPurchase, setTotal, setDate, setDue, setPurchaseProducts, setLoading]);
+    const handlePaymentMethod = (event) => {
+        if (event.target.value === 'bank' || event.target.value === 'multiple') {
+            setLoader(true);
+            getBankAccounts()
+        }
+        setPaymentMethod(event.target.value)
+    }
     const handleForm = async (e) => {
         e.preventDefault();
         toast.loading('Submitting', {
@@ -67,7 +112,11 @@ export default function EditPurchase({user, id}) {
         }).get();
         const comment = $('.note').val();
         const date = $('.date').val();
-        const paid = $('.paid').val();
+        const cash = $('.cash').val();
+        const bkash = $('.bkash').val();
+        const nagad = $('.nagad').val();
+        const bankId = $('.bankId').val();
+        const openingStock = $('.opening').val();
         const supplier = $('.supplier-id').val();
         if (supplier === '') {
             setLoader(false);
@@ -106,8 +155,14 @@ export default function EditPurchase({user, id}) {
                 productPrices,
                 date,
                 comment,
-                paid,
-                total
+                cash,
+                bkash,
+                nagad,
+                bankId,
+                bank,
+                paymentMethod,
+                total,
+                openingStock
             }, headers);
             if (res.data.status === true) {
                 toast.dismiss();
@@ -173,12 +228,11 @@ export default function EditPurchase({user, id}) {
         });
     }
     const calculateDue = () => {
-        const paid = $(`.paid`).val();
-        if (paid !== '') {
-            setDue(parseFloat(paid));
-        } else {
-            setDue(0);
-        }
+        let paid = 0;
+        $('.paid').each(function () {
+            paid += Number($(this).val());
+        });
+        setDue(parseFloat(paid));
     }
     const searchProduct = async (value) => {
         setKeyword(value);
@@ -217,6 +271,10 @@ export default function EditPurchase({user, id}) {
         }
         $(`.search-product`).val('');
         setKeyword(null)
+    }
+    const handleBankPaid = (event) => {
+        setBank(event.target.value)
+        calculateDue()
     }
     return (
         <>
@@ -395,25 +453,117 @@ export default function EditPurchase({user, id}) {
                                     <td/>
                                 </tr>
                                 <tr>
-                                    <td className={`text-end`} colSpan={4}><strong>Paid</strong></td>
+                                    <td className={`text-end`} colSpan={4}><strong>Payment Method</strong></td>
                                     <td>
-                                        {
-                                            purchase && loading === false && (
-                                                <input type="text" className={`form-control paid`} onKeyUp={calculateDue}
-                                                       onKeyDown={calculateDue} onChange={calculateDue}
-                                                       defaultValue={purchase.purchaseData.paid}/>
-                                            ) || (
-                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
-                                                    <Skeleton width={`100%`} height={30}/>
-                                                </SkeletonTheme>
-                                            )
-                                        }
+                                        <select className={`paymentMethod form-control form-select`}
+                                                value={paymentMethod} onChange={handlePaymentMethod}>
+                                            <option value="cash">Cash</option>
+                                            <option value="bank">Bank</option>
+                                            <option value="bkash">Bkash</option>
+                                            <option value="nagad">Nagad</option>
+                                            <option value="multiple">Multiple</option>
+                                        </select>
                                     </td>
                                     <td></td>
                                 </tr>
+                                {
+                                    purchase && loading === false && (
+                                        paymentMethod === 'cash' || paymentMethod === 'multiple' && (
+                                            <tr>
+                                                <td className={`text-end`} colSpan={4}><strong>Cash Paid Amount</strong>
+                                                </td>
+                                                <td>
+                                                    <input type="text" className={`form-control paid cash`}
+                                                           onKeyUp={calculateDue}
+                                                           onKeyDown={calculateDue} onChange={calculateDue}
+                                                           defaultValue={paymentData.cash ? paymentData.cash : ''}/>
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                        )
+                                    )
+                                }
+
+                                {
+                                    purchase && loading === false && (
+                                        paymentMethod === 'bkash' || paymentMethod === 'multiple' && (
+                                            <tr>
+                                                <td className={`text-end`} colSpan={4}><strong>Bkash Paid Amount</strong>
+                                                </td>
+                                                <td>
+                                                    <input type="text" className={`form-control paid bkash`}
+                                                           onKeyUp={calculateDue}
+                                                           onKeyDown={calculateDue} onChange={calculateDue}
+                                                           defaultValue={paymentData.bkash ? paymentData.bkash : ''}/>
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                        )
+                                    )
+                                }
+
+                                {
+                                    purchase && loading === false && (
+                                        paymentMethod === 'nagad' || paymentMethod === 'multiple' && (
+                                            <tr>
+                                                <td className={`text-end`} colSpan={4}><strong>Nagad Paid Amount</strong>
+                                                </td>
+                                                <td>
+                                                    <input type="text" className={`form-control paid nagad`}
+                                                           onKeyUp={calculateDue}
+                                                           onKeyDown={calculateDue} onChange={calculateDue}
+                                                           defaultValue={paymentData.nagad ? paymentData.nagad : ''}/>
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                        )
+                                    )
+                                }
+
+                                {
+                                    purchase && loading === false && (
+                                        paymentMethod === 'bank' || paymentMethod === 'multiple' && banks && banks.length > 0 && (
+                                            <tr>
+                                                <td className={`text-end`} colSpan={4}><strong>Bank</strong>
+                                                </td>
+                                                <td>
+                                                    <select className={`form-control form-select bankId`} value={bankId}
+                                                            required onChange={(e) => setBankId(e.target.value)}>
+                                                        <option value="">Select Bank</option>
+                                                        {
+                                                            banks.map(bank => (
+                                                                <option key={bank.id} value={bank.id}>
+                                                                    {bank.name} ({bank.account_no})
+                                                                </option>
+                                                            ))
+                                                        }
+                                                    </select>
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                        )
+                                    )
+                                }
+                                {
+                                    purchase && loading === false && (
+                                        paymentMethod === 'bank' || paymentMethod === 'multiple' && (
+                                            <tr>
+                                                <td className={`text-end`} colSpan={4}><strong>Bank Paid Amount</strong>
+                                                </td>
+                                                <td>
+                                                    <input type="text" className={`form-control paid bank`}
+                                                           onKeyUp={handleBankPaid}
+                                                           onKeyDown={handleBankPaid} onChange={handleBankPaid}
+                                                           defaultValue={bank ? bank : ''}/>
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                        )
+                                    )
+                                }
                                 <tr>
                                     <td className={`text-end`} colSpan={4}><strong>Due</strong></td>
-                                    <td className={`text-end border-1 border-white d-block`}>
+                                    <td className={`text-end d-block`}>
                                         {
                                             purchase && loading === false && (
                                                 <span className={`due`}>{total - due} Tk.</span>
@@ -424,6 +574,7 @@ export default function EditPurchase({user, id}) {
                                             )
                                         }
                                     </td>
+                                    <td></td>
                                 </tr>
                                 </tfoot>
                             </table>
