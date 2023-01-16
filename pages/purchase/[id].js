@@ -468,7 +468,7 @@ export default function EditPurchase({user, id}) {
                                 </tr>
                                 {
                                     purchase && loading === false && (
-                                        paymentMethod === 'cash' || paymentMethod === 'multiple' && (
+                                        paymentMethod === 'cash' && (
                                             <tr>
                                                 <td className={`text-end`} colSpan={4}><strong>Cash Paid Amount</strong>
                                                 </td>
@@ -486,7 +486,7 @@ export default function EditPurchase({user, id}) {
 
                                 {
                                     purchase && loading === false && (
-                                        paymentMethod === 'bkash' || paymentMethod === 'multiple' && (
+                                        paymentMethod === 'bkash' && (
                                             <tr>
                                                 <td className={`text-end`} colSpan={4}><strong>Bkash Paid Amount</strong>
                                                 </td>
@@ -504,7 +504,7 @@ export default function EditPurchase({user, id}) {
 
                                 {
                                     purchase && loading === false && (
-                                        paymentMethod === 'nagad' || paymentMethod === 'multiple' && (
+                                        paymentMethod === 'nagad' && (
                                             <tr>
                                                 <td className={`text-end`} colSpan={4}><strong>Nagad Paid Amount</strong>
                                                 </td>
@@ -522,7 +522,7 @@ export default function EditPurchase({user, id}) {
 
                                 {
                                     purchase && loading === false && (
-                                        paymentMethod === 'bank' || paymentMethod === 'multiple' && banks && banks.length > 0 && (
+                                        paymentMethod === 'bank' && banks && banks.length > 0 && (
                                             <tr>
                                                 <td className={`text-end`} colSpan={4}><strong>Bank</strong>
                                                 </td>
@@ -546,7 +546,7 @@ export default function EditPurchase({user, id}) {
                                 }
                                 {
                                     purchase && loading === false && (
-                                        paymentMethod === 'bank' || paymentMethod === 'multiple' && (
+                                        paymentMethod === 'bank' && (
                                             <tr>
                                                 <td className={`text-end`} colSpan={4}><strong>Bank Paid Amount</strong>
                                                 </td>
@@ -558,6 +558,77 @@ export default function EditPurchase({user, id}) {
                                                 </td>
                                                 <td></td>
                                             </tr>
+                                        )
+                                    )
+                                }
+
+                                {
+                                    purchase && loading === false && (
+                                        paymentMethod === 'multiple' && (
+                                            <>
+                                                <tr>
+                                                    <td className={`text-end`} colSpan={4}><strong>Cash Paid Amount</strong>
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" className={`form-control paid cash`}
+                                                               onKeyUp={calculateDue}
+                                                               onKeyDown={calculateDue} onChange={calculateDue}
+                                                               defaultValue={paymentData.cash ? paymentData.cash : ''}/>
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td className={`text-end`} colSpan={4}><strong>Bkash Paid Amount</strong>
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" className={`form-control paid bkash`}
+                                                               onKeyUp={calculateDue}
+                                                               onKeyDown={calculateDue} onChange={calculateDue}
+                                                               defaultValue={paymentData.bkash ? paymentData.bkash : ''}/>
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td className={`text-end`} colSpan={4}><strong>Nagad Paid Amount</strong>
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" className={`form-control paid nagad`}
+                                                               onKeyUp={calculateDue}
+                                                               onKeyDown={calculateDue} onChange={calculateDue}
+                                                               defaultValue={paymentData.nagad ? paymentData.nagad : ''}/>
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td className={`text-end`} colSpan={4}><strong>Bank</strong>
+                                                    </td>
+                                                    <td>
+                                                        <select className={`form-control form-select bankId`} value={bankId}
+                                                                required onChange={(e) => setBankId(e.target.value)}>
+                                                            <option value="">Select Bank</option>
+                                                            {
+                                                                banks.map(bank => (
+                                                                    <option key={bank.id} value={bank.id}>
+                                                                        {bank.name} ({bank.account_no})
+                                                                    </option>
+                                                                ))
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td className={`text-end`} colSpan={4}><strong>Bank Paid Amount</strong>
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" className={`form-control paid bank`}
+                                                               onKeyUp={handleBankPaid}
+                                                               onKeyDown={handleBankPaid} onChange={handleBankPaid}
+                                                               defaultValue={bank ? bank : ''}/>
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                            </>
                                         )
                                     )
                                 }
