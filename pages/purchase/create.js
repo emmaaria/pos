@@ -153,11 +153,16 @@ export default function CreatePurchase({user}) {
             setTotal(oldTotal => oldTotal + parseFloat($(`.subtotal_${el.product_id}`).text()));
         });
     }
-    const calculateSubtotal = (productId) => {
+    const calculateSubtotal = (event,type, productId) => {
         const price = parseFloat($(`.productPrice_${productId}`).val());
         const quantity = parseFloat($(`.productQuantity_${productId}`).val());
-        const subTotal = price * quantity;
+        const subTotal = isNaN(price * quantity) ? 0 : price * quantity;
         $(`.subtotal_${productId}`).text(`${subTotal}`);
+        if (type === 'quantity'){
+            $(`.productQuantity_${productId}`).val(event.target.value.replace(/[^0-9.]/g, ''));
+        }else {
+            $(`.productPrice_${productId}`).val(event.target.value.replace(/[^0-9.]/g, ''));
+        }
         calculateSum();
     }
     const calculateSum = () => {
@@ -354,17 +359,17 @@ export default function CreatePurchase({user}) {
                                                     <input type="text"
                                                            className={`form-control productPrice productPrice_${el.product_id}`}
                                                            defaultValue={el.purchase_price}
-                                                           onChange={() => calculateSubtotal(el.product_id)}
-                                                           onKeyUp={() => calculateSubtotal(el.product_id)}
-                                                           onKeyDown={() => calculateSubtotal(el.product_id)}/>
+                                                           onChange={(event) => calculateSubtotal(event,'price', el.product_id)}
+                                                           onKeyUp={(event) => calculateSubtotal(event,'price', el.product_id)}
+                                                           onKeyDown={(event) => calculateSubtotal(event,'price', el.product_id)}/>
                                                 </td>
                                                 <td>
                                                     <input type="text"
                                                            className={`form-control productQuantity productQuantity_${el.product_id}`}
                                                            defaultValue={1}
-                                                           onChange={() => calculateSubtotal(el.product_id)}
-                                                           onKeyUp={() => calculateSubtotal(el.product_id)}
-                                                           onKeyDown={() => calculateSubtotal(el.product_id)}/>
+                                                           onChange={(event) => calculateSubtotal(event,'quantity', el.product_id)}
+                                                           onKeyUp={(event) => calculateSubtotal(event,'quantity', el.product_id)}
+                                                           onKeyDown={(event) => calculateSubtotal(event,'quantity', el.product_id)}/>
                                                 </td>
                                                 <td className={`text-end`}>
                                                 <span
