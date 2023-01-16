@@ -215,11 +215,16 @@ export default function EditPurchase({user, id}) {
             setTotal(oldTotal => oldTotal + parseFloat($(`.subtotal_${el.product_id}`).text()));
         });
     }
-    const calculateSubtotal = (productId) => {
+    const calculateSubtotal = (event,type, productId) => {
         const price = parseFloat($(`.productPrice_${productId}`).val());
         const quantity = parseFloat($(`.productQuantity_${productId}`).val());
-        const subTotal = price * quantity;
+        const subTotal = isNaN(price * quantity) ? 0 : price * quantity;
         $(`.subtotal_${productId}`).text(`${subTotal}`);
+        if (type === 'quantity'){
+            $(`.productQuantity_${productId}`).val(event.target.value.replace(/[^0-9.]/g, ''));
+        }else {
+            $(`.productPrice_${productId}`).val(event.target.value.replace(/[^0-9.]/g, ''));
+        }
         calculateSum();
     }
     const calculateSum = () => {
@@ -228,8 +233,11 @@ export default function EditPurchase({user, id}) {
             setTotal(oldTotal => oldTotal + parseFloat($(this).text()));
         });
     }
-    const calculateDue = () => {
+    const calculateDue = (event, type) => {
         let paid = 0;
+        if (event && type){
+            $(`.${type}`).val(event.target.value.replace(/[^0-9.]/g, ''));
+        }
         $('.paid').each(function () {
             paid += Number($(this).val());
         });
@@ -274,7 +282,8 @@ export default function EditPurchase({user, id}) {
         setKeyword(null)
     }
     const handleBankPaid = (event) => {
-        setBank(event.target.value)
+        $(`.bank`).val(event.target.value.replace(/[^0-9.]/g, ''));
+        setBank(event.target.value.replace(/[^0-9.]/g, ''))
         calculateDue()
     }
     return (
@@ -407,17 +416,17 @@ export default function EditPurchase({user, id}) {
                                                     <input type="text"
                                                            className={`form-control productPrice productPrice_${el.product_id}`}
                                                            defaultValue={el.purchase_price}
-                                                           onChange={() => calculateSubtotal(el.product_id)}
-                                                           onKeyUp={() => calculateSubtotal(el.product_id)}
-                                                           onKeyDown={() => calculateSubtotal(el.product_id)}/>
+                                                           onChange={(event) => calculateSubtotal(event,'price',el.product_id)}
+                                                           onKeyUp={(event) => calculateSubtotal(event,'price',el.product_id)}
+                                                           onKeyDown={(event) => calculateSubtotal(event,'price',el.product_id)}/>
                                                 </td>
                                                 <td>
                                                     <input type="text"
                                                            className={`form-control productQuantity productQuantity_${el.product_id}`}
                                                            defaultValue={el.quantity ? el.quantity : 1}
-                                                           onChange={() => calculateSubtotal(el.product_id)}
-                                                           onKeyUp={() => calculateSubtotal(el.product_id)}
-                                                           onKeyDown={() => calculateSubtotal(el.product_id)}/>
+                                                           onChange={(event) => calculateSubtotal(event,'quantity',el.product_id)}
+                                                           onKeyUp={(event) => calculateSubtotal(event,'quantity',el.product_id)}
+                                                           onKeyDown={(event) => calculateSubtotal(event,'quantity',el.product_id)}/>
                                                 </td>
                                                 <td className={`text-end`}>
                                                     <span
@@ -475,8 +484,8 @@ export default function EditPurchase({user, id}) {
                                                 </td>
                                                 <td>
                                                     <input type="text" className={`form-control paid cash`}
-                                                           onKeyUp={calculateDue}
-                                                           onKeyDown={calculateDue} onChange={calculateDue}
+                                                           onKeyUp={(event) => calculateDue(event,'cash')}
+                                                           onKeyDown={(event) => calculateDue(event,'cash')} onChange={(event) => calculateDue(event,'cash')}
                                                            defaultValue={paymentData.cash ? paymentData.cash : ''}/>
                                                 </td>
                                                 <td></td>
@@ -493,8 +502,8 @@ export default function EditPurchase({user, id}) {
                                                 </td>
                                                 <td>
                                                     <input type="text" className={`form-control paid bkash`}
-                                                           onKeyUp={calculateDue}
-                                                           onKeyDown={calculateDue} onChange={calculateDue}
+                                                           onKeyUp={(event) => calculateDue(event,'bkash')}
+                                                           onKeyDown={(event) => calculateDue(event,'bkash')} onChange={(event) => calculateDue(event,'bkash')}
                                                            defaultValue={paymentData.bkash ? paymentData.bkash : ''}/>
                                                 </td>
                                                 <td></td>
@@ -511,8 +520,8 @@ export default function EditPurchase({user, id}) {
                                                 </td>
                                                 <td>
                                                     <input type="text" className={`form-control paid nagad`}
-                                                           onKeyUp={calculateDue}
-                                                           onKeyDown={calculateDue} onChange={calculateDue}
+                                                           onKeyUp={(event) => calculateDue(event,'nagad')}
+                                                           onKeyDown={(event) => calculateDue(event,'nagad')} onChange={(event) => calculateDue(event,'nagad')}
                                                            defaultValue={paymentData.nagad ? paymentData.nagad : ''}/>
                                                 </td>
                                                 <td></td>
@@ -553,8 +562,8 @@ export default function EditPurchase({user, id}) {
                                                 </td>
                                                 <td>
                                                     <input type="text" className={`form-control paid bank`}
-                                                           onKeyUp={handleBankPaid}
-                                                           onKeyDown={handleBankPaid} onChange={handleBankPaid}
+                                                           onKeyUp={(event) => handleBankPaid(event)}
+                                                           onKeyDown={(event) => handleBankPaid(event)} onChange={(event) => handleBankPaid(event)}
                                                            defaultValue={bank ? bank : ''}/>
                                                 </td>
                                                 <td></td>
@@ -572,8 +581,8 @@ export default function EditPurchase({user, id}) {
                                                     </td>
                                                     <td>
                                                         <input type="text" className={`form-control paid cash`}
-                                                               onKeyUp={calculateDue}
-                                                               onKeyDown={calculateDue} onChange={calculateDue}
+                                                               onKeyUp={(event) => calculateDue(event,'cash')}
+                                                               onKeyDown={(event) => calculateDue(event,'cash')} onChange={(event) => calculateDue(event,'cash')}
                                                                defaultValue={paymentData.cash ? paymentData.cash : ''}/>
                                                     </td>
                                                     <td></td>
@@ -583,8 +592,8 @@ export default function EditPurchase({user, id}) {
                                                     </td>
                                                     <td>
                                                         <input type="text" className={`form-control paid bkash`}
-                                                               onKeyUp={calculateDue}
-                                                               onKeyDown={calculateDue} onChange={calculateDue}
+                                                               onKeyUp={(event) => calculateDue(event,'bkash')}
+                                                               onKeyDown={(event) => calculateDue(event,'bkash')} onChange={(event) => calculateDue(event,'bkash')}
                                                                defaultValue={paymentData.bkash ? paymentData.bkash : ''}/>
                                                     </td>
                                                     <td></td>
@@ -594,8 +603,8 @@ export default function EditPurchase({user, id}) {
                                                     </td>
                                                     <td>
                                                         <input type="text" className={`form-control paid nagad`}
-                                                               onKeyUp={calculateDue}
-                                                               onKeyDown={calculateDue} onChange={calculateDue}
+                                                               onKeyUp={(event) => calculateDue(event,'nagad')}
+                                                               onKeyDown={(event) => calculateDue(event,'nagad')} onChange={(event) => calculateDue(event,'nagad')}
                                                                defaultValue={paymentData.nagad ? paymentData.nagad : ''}/>
                                                     </td>
                                                     <td></td>
@@ -623,8 +632,8 @@ export default function EditPurchase({user, id}) {
                                                     </td>
                                                     <td>
                                                         <input type="text" className={`form-control paid bank`}
-                                                               onKeyUp={handleBankPaid}
-                                                               onKeyDown={handleBankPaid} onChange={handleBankPaid}
+                                                               onKeyUp={(event) => handleBankPaid(event)}
+                                                               onKeyDown={(event) => handleBankPaid(event)} onChange={(event) => handleBankPaid(event)}
                                                                defaultValue={bank ? bank : ''}/>
                                                     </td>
                                                     <td></td>
