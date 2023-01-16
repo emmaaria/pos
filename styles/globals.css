@@ -18,8 +18,8 @@ a:focus-visible {
 
 .content {
     padding: 0 24px;
-    margin: 10.5rem 0 0 0;
-    width: calc(100% - 16%);
+    margin: 9rem 0 0 0;
+    width: calc(100% - 15%);
     float: right;
 }
 

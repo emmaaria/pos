@@ -93,6 +93,7 @@ export default function EditPurchase({user, id}) {
             getBankAccounts()
         }
         setPaymentMethod(event.target.value)
+        setDue(0)
     }
     const handleForm = async (e) => {
         e.preventDefault();
@@ -166,7 +167,7 @@ export default function EditPurchase({user, id}) {
             }, headers);
             if (res.data.status === true) {
                 toast.dismiss();
-                toast.success('Successfully Saved', {
+                toast.success('Successfully Updated', {
                     position: "bottom-right",
                     autoClose: 5000,
                     hideProgressBar: false,
