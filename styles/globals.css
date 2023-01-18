@@ -560,7 +560,7 @@ table {
 }
 
 .product-table {
-    height: 68%;
+    height: 55%;
     overflow-y: scroll;
 }
 
@@ -608,6 +608,7 @@ table {
 .ttl, .ttl td {
     font-size: 22px !important;
     color: rgb(249, 58, 11) !important;
+    margin-bottom: 0;
 }
 
 .product-qty-container {

@@ -158,7 +158,7 @@ export default function CreatePurchase({user}) {
         const price = parseFloat($(`.productPrice_${productId}`).val());
         const quantity = parseFloat($(`.productQuantity_${productId}`).val());
         const subTotal = isNaN(price * quantity) ? 0 : price * quantity;
-        $(`.subtotal_${productId}`).text(`${subTotal}`);
+        $(`.subtotal_${productId}`).text(`${parseFloat(subTotal).toFixed(2)}`);
         if (type === 'quantity'){
             $(`.productQuantity_${productId}`).val(event.target.value.replace(/[^0-9.]/g, ''));
         }else {
@@ -401,7 +401,7 @@ export default function CreatePurchase({user}) {
                                 <tr>
                                     <td className={`text-end`} colSpan={4}><strong>Total</strong></td>
                                     <td className={`text-end border-white d-block border-left-none border-right-none`}>
-                                        <span className={`total`}>{total} Tk.</span>
+                                        <span className={`total`}>{parseFloat(total).toFixed(2)} Tk.</span>
                                     </td>
                                     <td/>
                                 </tr>
@@ -569,7 +569,7 @@ export default function CreatePurchase({user}) {
                                 <tr>
                                     <td className={`text-end`} colSpan={4}><strong>Due</strong></td>
                                     <td className={`text-end border-left-none border-right-none border-white d-block`}>
-                                        <span className={`due`}>{(total - due).toFixed(2)}</span> Tk.
+                                        <span className={`due`}>{parseFloat(total - due).toFixed(2)}</span> Tk.
                                     </td>
                                     <td></td>
                                 </tr>

@@ -430,66 +430,103 @@ export default function CreateSale({user}) {
                                     <div className="custom-card right-card">
                                         <PosCartList calculateSubtotal={calculateSubtotal}
                                                      invoiceProducts={invoiceProducts} removeProduct={removeProduct}
-                                                     handleProductDiscountPopup={handleProductDiscountPopup} discountType={user.discountType}/>
+                                                     handleProductDiscountPopup={handleProductDiscountPopup}
+                                                     discountType={user.discountType}/>
                                         <div className="subtotal-area">
-                                            <div className="row">
-                                                <div className="col-md-6">
-                                                    {
-                                                        user.discountType == 'invoice' && (
-                                                            <>
-                                                                <div className="form-group mb-2">
+                                            <table className={`table table-bordered`}>
+                                                <thead>
+                                                <tr className={`no-border`}>
+                                                    <th width="60%" className={`no-border`}></th>
+                                                    <th className={`no-border`} width="40%"></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td className={`text-end`}>
+                                                        <strong>Subtotal</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span>{subTotal} Tk.</span>
+                                                    </td>
+                                                </tr>
+                                                {
+                                                    user.discountType == 'invoice' && (
+                                                        <>
+                                                            <tr>
+                                                                <td></td>
+                                                                <td>
                                                                     <select
                                                                         className={`form-select form-control discount-type`}
                                                                         onChange={calculateDiscount}>
                                                                         <option value="%">Discount Type (%)</option>
                                                                         <option value="fixed">Discount Type (Fixed)</option>
                                                                     </select>
-                                                                </div>
-                                                                <div className="form-group">
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td></td>
+                                                                <td>
                                                                     <input type="text" className={`form-control discount`}
                                                                            placeholder={`Discount`}
                                                                            onKeyUp={calculateDiscount}
                                                                            onKeyDown={calculateDiscount}
                                                                            onChange={calculateDiscount}/>
+                                                                </td>
+                                                            </tr>
+                                                        </>
+                                                    )
+                                                }
+                                                <tr>
+                                                    <td className={`text-end`}>
+                                                        <strong>Discount Amount</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span>{discountAmount}</span> Tk.
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td className={`text-end`}>
+                                                        <p className={`ttl`}>
+                                                            <strong>Total</strong>
+                                                        </p>
+                                                    </td>
+                                                    <td>
+                                                        <p className={`ttl`}>
+                                                            <strong>
+                                                                <span
+                                                                    className='total'>{total - discountAmount}</span> Tk.
+                                                            </strong>
+                                                        </p>
+                                                    </td>
+                                                </tr>
+                                                {
+                                                    invoiceProducts && invoiceProducts.length > 0 && (
+                                                        <tr>
+                                                            <td colSpan={2}>
+                                                                <div className="payment-area">
+                                                                    <div
+                                                                        className="d-flex justify-content-between align-items-center gap-4">
+                                                                        <button
+                                                                            className={`btn btn-danger d-block w-100 py-3`}
+                                                                            onClick={reset}>
+                                                                            Reset <i
+                                                                            className="fa-solid fa-rotate-right"></i>
+                                                                        </button>
+                                                                        <button
+                                                                            className={`btn btn-success d-block w-100 py-3 pay-btn`}
+                                                                            onClick={showPayment}>
+                                                                            Pay Now <i
+                                                                            className="fa-solid fa-money-bill"></i>
+                                                                        </button>
+                                                                    </div>
                                                                 </div>
-                                                            </>
-                                                        )
-                                                    }
-                                                </div>
-                                                <div className="col-md-6 text-end">
-                                                    <p>
-                                                        <strong>Subtotal</strong> : <span>{subTotal} Tk.</span>
-                                                    </p>
-                                                    <p>
-                                                        <strong>Discount
-                                                            Amount</strong> : <span>{discountAmount}</span> Tk.
-                                                    </p>
-                                                    <p className={`ttl`}>
-                                                        <strong>
-                                                            Total : <span
-                                                            className='total'>{total - discountAmount}</span> Tk.
-                                                        </strong>
-                                                    </p>
-                                                </div>
-                                            </div>
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                }
+                                                </tbody>
+                                            </table>
                                         </div>
-                                        {
-                                            invoiceProducts && invoiceProducts.length > 0 && (
-                                                <div className="payment-area">
-                                                    <div
-                                                        className="d-flex justify-content-between align-items-center gap-4">
-                                                        <button className={`btn btn-danger d-block w-100 py-3`}
-                                                                onClick={reset}>
-                                                            Reset <i className="fa-solid fa-rotate-right"></i>
-                                                        </button>
-                                                        <button className={`btn btn-success d-block w-100 py-3 pay-btn`}
-                                                                onClick={showPayment}>
-                                                            Pay Now <i className="fa-solid fa-money-bill"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            )
-                                        }
                                     </div>
                                 </div>
                             </div>

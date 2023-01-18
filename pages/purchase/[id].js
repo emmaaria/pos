@@ -271,7 +271,6 @@ export default function EditPurchase({user, id}) {
         const alreadyAdded = purchaseProducts.filter(product => {
             return product.product_id === data.product_id;
         });
-        console.log(alreadyAdded);
         if (alreadyAdded.length > 0) {
             alert('Product already added');
         } else {
@@ -430,7 +429,7 @@ export default function EditPurchase({user, id}) {
                                                 </td>
                                                 <td className={`text-end`}>
                                                     <span
-                                                        className={`subtotal subtotal_${el.product_id}`}>{el.total ? el.total : el.purchase_price}</span> Tk.
+                                                        className={`subtotal subtotal_${el.product_id}`}>{el.total ? parseFloat(el.total).toFixed(2) : parseFloat(el.purchase_price).toFixed(2)}</span> Tk.
                                                 </td>
                                                 <td className={`text-center`}>
                                                     <button
@@ -452,7 +451,7 @@ export default function EditPurchase({user, id}) {
                                     <td className={`text-end border-1 border-white d-block`}>
                                         {
                                             purchase && loading === false && (
-                                                <span className={`total`}>{total} Tk.</span>
+                                                <span className={`total`}>{parseFloat(total).toFixed(2)} Tk.</span>
                                             ) || (
                                                 <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
                                                     <Skeleton width={`100%`} height={30}/>
@@ -647,7 +646,7 @@ export default function EditPurchase({user, id}) {
                                     <td className={`text-end d-block`}>
                                         {
                                             purchase && loading === false && (
-                                                <span className={`due`}>{total - due} Tk.</span>
+                                                <span className={`due`}>{parseFloat(total - due).toFixed(2)} Tk.</span>
                                             ) || (
                                                 <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
                                                     <Skeleton width={`100%`} height={30}/>
