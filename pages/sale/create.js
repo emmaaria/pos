@@ -430,24 +430,31 @@ export default function CreateSale({user}) {
                                     <div className="custom-card right-card">
                                         <PosCartList calculateSubtotal={calculateSubtotal}
                                                      invoiceProducts={invoiceProducts} removeProduct={removeProduct}
-                                                     handleProductDiscountPopup={handleProductDiscountPopup}/>
+                                                     handleProductDiscountPopup={handleProductDiscountPopup} discountType={user.discountType}/>
                                         <div className="subtotal-area">
                                             <div className="row">
                                                 <div className="col-md-6">
-                                                    <div className="form-group mb-2">
-                                                        <select className={`form-select form-control discount-type`}
-                                                                onChange={calculateDiscount}>
-                                                            <option value="%">Discount Type (%)</option>
-                                                            <option value="fixed">Discount Type (Fixed)</option>
-                                                        </select>
-                                                    </div>
-                                                    <div className="form-group">
-                                                        <input type="text" className={`form-control discount`}
-                                                               placeholder={`Discount`}
-                                                               onKeyUp={calculateDiscount}
-                                                               onKeyDown={calculateDiscount}
-                                                               onChange={calculateDiscount}/>
-                                                    </div>
+                                                    {
+                                                        user.discountType == 'invoice' && (
+                                                            <>
+                                                                <div className="form-group mb-2">
+                                                                    <select
+                                                                        className={`form-select form-control discount-type`}
+                                                                        onChange={calculateDiscount}>
+                                                                        <option value="%">Discount Type (%)</option>
+                                                                        <option value="fixed">Discount Type (Fixed)</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div className="form-group">
+                                                                    <input type="text" className={`form-control discount`}
+                                                                           placeholder={`Discount`}
+                                                                           onKeyUp={calculateDiscount}
+                                                                           onKeyDown={calculateDiscount}
+                                                                           onChange={calculateDiscount}/>
+                                                                </div>
+                                                            </>
+                                                        )
+                                                    }
                                                 </div>
                                                 <div className="col-md-6 text-end">
                                                     <p>

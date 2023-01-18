@@ -70,11 +70,11 @@ export default function Login() {
                             id: response.data.user.id,
                             name: response.data.user.name,
                             companyName: response.data.company.company_name,
+                            discountType: response.data.company.discount_type,
                             companyAddress: response.data.company.company_address,
                             companyMobile: response.data.company.company_mobile,
                             companyVatNumber: response.data.company.vat_number,
                             companyMushokNumber: response.data.company.mushok_number,
-                            mobile: response.data.user.email,
                             role: response.data.user.role,
                             token: response.data.token,
                         })

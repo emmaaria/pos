@@ -5,8 +5,8 @@ export default withIronSessionApiRoute(async (req, res) => {
     req.session.user = {
         id: req.body.id,
         name: req.body.name,
-        email: req.body.email,
         token: req.body.token,
+        discountType: req.body.discountType,
         role: req.body.role,
         companyName: req.body.companyName,
         companyAddress: req.body.companyAddress,

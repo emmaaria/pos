@@ -76,21 +76,50 @@ export default function EditCustomer({user}) {
             return;
         }
         try {
-            const res = await axios.post(`${process.env.API_URL}/company/update`, {discount_type,
-                name, mobile, address, email, vat_number, mushok_number, logo : image.length > 0 ? image[0].data_url : ''
+            const res = await axios.post(`${process.env.API_URL}/company/update`, {
+                discount_type,
+                name, mobile, address, email, vat_number, mushok_number, logo: image.length > 0 ? image[0].data_url : ''
             }, headers);
             if (res.data.status === true) {
-                toast.dismiss();
-                toast.success('Successfully Updated', {
-                    position: "bottom-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    theme: 'dark',
-                });
-                setLoader(false);
+                axios
+                    .post('/api/auth/login', {
+                        id: user.id,
+                        name: user.name,
+                        token: user.token,
+                        discountType: discount_type,
+                        role: user.role,
+                        companyName: name,
+                        companyAddress: address,
+                        companyMobile: mobile,
+                        companyVatNumber: vat_number,
+                        companyMushokNumber: mushok_number,
+                    })
+                    .then(() => {
+                        toast.dismiss();
+                        toast.success('Successfully Updated', {
+                            position: "bottom-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            theme: 'dark',
+                        });
+                        setLoader(false);
+                    })
+                    .catch((err) => {
+                        toast.dismiss();
+                        toast.error(err.response.data, {
+                            position: "bottom-left",
+                            autoClose: 3000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            theme: 'dark',
+                        });
+                        setLoader(false);
+                    });
             } else {
                 toast.dismiss();
                 toast.error(e.response.data.errors, {
@@ -142,7 +171,7 @@ export default function EditCustomer({user}) {
                                 <label className={`form-label`}>Company Logo</label>
                                 {
                                     company && loading === false && (
-                                        <img className={`logoImage`} src={company.logo} />
+                                        <img className={`logoImage`} src={company.logo}/>
                                     ) || (
                                         <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
                                             <Skeleton width={`100%`} height={60}/>
@@ -171,7 +200,7 @@ export default function EditCustomer({user}) {
                                                             type={`button`}
                                                             className={`uploadBtn`}
                                                         >
-                                                            <i className="fa-solid fa-cloud-arrow-up" /> Upload Logo
+                                                            <i className="fa-solid fa-cloud-arrow-up"/> Upload Logo
                                                         </button>
                                                     )
                                                 }
@@ -179,8 +208,9 @@ export default function EditCustomer({user}) {
                                                     <div key={index} className="image-item">
                                                         <img src={image['data_url']} className={`uploadPreview`}/>
                                                         <div className="image-item__btn-wrapper">
-                                                            <button onClick={() => onImageRemove(index)} type={`button`} className={`removeBtn`}>
-                                                                <i className="fa-solid fa-trash" /> Remove
+                                                            <button onClick={() => onImageRemove(index)} type={`button`}
+                                                                    className={`removeBtn`}>
+                                                                <i className="fa-solid fa-trash"/> Remove
                                                             </button>
                                                         </div>
                                                     </div>
@@ -273,7 +303,8 @@ export default function EditCustomer({user}) {
                                 <label className={`form-label`}>Discount Type</label>
                                 {
                                     company && loading === false && (
-                                        <select className="form-control discount_type" value={company.discount_type} onChange={handleDiscountChange}>
+                                        <select className="form-control discount_type" value={company.discount_type}
+                                                onChange={handleDiscountChange}>
                                             <option value="invoice">Invoice Wise</option>
                                             <option value="product">Product Wise</option>
                                         </select>
