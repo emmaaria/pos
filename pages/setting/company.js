@@ -10,9 +10,9 @@ import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 import Loader from "../../components/Loader";
 import ImageUploading from 'react-images-uploading';
 
-export default function EditCustomer({user}) {
+export default function EditCompany({user}) {
     const [company, setCompany] = useState();
-    const [discount, setDiscount] = useState();
+    const [discount, setDiscount] = useState(null);
     const [image, setImage] = useState([]);
     const [loader, setLoader] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -303,7 +303,7 @@ export default function EditCustomer({user}) {
                                 <label className={`form-label`}>Discount Type</label>
                                 {
                                     company && loading === false && (
-                                        <select className="form-control discount_type" value={company.discount_type}
+                                        <select className="form-control discount_type" value={discount}
                                                 onChange={handleDiscountChange}>
                                             <option value="invoice">Invoice Wise</option>
                                             <option value="product">Product Wise</option>

@@ -18,6 +18,7 @@ export default function PosInvoicePrint({companyName, companyAddress, companyMob
                         <p>
                             Mobile: {companyMobile}
                         </p>
+                        <p style={{textAlign: 'left', borderTop: '1px solid #000', marginBottom : 0, marginTop : '10px', paddingTop : '5px'}}>Customer: {invoice.customer_name}</p>
                         <div className="invoiceRow">
                             <p className={`date`}>Date: 2022-15-22</p>
                             <p className={`invNum`}>Invoice: 10002</p>
@@ -47,7 +48,7 @@ export default function PosInvoicePrint({companyName, companyAddress, companyMob
                                     <>
                                         <tr key={item.product_id}>
                                             <td>{item.name}</td>
-                                            <td>{item.price}00 Tk.</td>
+                                            <td>{item.price} Tk.</td>
                                             <td style={{textAlign: 'center'}}>{item.quantity}</td>
                                             <td style={{textAlign: 'right'}}>{item.total} Tk.</td>
                                         </tr>
@@ -63,17 +64,8 @@ export default function PosInvoicePrint({companyName, companyAddress, companyMob
                                 <td colSpan={4}>Subtotal : {invoice.subtotal} Tk.</td>
                             </tr>
                             {
-                                invoice.discount && (
+                                invoice.discountAmount && (
                                     <>
-                                        <tr style={{textAlign: 'right'}}>
-                                            {
-                                                invoice.discountType === '%' && (
-                                                    <td colSpan={4}>Discount : {invoice.discount}%</td>
-                                                ) || (
-                                                    <td colSpan={4}>Discount : {invoice.discount} Tk.</td>
-                                                )
-                                            }
-                                        </tr>
                                         <tr>
                                             <td className={`p-0`} colSpan={4}></td>
                                         </tr>
@@ -97,7 +89,7 @@ export default function PosInvoicePrint({companyName, companyAddress, companyMob
                             </tr>
                             <tr style={{textAlign: 'right'}}>
                                 {
-                                    invoice.due < 0 && (
+                                    (invoice.due < 0 || invoice.due === 0) && (
                                         <td colSpan={4}>Change : {Math.abs(invoice.due)} Tk.</td>
                                     ) || (
                                         <td colSpan={4}>Due : {invoice.due} Tk.</td>

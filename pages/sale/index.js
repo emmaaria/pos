@@ -9,7 +9,7 @@ import TableSkeleton from "../../components/TableSkeleton";
 import {ToastContainer, toast} from 'react-toastify';
 import $ from "jquery";
 
-export default function Purchase({user}) {
+export default function Sale({user}) {
     const [invoices, setInvoices] = useState();
     const [links, setLinks] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -122,18 +122,18 @@ export default function Purchase({user}) {
         <>
             <Head>
                 <title>
-                    Invoices
+                    Sale List
                 </title>
             </Head>
             <ToastContainer/>
-            <Layout user={user} title={`Purchase`}>
+            <Layout user={user} title={`Sale List`}>
                 <div className="content">
                     <div className="custom-card">
                         <div className="row">
                             <div className="col-md-9">
                                 <Link href={`/sale/create`}>
                                     <a className={`btn btn-success`}>
-                                        <i className="fa-solid fa-plus"/> Add New Invoice
+                                        <i className="fa-solid fa-plus"/> Add New Sale
                                     </a>
                                 </Link>
                             </div>
@@ -154,7 +154,7 @@ export default function Purchase({user}) {
                             <thead>
                             <tr>
                                 <th width={`5%`}>Sl</th>
-                                <th width={`10%`}>Invoice ID</th>
+                                <th width={`10%`}>Invoice No.</th>
                                 <th width={`15%`}>Date</th>
                                 <th width={`20%`}>Customer Name</th>
                                 <th width={`15%`}>Amount</th>
@@ -166,7 +166,7 @@ export default function Purchase({user}) {
                             {
                                 invoices && invoices.length <= 0 && (
                                     <tr>
-                                        <td colSpan={7} className={`text-center`}>No Invoice Found</td>
+                                        <td colSpan={7} className={`text-center`}>No Sales Found</td>
                                     </tr>
                                 )
                             }
@@ -174,10 +174,10 @@ export default function Purchase({user}) {
                                 invoices.map((el, index) => (
                                     <tr key={el.invoice_id} valign={`middle`} className={`row-id-${el.invoice_id}`}>
                                         <td>{index + 1}</td>
-                                        <td>{el.date}</td>
                                         <td className={`text-uppercase`}>{el.invoice_id}</td>
+                                        <td>{el.date}</td>
                                         <td>{el.customer_name}</td>
-                                        <td>{el.total - el.discountAmount} Tk.</td>
+                                        <td>{el.grand_total} Tk.</td>
                                         <td>{el.comment}</td>
                                         <td>
                                             <Link href={`/sale/view/${el.invoice_id}`}>

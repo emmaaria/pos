@@ -21,7 +21,6 @@ import PosPaymentModal from "../../components/PosPaymentModal";
 import PosInvoicePrint from "../../components/PosInvoicePrint";
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 import styles from '../../styles/CreateSale.module.css'
-import EditProductPopup from "../../components/EditProductPopup";
 
 export default function CreateSale({user}) {
     const [loader, setLoader] = useState(false)
@@ -38,8 +37,6 @@ export default function CreateSale({user}) {
     const [date, setDate] = useState(new Date())
     const [invoiceProducts, setInvoiceProducts] = useState([])
     const [staticProducts, setStaticProducts] = useState()
-    const [editProduct, setEditProduct] = useState()
-    const [showEditProductPopup, setShowEditProduct] = useState(false)
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     }
@@ -70,6 +67,15 @@ export default function CreateSale({user}) {
             return $(el).val()
         }).get()
         const productPrices = $('.productPrice').map(function (index, el) {
+            return $(el).val()
+        }).get()
+        const productDiscounts = $('.product_discount').map(function (index, el) {
+            return $(el).val()
+        }).get()
+        const productDiscountTypes = $('.product_discount_type').map(function (index, el) {
+            return $(el).val()
+        }).get()
+        const productDiscountedAmounts = $('.productDiscountedAmount').map(function (index, el) {
             return $(el).val()
         }).get()
         const comment = $('.note').val()
@@ -103,6 +109,9 @@ export default function CreateSale({user}) {
                 productIds,
                 productQuantities,
                 productPrices,
+                productDiscounts,
+                productDiscountTypes,
+                productDiscountedAmounts,
                 date,
                 comment,
                 cash,
@@ -116,7 +125,6 @@ export default function CreateSale({user}) {
                 discountType,
                 pos: 1
             }, headers)
-            console.log(res.data)
             if (res.data.status === true) {
                 toast.dismiss()
                 toast.success('Successfully Saved', {
@@ -187,13 +195,19 @@ export default function CreateSale({user}) {
     const calculateSubtotal = (productId) => {
         const price = parseFloat($(`.productPrice_${productId}`).val())
         const quantity = parseFloat($(`.productQuantity_${productId}`).val())
-        $(`.subtotal_${productId}`).text(price * quantity)
+        $(`.subtotal_${productId}`).text(((price * quantity).toFixed(2)))
         calculateSum()
     }
     const calculateSum = () => {
         setSubTotal(0)
         setTotal(0)
         setGrandTotal(0)
+        setDiscountAmount(0)
+        $(`.productDiscountedAmount`).each(function () {
+            if (!isNaN($(this).val()) && $(this).val() !== ''){
+                setDiscountAmount(oldDiscountAmount => oldDiscountAmount + parseFloat($(this).val()))
+            }
+        })
         $(`.subtotal`).each(function () {
             setSubTotal(oldTotal => oldTotal + parseFloat($(this).text()))
             setTotal(oldTotal => oldTotal + parseFloat($(this).text()))
@@ -297,29 +311,6 @@ export default function CreateSale({user}) {
         $('.card').val('')
         $('.discount').val('')
     }
-    const handleProductDiscountPopup = (id) => {
-        const editProduct = invoiceProducts.find((item) => item.product_id == id)
-        if (editProduct) {
-            setEditProduct(editProduct)
-            setShowEditProduct(true)
-        }
-    }
-    const cancelDiscount = () => {
-        setEditProduct(null)
-        setShowEditProduct(false)
-    }
-    const saveDiscount = (id, discount) => {
-        const newCartProduct = invoiceProducts.map((item) => {
-            if (item.product_id == id) {
-                return {...item, discount: discount}
-            } else {
-                return item
-            }
-        })
-        setInvoiceProducts(newCartProduct)
-        setEditProduct(null)
-        setShowEditProduct(false)
-    }
     return (
         <>
             <Head>
@@ -336,7 +327,7 @@ export default function CreateSale({user}) {
             <Layout user={user} title={`POS`} sidebar={false} topbar={false}>
                 <div className="content-pos">
                     <div className="row pb-15">
-                        <div className="col-md-6">
+                        <div className="col-md-7">
                             <form onSubmit={handleForm} id='invoice'></form>
                             <div className="d-flex gap-3 justify-content-between">
                                 <PosMenu token={user.token}/>
@@ -367,7 +358,7 @@ export default function CreateSale({user}) {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-6">
+                        <div className="col-md-5">
                             <div className="row">
                                 <div className="col-md-6">
                                     <div className="customer-input">
@@ -400,7 +391,7 @@ export default function CreateSale({user}) {
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col-md-6">
+                        <div className="col-md-5">
                             <div className="row">
                                 <div className="col-md-12">
                                     <div className="custom-card left-card">
@@ -424,13 +415,12 @@ export default function CreateSale({user}) {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-6">
+                        <div className="col-md-7">
                             <div className="row">
                                 <div className="col-md-12">
                                     <div className="custom-card right-card">
                                         <PosCartList calculateSubtotal={calculateSubtotal}
                                                      invoiceProducts={invoiceProducts} removeProduct={removeProduct}
-                                                     handleProductDiscountPopup={handleProductDiscountPopup}
                                                      discountType={user.discountType}/>
                                         <div className="subtotal-area">
                                             <table className={`table table-bordered`}>
@@ -481,7 +471,7 @@ export default function CreateSale({user}) {
                                                         <strong>Discount Amount</strong>
                                                     </td>
                                                     <td>
-                                                        <span>{discountAmount}</span> Tk.
+                                                        <span>{discountAmount.toFixed(2)}</span> Tk.
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -494,7 +484,7 @@ export default function CreateSale({user}) {
                                                         <p className={`ttl`}>
                                                             <strong>
                                                                 <span
-                                                                    className='total'>{total - discountAmount}</span> Tk.
+                                                                    className='total'>{(total - discountAmount).toFixed(2)}</span> Tk.
                                                             </strong>
                                                         </p>
                                                     </td>
@@ -541,11 +531,6 @@ export default function CreateSale({user}) {
                 showInvoice && (
                     <PosInvoicePrint companyName={user.companyName} companyAddress={user.companyAddress}
                                      companyMobile={user.companyMobile} invoice={invoice} closeInvoice={closeInvoice}/>
-                )
-            }
-            {
-                showEditProductPopup && (
-                    <EditProductPopup product={editProduct} cancelDiscount={cancelDiscount} saveDiscount={saveDiscount}/>
                 )
             }
         </>

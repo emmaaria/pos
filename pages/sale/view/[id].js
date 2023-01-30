@@ -22,9 +22,9 @@ export default function Details({user, id}) {
             if (res.data.status === true) {
                 setInvoice(res.data.invoice);
                 if (res.data.invoice.invoiceData.discountAmount) {
-                    setChangeOrDue(res.data.invoice.invoiceData.total - res.data.invoice.invoiceData.discountAmount - res.data.invoice.invoiceData.paid_amount)
-                }else {
-                    setChangeOrDue(res.data.invoice.invoiceData.total - res.data.invoice.invoiceData.paid_amount)
+                    setChangeOrDue((res.data.invoice.invoiceData.grand_total - res.data.invoice.invoiceData.paid_amount).toFixed(2))
+                } else {
+                    setChangeOrDue(res.data.invoice.invoiceData.grand_total - res.data.invoice.invoiceData.paid_amount)
                 }
                 setLoading(false);
             }
@@ -54,7 +54,7 @@ export default function Details({user, id}) {
                         }
                         </p>
                         <p>
-                            <strong>Purchase ID</strong> : {
+                            <strong>Invoice No</strong> : {
                             invoice && loading === false && (
                                 invoice.invoiceData.invoice_id
                             ) || (
@@ -79,21 +79,43 @@ export default function Details({user, id}) {
                         <table className={`table table-bordered table-hover`}>
                             <thead>
                             <tr>
-                                <th width={`5%`}>
+                                <th>
                                     SL
                                 </th>
-                                <th width={`45%`}>
+                                <th>
                                     Product Name
                                 </th>
-                                <th width={`15%`}>
+                                <th>
                                     Unit Price
                                 </th>
-                                <th width={`15%`}>
+                                <th>
                                     Quantity
                                 </th>
-                                <th className={`text-end`} width={`20%`}>
+                                {
+                                    invoice && invoice.invoiceData.discount_setting === 'product' && (
+                                        <>
+                                            <th>
+                                                Discount Type
+                                            </th>
+                                            <th>
+                                                Discount
+                                            </th>
+                                            <th>
+                                                Discount Amount
+                                            </th>
+                                        </>
+                                    )
+                                }
+                                <th className={`text-end`}>
                                     Subtotal
                                 </th>
+                                {
+                                    invoice && invoice.invoiceData.discount_setting === 'product' && (
+                                        <th className={`text-end`}>
+                                            Total
+                                        </th>
+                                    )
+                                }
                             </tr>
                             </thead>
                             <tbody>
@@ -107,7 +129,29 @@ export default function Details({user, id}) {
                                             </td>
                                             <td>{el.price} Tk.</td>
                                             <td>{el.quantity}</td>
+                                            {
+                                                invoice && invoice.invoiceData.discount_setting === 'product' && (
+                                                    <>
+                                                        <td>
+                                                            {el.discount_type}
+                                                        </td>
+                                                        <td>
+                                                            {el.discount}
+                                                        </td>
+                                                        <td>
+                                                            {el.discount_amount}
+                                                        </td>
+                                                    </>
+                                                )
+                                            }
                                             <td className={`text-end`}>{el.total} Tk.</td>
+                                            {
+                                                invoice && invoice.invoiceData.discount_setting === 'product' && (
+                                                    <td className={`text-end`}>
+                                                        {el.grand_total} Tk.
+                                                    </td>
+                                                )
+                                            }
                                         </tr>
                                     ))
                                 ) || (
@@ -117,7 +161,7 @@ export default function Details({user, id}) {
                             </tbody>
                             <tfoot>
                             <tr>
-                                <td colSpan={4} className={`text-end`}>Total</td>
+                                <td colSpan={invoice && invoice.invoiceData.discount_setting === 'product' ? 8 : 4} className={`text-end`}>Total</td>
                                 <td className={`text-end`}>
                                     {
                                         invoice && loading === false && (
@@ -130,12 +174,31 @@ export default function Details({user, id}) {
                                     }
                                 </td>
                             </tr>
+                            {
+                                invoice && invoice.invoiceData.discount_setting !== 'product' && (
+                                    <tr>
+                                        <td colSpan={4} className={`text-end`}>Discount</td>
+                                        <td className={`text-end`}>
+                                            {
+                                                invoice && loading === false && (
+                                                    `${invoice.invoiceData.discount ? invoice.invoiceData.discount : '0'}${invoice.invoiceData.discountType}`
+                                                ) || (
+                                                    <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                        <Skeleton width={`100%`} height={20}/>
+                                                    </SkeletonTheme>
+                                                )
+                                            }
+                                        </td>
+                                    </tr>
+                                )
+                            }
+                            
                             <tr>
-                                <td colSpan={4} className={`text-end`}>Discount</td>
+                                <td colSpan={invoice && invoice.invoiceData.discount_setting === 'product' ? 8 : 4} className={`text-end`}>Discount Amount</td>
                                 <td className={`text-end`}>
                                     {
                                         invoice && loading === false && (
-                                            `${invoice.invoiceData.discount ? invoice.invoiceData.discount : '0'}${invoice.invoiceData.discountType}`
+                                            `${invoice.invoiceData.discountAmount ? invoice.invoiceData.discountAmount : '0'} Tk.`
                                         ) || (
                                             <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
                                                 <Skeleton width={`100%`} height={20}/>
@@ -145,11 +208,11 @@ export default function Details({user, id}) {
                                 </td>
                             </tr>
                             <tr>
-                                <td colSpan={4} className={`text-end`}>Discount Amount</td>
+                                <td colSpan={invoice && invoice.invoiceData.discount_setting === 'product' ? 8 : 4} className={`text-end`}>Grand Total</td>
                                 <td className={`text-end`}>
                                     {
                                         invoice && loading === false && (
-                                            `${invoice.invoiceData.discountAmount ? invoice.invoiceData.discountAmount : '0'}Tk.`
+                                            `${invoice.invoiceData.grand_total} Tk.`
                                         ) || (
                                             <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
                                                 <Skeleton width={`100%`} height={20}/>
@@ -159,21 +222,7 @@ export default function Details({user, id}) {
                                 </td>
                             </tr>
                             <tr>
-                                <td colSpan={4} className={`text-end`}>Grand Total</td>
-                                <td className={`text-end`}>
-                                    {
-                                        invoice && loading === false && (
-                                            `${invoice.invoiceData.total - invoice.invoiceData.discountAmount}`
-                                        ) || (
-                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
-                                                <Skeleton width={`100%`} height={20}/>
-                                            </SkeletonTheme>
-                                        )
-                                    }
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colSpan={4} className={`text-end`}>Paid</td>
+                                <td colSpan={invoice && invoice.invoiceData.discount_setting === 'product' ? 8 : 4} className={`text-end`}>Paid</td>
                                 <td className={`text-end`}>
                                     {
                                         invoice && loading === false && (
@@ -187,7 +236,7 @@ export default function Details({user, id}) {
                                 </td>
                             </tr>
                             <tr>
-                                <td colSpan={4} className={`text-end`}>
+                                <td colSpan={invoice && invoice.invoiceData.discount_setting === 'product' ? 8 : 4} className={`text-end`}>
                                     {
                                         invoice && loading === false && (
                                             invoice.invoiceData.total < invoice.invoiceData.paid_amount ? 'Due' : 'Change'
@@ -201,7 +250,9 @@ export default function Details({user, id}) {
                                 <td className={`text-end`}>
                                     {
                                         invoice && loading === false && (
-                                            Math.abs(changeOrDue)
+                                            <>
+                                                {Math.abs(changeOrDue)} Tk.
+                                            </>
                                         ) || (
                                             <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
                                                 <Skeleton width={`100%`} height={20}/>
