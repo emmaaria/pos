@@ -19,6 +19,7 @@ import PosPaymentModal from "../../components/PosPaymentModal";
 import PosInvoicePrint from "../../components/PosInvoicePrint";
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 import AutocompleteDefaultCustomer from "../../components/AutocompleteDefaultCustomer";
+import styles from '../../styles/CreateSale.module.css'
 
 export default function EditSale({user, id}) {
     const [loader, setLoader] = useState(false)
@@ -327,7 +328,7 @@ export default function EditSale({user, id}) {
                                             <i className="fa-solid fa-magnifying-glass"></i>
                                         </div>
                                         <input type="text"
-                                               className={`form-control autocompleteInput search-product`}
+                                               className={`form-control autocompleteInput search-product ${styles.posInput}`}
                                                autoComplete={`off`} onKeyUp={(e) => setSearch(e.target.value)}
                                                onKeyDown={(e) => setSearch(e.target.value)}
                                                onChange={(e) => setSearch(e.target.value)}
@@ -339,7 +340,7 @@ export default function EditSale({user, id}) {
                                         <div className="barcode-icon">
                                             <i className="fa-solid fa-barcode"></i>
                                         </div>
-                                        <input type="text" className={`form-control scan-barcode`}
+                                        <input type="text" className={`form-control scan-barcode ${styles.posInput}`}
                                                placeholder={`Scan Barcode Here`}
                                                autoComplete={`off`}
                                                id='barcode'
@@ -357,7 +358,7 @@ export default function EditSale({user, id}) {
                                                 <div className="customer-icon">
                                                     <i className="fa-regular fa-user"></i>
                                                 </div>
-                                                <AutocompleteDefaultCustomer name={invoice.invoiceData.customer_name} id={invoice.invoiceData.customer_id} token={user.token}/>
+                                                <AutocompleteDefaultCustomer name={invoice.invoiceData.customer_name} id={invoice.invoiceData.customer_id} token={user.token} className={styles.posInput}/>
                                                 <div className="customer-add-icon">
                                                     <a>
                                                         <i className="fa-solid fa-user-plus"></i>
@@ -382,7 +383,7 @@ export default function EditSale({user, id}) {
                                                     selected={date}
                                                     onChange={(date) => setDate(date)}
                                                     dateFormat='yyyy-MM-dd'
-                                                    className={`form-control date`}
+                                                    className={`form-control date ${styles.posInput}`}
                                                 />
                                             </div>
                                         ) || (
@@ -396,7 +397,7 @@ export default function EditSale({user, id}) {
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col-md-7">
+                        <div className="col-md-5">
                             <div className="row">
                                 <div className="col-md-12">
                                     <div className="custom-card left-card">
@@ -442,12 +443,12 @@ export default function EditSale({user, id}) {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-5">
+                        <div className="col-md-7">
                             <div className="row">
                                 <div className="col-md-12">
                                     <div className="custom-card right-card">
                                         <PosCartList calculateSubtotal={calculateSubtotal}
-                                                     invoiceProducts={invoiceProducts} removeProduct={removeProduct}/>
+                                                     invoiceProducts={invoiceProducts} removeProduct={removeProduct} discountType={user.discountType}/>
                                         <div className="subtotal-area">
                                             <div className="row">
                                                 <div className="col-md-6">

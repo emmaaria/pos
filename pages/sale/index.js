@@ -153,13 +153,13 @@ export default function Sale({user}) {
                         <table className={`table mt-4`}>
                             <thead>
                             <tr>
-                                <th width={`5%`}>Sl</th>
-                                <th width={`10%`}>Invoice No.</th>
-                                <th width={`15%`}>Date</th>
-                                <th width={`20%`}>Customer Name</th>
-                                <th width={`15%`}>Amount</th>
-                                <th width={`15%`}>Note</th>
-                                <th width={`20%`}>Action</th>
+                                <th>Sl</th>
+                                <th>Invoice No.</th>
+                                <th>Date</th>
+                                <th>Customer Name</th>
+                                <th>Amount</th>
+                                <th>Note</th>
+                                <th className="text-end">Action</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -179,7 +179,7 @@ export default function Sale({user}) {
                                         <td>{el.customer_name}</td>
                                         <td>{el.grand_total} Tk.</td>
                                         <td>{el.comment}</td>
-                                        <td>
+                                        <td className="text-end">
                                             <Link href={`/sale/view/${el.invoice_id}`}>
                                                 <a className={`btn btn-success btn-sm me-2`}>
                                                     <i className="fa-solid fa-eye"/>
