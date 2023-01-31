@@ -18,10 +18,16 @@ export default function PosInvoicePrint({companyName, companyAddress, companyMob
                         <p>
                             Mobile: {companyMobile}
                         </p>
-                        <p style={{textAlign: 'left', borderTop: '1px solid #000', marginBottom : 0, marginTop : '10px', paddingTop : '5px'}}>Customer: {invoice.customer_name}</p>
+                        <p style={{
+                            textAlign: 'left',
+                            borderTop: '1px solid #000',
+                            marginBottom: 0,
+                            marginTop: '10px',
+                            paddingTop: '5px'
+                        }}>Customer: {invoice.customer_name}</p>
                         <div className="invoiceRow">
-                            <p className={`date`}>Date: 2022-15-22</p>
-                            <p className={`invNum`}>Invoice: 10002</p>
+                            <p className={`date`}>Date: {invoice.date}</p>
+                            <p className={`invNum`}>Invoice: {invoice.invoice_id}</p>
                         </div>
                     </div>
                     <div className="product-table">
@@ -64,7 +70,7 @@ export default function PosInvoicePrint({companyName, companyAddress, companyMob
                                 <td colSpan={4}>Subtotal : {invoice.subtotal} Tk.</td>
                             </tr>
                             {
-                                invoice.discountAmount && (
+                                invoice.discountAmount > 0 && (
                                     <>
                                         <tr>
                                             <td className={`p-0`} colSpan={4}></td>

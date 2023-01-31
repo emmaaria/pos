@@ -84,6 +84,7 @@ export default function CreateSale({user}) {
         const bkash = $('.bkash').val()
         const nagad = $('.nagad').val()
         const card = $('.card').val()
+        const payment_method = $('.paymentMethod').val()
         const bank = $('.bank').val()
         const bankId = $('.bankId').val()
         const discountType = $('.discount-type').val()
@@ -106,6 +107,7 @@ export default function CreateSale({user}) {
         try {
             const res = await axios.post(`${process.env.API_URL}/invoice/store`, {
                 customer_id: customer,
+                payment_method,
                 productIds,
                 productQuantities,
                 productPrices,
@@ -466,14 +468,6 @@ export default function CreateSale({user}) {
                                                         </>
                                                     )
                                                 }
-                                                <tr>
-                                                    <td className={`text-end`}>
-                                                        <strong>Discount Amount</strong>
-                                                    </td>
-                                                    <td>
-                                                        <span>{discountAmount.toFixed(2)}</span> Tk.
-                                                    </td>
-                                                </tr>
                                                 <tr>
                                                     <td className={`text-end`}>
                                                         <p className={`ttl`}>

@@ -1,7 +1,6 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 import {toast} from "react-toastify";
-import $ from "jquery";
 
 export default function PosPaymentModal({
                                             hidePayment,
@@ -12,18 +11,26 @@ export default function PosPaymentModal({
                                             paid,
                                             handleForm,
                                             token,
-                                            discount
+                                            discount,
+                                            defaultPaymentMethod,
+                                            paymentInfo
                                         }) {
     const [banks, setBanks] = useState([]);
-    const [paymentMethod, setPaymentMethod] = useState('cash');
+    const [paymentMethod, setPaymentMethod] = useState();
+    useEffect(() => {
+        if (defaultPaymentMethod) {
+            setPaymentMethod(defaultPaymentMethod)
+            handlePaymentMethod(defaultPaymentMethod)
+        }else {
+            setPaymentMethod('cash')
+            handlePaymentMethod('cash')
+        }
+    },[defaultPaymentMethod, setPaymentMethod])
     const headers = {
         headers: {Authorization: `Bearer ${token}`},
     };
-    const handlePaymentMethod = (event) => {
-        $(`.paid`).each(function () {
-            $(this).val('')
-        })
-        if (event.target.value === 'bank' || event.target.value === 'multiple') {
+    const handlePaymentMethod = (method) => {
+        if (method === 'bank' || method === 'multiple') {
             axios.get(
                 `${process.env.API_URL}/bank?allData=true`,
                 headers
@@ -46,7 +53,7 @@ export default function PosPaymentModal({
                 console.log(err);
             });
         }
-        setPaymentMethod(event.target.value)
+        setPaymentMethod(method)
     }
     return (
         <div className="payment-modal">
@@ -65,7 +72,7 @@ export default function PosPaymentModal({
                                 Payment Method
                             </label>
                             <select className={`paymentMethod form-control form-select`}
-                                    value={paymentMethod} onChange={handlePaymentMethod}>
+                                    value={paymentMethod} onChange={(event) => handlePaymentMethod(event.target.value)}>
                                 <option value="cash">Cash</option>
                                 <option value="bank">Bank</option>
                                 <option value="bkash">Bkash</option>
@@ -75,43 +82,43 @@ export default function PosPaymentModal({
                             </select>
                         </div>
                         {
-                            paymentMethod === 'cash' && (
+                            (paymentMethod === 'cash' || paymentMethod === 'multiple') && (
                                 <div className="form-group mb-3">
                                     <label className={`form-label`}>
                                         Cash
                                     </label>
                                     <input type="text" className={`form-control paid cash`}
                                            onKeyUp={calculateDue}
-                                           onKeyDown={calculateDue} onChange={calculateDue}/>
+                                           onKeyDown={calculateDue} onChange={calculateDue} defaultValue={paymentInfo && paymentInfo.cash ? paymentInfo.cash : ''}/>
                                 </div>
                             )
                         }
                         {
-                            paymentMethod === 'bkash' && (
+                            (paymentMethod === 'bkash' || paymentMethod === 'multiple') && (
                                 <div className="form-group mb-3">
                                     <label className={`form-label`}>
                                         Bkash
                                     </label>
                                     <input type="text" className={`form-control paid bkash`}
                                            onKeyUp={calculateDue}
-                                           onKeyDown={calculateDue} onChange={calculateDue}/>
+                                           onKeyDown={calculateDue} onChange={calculateDue} defaultValue={paymentInfo && paymentInfo.bkash ? paymentInfo.bkash : ''}/>
                                 </div>
                             )
                         }
                         {
-                            paymentMethod === 'nagad' && (
+                            (paymentMethod === 'nagad' || paymentMethod === 'multiple') && (
                                 < div className="form-group mb-3">
                                     <label className={`form-label`}>
                                         Nagad
                                     </label>
                                     <input type="text" className={`form-control paid nagad`}
                                            onKeyUp={calculateDue}
-                                           onKeyDown={calculateDue} onChange={calculateDue}/>
+                                           onKeyDown={calculateDue} onChange={calculateDue} defaultValue={paymentInfo && paymentInfo.nagad ? paymentInfo.nagad : ''}/>
                                 </div>
                             )
                         }
                         {
-                            paymentMethod === 'card' && (
+                            (paymentMethod === 'card' || paymentMethod === 'multiple') && (
                                 <div className="form-group mb-3">
                                     <label className={`form-label`}>
                                         Card
@@ -123,13 +130,13 @@ export default function PosPaymentModal({
                             )
                         }
                         {
-                            paymentMethod === 'bank' && banks && banks.length > 0 && (
+                            (paymentMethod === 'bank' && banks && banks.length > 0  || paymentMethod === 'multiple') && (
                                 <>
                                     <div className="form-group mb-3">
                                         <label className={`form-label`}>
                                             Bank
                                         </label>
-                                        <select className={`form-control form-select bankId`} required>
+                                        <select className={`form-control form-select bankId`} required defaultValue={paymentInfo && paymentInfo.bankId ? paymentInfo.bankId : ''}>
                                             <option value="">Select Bank</option>
                                             {
                                                 banks.map(bank => (
@@ -146,7 +153,7 @@ export default function PosPaymentModal({
                                         </label>
                                         <input type="text" className={`form-control paid bank`}
                                                onKeyUp={calculateDue}
-                                               onKeyDown={calculateDue} onChange={calculateDue}/>
+                                               onKeyDown={calculateDue} onChange={calculateDue} defaultValue={paymentInfo && paymentInfo.bank ? paymentInfo.bank : ''}/>
                                     </div>
                                 </>
                             )

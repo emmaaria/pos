@@ -12,6 +12,7 @@ import 'swiper/css'
 import 'swiper/css/free-mode'
 import 'swiper/css/virtual'
 import PosMenu from "../../components/PosMenu";
+
 const PosCategories = lazy(() => import("../../components/PosCategories"))
 const PosProducts = lazy(() => import("../../components/PosProducts"))
 import PosCartList from "../../components/PosCartList";
@@ -31,12 +32,15 @@ export default function EditSale({user, id}) {
     const [search, setSearch] = useState('')
     const [paid, setPaid] = useState(0)
     const [discountAmount, setDiscountAmount] = useState(0)
+    const [discountSetting, setDiscountSetting] = useState()
     const [invoice, setInvoice] = useState()
     const [discount, setDiscount] = useState(0)
     const [discountType, setDiscountType] = useState('Tk.')
     const [date, setDate] = useState(new Date())
     const [invoiceProducts, setInvoiceProducts] = useState([])
     const [staticProducts, setStaticProducts] = useState()
+    const [paymentInfo, setPaymentInfo] = useState()
+    const [defaultPaymentMethod, setDefaultPaymentMethod] = useState()
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     }
@@ -47,11 +51,16 @@ export default function EditSale({user, id}) {
         ).then(res => {
             if (res.data.status === true) {
                 setInvoice(res.data.invoice);
+                setDiscountSetting(res.data.invoice.invoiceData.discount_setting);
+                setDefaultPaymentMethod(res.data.invoice.invoiceData.payment_method);
+                setPaymentInfo(res.data.invoice.payments)
+                setDiscountType(res.data.invoice.invoiceData.discountType);
                 setSubTotal(parseFloat(res.data.invoice.invoiceData.total));
                 setTotal(parseFloat(res.data.invoice.invoiceData.total));
                 setDiscountAmount(parseFloat(res.data.invoice.invoiceData.discountAmount));
                 setGrandTotal(parseFloat(res.data.invoice.invoiceData.total));
                 setDate(new Date(res.data.invoice.invoiceData.date));
+                calculateDue()
                 setInvoiceProducts(res.data.invoice.invoiceItems);
                 $('.discount').val(res.data.invoice.invoiceData.discount ? parseFloat(res.data.invoice.invoiceData.discount) : '');
                 setLoading(false);
@@ -72,6 +81,7 @@ export default function EditSale({user, id}) {
             console.log(err)
         })
     }, [])
+
     const handleForm = async (e) => {
         e.preventDefault()
         toast.loading('Submitting', {
@@ -89,10 +99,20 @@ export default function EditSale({user, id}) {
         const productPrices = $('.productPrice').map(function (index, el) {
             return $(el).val()
         }).get()
+        const productDiscounts = $('.product_discount').map(function (index, el) {
+            return $(el).val()
+        }).get()
+        const productDiscountTypes = $('.product_discount_type').map(function (index, el) {
+            return $(el).val()
+        }).get()
+        const productDiscountedAmounts = $('.productDiscountedAmount').map(function (index, el) {
+            return $(el).val()
+        }).get()
         const comment = $('.note').val()
         const date = $('.date').val()
         const cash = $('.cash').val()
         const bkash = $('.bkash').val()
+        const payment_method = $('.paymentMethod').val()
         const nagad = $('.nagad').val()
         const card = $('.card').val()
         const bank = $('.bank').val()
@@ -116,11 +136,15 @@ export default function EditSale({user, id}) {
         }
         try {
             const res = await axios.post(`${process.env.API_URL}/invoice/update`, {
-                invoice_id : id,
+                invoice_id: id,
                 customer_id: customer,
+                payment_method,
                 productIds,
                 productQuantities,
                 productPrices,
+                productDiscounts,
+                productDiscountTypes,
+                productDiscountedAmounts,
                 date,
                 comment,
                 cash,
@@ -146,8 +170,6 @@ export default function EditSale({user, id}) {
                     theme: 'dark',
                 })
                 setShowInvoice(true)
-                setInvoice(res.data.invoice)
-                setLoader(false)
             } else {
                 toast.dismiss()
                 toast.success(res.data.errors, {
@@ -175,7 +197,6 @@ export default function EditSale({user, id}) {
             setLoader(false)
         }
     }
-
     const removeProduct = (productId) => {
         const newProducts = invoiceProducts.filter(product => {
             return product.product_id !== productId
@@ -192,13 +213,19 @@ export default function EditSale({user, id}) {
     const calculateSubtotal = (productId) => {
         const price = parseFloat($(`.productPrice_${productId}`).val())
         const quantity = parseFloat($(`.productQuantity_${productId}`).val())
-        $(`.subtotal_${productId}`).text(price * quantity)
+        $(`.subtotal_${productId}`).text(((price * quantity).toFixed(2)))
         calculateSum()
     }
     const calculateSum = () => {
         setSubTotal(0)
         setTotal(0)
         setGrandTotal(0)
+        setDiscountAmount(0)
+        $(`.productDiscountedAmount`).each(function () {
+            if (!isNaN($(this).val()) && $(this).val() !== ''){
+                setDiscountAmount(oldDiscountAmount => oldDiscountAmount + parseFloat($(this).val()))
+            }
+        })
         $(`.subtotal`).each(function () {
             setSubTotal(oldTotal => oldTotal + parseFloat($(this).text()))
             setTotal(oldTotal => oldTotal + parseFloat($(this).text()))
@@ -230,7 +257,7 @@ export default function EditSale({user, id}) {
             return product.product_id === data.product_id
         })
         const stock = data.purchase - data.sale;
-        if (stock <= 0){
+        if (stock <= 0) {
             toast.dismiss()
             toast.error('You don\'t have stock. Please purchase product first.', {
                 position: "bottom-right",
@@ -256,6 +283,7 @@ export default function EditSale({user, id}) {
             setGrandTotal(oldTotal => oldTotal + parseFloat(data.price))
         }
         $(`.search-product`).val('')
+        calculateDue()
     }
     const showPayment = () => {
         $('.payment-modal').fadeIn()
@@ -266,7 +294,6 @@ export default function EditSale({user, id}) {
 
     const closeInvoice = () => {
         setShowInvoice(false);
-        setInvoice(null);
     }
 
     const calculateDiscount = () => {
@@ -358,7 +385,10 @@ export default function EditSale({user, id}) {
                                                 <div className="customer-icon">
                                                     <i className="fa-regular fa-user"></i>
                                                 </div>
-                                                <AutocompleteDefaultCustomer name={invoice.invoiceData.customer_name} id={invoice.invoiceData.customer_id} token={user.token} className={styles.posInput}/>
+                                                <AutocompleteDefaultCustomer name={invoice.invoiceData.customer_name}
+                                                                             id={invoice.invoiceData.customer_id}
+                                                                             token={user.token}
+                                                                             className={styles.posInput}/>
                                                 <div className="customer-add-icon">
                                                     <a>
                                                         <i className="fa-solid fa-user-plus"></i>
@@ -401,37 +431,45 @@ export default function EditSale({user, id}) {
                             <div className="row">
                                 <div className="col-md-12">
                                     <div className="custom-card left-card">
-                                        <Suspense fallback={<SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd"><Skeleton width={`100%`} height={40}/></SkeletonTheme>}>
+                                        <Suspense fallback={<SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)"
+                                                                           highlightColor="#dddddd"><Skeleton
+                                            width={`100%`} height={40}/></SkeletonTheme>}>
                                             <PosCategories token={user.token}/>
                                         </Suspense>
                                         <Suspense fallback={<>
                                             <div className={`product-item`}>
-                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)"
+                                                               highlightColor="#dddddd">
                                                     <Skeleton width={`100px`} height={60}/>
                                                 </SkeletonTheme>
                                             </div>
                                             <div className={`product-item`}>
-                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)"
+                                                               highlightColor="#dddddd">
                                                     <Skeleton width={`100px`} height={60}/>
                                                 </SkeletonTheme>
                                             </div>
                                             <div className={`product-item`}>
-                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)"
+                                                               highlightColor="#dddddd">
                                                     <Skeleton width={`100px`} height={60}/>
                                                 </SkeletonTheme>
                                             </div>
                                             <div className={`product-item`}>
-                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)"
+                                                               highlightColor="#dddddd">
                                                     <Skeleton width={`100px`} height={60}/>
                                                 </SkeletonTheme>
                                             </div>
                                             <div className={`product-item`}>
-                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)"
+                                                               highlightColor="#dddddd">
                                                     <Skeleton width={`100px`} height={60}/>
                                                 </SkeletonTheme>
                                             </div>
                                             <div className={`product-item`}>
-                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)"
+                                                               highlightColor="#dddddd">
                                                     <Skeleton width={`100px`} height={60}/>
                                                 </SkeletonTheme>
                                             </div>
@@ -448,40 +486,81 @@ export default function EditSale({user, id}) {
                                 <div className="col-md-12">
                                     <div className="custom-card right-card">
                                         <PosCartList calculateSubtotal={calculateSubtotal}
-                                                     invoiceProducts={invoiceProducts} removeProduct={removeProduct} discountType={user.discountType}/>
+                                                     invoiceProducts={invoiceProducts} removeProduct={removeProduct}
+                                                     discountType={discountSetting}/>
                                         <div className="subtotal-area">
                                             <div className="row">
-                                                <div className="col-md-6">
-                                                    <div className="form-group mb-2">
-                                                        <select className={`form-select form-control discount-type`}
-                                                                onChange={calculateDiscount}>
-                                                            <option value="%">Discount Type (%)</option>
-                                                            <option value="fixed">Discount Type (Fixed)</option>
-                                                        </select>
-                                                    </div>
-                                                    <div className="form-group">
-                                                        <input type="text" className={`form-control discount`}
-                                                               placeholder={`Discount`}
-                                                               onKeyUp={calculateDiscount}
-                                                               onKeyDown={calculateDiscount}
-                                                               onChange={calculateDiscount}/>
-                                                    </div>
-                                                </div>
-                                                <div className="col-md-6 text-end">
-                                                    <p>
-                                                        <strong>Subtotal</strong> : <span>{subTotal} Tk.</span>
-                                                    </p>
-                                                    <p>
-                                                        <strong>Discount
-                                                            Amount</strong> : <span>{discountAmount}</span> Tk.
-                                                    </p>
-                                                    <p className={`ttl`}>
-                                                        <strong>
-                                                            Total : <span
-                                                            className='total'>{total - discountAmount}</span> Tk.
-                                                        </strong>
-                                                    </p>
-                                                </div>
+                                                <table className={`table table-bordered`}>
+                                                    <thead>
+                                                    <tr className={`no-border`}>
+                                                        <th width="60%" className={`no-border`}></th>
+                                                        <th className={`no-border`} width="40%"></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td className={`text-end`}>
+                                                            <strong>Subtotal</strong>
+                                                        </td>
+                                                        <td>
+                                                            <span>{subTotal} Tk.</span>
+                                                        </td>
+                                                        {
+                                                            discountSetting == 'invoice' && (
+                                                                <>
+                                                                    <tr>
+                                                                        <td></td>
+                                                                        <td>
+                                                                            <select
+                                                                                className={`form-select form-control discount-type`}
+                                                                                onChange={calculateDiscount} value={discountType}>
+                                                                                <option value="%">Discount Type (%)</option>
+                                                                                <option value="fixed">Discount Type
+                                                                                    (Fixed)
+                                                                                </option>
+                                                                            </select>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td></td>
+                                                                        <td>
+                                                                            <input type="text"
+                                                                                   className={`form-control discount`}
+                                                                                   placeholder={`Discount`}
+                                                                                   onKeyUp={calculateDiscount}
+                                                                                   onKeyDown={calculateDiscount}
+                                                                                   onChange={calculateDiscount}/>
+                                                                        </td>
+                                                                    </tr>
+                                                                </>
+                                                            )
+                                                        }
+                                                    </tr>
+                                                    <tr>
+                                                        <td className={`text-end`}>
+                                                            <strong>Discount Amount</strong>
+                                                        </td>
+                                                        <td>
+                                                            <span>{discountAmount.toFixed(2)}</span> Tk.
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td className={`text-end`}>
+                                                            <p className={`ttl`}>
+                                                                <strong>Total</strong>
+                                                            </p>
+                                                        </td>
+                                                        <td>
+                                                            <p className={`ttl`}>
+                                                                <strong>
+                                                                <span
+                                                                    className='total'>{(total - discountAmount).toFixed(2)}</span> Tk.
+                                                                </strong>
+                                                            </p>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </div>
                                         {
@@ -510,10 +589,11 @@ export default function EditSale({user, id}) {
             </Layout>
             <PosPaymentModal hidePayment={hidePayment} calculateDue={calculateDue}
                              discountAmount={discountAmount} grandTotal={grandTotal} handleForm={handleForm}
-                             paid={paid} token={user.token} discountType={discountType} discount={discount}/>
+                             paid={paid} token={user.token} discountType={discountType} discount={discount} defaultPaymentMethod={defaultPaymentMethod} paymentInfo={paymentInfo}/>
             {
                 showInvoice && (
-                    <PosInvoicePrint companyName={user.companyName} companyAddress={user.companyAddress} companyMobile={user.companyMobile} invoice={invoice} closeInvoice={closeInvoice}/>
+                    <PosInvoicePrint companyName={user.companyName} companyAddress={user.companyAddress}
+                                     companyMobile={user.companyMobile} invoice={invoice} closeInvoice={closeInvoice}/>
                 )
             }
         </>

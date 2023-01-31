@@ -152,21 +152,21 @@ export default function PosCartList({invoiceProducts, calculateSubtotal, removeP
                                     <>
                                         <td>
                                             <select
-                                                className={`form-select form-control product_discount_type product_discount_type_${el.product_id}`} onChange={()=> handleDiscount(el.product_id)}>
+                                                className={`form-select form-control product_discount_type product_discount_type_${el.product_id}`} onChange={()=> handleDiscount(el.product_id)} defaultValue={el.discount_type}>
                                                 <option value="%">%</option>
                                                 <option value="fixed">Fixed</option>
                                             </select>
                                         </td>
                                         <td>
                                             <input type="text" onChange={()=> handleDiscount(el.product_id)} onKeyDown={()=> handleDiscount(el.product_id)} onKeyUp={()=> handleDiscount(el.product_id)}
-                                                   className={`form-control product_discount product_discount_${el.product_id}`}/>
+                                                   className={`form-control product_discount product_discount_${el.product_id}`} defaultValue={el.discount}/>
                                         </td>
                                     </>
                                 )
                             }
                             <td className={`text-end`}>
                                 <input type="hidden"
-                                       className={`form-control productDiscountedAmount productDiscountedAmount_${el.product_id}`}/>
+                                       className={`form-control productDiscountedAmount productDiscountedAmount_${el.product_id}`} defaultValue={el.discount_amount}/>
                                                                 <span className={`subtotal subtotal_${el.product_id}`}>
                                                                     {el.price}
                                                                 </span> Tk.
