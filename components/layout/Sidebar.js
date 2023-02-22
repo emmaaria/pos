@@ -43,6 +43,13 @@ export default function Sidebar({user}) {
         $('.purchase').toggleClass('open');
         $('.purchaseParent').toggleClass(styles.opened);
     };
+
+    const showReturnMenu = (e) => {
+        e.preventDefault();
+        $('.returnMenu').slideToggle();
+        $('.return').toggleClass('open');
+        $('.returnParent').toggleClass(styles.opened);
+    };
     const showProductMenu = (e) => {
         e.preventDefault();
         $('.productMenu').slideToggle();
@@ -386,6 +393,68 @@ export default function Sidebar({user}) {
                                 }
                             `}>
                                     Add Purchase
+                                </a>
+                            </Link>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <Link href={`#`}>
+                        <a
+                            onClick={showReturnMenu}
+                            className={`returnParent 
+                                ${
+                                router.pathname === '/return' ||
+                                router.pathname === '/return/direct/create' ||
+                                router.pathname === '/purchase/view/[id]' ||
+                                router.pathname === '/purchase/[id]'
+                                    ? styles.active
+                                    : ''
+                            }
+                            `}>
+                            <i className="fa-solid fa-right-left"></i>
+                            Return
+                            <span className={`fa-solid fa-caret-right float-end ${styles.dropdownIcon} return`}/>
+                        </a>
+                    </Link>
+                    <ul className={`returnMenu ${styles.subMenu}`}>
+                        <li>
+                            <Link href={`/return`}>
+                                <a className={`
+                                ${
+                                    router.pathname === '/return' ||
+                                    router.pathname === '/return/[id]'
+                                        ? styles.active
+                                        : ''
+                                }
+                            `}>
+                                    Return List
+                                </a>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href={`/return/direct/create`}>
+                                <a className={`
+                                ${
+                                    router.pathname === '/return/direct/create'
+                                        ? styles.active
+                                        : ''
+                                }
+                            `}>
+                                    Direct Product Return
+                                </a>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href={`/return/invoice/create`}>
+                                <a className={`
+                                ${
+                                    router.pathname === '/return/invoice/create'
+                                        ? styles.active
+                                        : ''
+                                }
+                            `}>
+                                    Invoice Product Return
                                 </a>
                             </Link>
                         </li>

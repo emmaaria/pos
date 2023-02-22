@@ -186,7 +186,6 @@ export default function CreatePurchase({user}) {
         setKeyword(value);
         setSearching(true)
         setProducts(null)
-        $('.autocompleteItemContainer.product').show();
         if (timer) {
             clearTimeout(timer);
             setTimer(null);
@@ -302,7 +301,9 @@ export default function CreatePurchase({user}) {
                                                             products.map(el => (
                                                                 <div className={`autocompleteItem`}
                                                                      key={`search-product-item-${el.product_id}`}
-                                                                     onClick={() => addProduct(el)}>{el.name}</div>
+                                                                     onClick={() => addProduct(el)}>
+                                                                    {el.name} ({el.product_id})
+                                                                </div>
                                                             ))
                                                         ) || (
                                                             <div className={`autocompleteItem`}>

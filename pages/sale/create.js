@@ -45,6 +45,7 @@ export default function CreateSale({user}) {
             `${process.env.API_URL}/products-with-stock`,
             headers
         ).then(res => {
+            console.log(res.data)
             if (res.data.status === true) {
                 setStaticProducts(res.data.products)
             }
