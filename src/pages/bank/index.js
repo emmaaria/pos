@@ -179,10 +179,8 @@ export default function Bank({user}) {
                                             } Tk.
                                         </td>
                                         <td>
-                                            <Link href={`/bank/${el.id}`}>
-                                                <a className={`btn btn-warning btn-sm me-2`}>
-                                                    <i className="fa-solid fa-pen-to-square"/>
-                                                </a>
+                                            <Link href={`/bank/${el.id}`} className={`btn btn-warning btn-sm me-2`}>
+                                                <i className="fa-solid fa-pen-to-square"/>
                                             </Link>
                                             <a className={`btn btn-danger btn-sm`} onClick={(e) => {
                                                 e.preventDefault();

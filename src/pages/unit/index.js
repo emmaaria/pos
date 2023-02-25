@@ -172,10 +172,8 @@ export default function Unit({user}) {
                                         <td>{index + 1}</td>
                                         <td>{el.name}</td>
                                         <td>
-                                            <Link href={`/unit/${el.id}`}>
-                                                <a className={`btn btn-warning btn-sm me-2`}>
+                                            <Link href={`/unit/${el.id}`} className={`btn btn-warning btn-sm me-2`}>
                                                     <i className="fa-solid fa-pen-to-square"/>
-                                                </a>
                                             </Link>
                                             <a className={`btn btn-danger btn-sm`} onClick={(e) => {
                                                 e.preventDefault();

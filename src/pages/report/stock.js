@@ -11,7 +11,6 @@ export default function Stock({user}) {
     const [products, setProducts] = useState();
     const [links, setLinks] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [timer, setTimer] = useState(null);
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
@@ -30,29 +29,22 @@ export default function Stock({user}) {
             console.log(err);
         });
     }, []);
-    const search = async () => {
-        if (timer) {
-            clearTimeout(timer);
-            setTimer(null);
-        }
-        setTimer(
-            setTimeout(() => {
-                setLoading(true);
-                const name = $('.terms').val();
-                axios.get(
-                    `${process.env.API_URL}/stock?name=${name}`,
-                    headers
-                ).then(res => {
-                    if (res.data.status === true) {
-                        setProducts(res.data.products.data);
-                        setLinks(res.data.products.links);
-                        setLoading(false);
-                    }
-                }).catch(err => {
-                    console.log(err);
-                });
-            }, 2000)
-        );
+    const search = async (e) => {
+        e.preventDefault()
+        setLoading(true);
+        const name = $('.terms').val();
+        axios.get(
+            `${process.env.API_URL}/stock?name=${name}`,
+            headers
+        ).then(res => {
+            if (res.data.status === true) {
+                setProducts(res.data.products.data);
+                setLinks(res.data.products.links);
+                setLoading(false);
+            }
+        }).catch(err => {
+            console.log(err);
+        });
     }
     const paginate = async (url) => {
         setLoading(true);
@@ -83,13 +75,11 @@ export default function Stock({user}) {
                         <div className="row">
                             <div className="col-md-9"></div>
                             <div className="col-md-3">
-                                <form>
+                                <form onSubmit={search}>
                                     <div className="row">
                                         <div className="col">
                                             <input type="text" className="form-control terms"
-                                                   placeholder={`Search`}
-                                                   name="email" onKeyUp={search} onKeyDown={search}
-                                                   onChange={search}/>
+                                                   placeholder={`Search`}/>
                                         </div>
                                     </div>
                                 </form>
@@ -113,14 +103,14 @@ export default function Stock({user}) {
                                     </tr>
                                 )
                             }
-                            {products && !loading &&(
+                            {products && !loading && (
                                 products.map((el, index) => (
                                     <tr key={el.product_id} valign={`middle`}>
                                         <td>{index + 1}</td>
                                         <td>{el.name}</td>
                                         <td>{el.purchase ? el.purchase : 0}</td>
                                         <td>{el.sale ? el.sale : 0}</td>
-                                        <td>{ el.purchase - el.sale}</td>
+                                        <td>{el.purchase - el.sale}</td>
                                     </tr>
                                 ))
                             ) || (

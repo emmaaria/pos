@@ -8,6 +8,8 @@ import $ from 'jquery';
 import {useState} from "react";
 import DatePicker from "react-datepicker";
 import Loader from "../../../components/Loader";
+import styles from "../../../styles/CreateSale.module.css";
+import AutocompleteInput from "../../../components/AutocompleteInput";
 
 export default function CreateDirectReturn({user}) {
     const [loader, setLoader] = useState(false);
@@ -16,8 +18,10 @@ export default function CreateDirectReturn({user}) {
     const [timer, setTimer] = useState(null);
     const [date, setDate] = useState(new Date());
     const [returnProducts, setReturnProducts] = useState([]);
+    const [banks, setBanks] = useState();
     const [keyword, setKeyword] = useState();
     const [searching, setSearching] = useState(false);
+    const [account, setAccount] = useState();
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
@@ -39,26 +43,9 @@ export default function CreateDirectReturn({user}) {
         }).get();
         const comment = $('.note').val();
         const date = $('.date').val();
-        const cash = $('.cash').val();
-        const bkash = $('.bkash').val();
-        const nagad = $('.nagad').val();
+        const account = $('.account').val();
         const bankId = $('.bankId').val();
-        const openingStock = $('.opening').val();
-        const supplier = $('.supplier-id').val();
-        if (supplier === '') {
-            setLoader(false);
-            toast.dismiss();
-            toast.error('Please select supplier', {
-                position: "bottom-right",
-                autoClose: false,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                theme: 'dark',
-            });
-            return;
-        }
+        const customerId = $('.customer-id').val();
         if (productIds.length <= 0) {
             setLoader(false);
             toast.dismiss();
@@ -73,20 +60,45 @@ export default function CreateDirectReturn({user}) {
             });
             return;
         }
+        if (account == '') {
+            setLoader(false);
+            toast.dismiss();
+            toast.error('No adjust account selected', {
+                position: "bottom-right",
+                autoClose: false,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+            });
+            return;
+        }
+        if (account !== '' && account == 'bank' && bankId == '') {
+            setLoader(false);
+            toast.dismiss();
+            toast.error('No bank account selected', {
+                position: "bottom-right",
+                autoClose: false,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+            });
+            return;
+        }
         try {
-            const res = await axios.post(`${process.env.API_URL}/purchase/store`, {
-                supplier_id: supplier,
+            const res = await axios.post(`${process.env.API_URL}/sale/return/direct`, {
                 productIds,
                 productQuantities,
                 productPrices,
                 date,
                 comment,
-                cash,
-                bkash,
-                nagad,
                 bankId,
                 total,
-                openingStock
+                account,
+                customerId
             }, headers);
             if (res.data.status === true) {
                 toast.dismiss();
@@ -101,6 +113,7 @@ export default function CreateDirectReturn({user}) {
                 });
                 $('form').trigger('reset');
                 setTotal(0);
+                setReturnProducts([]);
                 setLoader(false);
             } else {
                 toast.dismiss();
@@ -214,6 +227,40 @@ export default function CreateDirectReturn({user}) {
         $(`.search-product`).val('');
         setKeyword(null)
     }
+    const handleAccountChange = (e) => {
+        if (e.target.value === 'bank') {
+            setLoader(true);
+            axios.get(
+                `${process.env.API_URL}/bank?allData=true`,
+                headers
+            ).then(res => {
+                if (res.data.status === true) {
+                    setBanks(res.data.banks);
+                    setLoader(false);
+                } else {
+                    setLoader(false);
+                    toast.error('No bank account fround. Please add bank first.', {
+                        position: "bottom-right",
+                        autoClose: false,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        theme: 'dark',
+                    });
+                }
+            }).catch(err => {
+                console.log(err);
+            });
+        }
+        setAccount(e.target.value)
+    }
+    const handleTotal = (e) => {
+        const re = /^[0-9]*[.]?[0-9]*$/;
+        if (e.target.value === '' || re.test(e.target.value)) {
+            setTotal(e.target.value)
+        }
+    }
     return (
         <>
             <Head>
@@ -305,7 +352,7 @@ export default function CreateDirectReturn({user}) {
                                         Product Name
                                     </th>
                                     <th width={`15%`}>
-                                        Purchase Price
+                                        Price
                                     </th>
                                     <th width={`15%`}>
                                         Quantity
@@ -362,7 +409,7 @@ export default function CreateDirectReturn({user}) {
                                         ))
                                     ) || (
                                         <tr>
-                                            <td colSpan={6} className={`border-white text-center border-right-1`}>
+                                            <td colSpan={6} className={`text-center`}>
                                                 No product added
                                             </td>
                                         </tr>
@@ -370,6 +417,71 @@ export default function CreateDirectReturn({user}) {
                                 }
                                 </tbody>
                                 <tfoot>
+                                <tr>
+                                    <td colSpan={4} className="text-end">
+                                        <strong>Total</strong>
+                                    </td>
+                                    <td>
+                                        <input type="text" value={total} onChange={handleTotal} className="form-control total"/>
+                                    </td>
+                                    <td>Tk.</td>
+                                </tr>
+                                <tr>
+                                    <td colSpan={4} className="text-end">
+                                        <strong>Adjust From</strong>
+                                    </td>
+                                    <td>
+                                        <select name="" className="form-select form-control account"
+                                                onChange={handleAccountChange}>
+                                            <option value="">Choose Option</option>
+                                            <option value="cash">Cash</option>
+                                            <option value="customer">Customer Account</option>
+                                            <option value="bkash">Bkash</option>
+                                            <option value="nagad">Nagad</option>
+                                            <option value="bank">Bank</option>
+                                        </select>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                {
+                                    (account && account === 'customer') && (
+                                        <tr>
+                                            <td colSpan={4} className="text-end">
+                                                <strong>Customer</strong>
+                                            </td>
+                                            <td>
+                                                <div className="return-customer-input">
+                                                    <AutocompleteInput type='customer' token={user.token}
+                                                                       placeholder='Search customer'
+                                                                       className={styles.posInput}/>
+                                                </div>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                    )
+                                }
+                                {
+                                    (account && account === 'bank' && banks && banks.length > 0) && (
+                                        <tr>
+                                            <td colSpan={4} className="text-end">
+                                                <strong>Bank</strong>
+                                            </td>
+                                            <td>
+                                                <select className={`form-control form-select bankId`} required>
+                                                    <option value="">Select Bank</option>
+                                                    {
+                                                        banks.map(bank => (
+                                                            <option key={bank.id} value={bank.id}>
+                                                                {bank.name} ({bank.account_no})
+                                                            </option>
+                                                        ))
+                                                    }
+                                                </select>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                    )
+                                }
                                 </tfoot>
                             </table>
                             <div className="mb-3 mt-3">

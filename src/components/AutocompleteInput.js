@@ -94,10 +94,10 @@ export default function AutocompleteInput({type, token, placeholder, className})
                                     data.length > 0 && (
                                         data.map(el => (
                                                 <div className={`autocompleteItem`} key={`supplier-${el.id}`}
-                                                     onClick={() => setValue(el.name, el.id)}>
+                                                     onClick={() => setValue(`${el.name} (${el.address})`, el.id)}>
                                                     {el.name}
                                                     {type !== 'supplier' && (
-                                                        `(${el.address})`
+                                                        ` (${el.address ? el.address : ''})`
                                                     )
                                                     }
                                                 </div>

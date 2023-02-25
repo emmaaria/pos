@@ -180,10 +180,8 @@ export default function Supplier({user}) {
                                             } Tk.
                                         </td>
                                         <td>
-                                            <Link href={`/supplier/${el.id}`}>
-                                                <a className={`btn btn-warning btn-sm me-2`}>
-                                                    <i className="fa-solid fa-pen-to-square"/>
-                                                </a>
+                                            <Link href={`/supplier/${el.id}`} className={`btn btn-warning btn-sm me-2`}>
+                                                <i className="fa-solid fa-pen-to-square"/>
                                             </Link>
                                             <a className={`btn btn-danger btn-sm`} onClick={(e) => {
                                                 e.preventDefault();

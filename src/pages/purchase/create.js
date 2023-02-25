@@ -154,14 +154,14 @@ export default function CreatePurchase({user}) {
             setTotal(oldTotal => oldTotal + parseFloat($(`.subtotal_${el.product_id}`).text()));
         });
     }
-    const calculateSubtotal = (event,type, productId) => {
+    const calculateSubtotal = (event, type, productId) => {
         const price = parseFloat($(`.productPrice_${productId}`).val());
         const quantity = parseFloat($(`.productQuantity_${productId}`).val());
         const subTotal = isNaN(price * quantity) ? 0 : price * quantity;
         $(`.subtotal_${productId}`).text(`${parseFloat(subTotal).toFixed(2)}`);
-        if (type === 'quantity'){
+        if (type === 'quantity') {
             $(`.productQuantity_${productId}`).val(event.target.value.replace(/[^0-9.]/g, ''));
-        }else {
+        } else {
             $(`.productPrice_${productId}`).val(event.target.value.replace(/[^0-9.]/g, ''));
         }
         calculateSum();
@@ -174,7 +174,7 @@ export default function CreatePurchase({user}) {
     }
     const calculateDue = (event, type) => {
         let paid = 0;
-        if (event && type){
+        if (event && type) {
             $(`.${type}`).val(event.target.value.replace(/[^0-9.]/g, ''));
         }
         $('.paid').each(function () {
@@ -364,17 +364,17 @@ export default function CreatePurchase({user}) {
                                                     <input type="text"
                                                            className={`form-control productPrice productPrice_${el.product_id}`}
                                                            defaultValue={el.purchase_price}
-                                                           onChange={(event) => calculateSubtotal(event,'price', el.product_id)}
-                                                           onKeyUp={(event) => calculateSubtotal(event,'price', el.product_id)}
-                                                           onKeyDown={(event) => calculateSubtotal(event,'price', el.product_id)}/>
+                                                           onChange={(event) => calculateSubtotal(event, 'price', el.product_id)}
+                                                           onKeyUp={(event) => calculateSubtotal(event, 'price', el.product_id)}
+                                                           onKeyDown={(event) => calculateSubtotal(event, 'price', el.product_id)}/>
                                                 </td>
                                                 <td>
                                                     <input type="text"
                                                            className={`form-control productQuantity productQuantity_${el.product_id}`}
                                                            defaultValue={1}
-                                                           onChange={(event) => calculateSubtotal(event,'quantity', el.product_id)}
-                                                           onKeyUp={(event) => calculateSubtotal(event,'quantity', el.product_id)}
-                                                           onKeyDown={(event) => calculateSubtotal(event,'quantity', el.product_id)}/>
+                                                           onChange={(event) => calculateSubtotal(event, 'quantity', el.product_id)}
+                                                           onKeyUp={(event) => calculateSubtotal(event, 'quantity', el.product_id)}
+                                                           onKeyDown={(event) => calculateSubtotal(event, 'quantity', el.product_id)}/>
                                                 </td>
                                                 <td className={`text-end`}>
                                                 <span
@@ -421,13 +421,16 @@ export default function CreatePurchase({user}) {
                                     <td></td>
                                 </tr>
                                 {
-                                    paymentMethod === 'cash' && (
+                                    (paymentMethod === 'cash' && paymentMethod === 'multiple') && (
                                         <tr>
-                                            <td className={`text-end`} colSpan={4}><strong>Cash Paid Amount</strong></td>
+                                            <td className={`text-end`} colSpan={4}>
+                                                <strong>Cash Paid Amount</strong>
+                                            </td>
                                             <td>
                                                 <input type="text" className={`form-control paid cash`}
-                                                       onKeyUp={(event) => calculateDue(event,'cash')}
-                                                       onKeyDown={(event) => calculateDue(event,'cash')} onChange={(event) => calculateDue(event,'cash')}/>
+                                                       onKeyUp={(event) => calculateDue(event, 'cash')}
+                                                       onKeyDown={(event) => calculateDue(event, 'cash')}
+                                                       onChange={(event) => calculateDue(event, 'cash')}/>
                                             </td>
                                             <td></td>
                                         </tr>
@@ -435,13 +438,14 @@ export default function CreatePurchase({user}) {
                                 }
 
                                 {
-                                    paymentMethod === 'bkash' && (
+                                    (paymentMethod === 'bkash' && paymentMethod === 'multiple') && (
                                         <tr>
                                             <td className={`text-end`} colSpan={4}><strong>Bkash Paid Amount</strong></td>
                                             <td>
                                                 <input type="text" className={`form-control paid bkash`}
-                                                       onKeyUp={(event) => calculateDue(event,'bkash')}
-                                                       onKeyDown={(event) => calculateDue(event,'bkash')} onChange={(event) => calculateDue(event,'bkash')}/>
+                                                       onKeyUp={(event) => calculateDue(event, 'bkash')}
+                                                       onKeyDown={(event) => calculateDue(event, 'bkash')}
+                                                       onChange={(event) => calculateDue(event, 'bkash')}/>
                                             </td>
                                             <td></td>
                                         </tr>
@@ -449,13 +453,14 @@ export default function CreatePurchase({user}) {
                                 }
 
                                 {
-                                    paymentMethod === 'nagad' && (
+                                    (paymentMethod === 'nagad' && paymentMethod === 'multiple') && (
                                         <tr>
                                             <td className={`text-end`} colSpan={4}><strong>Nagad Paid Amount</strong></td>
                                             <td>
                                                 <input type="text" className={`form-control paid nagad`}
-                                                       onKeyUp={(event) => calculateDue(event,'nagad')}
-                                                       onKeyDown={(event) => calculateDue(event,'nagad')} onChange={(event) => calculateDue(event,'nagad')}/>
+                                                       onKeyUp={(event) => calculateDue(event, 'nagad')}
+                                                       onKeyDown={(event) => calculateDue(event, 'nagad')}
+                                                       onChange={(event) => calculateDue(event, 'nagad')}/>
                                             </td>
                                             <td></td>
                                         </tr>
@@ -463,7 +468,7 @@ export default function CreatePurchase({user}) {
                                 }
 
                                 {
-                                    paymentMethod === 'bank' && banks && banks.length > 0 && (
+                                    (paymentMethod === 'bank' && banks && banks.length > 0 && paymentMethod === 'multiple') && (
                                         <>
                                             <tr>
                                                 <td className={`text-end`} colSpan={4}><strong>Bank</strong>
@@ -483,86 +488,17 @@ export default function CreatePurchase({user}) {
                                                 <td></td>
                                             </tr>
                                             <tr>
-                                                <td className={`text-end`} colSpan={4}><strong>Bank Paid Amount</strong>
+                                                <td className={`text-end`} colSpan={4}>
+                                                    <strong>Bank Paid Amount</strong>
                                                 </td>
                                                 <td>
                                                     <input type="text" className={`form-control paid bank`}
                                                            onKeyUp={(event) => handleBankPaid(event)}
-                                                           onKeyDown={(event) => handleBankPaid(event)} onChange={(event) => handleBankPaid(event)}/>
+                                                           onKeyDown={(event) => handleBankPaid(event)}
+                                                           onChange={(event) => handleBankPaid(event)}/>
                                                 </td>
                                                 <td></td>
                                             </tr>
-                                        </>
-                                    )
-                                }
-
-                                {
-                                    paymentMethod === 'multiple' && (
-                                        <>
-                                            <tr>
-                                                <td className={`text-end`} colSpan={4}><strong>Cash Paid Amount</strong>
-                                                </td>
-                                                <td>
-                                                    <input type="text" className={`form-control paid cash`}
-                                                           onKeyUp={(event) => calculateDue(event,'cash')}
-                                                           onKeyDown={(event) => calculateDue(event,'cash')} onChange={(event) => calculateDue(event,'cash')}/>
-                                                </td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td className={`text-end`} colSpan={4}><strong>Bkash Paid Amount</strong>
-                                                </td>
-                                                <td>
-                                                    <input type="text" className={`form-control paid bkash`}
-                                                           onKeyUp={(event) => calculateDue(event,'bkash')}
-                                                           onKeyDown={(event) => calculateDue(event,'bkash')} onChange={(event) => calculateDue(event,'bkash')}/>
-                                                </td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td className={`text-end`} colSpan={4}><strong>Nagad Paid Amount</strong>
-                                                </td>
-                                                <td>
-                                                    <input type="text" className={`form-control paid nagad`}
-                                                           onKeyUp={(event) => calculateDue(event,'nagad')}
-                                                           onKeyDown={(event) => calculateDue(event,'nagad')} onChange={(event) => calculateDue(event,'nagad')}/>
-                                                </td>
-                                                <td></td>
-                                            </tr>
-                                            {
-                                                banks && banks.length > 0 && (
-                                                    <>
-                                                        <tr>
-                                                            <td className={`text-end`} colSpan={4}><strong>Bank</strong>
-                                                            </td>
-                                                            <td>
-                                                                <select className={`form-control form-select bankId`} required>
-                                                                    <option value="">Select Bank</option>
-                                                                    {
-                                                                        banks.map(bank => (
-                                                                            <option key={bank.id} value={bank.id}>
-                                                                                {bank.name} ({bank.account_no})
-                                                                            </option>
-                                                                        ))
-                                                                    }
-                                                                </select>
-                                                            </td>
-                                                            <td></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td className={`text-end`} colSpan={4}><strong>Bank Paid
-                                                                Amount</strong>
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" className={`form-control paid bank`}
-                                                                       onKeyUp={(event) => handleBankPaid(event)}
-                                                                       onKeyDown={(event) => handleBankPaid(event)}onChange={(event) => handleBankPaid(event)}/>
-                                                            </td>
-                                                            <td></td>
-                                                        </tr>
-                                                    </>
-                                                )
-                                            }
                                         </>
                                     )
                                 }

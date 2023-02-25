@@ -179,10 +179,8 @@ export default function Customer({user}) {
                                             } Tk.
                                         </td>
                                         <td>
-                                            <Link href={`/customer/${el.id}`}>
-                                                <a className={`btn btn-warning btn-sm me-2`}>
-                                                    <i className="fa-solid fa-pen-to-square"/>
-                                                </a>
+                                            <Link href={`/customer/${el.id}`} className={`btn btn-warning btn-sm me-2`}>
+                                                <i className="fa-solid fa-pen-to-square"/>
                                             </Link>
                                             <a className={`btn btn-danger btn-sm`} onClick={(e) => {
                                                 e.preventDefault();

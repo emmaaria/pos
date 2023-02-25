@@ -2,37 +2,36 @@ import Layout from "../../components/layout/Layout";
 import Head from "next/head";
 import {withIronSessionSsr} from 'iron-session/next';
 import session from "../../lib/session";
-import Link from "next/link";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import TableSkeleton from "../../components/TableSkeleton";
+import $ from 'jquery';
 import {ToastContainer, toast} from 'react-toastify';
-import $ from "jquery";
 
-export default function Purchase({user}) {
-    const [purchases, setPurchases] = useState();
-    const [links, setLinks] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [timer, setTimer] = useState(null);
+export default function Return({user}) {
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
-
+    const [data, setData] = useState();
+    const [links, setLinks] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [timer, setTimer] = useState(null);
     useEffect(() => {
         axios.get(
-            `${process.env.API_URL}/purchase`,
+            `${process.env.API_URL}/sale/return`,
             headers
         ).then(res => {
             if (res.data.status === true) {
-                setPurchases(res.data.purchases.data);
-                setLinks(res.data.purchases.links);
+                setData(res.data.returns.data);
+                setLinks(res.data.returns.links);
                 setLoading(false);
             }
         }).catch(err => {
             console.log(err);
         });
     }, []);
-    const searchPurchase = async () => {
+
+    const search = async () => {
         if (timer) {
             clearTimeout(timer);
             setTimer(null);
@@ -42,12 +41,12 @@ export default function Purchase({user}) {
                 setLoading(true);
                 const name = $('.terms').val();
                 axios.get(
-                    `${process.env.API_URL}/purchase?name=${name}`,
+                    `${process.env.API_URL}/sale/return?name=${name}`,
                     headers
                 ).then(res => {
                     if (res.data.status === true) {
-                        setPurchases(res.data.purchases.data);
-                        setLinks(res.data.purchases.links);
+                        setData(res.data.returns.data);
+                        setLinks(res.data.returns.links);
                         setLoading(false);
                     }
                 }).catch(err => {
@@ -64,8 +63,8 @@ export default function Purchase({user}) {
                 headers
             );
             if (res.data.status === true) {
-                setPurchases(res.data.purchases.data);
-                setLinks(res.data.purchases.links);
+                setData(res.data.returns.data);
+                setLinks(res.data.returns.links);
                 setLoading(false);
             }
         } catch (err) {
@@ -78,7 +77,7 @@ export default function Purchase({user}) {
             theme: 'dark'
         });
         try {
-            const response = await axios.post(`${process.env.API_URL}/purchase/delete`, {
+            const response = await axios.post(`${process.env.API_URL}/sale/return/delete`, {
                 id: id,
             }, headers);
             if (response.data.status === true) {
@@ -95,7 +94,7 @@ export default function Purchase({user}) {
                 $(`.row-id-${id}`).fadeOut();
             } else {
                 toast.dismiss();
-                toast.error(response.data.error, {
+                toast.error(response.data.errors, {
                     position: "bottom-right",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -122,27 +121,23 @@ export default function Purchase({user}) {
         <>
             <Head>
                 <title>
-                    Purchase
+                    Return List
                 </title>
             </Head>
             <ToastContainer/>
-            <Layout user={user} title={`Purchase`}>
+            <Layout user={user} title={`Return List`}>
                 <div className="content">
                     <div className="custom-card">
                         <div className="row">
-                            <div className="col-md-9">
-                                <Link href={`/purchase/create`} className={`btn btn-success`}>
-                                    <i className="fa-solid fa-plus"/> Add New Purchase
-                                </Link>
-                            </div>
+                            <div className="col-md-9"></div>
                             <div className="col-md-3">
                                 <form>
                                     <div className="row">
                                         <div className="col">
                                             <input type="text" className="form-control terms"
-                                                   placeholder={`Search`}
-                                                   name="email" onKeyUp={searchPurchase} onKeyDown={searchPurchase}
-                                                   onChange={searchPurchase}/>
+                                                   placeholder={`Search Return`}
+                                                   name="email" onKeyUp={search} onKeyDown={search}
+                                                   onChange={search}/>
                                         </div>
                                     </div>
                                 </form>
@@ -151,44 +146,32 @@ export default function Purchase({user}) {
                         <table className={`table mt-4`}>
                             <thead>
                             <tr>
-                                <th width={`5%`}>Sl</th>
-                                <th width={`15%`}>Purchase ID</th>
-                                <th width={`15%`}>Date</th>
-                                <th width={`15%`}>Supplier Name</th>
-                                <th width={`15%`}>Amount</th>
-                                <th width={`15%`}>Note</th>
-                                <th width={`20%`}>Action</th>
+                                <th width={`10%`}>Sl</th>
+                                <th width={`40%`}>Return ID</th>
+                                <th width={`20%`}>Return Amount</th>
+                                <th width={`20%`}>Note</th>
+                                <th width={`10%`}>Action</th>
                             </tr>
                             </thead>
                             <tbody>
                             {
-                                purchases && purchases.length <= 0 && (
+                                data && data.length <= 0 && (
                                     <tr>
-                                        <td colSpan={7} className={`text-center`}>No Purchase Found</td>
+                                        <td colSpan={5} className={`text-center`}>No Return Found</td>
                                     </tr>
                                 )
                             }
-                            {purchases && !loading && (
-                                purchases.map((el, index) => (
+                            {data && !loading && (
+                                data.map((el, index) => (
                                     <tr key={el.id} valign={`middle`} className={`row-id-${el.id}`}>
                                         <td>{index + 1}</td>
-                                        <td className={`text-uppercase`}>{el.purchase_id}</td>
-                                        <td>{el.date}</td>
-                                        <td>{el.supplier_name}</td>
-                                        <td>{el.amount} Tk.</td>
-                                        <td>{el.comment}</td>
+                                        <td>{el.return_id}</td>
+                                        <td>{el.return_amount} Tk.</td>
+                                        <td>{el.note}</td>
                                         <td>
-                                            <Link href={`/purchase/barcode/${el.id}`}
-                                                  className={`btn btn-success btn-sm me-2`}>
-                                                <i className="fa-solid fa-barcode"/>
-                                            </Link>
-                                            <Link href={`/purchase/view/${el.id}`}
-                                                  className={`btn btn-success btn-sm me-2`}>
-                                                <i className="fa-solid fa-eye"/>
-                                            </Link>
-                                            <Link href={`/purchase/${el.id}`} className={`btn btn-warning btn-sm me-2`}>
-                                                <i className="fa-solid fa-pen-to-square"/>
-                                            </Link>
+                                            {/*<Link href={`/product/${el.id}`} className={`btn btn-warning btn-sm me-2`}>*/}
+                                            {/*    <i className="fa-solid fa-pen-to-square"/>*/}
+                                            {/*</Link>*/}
                                             <a className={`btn btn-danger btn-sm`} onClick={(e) => {
                                                 e.preventDefault();
                                                 const result =
@@ -197,8 +180,8 @@ export default function Purchase({user}) {
                                                     );
                                                 if (result) {
                                                     deleteHandler(
-                                                        el.id
-                                                    ).then();
+                                                        el.return_id
+                                                    );
                                                 }
                                             }}>
                                                 <i className="fa-solid fa-trash-can"/>
@@ -207,13 +190,12 @@ export default function Purchase({user}) {
                                     </tr>
                                 ))
                             ) || (
-                                <TableSkeleton tr={3} td={7}/>
+                                <TableSkeleton tr={3} td={5}/>
                             )}
-
                             </tbody>
                             <tfoot>
                             <tr>
-                                <td colSpan={7}>
+                                <td colSpan={6}>
                                     <nav className={`float-end`}>
                                         <ul className="pagination mt-3">
                                             {
