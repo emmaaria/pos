@@ -56,6 +56,13 @@ export default function Sidebar({user}) {
         $('.product').toggleClass('open');
         $('.productParent').toggleClass(styles.opened);
     };
+
+    const showHrMenu = (e) => {
+        e.preventDefault();
+        $('.hrMenu').slideToggle();
+        $('.hr').toggleClass('open');
+        $('.hrParent').toggleClass(styles.opened);
+    };
     return (
         <div className={`sidebar ${styles.sidebar}`}>
             <div className={styles.avatarArea}>
@@ -441,6 +448,53 @@ export default function Sidebar({user}) {
                             }
                             `}>
                                 Add Bank
+                            </Link>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <Link href={`#`} onClick={showHrMenu}
+                          className={`hrParent 
+                                ${
+                              router.pathname === '/hr/expense' ||
+                              router.pathname === '/hr/expense/create' ||
+                              router.pathname === '/hr/expense/category' ||
+                              router.pathname === '/hr/expense/category/create' ||
+                              router.pathname === '/hr/expense/category/[id]'
+                                  ? styles.active
+                                  : ''
+                          }
+                            `}>
+                        <i className="fa-solid fa-hospital-user"></i>
+                        HR
+                        <span className={`fa-solid fa-caret-right float-end ${styles.dropdownIcon} hr`}/>
+                    </Link>
+                    <ul className={`hrMenu ${styles.subMenu}`}>
+                        <li>
+                            <Link href={`/hr/expense/category`} className={`
+                                ${
+                                router.pathname === '/hr/expense/category' ||
+                                router.pathname === '/hr/expense/category/create' ||
+                                router.pathname === '/hr/expense/category/[id]'
+                                    ? styles.active
+                                    : ''
+                            }
+                            `}>
+                                Expense Category
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href={`/hr/expense`} className={`
+                                ${
+                                router.pathname === '/hr/expense' ||
+                                router.pathname === '/hr/expense/create' ||
+                                router.pathname === '/hr/expense/[id]'
+                                    ? styles.active
+                                    : ''
+                            }
+                            `}>
+                                Manage Expense
                             </Link>
                         </li>
                     </ul>
