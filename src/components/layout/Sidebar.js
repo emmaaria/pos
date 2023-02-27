@@ -209,6 +209,7 @@ export default function Sidebar({user}) {
                           className={`customerParent 
                                 ${
                               router.pathname === '/customer' ||
+                              router.pathname === '/customer/ledger' ||
                               router.pathname === '/customer/create' ||
                               router.pathname === '/customer/[id]'
                                   ? styles.active
@@ -244,7 +245,7 @@ export default function Sidebar({user}) {
                             </Link>
                         </li>
                         <li>
-                            <Link href={`#`} className={`
+                            <Link href={`/customer/ledger`} className={`
                                 ${
                                 router.pathname === '/customer/ledger'
                                     ? styles.active
