@@ -511,7 +511,8 @@ export default function Sidebar({user}) {
                     <Link href={`#`} onClick={showReportMenu}
                           className={`reportParent 
                                 ${
-                              router.pathname === '/report/sales'
+                              router.pathname === '/report/sales' ||
+                              router.pathname === '/report/purchase'
                                   ? styles.active
                                   : ''
                           }
@@ -530,6 +531,17 @@ export default function Sidebar({user}) {
                             }
                             `}>
                                 Sales Report
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href={`/report/purchase`} className={`
+                                ${
+                                router.pathname === '/report/purchase'
+                                    ? styles.active
+                                    : ''
+                            }
+                            `}>
+                                Purchase Report
                             </Link>
                         </li>
                     </ul>
