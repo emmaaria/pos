@@ -672,6 +672,10 @@ table {
     height: auto;
 }
 
+.mt-1-8 {
+    margin-top: 1.8rem;
+}
+
 @media print {
     .no-print {
         display: none !important;

@@ -63,6 +63,13 @@ export default function Sidebar({user}) {
         $('.hr').toggleClass('open');
         $('.hrParent').toggleClass(styles.opened);
     };
+
+    const showReportMenu = (e) => {
+        e.preventDefault();
+        $('.reportMenu').slideToggle();
+        $('.report').toggleClass('open');
+        $('.reportParent').toggleClass(styles.opened);
+    };
     return (
         <div className={`sidebar ${styles.sidebar}`}>
             <div className={styles.avatarArea}>
@@ -495,6 +502,34 @@ export default function Sidebar({user}) {
                             }
                             `}>
                                 Manage Expense
+                            </Link>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <Link href={`#`} onClick={showReportMenu}
+                          className={`reportParent 
+                                ${
+                              router.pathname === '/report/sales'
+                                  ? styles.active
+                                  : ''
+                          }
+                            `}>
+                        <i className="fa-solid fa-chart-column"></i>
+                        Reports
+                        <span className={`fa-solid fa-caret-right float-end ${styles.dropdownIcon} report`}/>
+                    </Link>
+                    <ul className={`reportMenu ${styles.subMenu}`}>
+                        <li>
+                            <Link href={`/report/sales`} className={`
+                                ${
+                                router.pathname === '/report/sales'
+                                    ? styles.active
+                                    : ''
+                            }
+                            `}>
+                                Sales Report
                             </Link>
                         </li>
                     </ul>

@@ -168,15 +168,15 @@ export default function Expense({user}) {
                             }
                             {data && !loading && (
                                 data.map((el, index) => (
-                                    <tr key={el.expense_id} valign={`middle`} className={`row-id-${el.id}`}>
+                                    <tr key={el.expense_id} valign={`middle`} className={`row-id-${el.expense_id}`}>
                                         <td>{index + 1}</td>
                                         <td>{el.title}</td>
                                         <td>{el.amount} Tk.</td>
                                         <td>{el.note}</td>
                                         <td>
-                                            <Link href={`/hr/expense/${el.id}`} className={`btn btn-warning btn-sm me-2`}>
-                                                <i className="fa-solid fa-pen-to-square"/>
-                                            </Link>
+                                            {/*<Link href={`/hr/expense/${el.id}`} className={`btn btn-warning btn-sm me-2`}>*/}
+                                            {/*    <i className="fa-solid fa-pen-to-square"/>*/}
+                                            {/*</Link>*/}
                                             <a className={`btn btn-danger btn-sm`} onClick={(e) => {
                                                 e.preventDefault();
                                                 const result =
