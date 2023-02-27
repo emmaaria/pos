@@ -211,6 +211,7 @@ export default function Sidebar({user}) {
                               router.pathname === '/customer' ||
                               router.pathname === '/customer/ledger' ||
                               router.pathname === '/customer/create' ||
+                              router.pathname === '/customer/due' ||
                               router.pathname === '/customer/[id]'
                                   ? styles.active
                                   : ''
@@ -253,6 +254,18 @@ export default function Sidebar({user}) {
                             }
                             `}>
                                 Customer Ledger
+                            </Link>
+                        </li>
+
+                        <li>
+                            <Link href={`/customer/due`} className={`
+                                ${
+                                router.pathname === '/customer/due'
+                                    ? styles.active
+                                    : ''
+                            }
+                            `}>
+                                Due Receive
                             </Link>
                         </li>
                     </ul>

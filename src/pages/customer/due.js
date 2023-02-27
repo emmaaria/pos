@@ -1,27 +1,27 @@
-import Layout from "../../../components/layout/Layout";
+import Layout from "../../components/layout/Layout";
 import Head from "next/head";
 import {withIronSessionSsr} from 'iron-session/next';
-import session from "../../../lib/session";
-import {ToastContainer, toast} from 'react-toastify';
-import axios from "axios";
-import $ from 'jquery';
+import session from "../../lib/session";
 import {useEffect, useState} from "react";
-import Loader from "../../../components/Loader";
-import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
-import Select from "react-select";
+import axios from "axios";
 import DatePicker from "react-datepicker";
+import Loader from "../../components/Loader";
+import Select from "react-select";
+import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
+import {toast, ToastContainer} from "react-toastify";
+import $ from "jquery";
 
-export default function CreateExpense({user}) {
-    const [loader, setLoader] = useState(false);
-    const [categories, setCategories] = useState([]);
-    const [banks, setBanks] = useState([]);
-    const [category, setCategory] = useState();
-    const [account, setAccount] = useState();
-    const [amount, setAmount] = useState('');
-    const [date, setDate] = useState(new Date());
+export default function CustomerDueReceive({user}) {
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
+    const [customers, setCustomers] = useState([]);
+    const [customer, setCustomer] = useState();
+    const [date, setDate] = useState(new Date());
+    const [amount, setAmount] = useState();
+    const [loader, setLoader] = useState(false);
+    const [banks, setBanks] = useState([]);
+    const [account, setAccount] = useState();
     const handleAmount = (e) => {
         const re = /^[0-9]*[.]?[0-9]*$/;
         if (e.target.value === '' || re.test(e.target.value)) {
@@ -32,13 +32,16 @@ export default function CreateExpense({user}) {
         async function getData() {
             try {
                 const res = await axios.get(
-                    `${process.env.API_URL}/expense/category?allData=true`, headers
+                    `${process.env.API_URL}/customer?allData=true`, headers
                 );
                 if (res.data.status === true) {
-                    if (res.data.categories && res.data.categories.length > 0) {
-                        setCategories([]);
-                        res.data.categories.map(el => {
-                            setCategories(old => [...old, {value: el.id, label: el.name}])
+                    if (res.data.customers && res.data.customers.length > 0) {
+                        setCustomers([]);
+                        res.data.customers.map(el => {
+                            setCustomers(old => [...old, {
+                                value: el.id,
+                                label: `${el.name} (${el.address ? el.address : ''})`
+                            }])
                         })
                     }
                 }
@@ -48,7 +51,8 @@ export default function CreateExpense({user}) {
         }
 
         getData();
-    }, [setCategories]);
+    }, [setCustomers]);
+
     const handleForm = async (e) => {
         e.preventDefault();
         toast.loading('Submitting', {
@@ -58,7 +62,7 @@ export default function CreateExpense({user}) {
         setLoader(true);
         const note = $('.note').val();
         const bankId = $('.bankId').val();
-        const expenseDate = $('.date').val();
+        const paymentDate = $('.date').val();
         if (account === '') {
             toast.dismiss();
             toast.error('Account is required', {
@@ -87,7 +91,7 @@ export default function CreateExpense({user}) {
             setLoader(false);
             return;
         }
-        if (amount === '') {
+        if (!amount || amount === '') {
             toast.dismiss();
             toast.error('Amount is required', {
                 position: "bottom-right",
@@ -101,9 +105,9 @@ export default function CreateExpense({user}) {
             setLoader(false);
             return;
         }
-        if (!category || category === '') {
+        if (!customer || customer === '') {
             toast.dismiss();
-            toast.error('Expense category is required', {
+            toast.error('Please select customer', {
                 position: "bottom-right",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -115,7 +119,7 @@ export default function CreateExpense({user}) {
             setLoader(false);
             return;
         }
-        if (!expenseDate || expenseDate === '') {
+        if (!date || date === '') {
             toast.dismiss();
             toast.error('Date is required', {
                 position: "bottom-right",
@@ -130,12 +134,12 @@ export default function CreateExpense({user}) {
             return;
         }
         try {
-            const res = await axios.post(`${process.env.API_URL}/expense/store`, {
-                category,
+            const res = await axios.post(`${process.env.API_URL}/customer/payment/store`, {
+                customer,
                 note,
                 amount,
                 account,
-                date : expenseDate,
+                date : paymentDate,
                 bankId
             }, headers);
             if (res.data.status === true) {
@@ -150,6 +154,8 @@ export default function CreateExpense({user}) {
                     theme: 'dark',
                 });
                 $('form').trigger('reset');
+                setAmount('');
+                setAccount('');
                 setLoader(false);
             } else {
                 toast.dismiss();
@@ -222,11 +228,12 @@ export default function CreateExpense({user}) {
         }
         setAccount(event.target.value)
     }
+
     return (
         <>
             <Head>
                 <title>
-                    Add New Expense
+                    Customer Due Receive
                 </title>
             </Head>
             {
@@ -235,17 +242,18 @@ export default function CreateExpense({user}) {
                 )
             }
             <ToastContainer/>
-            <Layout user={user} title={`Add New Expense`}>
+            <Layout user={user} title={`Customer Due Receive`}>
                 <div className="content">
                     <div className="custom-card">
                         <form onSubmit={handleForm}>
                             <div className="mb-3 row">
-                                
+
                                 <div className="col-md-4">
-                                    <label htmlFor="category" className={`form-label`}>Expense Category</label>
+                                    <label className={`form-label`}>Customer</label>
                                     {
-                                        categories && (
-                                            <Select options={categories} isClearable={true} isSearchable={true} onChange={(value) => setCategory(value?.value)} required/>
+                                        customers && (
+                                            <Select options={customers} isClearable={true} isSearchable={true}
+                                                    onChange={(value) => setCustomer(value?.value)}/>
                                         ) || (
                                             <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
                                                 <Skeleton width={`100%`} height={40}/>
@@ -255,7 +263,8 @@ export default function CreateExpense({user}) {
                                 </div>
                                 <div className="col-md-4">
                                     <label htmlFor="note" className={`form-label`}>Account</label>
-                                    <select className="form-select form-control account" required onChange={handleAccount} value={account}>
+                                    <select className="form-select form-control account"
+                                            onChange={handleAccount} value={account}>
                                         <option value="">Choose Account</option>
                                         <option value="cash">Cash</option>
                                         <option value="bkash">Bkash</option>
@@ -277,7 +286,7 @@ export default function CreateExpense({user}) {
                                 account && account === 'bank' && (
                                     <div className="row mb-3">
                                         <div className="col-md-12">
-                                            <select className={`form-control form-select bankId`} required>
+                                            <select className={`form-control form-select bankId`}>
                                                 <option value="">Select Bank</option>
                                                 {
                                                     banks.map(bank => (
@@ -294,11 +303,11 @@ export default function CreateExpense({user}) {
                             <div className="row mb-3">
                                 <div className="col-md-6">
                                     <label htmlFor="amount" className={`form-label`}>Amount</label>
-                                    <input type="text" className={`form-control amount`} id={`amount`} value={amount}
-                                           onChange={handleAmount} onKeyUp={handleAmount} onKeyDown={handleAmount} required/>
+                                    <input type="text" className={`form-control`} id={`amount`} value={amount}
+                                           onChange={handleAmount} onKeyUp={handleAmount} onKeyDown={handleAmount}/>
                                 </div>
                                 <div className="col-md-6">
-                                    <label htmlFor="note" className={`form-label`}>Expense Note</label>
+                                    <label htmlFor="note" className={`form-label`}>Receive Note</label>
                                     <input type="text" className={`form-control note`} id={`note`}/>
                                 </div>
                             </div>

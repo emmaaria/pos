@@ -27,7 +27,7 @@ export default function CreateCustomer({user}) {
         if (name === ''){
             toast.dismiss();
             toast.error('Name is required', {
-                position: "bottom-left",
+                position: "bottom-right",
                 autoClose: 3000,
                 hideProgressBar: false,
                 closeOnClick: true,
