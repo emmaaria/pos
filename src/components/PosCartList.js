@@ -134,7 +134,7 @@ export default function PosCartList({invoiceProducts, calculateSubtotal, removeP
                                     <div className="product-qty-field">
                                         <input type="text"
                                                className={`form-control productQuantity productQuantity_${el.product_id} border-radius-0`}
-                                               defaultValue={1}
+                                               defaultValue={el.quantity ? el.quantity : 1}
                                                onChange={() => calculateSubtotal(el.product_id)}
                                                onKeyUp={() => calculateSubtotal(el.product_id)}
                                                onKeyDown={() => calculateSubtotal(el.product_id)}/>
@@ -168,7 +168,7 @@ export default function PosCartList({invoiceProducts, calculateSubtotal, removeP
                                 <input type="hidden"
                                        className={`form-control productDiscountedAmount productDiscountedAmount_${el.product_id}`} defaultValue={el.discount_amount}/>
                                                                 <span className={`subtotal subtotal_${el.product_id}`}>
-                                                                    {el.price}
+                                                                    {el.quantity ? el.quantity * el.price : el.price}
                                                                 </span> Tk.
                             </td>
                             <td className={`text-center`}>

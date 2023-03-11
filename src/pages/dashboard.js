@@ -41,90 +41,97 @@ export default function Dashboard({user}) {
             </Head>
             <Layout user={user} title={`Dashboard`}>
                 <div className="content">
+                    <h4>Overview</h4>
+                    <div className="row mt-4">
+                        <div className="col-xxl-3 mb-4 col-lg-4">
+                            <DashboardCard
+                                icon="fa-solid fa-bag-shopping"
+                                title="Total Product"
+                                value={data ? `${data?.totalProduct}` : ''}
+                                bgColor="#6c5ce7"
+                            />
+                        </div>
+                        <div className="col-xxl-3 mb-4 col-lg-4">
+                            <DashboardCard
+                                icon="fa-solid fa-user-group"
+                                title="Total Customer"
+                                value={data ? `${data?.totalCustomer}` : ''}
+                                bgColor="#e84393"
+                            />
+                        </div>
+                        <div className="col-xxl-3 mb-4 col-lg-4">
+                            <DashboardCard
+                                icon="fa-solid fa-users"
+                                title="Total Supplier"
+                                value={data ? `${data?.totalSupplier}` : ''}
+                                bgColor="#00b894"
+                            />
+                        </div>
+                        <div className="col-xxl-3 mb-4 col-lg-4">
+                            <DashboardCard
+                                icon="fa-solid fa-cart-plus"
+                                title="Total Purchase"
+                                value={data ? `${data?.totalPurchase}` : ''}
+                                bgColor="#192a56"
+                            />
+                        </div>
+                        <div className="col-xxl-3 mb-4 col-lg-4">
+                            <DashboardCard
+                                icon="fa-solid fa-shopping-cart"
+                                title="Total Invoice"
+                                value={data ? `${data?.totalInvoice}` : ''}
+                                bgColor="#fbc531"
+                            />
+                        </div>
+                        <div className="col-xxl-3 mb-4 col-lg-4">
+                            <DashboardCard
+                                icon="fa-solid fa-right-left"
+                                title="Total Return"
+                                value={data ? `${data?.totalReturn}` : ''}
+                                bgColor="#e84118"
+                            />
+                        </div>
+                        <div className="col-xxl-3 mb-4 col-lg-4">
+                            <DashboardCard
+                                icon="fa-solid fa-money-bill-trend-up"
+                                title="Purchase Amount"
+                                value={data ? `${data?.totalPurchaseAmount} Tk.` : ''}
+                                bgColor="#3c40c6"
+                            />
+                        </div>
+                        <div className="col-xxl-3 mb-4 col-lg-4">
+                            <DashboardCard
+                                icon="fa-solid fa-filter-circle-dollar"
+                                title="Sale Amount"
+                                value={data ? `${data?.totalSaleAmount} Tk.` : ''}
+                                bgColor="#0fbcf9"
+                            />
+                        </div>
+                    </div>
+                    <h4>Charts</h4>
+                    <div className="row mt-4">
+                        <div className="col-md-6 mb-4">
+                            <div className="chart-card">
+                                <h5 >Sales</h5>
+                                <div className="mt-4">
+                                    {
+                                        data && (
+                                            <LineChart width={500} height={300} data={salesChart}>
+                                                <XAxis dataKey="month"/>
+                                                <YAxis/>
+                                                <Tooltip/>
+                                                <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
+                                                <Line type="monotone" dataKey="total" stroke="rgb(249, 58, 11)"/>
+                                            </LineChart>
+                                        )
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div className="custom-card">
-                        <h4>Overview</h4>
-                        <div className="row mt-4">
-                            <div className="col-xxl-3 mb-4 col-lg-4">
-                                <DashboardCard
-                                    icon="fa-solid fa-bag-shopping"
-                                    title="Total Product"
-                                    value={data ? `${data?.totalProduct}` : ''}
-                                    bgColor="#6c5ce7"
-                                />
-                            </div>
-                            <div className="col-xxl-3 mb-4 col-lg-4">
-                                <DashboardCard
-                                    icon="fa-solid fa-user-group"
-                                    title="Total Customer"
-                                    value={data ? `${data?.totalCustomer}` : ''}
-                                    bgColor="#e84393"
-                                />
-                            </div>
-                            <div className="col-xxl-3 mb-4 col-lg-4">
-                                <DashboardCard
-                                    icon="fa-solid fa-users"
-                                    title="Total Supplier"
-                                    value={data ? `${data?.totalSupplier}` : ''}
-                                    bgColor="#00b894"
-                                />
-                            </div>
-                            <div className="col-xxl-3 mb-4 col-lg-4">
-                                <DashboardCard
-                                    icon="fa-solid fa-cart-plus"
-                                    title="Total Purchase"
-                                    value={data ? `${data?.totalPurchase}` : ''}
-                                    bgColor="#192a56"
-                                />
-                            </div>
-                            <div className="col-xxl-3 mb-4 col-lg-4">
-                                <DashboardCard
-                                    icon="fa-solid fa-shopping-cart"
-                                    title="Total Invoice"
-                                    value={data ? `${data?.totalInvoice}` : ''}
-                                    bgColor="#fbc531"
-                                />
-                            </div>
-                            <div className="col-xxl-3 mb-4 col-lg-4">
-                                <DashboardCard
-                                    icon="fa-solid fa-right-left"
-                                    title="Total Return"
-                                    value={data ? `${data?.totalReturn}` : ''}
-                                    bgColor="#e84118"
-                                />
-                            </div>
-                            <div className="col-xxl-3 mb-4 col-lg-4">
-                                <DashboardCard
-                                    icon="fa-solid fa-money-bill-trend-up"
-                                    title="Purchase Amount"
-                                    value={data ? `${data?.totalPurchaseAmount} Tk.` : ''}
-                                    bgColor="#3c40c6"
-                                />
-                            </div>
-                            <div className="col-xxl-3 mb-4 col-lg-4">
-                                <DashboardCard
-                                    icon="fa-solid fa-filter-circle-dollar"
-                                    title="Sale Amount"
-                                    value={data ? `${data?.totalSaleAmount} Tk.` : ''}
-                                    bgColor="#0fbcf9"
-                                />
-                            </div>
-                        </div>
-                        <h4>Charts</h4>
-                        <div className="row mt-4">
-                            <div className="col-md-6 mb-4">
-                                {
-                                    data && (
-                                        <LineChart width={500} height={300} data={salesChart}>
-                                            <XAxis dataKey="month"/>
-                                            <YAxis/>
-                                            <Tooltip/>
-                                            <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
-                                            <Line type="monotone" dataKey="total" stroke="rgb(249, 58, 11)"/>
-                                        </LineChart>
-                                    )
-                                }
-                            </div>
-                        </div>
+                        
+                        
                         <h4>Balance Overview</h4>
                         <div className="row mt-4 row-cols-xxl-5 row-cols-md-3">
                             <div className="col mb-4">

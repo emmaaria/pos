@@ -21,6 +21,7 @@ export default function Stock({user}) {
             headers
         ).then(res => {
             if (res.data.status === true) {
+                console.log(res.data.products.data)
                 setProducts(res.data.products.data);
                 setLinks(res.data.products.links);
                 setLoading(false);
@@ -109,7 +110,7 @@ export default function Stock({user}) {
                                         <td>{index + 1}</td>
                                         <td>{el.name}</td>
                                         <td>{el.purchase ? el.purchase : 0}</td>
-                                        <td>{el.sale ? el.sale : 0}</td>
+                                        <td>{el.sale ? el.sale - el.return : 0}</td>
                                         <td>{el.purchase - el.sale}</td>
                                     </tr>
                                 ))

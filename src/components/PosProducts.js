@@ -13,7 +13,7 @@ export default function PosProducts({addProduct, staticProducts, searchText}) {
                                  onClick={() => addProduct(pr)}>
                                 <p className={`name`}>{pr.name}</p>
                                 <p>Price: {pr.price} Tk.</p>
-                                <p>Stock: {pr.purchase - pr.sale}</p>
+                                <p>Stock: {pr.purchase - (pr.sale - pr.return)}</p>
                             </div>
                         ))
                     ) || (

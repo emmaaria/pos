@@ -676,6 +676,12 @@ table {
     margin-top: 1.8rem;
 }
 
+.chart-card {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+}
+
 @media print {
     .no-print {
         display: none !important;
@@ -736,6 +742,7 @@ table {
     .product-item {
         padding: 10px 7px;
     }
+
     .content {
         margin: 10.5rem auto 0;
         width: calc(100% - 17%);

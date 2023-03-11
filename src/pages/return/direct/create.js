@@ -222,7 +222,7 @@ export default function CreateDirectReturn({user}) {
             alert('Product already added');
         } else {
             setReturnProducts(currentProduct => [...currentProduct, data]);
-            setTotal(oldTotal => oldTotal + parseFloat(data.purchase_price));
+            setTotal(oldTotal => oldTotal + parseFloat(data.price));
         }
         $(`.search-product`).val('');
         setKeyword(null)
@@ -381,7 +381,7 @@ export default function CreateDirectReturn({user}) {
                                                 <td>
                                                     <input type="text"
                                                            className={`form-control productPrice productPrice_${el.product_id}`}
-                                                           defaultValue={el.purchase_price}
+                                                           defaultValue={el.price}
                                                            onChange={(event) => calculateSubtotal(event, 'price', el.product_id)}
                                                            onKeyUp={(event) => calculateSubtotal(event, 'price', el.product_id)}
                                                            onKeyDown={(event) => calculateSubtotal(event, 'price', el.product_id)}/>

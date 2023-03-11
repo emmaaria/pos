@@ -24,6 +24,7 @@ import styles from '../../styles/CreateSale.module.css'
 
 export default function EditSale({user, id}) {
     const [loader, setLoader] = useState(false)
+    const [newInvoice, setNewInvoice] = useState(false)
     const [loading, setLoading] = useState(false)
     const [subTotal, setSubTotal] = useState(0)
     const [showInvoice, setShowInvoice] = useState(false)
@@ -169,6 +170,8 @@ export default function EditSale({user, id}) {
                     draggable: true,
                     theme: 'dark',
                 })
+                setNewInvoice(res.data.invoice)
+                setLoader(false)
                 setShowInvoice(true)
             } else {
                 toast.dismiss()
@@ -593,7 +596,7 @@ export default function EditSale({user, id}) {
             {
                 showInvoice && (
                     <PosInvoicePrint companyName={user.companyName} companyAddress={user.companyAddress}
-                                     companyMobile={user.companyMobile} invoice={invoice} closeInvoice={closeInvoice}/>
+                                     companyMobile={user.companyMobile} invoice={newInvoice} closeInvoice={closeInvoice}/>
                 )
             }
         </>
