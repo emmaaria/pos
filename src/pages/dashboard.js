@@ -86,7 +86,7 @@ export default function Dashboard({user}) {
                                 <DashboardCard
                                     icon="fa-solid fa-money-bill-trend-up"
                                     title="Purchase Amount"
-                                    value={`${data?.totalPurchaseAmount} Tk.`}
+                                    value={data ? `${data?.totalPurchaseAmount} Tk.` : ''}
                                     bgColor="#3c40c6"
                                 />
                             </div>
@@ -94,7 +94,7 @@ export default function Dashboard({user}) {
                                 <DashboardCard
                                     icon="fa-solid fa-money-bill-transfer"
                                     title="Sale Amount"
-                                    value={`${data?.totalSaleAmount} Tk.`}
+                                    value={data ? `${data?.totalSaleAmount} Tk.` : ''}
                                     bgColor="#0fbcf9"
                                 />
                             </div>
