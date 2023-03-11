@@ -45,7 +45,6 @@ export default function CreateSale({user}) {
             `${process.env.API_URL}/products-with-stock`,
             headers
         ).then(res => {
-            console.log(res.data)
             if (res.data.status === true) {
                 setStaticProducts(res.data.products)
             }
@@ -128,6 +127,7 @@ export default function CreateSale({user}) {
                 discountType,
                 pos: 1
             }, headers)
+            console.log(res.data)
             if (res.data.status === true) {
                 toast.dismiss()
                 toast.success('Successfully Saved', {

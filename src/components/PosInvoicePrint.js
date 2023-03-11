@@ -52,7 +52,7 @@ export default function PosInvoicePrint({companyName, companyAddress, companyMob
                             {
                                 invoice.items.map((item) => (
                                     <>
-                                        <tr key={item.product_id}>
+                                        <tr key={item.name}>
                                             <td>{item.name}</td>
                                             <td>{item.price} Tk.</td>
                                             <td style={{textAlign: 'center'}}>{item.quantity}</td>

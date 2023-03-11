@@ -10,9 +10,11 @@ import bkash from "../../public/bkas.png"
 import nagad from "../../public/nagad.png"
 import bank from "../../public/bank.png"
 import card from "../../public/card.png"
+import {CartesianGrid, Line, LineChart, Tooltip, XAxis, YAxis} from "recharts";
 
 export default function Dashboard({user}) {
     const [data, setData] = useState();
+    const [salesChart, setSalesChart] = useState([]);
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
@@ -22,9 +24,10 @@ export default function Dashboard({user}) {
             headers
         ).then(res => {
             if (res.data.status === true) {
-                console.log(res.data.data)
                 setData(res.data.data);
-                console.log(res.data.data)
+                if (res.data.data.salesChart && res.data.data.salesChart.length > 0) {
+                    setSalesChart(res.data.data.salesChart)
+                }
             }
         }).catch(err => {
             console.log(err);
@@ -45,7 +48,7 @@ export default function Dashboard({user}) {
                                 <DashboardCard
                                     icon="fa-solid fa-bag-shopping"
                                     title="Total Product"
-                                    value={data?.totalProduct}
+                                    value={data ? `${data?.totalProduct}` : ''}
                                     bgColor="#6c5ce7"
                                 />
                             </div>
@@ -53,7 +56,7 @@ export default function Dashboard({user}) {
                                 <DashboardCard
                                     icon="fa-solid fa-user-group"
                                     title="Total Customer"
-                                    value={data?.totalCustomer}
+                                    value={data ? `${data?.totalCustomer}` : ''}
                                     bgColor="#e84393"
                                 />
                             </div>
@@ -61,7 +64,7 @@ export default function Dashboard({user}) {
                                 <DashboardCard
                                     icon="fa-solid fa-users"
                                     title="Total Supplier"
-                                    value={data?.totalSupplier}
+                                    value={data ? `${data?.totalSupplier}` : ''}
                                     bgColor="#00b894"
                                 />
                             </div>
@@ -69,7 +72,7 @@ export default function Dashboard({user}) {
                                 <DashboardCard
                                     icon="fa-solid fa-cart-plus"
                                     title="Total Purchase"
-                                    value={data?.totalPurchase}
+                                    value={data ? `${data?.totalPurchase}` : ''}
                                     bgColor="#192a56"
                                 />
                             </div>
@@ -77,7 +80,7 @@ export default function Dashboard({user}) {
                                 <DashboardCard
                                     icon="fa-solid fa-shopping-cart"
                                     title="Total Invoice"
-                                    value={data?.totalInvoice}
+                                    value={data ? `${data?.totalInvoice}` : ''}
                                     bgColor="#fbc531"
                                 />
                             </div>
@@ -85,7 +88,7 @@ export default function Dashboard({user}) {
                                 <DashboardCard
                                     icon="fa-solid fa-right-left"
                                     title="Total Return"
-                                    value={data?.totalReturn}
+                                    value={data ? `${data?.totalReturn}` : ''}
                                     bgColor="#e84118"
                                 />
                             </div>
@@ -104,6 +107,22 @@ export default function Dashboard({user}) {
                                     value={data ? `${data?.totalSaleAmount} Tk.` : ''}
                                     bgColor="#0fbcf9"
                                 />
+                            </div>
+                        </div>
+                        <h4>Charts</h4>
+                        <div className="row mt-4">
+                            <div className="col-md-6 mb-4">
+                                {
+                                    data && (
+                                        <LineChart width={500} height={300} data={salesChart}>
+                                            <XAxis dataKey="month"/>
+                                            <YAxis/>
+                                            <Tooltip/>
+                                            <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
+                                            <Line type="monotone" dataKey="total" stroke="rgb(249, 58, 11)"/>
+                                        </LineChart>
+                                    )
+                                }
                             </div>
                         </div>
                         <h4>Balance Overview</h4>
@@ -166,7 +185,7 @@ export default function Dashboard({user}) {
                                 <DashboardCard
                                     icon="fa-solid fa-shopping-cart"
                                     title="Invoice"
-                                    value={data?.todayTotalInvoice}
+                                    value={data ? `${data?.todayTotalInvoice}` : ''}
                                     bgColor="#16a085"
                                 />
                             </div>
@@ -182,7 +201,7 @@ export default function Dashboard({user}) {
                                 <DashboardCard
                                     icon="fa-solid fa-cart-plus"
                                     title="Purchase"
-                                    value={data?.todayTotalPurchase}
+                                    value={data ? `${data?.todayTotalPurchase}` : ''}
                                     bgColor="#e67e22"
                                 />
                             </div>
@@ -198,7 +217,7 @@ export default function Dashboard({user}) {
                                 <DashboardCard
                                     icon="fa-solid fa-right-left"
                                     title="Returns"
-                                    value={data?.todayTotalReturn}
+                                    value={data ? `${data?.todayTotalReturn}` : ''}
                                     bgColor="#2c3e50"
                                 />
                             </div>

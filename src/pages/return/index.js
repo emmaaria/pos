@@ -163,7 +163,7 @@ export default function Return({user}) {
                             }
                             {data && !loading && (
                                 data.map((el, index) => (
-                                    <tr key={el.id} valign={`middle`} className={`row-id-${el.id}`}>
+                                    <tr key={el.return_id} valign={`middle`} className={`row-id-${el.return_id}`}>
                                         <td>{index + 1}</td>
                                         <td>{el.return_id}</td>
                                         <td>{el.return_amount} Tk.</td>
