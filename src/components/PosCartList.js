@@ -100,7 +100,7 @@ export default function PosCartList({invoiceProducts, calculateSubtotal, removeP
                 {
                     invoiceProducts && invoiceProducts.length <= 0 && (
                         <tr>
-                            <td colSpan={6} className={`text-center`}>
+                            <td colSpan={8} className={`text-center`}>
                                 No product added
                             </td>
                         </tr>
