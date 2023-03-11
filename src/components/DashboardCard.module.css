@@ -20,10 +20,15 @@
 }
 .title{
     margin-bottom: 0;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: 600;
 }
 .number{
     margin-bottom: 0;
     font-size: 1.2rem;
+}
+@media only screen and (max-width: 1400px) {
+    .title{
+        font-size: 1rem;
+    }
 }

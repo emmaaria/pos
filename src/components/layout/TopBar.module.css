@@ -134,15 +134,23 @@
   color: rgb(249, 58, 11);
 }
 
-@media only screen and (max-width: 1200px) {
+@media only screen and (max-width: 1400px) {
   .topBar{
-    padding-left: 3rem;
+    padding-left: calc(17% + 24px);
     justify-content: flex-start;
+    padding-right: 24px;
   }
   .rightSide{
     margin-left: auto;
   }
   .pageTitle{
     margin-left: 2rem;
+    font-size: 1.5rem;
+  }
+  .clock{
+    font-size: 20px;
+  }
+  .notification{
+    font-size: 1.5rem;
   }
 }

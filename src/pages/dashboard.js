@@ -34,7 +34,7 @@ export default function Dashboard({user}) {
                     <div className="custom-card">
                         <h4>Overview</h4>
                         <div className="row mt-4">
-                            <div className="col-md-4 mb-4">
+                            <div className="col-xxl-3 mb-4 col-lg-4">
                                 <DashboardCard
                                     icon="fa-solid fa-bag-shopping"
                                     title="Total Product"
@@ -42,7 +42,7 @@ export default function Dashboard({user}) {
                                     bgColor="#6c5ce7"
                                 />
                             </div>
-                            <div className="col-md-4 mb-4">
+                            <div className="col-xxl-3 mb-4 col-lg-4">
                                 <DashboardCard
                                     icon="fa-solid fa-user-group"
                                     title="Total Customer"
@@ -50,7 +50,7 @@ export default function Dashboard({user}) {
                                     bgColor="#e84393"
                                 />
                             </div>
-                            <div className="col-md-4 mb-4">
+                            <div className="col-xxl-3 mb-4 col-lg-4">
                                 <DashboardCard
                                     icon="fa-solid fa-users"
                                     title="Total Supplier"
@@ -58,7 +58,7 @@ export default function Dashboard({user}) {
                                     bgColor="#00b894"
                                 />
                             </div>
-                            <div className="col-md-4 mb-4">
+                            <div className="col-xxl-3 mb-4 col-lg-4">
                                 <DashboardCard
                                     icon="fa-solid fa-cart-plus"
                                     title="Total Purchase"
@@ -66,7 +66,7 @@ export default function Dashboard({user}) {
                                     bgColor="#192a56"
                                 />
                             </div>
-                            <div className="col-md-4 mb-4">
+                            <div className="col-xxl-3 mb-4 col-lg-4">
                                 <DashboardCard
                                     icon="fa-solid fa-shopping-cart"
                                     title="Total Invoice"
@@ -74,12 +74,28 @@ export default function Dashboard({user}) {
                                     bgColor="#fbc531"
                                 />
                             </div>
-                            <div className="col-md-4 mb-4">
+                            <div className="col-xxl-3 mb-4 col-lg-4">
                                 <DashboardCard
                                     icon="fa-solid fa-right-left"
                                     title="Total Return"
                                     value={data?.totalReturn}
                                     bgColor="#e84118"
+                                />
+                            </div>
+                            <div className="col-xxl-3 mb-4 col-lg-4">
+                                <DashboardCard
+                                    icon="fa-solid fa-money-bill-trend-up"
+                                    title="Purchase Amount"
+                                    value={`${data?.totalPurchaseAmount} Tk.`}
+                                    bgColor="#3c40c6"
+                                />
+                            </div>
+                            <div className="col-xxl-3 mb-4 col-lg-4">
+                                <DashboardCard
+                                    icon="fa-solid fa-money-bill-transfer"
+                                    title="Sale Amount"
+                                    value={`${data?.totalSaleAmount} Tk.`}
+                                    bgColor="#0fbcf9"
                                 />
                             </div>
                         </div>
