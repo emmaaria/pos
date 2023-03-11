@@ -105,7 +105,6 @@ export default function Dashboard({user}) {
                             </div>
                         </div>
                         <h4>Balance Overview</h4>
-                        
                         <div className="row mt-4 row-cols-xxl-5 row-cols-md-3">
                             <div className="col mb-4">
                                 <DashboardCard
@@ -158,6 +157,8 @@ export default function Dashboard({user}) {
                                 />
                             </div>
                         </div>
+                        {/* eslint-disable-next-line react/no-unescaped-entities */}
+                        <h4>Today's Overview</h4>
                     </div>
                 </div>
             </Layout>
