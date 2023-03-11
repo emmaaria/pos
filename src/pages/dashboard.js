@@ -8,7 +8,6 @@ import axios from "axios";
 
 export default function Dashboard({user}) {
     const [data, setData] = useState();
-    const [loading, setLoading] = useState(true);
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
@@ -19,7 +18,6 @@ export default function Dashboard({user}) {
         ).then(res => {
             if (res.data.status === true) {
                 setData(res.data.data);
-                setLoading(false);
             }
         }).catch(err => {
             console.log(err);
@@ -36,12 +34,52 @@ export default function Dashboard({user}) {
                     <div className="custom-card">
                         <h4>Overview</h4>
                         <div className="row mt-4">
-                            <div className="col-md-3">
+                            <div className="col-md-4 mb-4">
                                 <DashboardCard
                                     icon="fa-solid fa-bag-shopping"
                                     title="Total Product"
                                     value={data?.totalProduct}
                                     bgColor="#6c5ce7"
+                                />
+                            </div>
+                            <div className="col-md-4 mb-4">
+                                <DashboardCard
+                                    icon="fa-solid fa-user-group"
+                                    title="Total Customer"
+                                    value={data?.totalCustomer}
+                                    bgColor="#e84393"
+                                />
+                            </div>
+                            <div className="col-md-4 mb-4">
+                                <DashboardCard
+                                    icon="fa-solid fa-users"
+                                    title="Total Supplier"
+                                    value={data?.totalSupplier}
+                                    bgColor="#00b894"
+                                />
+                            </div>
+                            <div className="col-md-4 mb-4">
+                                <DashboardCard
+                                    icon="fa-solid fa-cart-plus"
+                                    title="Total Purchase"
+                                    value={data?.totalPurchase}
+                                    bgColor="#192a56"
+                                />
+                            </div>
+                            <div className="col-md-4 mb-4">
+                                <DashboardCard
+                                    icon="fa-solid fa-shopping-cart"
+                                    title="Total Invoice"
+                                    value={data?.totalInvoice}
+                                    bgColor="#fbc531"
+                                />
+                            </div>
+                            <div className="col-md-4 mb-4">
+                                <DashboardCard
+                                    icon="fa-solid fa-right-left"
+                                    title="Total Return"
+                                    value={data?.totalReturn}
+                                    bgColor="#e84118"
                                 />
                             </div>
                         </div>
