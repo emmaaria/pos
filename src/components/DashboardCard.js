@@ -1,12 +1,20 @@
 import styles from "./DashboardCard.module.css"
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
+import Image from "next/image";
 
-export default function DashboardCard({icon, title, value, bgColor}) {
+export default function DashboardCard({icon, title, value, bgColor, imege, imageSrc}) {
     return (
         <div className={styles.cardContainer} style={{background: bgColor ? bgColor : "rgb(249, 58, 11)"}}>
             <div className="d-flex align-items-center">
                 <div className={styles.icon}>
-                    <i className={icon}></i>
+                    {
+                        !imege && (
+                            <i className={icon}></i>
+                        ) || (
+                            <Image src={imageSrc} width={35}/>
+                        )
+                    }
+
                 </div>
                 <div className={styles.content}>
                     <p className={styles.title}>{title}</p>
