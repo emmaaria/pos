@@ -22,7 +22,9 @@ export default function Dashboard({user}) {
             headers
         ).then(res => {
             if (res.data.status === true) {
+                console.log(res.data.data)
                 setData(res.data.data);
+                console.log(res.data.data)
             }
         }).catch(err => {
             console.log(err);
@@ -159,6 +161,109 @@ export default function Dashboard({user}) {
                         </div>
                         {/* eslint-disable-next-line react/no-unescaped-entities */}
                         <h4>Today's Overview</h4>
+                        <div className="row mt-4 row-cols-xxl-4 row-cols-md-3">
+                            <div className="col mb-4">
+                                <DashboardCard
+                                    icon="fa-solid fa-shopping-cart"
+                                    title="Invoice"
+                                    value={data?.todayTotalInvoice}
+                                    bgColor="#16a085"
+                                />
+                            </div>
+                            <div className="col mb-4">
+                                <DashboardCard
+                                    icon="fa-solid fa-filter-circle-dollar"
+                                    title="Sale Amount"
+                                    value={data ? `${data?.todayTotalSaleAmount} Tk.` : ''}
+                                    bgColor="#8e44ad"
+                                />
+                            </div>
+                            <div className="col mb-4">
+                                <DashboardCard
+                                    icon="fa-solid fa-cart-plus"
+                                    title="Purchase"
+                                    value={data?.todayTotalPurchase}
+                                    bgColor="#e67e22"
+                                />
+                            </div>
+                            <div className="col mb-4">
+                                <DashboardCard
+                                    icon="fa-solid fa-money-bill-trend-up"
+                                    title="Purchase Amount"
+                                    value={data ? `${data?.todayTotalPurchaseAmount} Tk.` : ''}
+                                    bgColor="#c0392b"
+                                />
+                            </div>
+                            <div className="col mb-4">
+                                <DashboardCard
+                                    icon="fa-solid fa-right-left"
+                                    title="Returns"
+                                    value={data?.todayTotalReturn}
+                                    bgColor="#2c3e50"
+                                />
+                            </div>
+                            <div className="col mb-4">
+                                <DashboardCard
+                                    icon="fa-solid fa-money-bill-transfer"
+                                    title="Return Amount"
+                                    value={data ? `${data?.todayTotalReturnAmount} Tk.` : ''}
+                                    bgColor="#ff3838"
+                                />
+                            </div>
+                            <div className="col mb-4">
+                                <DashboardCard
+                                    title="Cash"
+                                    value={data ? `${data?.todayTotalCash} Tk.` : ''}
+                                    bgColor="#4C4B16"
+                                    imege={true}
+                                    imageSrc={cash}
+                                />
+                            </div>
+                            <div className="col mb-4">
+                                <DashboardCard
+                                    title="Bkash"
+                                    value={data ? `${data?.todayTotalBkash} Tk.` : ''}
+                                    bgColor="#2C3333"
+                                    imege={true}
+                                    imageSrc={bkash}
+                                />
+                            </div>
+                            <div className="col mb-4">
+                                <DashboardCard
+                                    title="Nagad"
+                                    value={data ? `${data?.todayTotalNagad} Tk.` : ''}
+                                    bgColor="#0E8388"
+                                    imege={true}
+                                    imageSrc={nagad}
+                                />
+                            </div>
+                            <div className="col mb-4">
+                                <DashboardCard
+                                    title="Bank"
+                                    value={data ? `${data?.todayTotalBank} Tk.` : ''}
+                                    bgColor="#3E54AC"
+                                    imege={true}
+                                    imageSrc={bank}
+                                />
+                            </div>
+                            <div className="col mb-4">
+                                <DashboardCard
+                                    title="Card"
+                                    value={data ? `${data?.todayTotalCard} Tk.` : ''}
+                                    bgColor="#81C6E8"
+                                    imege={true}
+                                    imageSrc={card}
+                                />
+                            </div>
+                            <div className="col mb-4">
+                                <DashboardCard
+                                    title="Profit"
+                                    icon="fa-solid fa-piggy-bank"
+                                    value={data ? `${parseFloat(data?.todayTotalProfit).toFixed(2)} Tk.` : ''}
+                                    bgColor="#A84448"
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </Layout>

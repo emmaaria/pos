@@ -11,7 +11,7 @@ export default function DashboardCard({icon, title, value, bgColor, imege, image
                         !imege && (
                             <i className={icon}></i>
                         ) || (
-                            <Image src={imageSrc} width={35}/>
+                            <Image src={imageSrc} width={35} alt="Image"/>
                         )
                     }
 
