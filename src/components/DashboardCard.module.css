@@ -1,0 +1,29 @@
+.cardContainer{
+    border-radius: 10px;
+    padding: 20px;
+    color: #ffffff;
+}
+.icon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 0.5rem;
+}
+.icon i{
+    font-size: 2rem;
+}
+.content{
+    margin-left: 1rem;
+}
+.title{
+    margin-bottom: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+.number{
+    margin-bottom: 0;
+    font-size: 1.2rem;
+}
