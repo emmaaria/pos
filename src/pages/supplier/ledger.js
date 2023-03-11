@@ -9,15 +9,15 @@ import Loader from "../../components/Loader";
 import Select from "react-select";
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 import {toast, ToastContainer} from "react-toastify";
-import $ from "jquery";
+import $ from 'jquery';
 
-export default function CustomerLedger({user}) {
+export default function SupplierLedger({user}) {
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
     const [startDate, setStartDate] = useState();
-    const [customers, setCustomers] = useState([]);
-    const [customer, setCustomer] = useState();
+    const [suppliers, setSuppliers] = useState([]);
+    const [supplier, setSupplier] = useState();
     const [endDate, setEndDate] = useState();
     const [data, setData] = useState([]);
     const [totalDue, setTotalDue] = useState();
@@ -27,13 +27,16 @@ export default function CustomerLedger({user}) {
         async function getData() {
             try {
                 const res = await axios.get(
-                    `${process.env.API_URL}/customer?allData=true`, headers
+                    `${process.env.API_URL}/supplier?allData=true`, headers
                 );
                 if (res.data.status === true) {
-                    if (res.data.customers && res.data.customers.length > 0) {
-                        setCustomers([]);
-                        res.data.customers.map(el => {
-                            setCustomers(old => [...old, {value: el.id, label: `${el.name} (${el.address?el.address : ''})`}])
+                    if (res.data.suppliers && res.data.suppliers.length > 0) {
+                        setSuppliers([]);
+                        res.data.suppliers.map(el => {
+                            setSuppliers(old => [...old, {
+                                value: el.id,
+                                label: `${el.name} (${el.address ? el.address : ''})`
+                            }])
                         })
                     }
                 }
@@ -43,13 +46,13 @@ export default function CustomerLedger({user}) {
         }
 
         getData();
-    }, [setCustomers]);
+    }, [setSuppliers]);
 
     const search = async (e) => {
         e.preventDefault;
-        if (!customer || customer === '') {
+        if (!supplier || supplier === '') {
             toast.dismiss();
-            toast.error('Please select customer', {
+            toast.error('Please select supplier', {
                 position: "bottom-right",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -64,12 +67,13 @@ export default function CustomerLedger({user}) {
         const start = $('.startDate').val()
         const end = $('.endDate').val()
         axios.post(
-            `${process.env.API_URL}/report/customer/ledger`, {
-                startDate: start, endDate : end, customer
+            `${process.env.API_URL}/report/supplier/ledger`, {
+                startDate: start, endDate: end, supplier
             },
             headers
         ).then(res => {
             if (res.data.status === true) {
+                console.log(res.data.data)
                 setData(res.data.data);
                 setTotalDue(0);
                 setTotalPaid(0);
@@ -87,7 +91,7 @@ export default function CustomerLedger({user}) {
         <>
             <Head>
                 <title>
-                    Customer Ledger
+                    Supplier Ledger
                 </title>
             </Head>
             {
@@ -96,18 +100,19 @@ export default function CustomerLedger({user}) {
                 )
             }
             <ToastContainer/>
-            <Layout user={user} title={`Customer Ledger`}>
+            <Layout user={user} title={`Supplier Ledger`}>
                 <div className="content">
                     <div className="custom-card">
                         <div className="row mb-4">
                             <div className="row">
                                 <div className="col">
                                     <label className="form-label">
-                                        Customer
+                                        Supplier
                                     </label>
                                     {
-                                        customers && (
-                                            <Select options={customers} isClearable={true} isSearchable={true} onChange={(value) => setCustomer(value?.value)}/>
+                                        suppliers && (
+                                            <Select options={suppliers} isClearable={true} isSearchable={true}
+                                                    onChange={(value) => setSupplier(value?.value)}/>
                                         ) || (
                                             <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
                                                 <Skeleton width={`100%`} height={40}/>
@@ -199,7 +204,7 @@ export default function CustomerLedger({user}) {
                                                 </strong>
                                             </td>
                                             <td>
-                                                { totalDue - totalPaid } Tk.
+                                                {totalDue - totalPaid} Tk.
                                             </td>
                                             <td></td>
                                         </tr>
