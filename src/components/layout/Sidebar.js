@@ -184,6 +184,7 @@ export default function Sidebar({user}) {
                             <Link href={`/category`} className={`
                                 ${
                                 router.pathname === '/category' ||
+                                router.pathname === '/category/[id]' ||
                                 router.pathname === '/category/create'
                                     ? styles.active
                                     : ''
@@ -373,6 +374,7 @@ export default function Sidebar({user}) {
                             <Link href={`/purchase`} className={`
                                 ${
                                 router.pathname === '/purchase' ||
+                                router.pathname === '/purchase/view/[id]' ||
                                 router.pathname === '/purchase/[id]'
                                     ? styles.active
                                     : ''
@@ -400,7 +402,6 @@ export default function Sidebar({user}) {
                                 ${
                               router.pathname === '/return' ||
                               router.pathname === '/return/direct/create' ||
-                              router.pathname === '/purchase/view/[id]' ||
                               router.pathname === '/purchase/[id]'
                                   ? styles.active
                                   : ''
@@ -434,17 +435,17 @@ export default function Sidebar({user}) {
                                 Direct Product Return
                             </Link>
                         </li>
-                        <li>
-                            <Link href={`/return/invoice/create`} className={`
-                                ${
-                                router.pathname === '/return/invoice/create'
-                                    ? styles.active
-                                    : ''
-                            }
-                            `}>
-                                Invoice Product Return
-                            </Link>
-                        </li>
+                        {/*<li>*/}
+                        {/*    <Link href={`/return/invoice/create`} className={`*/}
+                        {/*        ${*/}
+                        {/*        router.pathname === '/return/invoice/create'*/}
+                        {/*            ? styles.active*/}
+                        {/*            : ''*/}
+                        {/*    }*/}
+                        {/*    `}>*/}
+                        {/*        Invoice Product Return*/}
+                        {/*    </Link>*/}
+                        {/*</li>*/}
                     </ul>
                 </li>
                 <li>
@@ -540,7 +541,7 @@ export default function Sidebar({user}) {
                     <Link href={`#`} onClick={showReportMenu}
                           className={`reportParent 
                                 ${
-                              router.pathname === '/report/sales' ||
+                              router.pathname === '/report/invoice' ||
                               router.pathname === '/report/purchase'
                                   ? styles.active
                                   : ''
@@ -552,14 +553,14 @@ export default function Sidebar({user}) {
                     </Link>
                     <ul className={`reportMenu ${styles.subMenu}`}>
                         <li>
-                            <Link href={`/report/sales`} className={`
+                            <Link href={`/report/invoice`} className={`
                                 ${
-                                router.pathname === '/report/sales'
+                                router.pathname === '/report/invoice'
                                     ? styles.active
                                     : ''
                             }
                             `}>
-                                Sales Report
+                                Invoice Report
                             </Link>
                         </li>
                         <li>

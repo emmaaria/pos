@@ -9,6 +9,7 @@ import {useState} from "react";
 import DatePicker from "react-datepicker";
 import AutocompleteInput from "../../components/AutocompleteInput";
 import Loader from "../../components/Loader";
+import useMode from "../../lib/mode";
 
 export default function CreatePurchase({user}) {
     const [loader, setLoader] = useState(false);
@@ -23,6 +24,7 @@ export default function CreatePurchase({user}) {
     const [purchaseProducts, setPurchaseProducts] = useState([]);
     const [keyword, setKeyword] = useState();
     const [searching, setSearching] = useState(false);
+    const {mode} = useMode()
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
@@ -100,6 +102,7 @@ export default function CreatePurchase({user}) {
                 total,
                 openingStock
             }, headers);
+            console.log(res.data)
             if (res.data.status === true) {
                 toast.dismiss();
                 toast.success('Successfully Saved', {
@@ -264,7 +267,7 @@ export default function CreatePurchase({user}) {
             }
             <ToastContainer/>
             <Layout user={user} title={`Add New Purchase`}>
-                <div className="content">
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <form onSubmit={handleForm}>
                             <div className="mb-3">
@@ -421,7 +424,7 @@ export default function CreatePurchase({user}) {
                                     <td></td>
                                 </tr>
                                 {
-                                    (paymentMethod === 'cash' && paymentMethod === 'multiple') && (
+                                    (paymentMethod === 'cash' || paymentMethod === 'multiple') && (
                                         <tr>
                                             <td className={`text-end`} colSpan={4}>
                                                 <strong>Cash Paid Amount</strong>
@@ -438,7 +441,7 @@ export default function CreatePurchase({user}) {
                                 }
 
                                 {
-                                    (paymentMethod === 'bkash' && paymentMethod === 'multiple') && (
+                                    (paymentMethod === 'bkash' || paymentMethod === 'multiple') && (
                                         <tr>
                                             <td className={`text-end`} colSpan={4}><strong>Bkash Paid Amount</strong></td>
                                             <td>
@@ -453,7 +456,7 @@ export default function CreatePurchase({user}) {
                                 }
 
                                 {
-                                    (paymentMethod === 'nagad' && paymentMethod === 'multiple') && (
+                                    (paymentMethod === 'nagad' || paymentMethod === 'multiple') && (
                                         <tr>
                                             <td className={`text-end`} colSpan={4}><strong>Nagad Paid Amount</strong></td>
                                             <td>
@@ -468,7 +471,7 @@ export default function CreatePurchase({user}) {
                                 }
 
                                 {
-                                    (paymentMethod === 'bank' && banks && banks.length > 0 && paymentMethod === 'multiple') && (
+                                    (paymentMethod === 'bank' || banks && banks.length > 0 && paymentMethod === 'multiple') && (
                                         <>
                                             <tr>
                                                 <td className={`text-end`} colSpan={4}><strong>Bank</strong>

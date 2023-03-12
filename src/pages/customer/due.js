@@ -10,6 +10,7 @@ import Select from "react-select";
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 import {toast, ToastContainer} from "react-toastify";
 import $ from "jquery";
+import useMode from "../../lib/mode";
 
 export default function CustomerDueReceive({user}) {
     const headers = {
@@ -139,7 +140,7 @@ export default function CustomerDueReceive({user}) {
                 note,
                 amount,
                 account,
-                date : paymentDate,
+                date: paymentDate,
                 bankId
             }, headers);
             if (res.data.status === true) {
@@ -228,7 +229,7 @@ export default function CustomerDueReceive({user}) {
         }
         setAccount(event.target.value)
     }
-
+    const {mode} = useMode()
     return (
         <>
             <Head>
@@ -243,7 +244,7 @@ export default function CustomerDueReceive({user}) {
             }
             <ToastContainer/>
             <Layout user={user} title={`Customer Due Receive`}>
-                <div className="content">
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <form onSubmit={handleForm}>
                             <div className="mb-3 row">

@@ -10,6 +10,7 @@ import Loader from "../../../components/Loader";
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 import Select from "react-select";
 import DatePicker from "react-datepicker";
+import useMode from "../../../lib/mode";
 
 export default function CreateExpense({user}) {
     const [loader, setLoader] = useState(false);
@@ -151,6 +152,7 @@ export default function CreateExpense({user}) {
                 });
                 $('form').trigger('reset');
                 setLoader(false);
+                setAmount('');
             } else {
                 toast.dismiss();
                 if (typeof res.data.errors === 'object') {
@@ -222,6 +224,7 @@ export default function CreateExpense({user}) {
         }
         setAccount(event.target.value)
     }
+    const {mode} = useMode()
     return (
         <>
             <Head>
@@ -236,7 +239,7 @@ export default function CreateExpense({user}) {
             }
             <ToastContainer/>
             <Layout user={user} title={`Add New Expense`}>
-                <div className="content">
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <form onSubmit={handleForm}>
                             <div className="mb-3 row">

@@ -28,8 +28,9 @@ a:focus-visible {
 }
 
 .content-pos {
-    padding: 15px 24px 0;
+    padding: 15px 24px 30px;
     width: 100%;
+    max-height: 100%;
 }
 
 .custom-card {
@@ -457,7 +458,7 @@ table {
 
 .customer-input .customer-add-icon {
     position: absolute;
-    top: 49%;
+    top: 50%;
     right: 0;
     transform: translate(0, -50%);
     z-index: 9;
@@ -568,7 +569,7 @@ table {
 }
 
 .product-table {
-    height: 55%;
+    height: 65%;
     overflow-y: scroll;
 }
 
@@ -705,7 +706,10 @@ table {
 .dark-mode-bg-body .custom-card{
     background: #212130 !important;
 }
-.dark-mode-bg-body hr{
+.dark-mode-bg-body .product-item{
+    background: #2C3A47 !important;
+}
+.dark-mode-bg-body hr, .dark-mode-bg-body p{
     color: #ffffff !important;
 }
 

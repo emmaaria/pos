@@ -21,9 +21,11 @@ import PosInvoicePrint from "../../components/PosInvoicePrint";
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 import AutocompleteDefaultCustomer from "../../components/AutocompleteDefaultCustomer";
 import styles from '../../styles/CreateSale.module.css'
+import useMode from "../../lib/mode";
 
 export default function EditSale({user, id}) {
     const [loader, setLoader] = useState(false)
+    const {mode} = useMode()
     const [newInvoice, setNewInvoice] = useState(false)
     const [loading, setLoading] = useState(false)
     const [subTotal, setSubTotal] = useState(0)
@@ -346,7 +348,7 @@ export default function EditSale({user, id}) {
             }
             <ToastContainer/>
             <Layout user={user} title={`POS`} sidebar={false} topbar={false}>
-                <div className="content-pos">
+                <div className={`content-pos ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="row pb-15">
                         <div className="col-md-7">
                             <form onSubmit={handleForm} id='invoice'></form>

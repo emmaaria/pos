@@ -11,6 +11,7 @@ import Loader from "../../components/Loader";
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 import TableSkeleton from "../../components/TableSkeleton";
 import AutocompleteDefaultSupplier from "../../components/AutocompleteDefaultSupplier";
+import useMode from "../../lib/mode";
 
 export default function EditPurchase({user, id}) {
     const [loader, setLoader] = useState(false);
@@ -285,6 +286,7 @@ export default function EditPurchase({user, id}) {
         setBank(event.target.value.replace(/[^0-9.]/g, ''))
         calculateDue()
     }
+    const {mode} = useMode()
     return (
         <>
             <Head>
@@ -299,7 +301,7 @@ export default function EditPurchase({user, id}) {
             }
             <ToastContainer/>
             <Layout user={user} title={`Edit Purchase`}>
-                <div className="content">
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <form onSubmit={handleForm}>
                             <div className="mb-3">

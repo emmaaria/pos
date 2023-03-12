@@ -7,12 +7,14 @@ import axios from "axios";
 import $ from 'jquery';
 import Loader from "../../components/Loader";
 import {useState} from "react";
+import useMode from "../../lib/mode";
 
 export default function CreateCustomer({user}) {
     const [loader, setLoader] = useState(false);
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
+    const {mode} = useMode()
     const handleForm = async (e) => {
         e.preventDefault();
         toast.loading('Submitting', {
@@ -94,7 +96,7 @@ export default function CreateCustomer({user}) {
             }
             <ToastContainer/>
             <Layout user={user} title={`Add New Customer`}>
-                <div className="content">
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <form onSubmit={handleForm}>
                             <div className="mb-3">

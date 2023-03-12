@@ -17,6 +17,7 @@ export default function Dashboard({user}) {
     const [data, setData] = useState();
     const {mode} = useMode()
     const [salesChart, setSalesChart] = useState([]);
+    const [profitChart, setProfitChart] = useState([]);
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
@@ -29,6 +30,9 @@ export default function Dashboard({user}) {
                 setData(res.data.data);
                 if (res.data.data.salesChart && res.data.data.salesChart.length > 0) {
                     setSalesChart(res.data.data.salesChart)
+                }
+                if (res.data.data.profitChart && res.data.data.profitChart.length > 0) {
+                    setProfitChart(res.data.data.profitChart)
                 }
             }
         }).catch(err => {
@@ -123,7 +127,25 @@ export default function Dashboard({user}) {
                                                 <YAxis/>
                                                 <Tooltip/>
                                                 <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
-                                                <Line type="monotone" dataKey="total" stroke="rgb(249, 58, 11)"/>
+                                                <Line type="monotone" dataKey="sale" stroke="rgb(249, 58, 11)"/>
+                                            </LineChart>
+                                        )
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-6 mb-4">
+                            <div className={`chart-card ${mode === 'dark' ? 'dark-mode-bg' : ''}`}>
+                                <h5 className={mode === 'dark' ? 'dark-mode-color' : ''}>Profit</h5>
+                                <div className="mt-4">
+                                    {
+                                        data && (
+                                            <LineChart width={500} height={300} data={profitChart}>
+                                                <XAxis dataKey="month"/>
+                                                <YAxis/>
+                                                <Tooltip/>
+                                                <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
+                                                <Line type="monotone" dataKey="profit" stroke="rgb(249, 58, 11)"/>
                                             </LineChart>
                                         )
                                     }
@@ -131,164 +153,162 @@ export default function Dashboard({user}) {
                             </div>
                         </div>
                     </div>
-                    <div className="custom-card">
-                        <h4 className={mode === 'dark' ? 'dark-mode-color' : ''}>Balance Overview</h4>
-                        <div className="row mt-4 row-cols-xxl-5 row-cols-md-3">
-                            <div className="col mb-4">
-                                <DashboardCard
-                                    icon="fa-solid fa-filter-circle-dollar"
-                                    title="Cash"
-                                    value={data ? `${data?.totalCash} Tk.` : ''}
-                                    bgColor="#05c46b"
-                                    imege={true}
-                                    imageSrc={cash}
-                                />
-                            </div>
-                            <div className="col mb-4">
-                                <DashboardCard
-                                    icon="fa-solid fa-filter-circle-dollar"
-                                    title="Bkash"
-                                    value={data ? `${data?.totalBkash} Tk.` : ''}
-                                    bgColor="#7d5fff"
-                                    imege={true}
-                                    imageSrc={bkash}
-                                />
-                            </div>
-                            <div className="col mb-4">
-                                <DashboardCard
-                                    icon="fa-solid fa-filter-circle-dollar"
-                                    title="Nagad"
-                                    value={data ? `${data?.totalNagad} Tk.` : ''}
-                                    bgColor="#227093"
-                                    imege={true}
-                                    imageSrc={nagad}
-                                />
-                            </div>
-                            <div className="col mb-4">
-                                <DashboardCard
-                                    icon="fa-solid fa-filter-circle-dollar"
-                                    title="Bank"
-                                    value={data ? `${data?.totalBank} Tk.` : ''}
-                                    bgColor="#cd6133"
-                                    imege={true}
-                                    imageSrc={bank}
-                                />
-                            </div>
-                            <div className="col mb-4">
-                                <DashboardCard
-                                    icon="fa-solid fa-filter-circle-dollar"
-                                    title="Card"
-                                    value={data ? `${data?.totalCard} Tk.` : ''}
-                                    bgColor="#40407a"
-                                    imege={true}
-                                    imageSrc={card}
-                                />
-                            </div>
+                    <h4 className={mode === 'dark' ? 'dark-mode-color' : ''}>Balance Overview</h4>
+                    <div className="row mt-4 row-cols-xxl-5 row-cols-md-3">
+                        <div className="col mb-4">
+                            <DashboardCard
+                                icon="fa-solid fa-filter-circle-dollar"
+                                title="Cash"
+                                value={data ? `${data?.totalCash} Tk.` : ''}
+                                bgColor="#05c46b"
+                                imege={true}
+                                imageSrc={cash}
+                            />
                         </div>
-                        {/* eslint-disable-next-line react/no-unescaped-entities */}
-                        <h4>Today's Overview</h4>
-                        <div className="row mt-4 row-cols-xxl-4 row-cols-md-3">
-                            <div className="col mb-4">
-                                <DashboardCard
-                                    icon="fa-solid fa-shopping-cart"
-                                    title="Invoice"
-                                    value={data ? `${data?.todayTotalInvoice}` : ''}
-                                    bgColor="#16a085"
-                                />
-                            </div>
-                            <div className="col mb-4">
-                                <DashboardCard
-                                    icon="fa-solid fa-filter-circle-dollar"
-                                    title="Sale Amount"
-                                    value={data ? `${data?.todayTotalSaleAmount} Tk.` : ''}
-                                    bgColor="#8e44ad"
-                                />
-                            </div>
-                            <div className="col mb-4">
-                                <DashboardCard
-                                    icon="fa-solid fa-cart-plus"
-                                    title="Purchase"
-                                    value={data ? `${data?.todayTotalPurchase}` : ''}
-                                    bgColor="#e67e22"
-                                />
-                            </div>
-                            <div className="col mb-4">
-                                <DashboardCard
-                                    icon="fa-solid fa-money-bill-trend-up"
-                                    title="Purchase Amount"
-                                    value={data ? `${data?.todayTotalPurchaseAmount} Tk.` : ''}
-                                    bgColor="#c0392b"
-                                />
-                            </div>
-                            <div className="col mb-4">
-                                <DashboardCard
-                                    icon="fa-solid fa-right-left"
-                                    title="Returns"
-                                    value={data ? `${data?.todayTotalReturn}` : ''}
-                                    bgColor="#2c3e50"
-                                />
-                            </div>
-                            <div className="col mb-4">
-                                <DashboardCard
-                                    icon="fa-solid fa-money-bill-transfer"
-                                    title="Return Amount"
-                                    value={data ? `${data?.todayTotalReturnAmount} Tk.` : ''}
-                                    bgColor="#ff3838"
-                                />
-                            </div>
-                            <div className="col mb-4">
-                                <DashboardCard
-                                    title="Cash"
-                                    value={data ? `${data?.todayTotalCash} Tk.` : ''}
-                                    bgColor="#4C4B16"
-                                    imege={true}
-                                    imageSrc={cash}
-                                />
-                            </div>
-                            <div className="col mb-4">
-                                <DashboardCard
-                                    title="Bkash"
-                                    value={data ? `${data?.todayTotalBkash} Tk.` : ''}
-                                    bgColor="#2C3333"
-                                    imege={true}
-                                    imageSrc={bkash}
-                                />
-                            </div>
-                            <div className="col mb-4">
-                                <DashboardCard
-                                    title="Nagad"
-                                    value={data ? `${data?.todayTotalNagad} Tk.` : ''}
-                                    bgColor="#0E8388"
-                                    imege={true}
-                                    imageSrc={nagad}
-                                />
-                            </div>
-                            <div className="col mb-4">
-                                <DashboardCard
-                                    title="Bank"
-                                    value={data ? `${data?.todayTotalBank} Tk.` : ''}
-                                    bgColor="#3E54AC"
-                                    imege={true}
-                                    imageSrc={bank}
-                                />
-                            </div>
-                            <div className="col mb-4">
-                                <DashboardCard
-                                    title="Card"
-                                    value={data ? `${data?.todayTotalCard} Tk.` : ''}
-                                    bgColor="#81C6E8"
-                                    imege={true}
-                                    imageSrc={card}
-                                />
-                            </div>
-                            <div className="col mb-4">
-                                <DashboardCard
-                                    title="Profit"
-                                    icon="fa-solid fa-piggy-bank"
-                                    value={data ? `${parseFloat(data?.todayTotalProfit).toFixed(2)} Tk.` : ''}
-                                    bgColor="#A84448"
-                                />
-                            </div>
+                        <div className="col mb-4">
+                            <DashboardCard
+                                icon="fa-solid fa-filter-circle-dollar"
+                                title="Bkash"
+                                value={data ? `${data?.totalBkash} Tk.` : ''}
+                                bgColor="#7d5fff"
+                                imege={true}
+                                imageSrc={bkash}
+                            />
+                        </div>
+                        <div className="col mb-4">
+                            <DashboardCard
+                                icon="fa-solid fa-filter-circle-dollar"
+                                title="Nagad"
+                                value={data ? `${data?.totalNagad} Tk.` : ''}
+                                bgColor="#227093"
+                                imege={true}
+                                imageSrc={nagad}
+                            />
+                        </div>
+                        <div className="col mb-4">
+                            <DashboardCard
+                                icon="fa-solid fa-filter-circle-dollar"
+                                title="Bank"
+                                value={data ? `${data?.totalBank} Tk.` : ''}
+                                bgColor="#cd6133"
+                                imege={true}
+                                imageSrc={bank}
+                            />
+                        </div>
+                        <div className="col mb-4">
+                            <DashboardCard
+                                icon="fa-solid fa-filter-circle-dollar"
+                                title="Card"
+                                value={data ? `${data?.totalCard} Tk.` : ''}
+                                bgColor="#40407a"
+                                imege={true}
+                                imageSrc={card}
+                            />
+                        </div>
+                    </div>
+                    {/* eslint-disable-next-line react/no-unescaped-entities */}
+                    <h4 className={mode === 'dark' ? 'dark-mode-color' : ''}>Today's Overview</h4>
+                    <div className="row mt-4 row-cols-xxl-4 row-cols-md-3">
+                        <div className="col mb-4">
+                            <DashboardCard
+                                icon="fa-solid fa-shopping-cart"
+                                title="Invoice"
+                                value={data ? `${data?.todayTotalInvoice}` : ''}
+                                bgColor="#16a085"
+                            />
+                        </div>
+                        <div className="col mb-4">
+                            <DashboardCard
+                                icon="fa-solid fa-filter-circle-dollar"
+                                title="Sale Amount"
+                                value={data ? `${data?.todayTotalSaleAmount} Tk.` : ''}
+                                bgColor="#8e44ad"
+                            />
+                        </div>
+                        <div className="col mb-4">
+                            <DashboardCard
+                                icon="fa-solid fa-cart-plus"
+                                title="Purchase"
+                                value={data ? `${data?.todayTotalPurchase}` : ''}
+                                bgColor="#e67e22"
+                            />
+                        </div>
+                        <div className="col mb-4">
+                            <DashboardCard
+                                icon="fa-solid fa-money-bill-trend-up"
+                                title="Purchase Amount"
+                                value={data ? `${data?.todayTotalPurchaseAmount} Tk.` : ''}
+                                bgColor="#c0392b"
+                            />
+                        </div>
+                        <div className="col mb-4">
+                            <DashboardCard
+                                icon="fa-solid fa-right-left"
+                                title="Returns"
+                                value={data ? `${data?.todayTotalReturn}` : ''}
+                                bgColor="#2c3e50"
+                            />
+                        </div>
+                        <div className="col mb-4">
+                            <DashboardCard
+                                icon="fa-solid fa-money-bill-transfer"
+                                title="Return Amount"
+                                value={data ? `${data?.todayTotalReturnAmount} Tk.` : ''}
+                                bgColor="#ff3838"
+                            />
+                        </div>
+                        <div className="col mb-4">
+                            <DashboardCard
+                                title="Cash"
+                                value={data ? `${data?.todayTotalCash} Tk.` : ''}
+                                bgColor="#4C4B16"
+                                imege={true}
+                                imageSrc={cash}
+                            />
+                        </div>
+                        <div className="col mb-4">
+                            <DashboardCard
+                                title="Bkash"
+                                value={data ? `${data?.todayTotalBkash} Tk.` : ''}
+                                bgColor="#2C3333"
+                                imege={true}
+                                imageSrc={bkash}
+                            />
+                        </div>
+                        <div className="col mb-4">
+                            <DashboardCard
+                                title="Nagad"
+                                value={data ? `${data?.todayTotalNagad} Tk.` : ''}
+                                bgColor="#0E8388"
+                                imege={true}
+                                imageSrc={nagad}
+                            />
+                        </div>
+                        <div className="col mb-4">
+                            <DashboardCard
+                                title="Bank"
+                                value={data ? `${data?.todayTotalBank} Tk.` : ''}
+                                bgColor="#3E54AC"
+                                imege={true}
+                                imageSrc={bank}
+                            />
+                        </div>
+                        <div className="col mb-4">
+                            <DashboardCard
+                                title="Card"
+                                value={data ? `${data?.todayTotalCard} Tk.` : ''}
+                                bgColor="#81C6E8"
+                                imege={true}
+                                imageSrc={card}
+                            />
+                        </div>
+                        <div className="col mb-4">
+                            <DashboardCard
+                                title="Profit"
+                                icon="fa-solid fa-piggy-bank"
+                                value={data ? `${parseFloat(data?.todayTotalProfit).toFixed(2)} Tk.` : ''}
+                                bgColor="#A84448"
+                            />
                         </div>
                     </div>
                 </div>

@@ -6,6 +6,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import TableSkeleton from "../../components/TableSkeleton";
 import $ from "jquery";
+import useMode from "../../lib/mode";
 
 export default function Stock({user}) {
     const [products, setProducts] = useState();
@@ -63,6 +64,7 @@ export default function Stock({user}) {
             console.log(err);
         }
     }
+    const {mode} = useMode()
     return (
         <>
             <Head>
@@ -71,7 +73,7 @@ export default function Stock({user}) {
                 </title>
             </Head>
             <Layout user={user} title={`Stock`}>
-                <div className="content">
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <div className="row">
                             <div className="col-md-9"></div>

@@ -8,6 +8,7 @@ import $ from 'jquery';
 import {useEffect, useState} from "react";
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 import Loader from "../../components/Loader";
+import useMode from "../../lib/mode";
 
 export default function EditCustomer({user, id}) {
     const [customer, setCustomer] = useState();
@@ -97,6 +98,7 @@ export default function EditCustomer({user, id}) {
             setLoader(false);
         }
     }
+    const {mode} = useMode()
     return (
         <>
             <Head>
@@ -111,7 +113,7 @@ export default function EditCustomer({user, id}) {
                 )
             }
             <Layout user={user} title={`Edit Customer`}>
-                <div className="content">
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <form onSubmit={handleForm}>
                             <div className="mb-3">

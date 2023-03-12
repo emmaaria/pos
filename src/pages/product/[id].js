@@ -9,6 +9,7 @@ import {useEffect, useState} from "react";
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 import Loader from "../../components/Loader";
 import Multiselect from "multiselect-react-dropdown";
+import useMode from "../../lib/mode";
 
 export default function EditProduct({user, id}) {
     const [product, setProduct] = useState();
@@ -112,7 +113,7 @@ export default function EditProduct({user, id}) {
                 price,
                 weight,
                 purchase_price: purchasePrice,
-                suppliers : selectedSupplier,
+                suppliers: selectedSupplier,
             }, headers);
             if (res.data.status === true) {
                 toast.dismiss();
@@ -166,6 +167,7 @@ export default function EditProduct({user, id}) {
     const handleSupplierRemove = (selectedList) => {
         setSelectedSupplier(selectedList);
     }
+    const {mode} = useMode()
     return (
         <>
             <Head>
@@ -180,7 +182,7 @@ export default function EditProduct({user, id}) {
             }
             <ToastContainer/>
             <Layout user={user} title={`Edit Product`}>
-                <div className="content">
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <form onSubmit={handleForm}>
                             <div className="mb-3 row">
@@ -201,7 +203,8 @@ export default function EditProduct({user, id}) {
                                     <label className={`form-label`}>Category</label>
                                     {
                                         product && loading === false && (
-                                            <select className="form-control category" value={category} onChange={handleCategoryChange}>
+                                            <select className="form-control category" value={category}
+                                                    onChange={handleCategoryChange}>
                                                 <option value="">Choose Category</option>
                                                 {
                                                     categories && (

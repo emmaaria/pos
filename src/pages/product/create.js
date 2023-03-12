@@ -9,6 +9,7 @@ import {useEffect, useState, useRef} from "react";
 import Loader from "../../components/Loader";
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 import Multiselect from 'multiselect-react-dropdown';
+import useMode from "../../lib/mode";
 
 export default function CreateProduct({user}) {
     const [loader, setLoader] = useState(false);
@@ -172,6 +173,7 @@ export default function CreateProduct({user}) {
     const handleSupplierRemove = (selectedList) => {
         setSelectedSupplier(selectedList);
     }
+    const {mode} = useMode()
     return (
         <>
             <Head>
@@ -186,7 +188,7 @@ export default function CreateProduct({user}) {
             }
             <ToastContainer/>
             <Layout user={user} title={`Add New Product`}>
-                <div className="content">
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <form onSubmit={handleForm}>
                             <div className="mb-3 row">

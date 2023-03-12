@@ -187,30 +187,34 @@ export default function SupplierLedger({user}) {
                                             ))
                                         }
                                         </tbody>
-                                        <tfoot>
-                                        <tr>
-                                            <td colSpan={4} className="text-end">
-                                                <strong>Total : </strong>
-                                            </td>
-                                            <td>
-                                                {totalDue} Tk.
-                                            </td>
-                                            <td>
-                                                {totalPaid} Tk.
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colSpan={4} className="text-end">
-                                                <strong>
-                                                    Balance :
-                                                </strong>
-                                            </td>
-                                            <td>
-                                                {totalDue - totalPaid} Tk.
-                                            </td>
-                                            <td></td>
-                                        </tr>
-                                        </tfoot>
+                                        {
+                                            (data && data.length > 0) && (
+                                                <tfoot>
+                                                <tr>
+                                                    <td colSpan={4} className="text-end">
+                                                        <strong>Total : </strong>
+                                                    </td>
+                                                    <td>
+                                                        {totalDue} Tk.
+                                                    </td>
+                                                    <td>
+                                                        {totalPaid} Tk.
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colSpan={4} className="text-end">
+                                                        <strong>
+                                                            Balance :
+                                                        </strong>
+                                                    </td>
+                                                    <td>
+                                                        {totalDue - totalPaid} Tk.
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                                </tfoot>
+                                            )
+                                        }
                                     </table>
                                 </>
                             )

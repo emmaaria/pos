@@ -6,6 +6,7 @@ import {useState, useEffect} from "react";
 import axios from "axios";
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 import TableSkeleton from "../../../components/TableSkeleton";
+import useMode from "../../../lib/mode";
 
 export default function Details({user, id}) {
     const [purchase, setPurchase] = useState();
@@ -13,6 +14,7 @@ export default function Details({user, id}) {
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
+    const {mode} = useMode()
     useEffect(() => {
         axios.get(
             `${process.env.API_URL}/purchase/${id}`,
@@ -34,7 +36,7 @@ export default function Details({user, id}) {
                 </title>
             </Head>
             <Layout user={user} title={`Purchase Details`}>
-                <div className="content">
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <p>
                             <strong>Supplier Name</strong> : {
@@ -129,7 +131,7 @@ export default function Details({user, id}) {
                                     <td className={`text-end`}>
                                         {
                                             purchase && loading === false && (
-                                                purchase.purchaseData.paid ? purchase.purchaseData.paid : 0 + ' Tk.'
+                                                `${purchase.purchaseData.paid ? purchase.purchaseData.paid : 0} Tk.`
                                             ) || (
                                                 <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
                                                     <Skeleton width={`100%`} height={20}/>

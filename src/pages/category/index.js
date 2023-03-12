@@ -8,6 +8,7 @@ import axios from "axios";
 import TableSkeleton from "../../components/TableSkeleton";
 import $ from 'jquery';
 import {ToastContainer, toast} from 'react-toastify';
+import useMode from "../../lib/mode";
 
 export default function Category({user}) {
     const headers = {
@@ -118,6 +119,7 @@ export default function Category({user}) {
             });
         }
     };
+    const {mode} = useMode()
     return (
         <>
             <Head>
@@ -127,7 +129,7 @@ export default function Category({user}) {
             </Head>
             <ToastContainer/>
             <Layout user={user} title={`Category`}>
-                <div className="content">
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <div className="row">
                             <div className="col-md-9">
@@ -170,10 +172,8 @@ export default function Category({user}) {
                                         <td>{index + 1}</td>
                                         <td>{el.name}</td>
                                         <td>
-                                            <Link href={`/category/${el.id}`}>
-                                                <a className={`btn btn-warning btn-sm me-2`}>
-                                                    <i className="fa-solid fa-pen-to-square"/>
-                                                </a>
+                                            <Link href={`/category/${el.id}`} className={`btn btn-warning btn-sm me-2`}>
+                                                <i className="fa-solid fa-pen-to-square"/>
                                             </Link>
                                             <a className={`btn btn-danger btn-sm`} onClick={(e) => {
                                                 e.preventDefault();

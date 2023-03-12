@@ -8,12 +8,14 @@ import axios from "axios";
 import TableSkeleton from "../../components/TableSkeleton";
 import {ToastContainer, toast} from 'react-toastify';
 import $ from "jquery";
+import useMode from "../../lib/mode";
 
 export default function Sale({user}) {
     const [invoices, setInvoices] = useState();
     const [links, setLinks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [timer, setTimer] = useState(null);
+    const {mode} = useMode()
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
@@ -127,7 +129,7 @@ export default function Sale({user}) {
             </Head>
             <ToastContainer/>
             <Layout user={user} title={`Sale List`}>
-                <div className="content">
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <div className="row">
                             <div className="col-md-9">

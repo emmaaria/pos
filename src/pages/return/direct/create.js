@@ -10,6 +10,7 @@ import DatePicker from "react-datepicker";
 import Loader from "../../../components/Loader";
 import styles from "../../../styles/CreateSale.module.css";
 import AutocompleteInput from "../../../components/AutocompleteInput";
+import useMode from "../../../lib/mode";
 
 export default function CreateDirectReturn({user}) {
     const [loader, setLoader] = useState(false);
@@ -261,6 +262,7 @@ export default function CreateDirectReturn({user}) {
             setTotal(e.target.value)
         }
     }
+    const {mode} = useMode()
     return (
         <>
             <Head>
@@ -275,7 +277,7 @@ export default function CreateDirectReturn({user}) {
             }
             <ToastContainer/>
             <Layout user={user} title={`Add Direct Product Return`}>
-                <div className="content">
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <form onSubmit={handleForm}>
                             <div className="mb-3">

@@ -21,6 +21,7 @@ import PosPaymentModal from "../../components/PosPaymentModal";
 import PosInvoicePrint from "../../components/PosInvoicePrint";
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 import styles from '../../styles/CreateSale.module.css'
+import useMode from "../../lib/mode";
 
 export default function CreateSale({user}) {
     const [loader, setLoader] = useState(false)
@@ -127,7 +128,6 @@ export default function CreateSale({user}) {
                 discountType,
                 pos: 1
             }, headers)
-            console.log(res.data)
             if (res.data.status === true) {
                 toast.dismiss()
                 toast.success('Successfully Saved', {
@@ -314,6 +314,7 @@ export default function CreateSale({user}) {
         $('.card').val('')
         $('.discount').val('')
     }
+    const {mode} = useMode()
     return (
         <>
             <Head>
@@ -328,7 +329,7 @@ export default function CreateSale({user}) {
             }
             <ToastContainer/>
             <Layout user={user} title={`POS`} sidebar={false} topbar={false}>
-                <div className="content-pos">
+                <div className={`content-pos ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="row pb-15">
                         <div className="col-md-7">
                             <form onSubmit={handleForm} id='invoice'></form>

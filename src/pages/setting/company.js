@@ -9,6 +9,7 @@ import {useEffect, useState} from "react";
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 import Loader from "../../components/Loader";
 import ImageUploading from 'react-images-uploading';
+import useMode from "../../lib/mode";
 
 export default function EditCompany({user}) {
     const [company, setCompany] = useState();
@@ -150,6 +151,7 @@ export default function EditCompany({user}) {
     const handleDiscountChange = (event) => {
         setDiscount(event.target.value)
     }
+    const {mode} = useMode()
     return (
         <>
             <Head>
@@ -164,7 +166,7 @@ export default function EditCompany({user}) {
                 )
             }
             <Layout user={user} title={`Edit Company Information`}>
-                <div className="content">
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <form onSubmit={handleForm}>
                             <div className="mb-3">

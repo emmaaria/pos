@@ -7,6 +7,7 @@ import axios from "axios";
 import $ from 'jquery';
 import {useState} from "react";
 import Loader from "../../components/Loader";
+import useMode from "../../lib/mode";
 
 export default function CreateCategory({user}) {
     const [loader, setLoader] = useState(false);
@@ -77,6 +78,7 @@ export default function CreateCategory({user}) {
             setLoader(false);
         }
     }
+    const {mode} = useMode()
     return (
         <>
             <Head>
@@ -91,7 +93,7 @@ export default function CreateCategory({user}) {
             }
             <ToastContainer/>
             <Layout user={user} title={`Create New Category`}>
-                <div className="content">
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <form onSubmit={handleForm}>
                             <div className="mb-3">

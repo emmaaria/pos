@@ -7,8 +7,8 @@
     background: #ffffff;
     z-index: 9999;
     overflow-y: scroll;
+    -ms-overflow-style: none;
     scrollbar-width: none;
-    scrollbar-color: transparent transparent;
 }
 
 .sidebar .avatarArea {

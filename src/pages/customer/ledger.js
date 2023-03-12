@@ -10,6 +10,7 @@ import Select from "react-select";
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 import {toast, ToastContainer} from "react-toastify";
 import $ from "jquery";
+import useMode from "../../lib/mode";
 
 export default function CustomerLedger({user}) {
     const headers = {
@@ -33,7 +34,10 @@ export default function CustomerLedger({user}) {
                     if (res.data.customers && res.data.customers.length > 0) {
                         setCustomers([]);
                         res.data.customers.map(el => {
-                            setCustomers(old => [...old, {value: el.id, label: `${el.name} (${el.address?el.address : ''})`}])
+                            setCustomers(old => [...old, {
+                                value: el.id,
+                                label: `${el.name} (${el.address ? el.address : ''})`
+                            }])
                         })
                     }
                 }
@@ -65,7 +69,7 @@ export default function CustomerLedger({user}) {
         const end = $('.endDate').val()
         axios.post(
             `${process.env.API_URL}/report/customer/ledger`, {
-                startDate: start, endDate : end, customer
+                startDate: start, endDate: end, customer
             },
             headers
         ).then(res => {
@@ -83,6 +87,7 @@ export default function CustomerLedger({user}) {
             console.log(err);
         });
     }
+    const {mode} = useMode()
     return (
         <>
             <Head>
@@ -97,7 +102,7 @@ export default function CustomerLedger({user}) {
             }
             <ToastContainer/>
             <Layout user={user} title={`Customer Ledger`}>
-                <div className="content">
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <div className="row mb-4">
                             <div className="row">
@@ -107,7 +112,8 @@ export default function CustomerLedger({user}) {
                                     </label>
                                     {
                                         customers && (
-                                            <Select options={customers} isClearable={true} isSearchable={true} onChange={(value) => setCustomer(value?.value)}/>
+                                            <Select options={customers} isClearable={true} isSearchable={true}
+                                                    onChange={(value) => setCustomer(value?.value)}/>
                                         ) || (
                                             <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
                                                 <Skeleton width={`100%`} height={40}/>
@@ -180,30 +186,34 @@ export default function CustomerLedger({user}) {
                                             ))
                                         }
                                         </tbody>
-                                        <tfoot>
-                                        <tr>
-                                            <td colSpan={4} className="text-end">
-                                                <strong>Total : </strong>
-                                            </td>
-                                            <td>
-                                                {totalDue} Tk.
-                                            </td>
-                                            <td>
-                                                {totalPaid} Tk.
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colSpan={4} className="text-end">
-                                                <strong>
-                                                    Balance :
-                                                </strong>
-                                            </td>
-                                            <td>
-                                                { totalDue - totalPaid } Tk.
-                                            </td>
-                                            <td></td>
-                                        </tr>
-                                        </tfoot>
+                                        {
+                                            (data && data.length > 0) && (
+                                                <tfoot>
+                                                <tr>
+                                                    <td colSpan={4} className="text-end">
+                                                        <strong>Total : </strong>
+                                                    </td>
+                                                    <td>
+                                                        {totalDue} Tk.
+                                                    </td>
+                                                    <td>
+                                                        {totalPaid} Tk.
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colSpan={4} className="text-end">
+                                                        <strong>
+                                                            Balance :
+                                                        </strong>
+                                                    </td>
+                                                    <td>
+                                                        {totalDue - totalPaid} Tk.
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                                </tfoot>
+                                            )
+                                        }
                                     </table>
                                 </>
                             )

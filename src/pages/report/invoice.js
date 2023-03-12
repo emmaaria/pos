@@ -6,8 +6,9 @@ import {useState} from "react";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import Loader from "../../components/Loader";
+import useMode from "../../lib/mode";
 
-export default function SalesReport({user}) {
+export default function InvoiceReport({user}) {
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
@@ -38,11 +39,12 @@ export default function SalesReport({user}) {
             console.log(err);
         });
     }
+    const {mode} = useMode()
     return (
         <>
             <Head>
                 <title>
-                    Sales Report
+                    Invoice Report
                 </title>
             </Head>
             {
@@ -50,8 +52,8 @@ export default function SalesReport({user}) {
                     <Loader/>
                 )
             }
-            <Layout user={user} title={`Sales Report`}>
-                <div className="content">
+            <Layout user={user} title={`Invoice Report`}>
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <div className="row mb-4">
                             <div className="row">

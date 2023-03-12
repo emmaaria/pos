@@ -8,6 +8,7 @@ import $ from 'jquery';
 import {useEffect, useState} from "react";
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 import Loader from "../../../../components/Loader";
+import useMode from "../../../../lib/mode";
 
 export default function EditExpenseCategory({user, id}) {
     const [loader, setLoader] = useState(false);
@@ -96,6 +97,7 @@ export default function EditExpenseCategory({user, id}) {
             setLoader(false);
         }
     }
+    const {mode} = useMode()
     return (
         <>
             <Head>
@@ -110,7 +112,7 @@ export default function EditExpenseCategory({user, id}) {
             }
             <ToastContainer/>
             <Layout user={user} title={`Edit Unit`}>
-                <div className="content">
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <form onSubmit={handleForm}>
                             <div className="mb-3">

@@ -6,11 +6,13 @@ import {useState} from "react";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import Loader from "../../components/Loader";
+import useMode from "../../lib/mode";
 
 export default function PurchaseReport({user}) {
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
+    const {mode} = useMode()
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
     const [data, setData] = useState();
@@ -51,7 +53,7 @@ export default function PurchaseReport({user}) {
                 )
             }
             <Layout user={user} title={`Purchase Report`}>
-                <div className="content">
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <div className="row mb-4">
                             <div className="row">

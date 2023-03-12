@@ -8,6 +8,7 @@ import $ from 'jquery';
 import {useEffect, useState} from "react";
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 import Loader from "../../components/Loader";
+import useMode from "../../lib/mode";
 
 export default function EditBank({user, id}) {
     const [bank, setBank] = useState();
@@ -158,6 +159,7 @@ export default function EditBank({user, id}) {
     const handleTypeChange = (event) => {
         setType(event.target.value)
     }
+    const {mode} = useMode()
     return (
         <>
             <Head>
@@ -172,7 +174,7 @@ export default function EditBank({user, id}) {
                 )
             }
             <Layout user={user} title={`Edit Bank`}>
-                <div className="content">
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <form onSubmit={handleForm}>
                             <div className="mb-3">
