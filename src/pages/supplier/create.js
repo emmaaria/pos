@@ -7,6 +7,7 @@ import axios from "axios";
 import $ from 'jquery';
 import Loader from "../../components/Loader";
 import {useState} from "react";
+import useMode from "../../lib/mode";
 
 export default function CreateSupplier({user}) {
     const [loader, setLoader] = useState(false);
@@ -100,6 +101,7 @@ export default function CreateSupplier({user}) {
             setBalance(e.target.value)
         }
     }
+    const {mode} = useMode()
     return (
         <>
             <Head>
@@ -114,8 +116,8 @@ export default function CreateSupplier({user}) {
             }
             <ToastContainer/>
             <Layout user={user} title={`Add New Supplier`}>
-                <div className="content">
-                    <div className="custom-card">
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
+                    <div className={`custom-card`}>
                         <form onSubmit={handleForm}>
                             <div className="mb-3">
                                 <label htmlFor="name" className={`form-label`}>Supplier Name</label>
@@ -153,7 +155,8 @@ export default function CreateSupplier({user}) {
                                 hasPrevious == 1 && (
                                     <div className="mb-3">
                                         <label htmlFor="balance" className={`form-label`}>Previous Balance Amount</label>
-                                        <input value={balance} onChange={handleBalance} type="text" className={`form-control balance`} id={`balance`}/>
+                                        <input value={balance} onChange={handleBalance} type="text"
+                                               className={`form-control balance`} id={`balance`}/>
                                     </div>
                                 )
                             }

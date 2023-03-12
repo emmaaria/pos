@@ -3,6 +3,7 @@ import CustomImage from "../CustomImage";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import $ from 'jquery';
+import useMode from "../../lib/mode";
 
 export default function Sidebar({user}) {
     const router = useRouter();
@@ -70,17 +71,18 @@ export default function Sidebar({user}) {
         $('.report').toggleClass('open');
         $('.reportParent').toggleClass(styles.opened);
     };
+    const {mode} = useMode()
     return (
-        <div className={`sidebar ${styles.sidebar}`}>
-            <div className={styles.avatarArea}>
+        <div className={`sidebar ${styles.sidebar} ${mode === 'dark' ? 'dark-mode-bg' : ''}`}>
+            <div className={`${styles.avatarArea} ${mode === 'dark' ? 'dark-mode-bg' : ''}`}>
                 <div className={styles.avatar}>
                     <CustomImage src={`/avatar.jpg`} circle={true}/>
                 </div>
-                <p className={styles.userName}>
+                <p className={`${styles.userName} ${mode === 'dark' ? 'dark-mode-color' : ''}`}>
                     {user.name}
                 </p>
             </div>
-            <ul>
+            <ul className={mode === 'dark' ? styles.dark : ''}>
                 <li>
                     <Link href={`/dashboard`} className={`
                                 ${

@@ -9,7 +9,6 @@
     overflow-y: scroll;
     scrollbar-width: none;
     scrollbar-color: transparent transparent;
-    border-right: 1px solid #EEF2F7;
 }
 
 .sidebar .avatarArea {
@@ -96,6 +95,10 @@
     margin-bottom: 5px;
     font-weight: 600;
     position: relative;
+}
+
+.sidebar ul.dark li a{
+    color: #ffffff;
 }
 
 .sidebar ul li a.active {

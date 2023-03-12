@@ -10,6 +10,7 @@ import Select from "react-select";
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 import {toast, ToastContainer} from "react-toastify";
 import $ from 'jquery';
+import useMode from "../../lib/mode";
 
 export default function SupplierLedger({user}) {
     const headers = {
@@ -87,6 +88,7 @@ export default function SupplierLedger({user}) {
             console.log(err);
         });
     }
+    const {mode} = useMode()
     return (
         <>
             <Head>
@@ -101,7 +103,7 @@ export default function SupplierLedger({user}) {
             }
             <ToastContainer/>
             <Layout user={user} title={`Supplier Ledger`}>
-                <div className="content">
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <div className="row mb-4">
                             <div className="row">

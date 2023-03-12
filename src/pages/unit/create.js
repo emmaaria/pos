@@ -7,6 +7,7 @@ import axios from "axios";
 import $ from 'jquery';
 import Loader from "../../components/Loader";
 import {useState} from "react";
+import useMode from "../../lib/mode";
 
 export default function CreateUnit({user}) {
     const [loader, setLoader] = useState(false);
@@ -21,7 +22,7 @@ export default function CreateUnit({user}) {
         });
         setLoader(true);
         const name = $('.name').val();
-        if (name === ''){
+        if (name === '') {
             toast.dismiss();
             toast.error('Name is required', {
                 position: "bottom-left",
@@ -36,8 +37,8 @@ export default function CreateUnit({user}) {
             return;
         }
         try {
-            const res = await axios.post(`${process.env.API_URL}/unit/store`,{name}, headers);
-            if (res.data.status === true){
+            const res = await axios.post(`${process.env.API_URL}/unit/store`, {name}, headers);
+            if (res.data.status === true) {
                 toast.dismiss();
                 toast.success('Successfully Saved', {
                     position: "bottom-right",
@@ -50,7 +51,7 @@ export default function CreateUnit({user}) {
                 });
                 $('form').trigger('reset');
                 setLoader(false);
-            }else {
+            } else {
                 toast.dismiss();
                 toast.success('Something went wrong', {
                     position: "bottom-right",
@@ -63,7 +64,7 @@ export default function CreateUnit({user}) {
                 });
                 setLoader(false);
             }
-        }catch (e) {
+        } catch (e) {
             toast.dismiss();
             toast.error(e.response.statusText, {
                 position: "bottom-right",
@@ -77,6 +78,7 @@ export default function CreateUnit({user}) {
             setLoader(false);
         }
     }
+    const {mode} = useMode()
     return (
         <>
             <Head>
@@ -91,7 +93,7 @@ export default function CreateUnit({user}) {
             }
             <ToastContainer/>
             <Layout user={user} title={`Create New Unit`}>
-                <div className="content">
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <form onSubmit={handleForm}>
                             <div className="mb-3">

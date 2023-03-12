@@ -7,9 +7,11 @@ import axios from "axios";
 import {useRouter} from "next/router";
 import {toast} from "react-toastify";
 import {useState, useEffect} from "react";
+import useMode from "../../lib/mode";
 
 export default function TopBar({title, handle}) {
     const [time, setTime] = useState('');
+    const {mode, changeMode} = useMode()
     const clock = () => {
         const today = new Date().toLocaleTimeString('en-US', {
             hour: '2-digit',
@@ -59,15 +61,14 @@ export default function TopBar({title, handle}) {
                 });
             });
     }
-
     return (
-        <div className={styles.topBar}>
+        <div className={`${styles.topBar} ${mode === 'dark' ? 'dark-mode-bg' : ''}`}>
             <div className={styles.sidebarToggler}>
                 <Link href={`#`} onClick={showSidebar}>
-                    <i className="fa-solid fa-bars-staggered text-dark"></i>
+                    <i className={`fa-solid fa-bars-staggered ${mode === 'dark' ? 'dark-mode-color' : 'text-dark'}`}></i>
                 </Link>
             </div>
-            <h4 className={styles.pageTitle}>
+            <h4 className={`${styles.pageTitle} ${mode === 'dark' ? 'dark-mode-color' : ''}`}>
                 {title}
             </h4>
             <ul className={styles.rightSide}>
@@ -78,7 +79,7 @@ export default function TopBar({title, handle}) {
                 </li>
                 <li>
                     <button className={styles.fullScreen} onClick={handle.enter}>
-                        <Image src={`/full-screen.svg`} width={25} height={25} alt="Full Screen"/>
+                        <Image className={mode === 'dark' ? 'dark-mode-image' : ''} src={`/full-screen.svg`} width={25} height={25} alt="Full Screen"/>
                     </button>
                 </li>
                 <li>
@@ -87,8 +88,17 @@ export default function TopBar({title, handle}) {
                     </Link>
                 </li>
                 <li>
-                    <Link href={`#`} className={styles.notification}>
-                        <i className="fa-solid fa-bell"></i>
+                    <Link href={`#`} className={styles.mode} onClick={(e) =>{
+                        e.preventDefault()
+                        changeMode()
+                    }}>
+                        {
+                            mode === 'light' && (
+                                <i className="fa-solid fa-moon text-dark"></i>
+                            ) || (
+                                <i className="fa-solid fa-sun text-white"></i>
+                            )
+                        }
                     </Link>
                 </li>
                 <li className={styles.userMenu}>

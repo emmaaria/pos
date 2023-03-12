@@ -120,6 +120,9 @@
   color: rgb(249, 58, 11);
   font-size: 30px;
 }
+.mode{
+  font-size: 24px;
+}
 .userMenuContainer ul li a:hover{
   color: rgb(249, 58, 11);
 }

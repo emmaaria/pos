@@ -11,9 +11,11 @@ import nagad from "../../public/nagad.png"
 import bank from "../../public/bank.png"
 import card from "../../public/card.png"
 import {CartesianGrid, Line, LineChart, Tooltip, XAxis, YAxis} from "recharts";
+import useMode from "../lib/mode";
 
 export default function Dashboard({user}) {
     const [data, setData] = useState();
+    const {mode} = useMode()
     const [salesChart, setSalesChart] = useState([]);
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
@@ -40,8 +42,8 @@ export default function Dashboard({user}) {
                 <link rel="icon" href="/fav.png"/>
             </Head>
             <Layout user={user} title={`Dashboard`}>
-                <div className="content">
-                    <h4>Overview</h4>
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
+                    <h4 className={mode === 'dark' ? 'dark-mode-color' : ''}>Overview</h4>
                     <div className="row mt-4">
                         <div className="col-xxl-3 mb-4 col-lg-4">
                             <DashboardCard
@@ -108,11 +110,11 @@ export default function Dashboard({user}) {
                             />
                         </div>
                     </div>
-                    <h4>Charts</h4>
+                    <h4 className={mode === 'dark' ? 'dark-mode-color' : ''}>Charts</h4>
                     <div className="row mt-4">
                         <div className="col-md-6 mb-4">
-                            <div className="chart-card">
-                                <h5 >Sales</h5>
+                            <div className={`chart-card ${mode === 'dark' ? 'dark-mode-bg' : ''}`}>
+                                <h5 className={mode === 'dark' ? 'dark-mode-color' : ''}>Sales</h5>
                                 <div className="mt-4">
                                     {
                                         data && (
@@ -130,9 +132,7 @@ export default function Dashboard({user}) {
                         </div>
                     </div>
                     <div className="custom-card">
-                        
-                        
-                        <h4>Balance Overview</h4>
+                        <h4 className={mode === 'dark' ? 'dark-mode-color' : ''}>Balance Overview</h4>
                         <div className="row mt-4 row-cols-xxl-5 row-cols-md-3">
                             <div className="col mb-4">
                                 <DashboardCard

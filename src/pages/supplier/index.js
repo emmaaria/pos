@@ -8,6 +8,7 @@ import axios from "axios";
 import TableSkeleton from "../../components/TableSkeleton";
 import $ from 'jquery';
 import {ToastContainer, toast} from 'react-toastify';
+import useMode from "../../lib/mode";
 
 export default function Supplier({user}) {
     const headers = {
@@ -118,6 +119,7 @@ export default function Supplier({user}) {
             });
         }
     };
+    const {mode} = useMode()
     return (
         <>
             <Head>
@@ -127,7 +129,7 @@ export default function Supplier({user}) {
             </Head>
             <ToastContainer/>
             <Layout user={user} title={`Suppliers`}>
-                <div className="content">
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <div className="row">
                             <div className="col-md-9">
