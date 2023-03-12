@@ -10,7 +10,7 @@ import bkash from "../../public/bkas.png"
 import nagad from "../../public/nagad.png"
 import bank from "../../public/bank.png"
 import card from "../../public/card.png"
-import {CartesianGrid, Line, LineChart, Tooltip, XAxis, YAxis} from "recharts";
+import {CartesianGrid, Line, LineChart, Tooltip, XAxis, YAxis, BarChart, Bar} from "recharts";
 import useMode from "../lib/mode";
 
 export default function Dashboard({user}) {
@@ -122,7 +122,7 @@ export default function Dashboard({user}) {
                                 <div className="mt-4">
                                     {
                                         data && (
-                                            <LineChart width={500} height={300} data={salesChart}>
+                                            <LineChart width={700} height={300} data={salesChart}>
                                                 <XAxis dataKey="month"/>
                                                 <YAxis/>
                                                 <Tooltip/>
@@ -140,13 +140,13 @@ export default function Dashboard({user}) {
                                 <div className="mt-4">
                                     {
                                         data && (
-                                            <LineChart width={500} height={300} data={profitChart}>
+                                            <BarChart width={700} height={300} data={profitChart}>
                                                 <XAxis dataKey="month"/>
                                                 <YAxis/>
                                                 <Tooltip/>
                                                 <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
-                                                <Line type="monotone" dataKey="profit" stroke="rgb(249, 58, 11)"/>
-                                            </LineChart>
+                                                <Bar dataKey="profit" fill="rgb(249, 58, 11)"/>
+                                            </BarChart>
                                         )
                                     }
                                 </div>
