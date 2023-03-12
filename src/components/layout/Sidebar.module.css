@@ -89,7 +89,7 @@
 
 .sidebar ul li a {
     color: #212130;
-    padding: 1rem 2.1875rem;
+    padding: 1rem 2rem 1rem 1rem;
     display: block;
     font-size: 0.9rem;
     margin-bottom: 5px;
@@ -127,7 +127,17 @@
 }
 
 .sidebar ul li ul a {
-    padding: 0.5rem 2.1875rem;
+    padding: 0.5rem 2rem 0.5rem 0.5rem;
+}
+.sidebar ul li ul a::after{
+    content: '';
+    width: 20px;
+    height: 1px;
+    background: rgba(255,255,255,0.2);
+    position: absolute;
+    top: 50%;
+    left: -20px;
+    transform: translate(0,-50%);
 }
 
 .sidebar ul li ul a:hover {

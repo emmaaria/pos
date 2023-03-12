@@ -10,7 +10,7 @@ import bkash from "../../public/bkas.png"
 import nagad from "../../public/nagad.png"
 import bank from "../../public/bank.png"
 import card from "../../public/card.png"
-import {CartesianGrid, Line, LineChart, Tooltip, XAxis, YAxis, BarChart, Bar} from "recharts";
+import {CartesianGrid, Line, LineChart, Tooltip, XAxis, YAxis, BarChart, Bar, ResponsiveContainer} from "recharts";
 import useMode from "../lib/mode";
 
 export default function Dashboard({user}) {
@@ -32,7 +32,10 @@ export default function Dashboard({user}) {
                     setSalesChart(res.data.data.salesChart)
                 }
                 if (res.data.data.profitChart && res.data.data.profitChart.length > 0) {
-                    setProfitChart(res.data.data.profitChart)
+                    setProfitChart([]);
+                    res.data.data.profitChart.map(month => {
+                        setProfitChart(old => [...old, {month: month.month, profit: parseFloat(month.profit)}])
+                    })
                 }
             }
         }).catch(err => {
@@ -122,13 +125,16 @@ export default function Dashboard({user}) {
                                 <div className="mt-4">
                                     {
                                         data && (
-                                            <LineChart width={700} height={300} data={salesChart}>
-                                                <XAxis dataKey="month"/>
-                                                <YAxis/>
-                                                <Tooltip/>
-                                                <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
-                                                <Line type="monotone" dataKey="sale" stroke="rgb(249, 58, 11)"/>
-                                            </LineChart>
+                                            <ResponsiveContainer height={300} width="100%">
+                                                <LineChart width={500} height={300} data={salesChart}>
+                                                    <XAxis dataKey="month"/>
+                                                    <YAxis/>
+                                                    <Tooltip/>
+                                                    <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
+                                                    <Line type="monotone" dataKey="sale" stroke="rgb(249, 58, 11)"
+                                                          strokeWidth={2} activeDot={{r: 8}}/>
+                                                </LineChart>
+                                            </ResponsiveContainer>
                                         )
                                     }
                                 </div>
@@ -140,13 +146,15 @@ export default function Dashboard({user}) {
                                 <div className="mt-4">
                                     {
                                         data && (
-                                            <BarChart width={700} height={300} data={profitChart}>
-                                                <XAxis dataKey="month"/>
-                                                <YAxis/>
-                                                <Tooltip/>
-                                                <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
-                                                <Bar dataKey="profit" fill="rgb(249, 58, 11)"/>
-                                            </BarChart>
+                                            <ResponsiveContainer height={300} width="100%">
+                                                <BarChart width={700} height={300} data={profitChart}>
+                                                    <XAxis dataKey="month"/>
+                                                    <YAxis/>
+                                                    <Tooltip/>
+                                                    <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
+                                                    <Bar dataKey="profit" fill="rgb(249, 58, 11)"/>
+                                                </BarChart>
+                                            </ResponsiveContainer>
                                         )
                                     }
                                 </div>

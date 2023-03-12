@@ -574,6 +574,17 @@ export default function Sidebar({user}) {
                                 Purchase Report
                             </Link>
                         </li>
+                        <li>
+                            <Link href={`/report/purchase`} className={`
+                                ${
+                                router.pathname === '/report/purchase'
+                                    ? styles.active
+                                    : ''
+                            }
+                            `}>
+                                Product Sale Report
+                            </Link>
+                        </li>
                     </ul>
                 </li>
 
