@@ -10,7 +10,7 @@ import bkash from "../../public/bkas.png"
 import nagad from "../../public/nagad.png"
 import bank from "../../public/bank.png"
 import card from "../../public/card.png"
-import {CartesianGrid, Line, LineChart, Tooltip, XAxis, YAxis, BarChart, Bar, ResponsiveContainer} from "recharts";
+import {CartesianGrid, Area, AreaChart, Tooltip, XAxis, YAxis, BarChart, Bar, ResponsiveContainer} from "recharts";
 import useMode from "../lib/mode";
 
 export default function Dashboard({user}) {
@@ -126,14 +126,20 @@ export default function Dashboard({user}) {
                                     {
                                         data && (
                                             <ResponsiveContainer height={300} width="100%">
-                                                <LineChart width={500} height={300} data={salesChart}>
+                                                <AreaChart width={500} height={300} data={salesChart}>
                                                     <XAxis dataKey="month"/>
                                                     <YAxis/>
                                                     <Tooltip/>
                                                     <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
-                                                    <Line type="monotone" dataKey="sale" stroke="rgb(249, 58, 11)"
-                                                          strokeWidth={2} activeDot={{r: 8}}/>
-                                                </LineChart>
+                                                    <Area
+                                                        type="monotone"
+                                                        dataKey="sale"
+                                                        stroke="rgb(249, 58, 11)"
+                                                        strokeWidth={2} 
+                                                        activeDot={{r: 8}}
+                                                        fill="rgba(249, 58, 11,0.5)"
+                                                    />
+                                                </AreaChart>
                                             </ResponsiveContainer>
                                         )
                                     }
