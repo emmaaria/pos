@@ -7,8 +7,10 @@ import axios from "axios";
 import DatePicker from "react-datepicker";
 import Loader from "../../components/Loader";
 import useMode from "../../lib/mode";
+import ProductSearch from "../../components/ProductSearch";
+import $ from "jquery"
 
-export default function PurchaseReport({user}) {
+export default function ProductSaleReport({user}) {
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
@@ -22,10 +24,12 @@ export default function PurchaseReport({user}) {
     const search = async (e) => {
         e.preventDefault;
         setLoading(true);
+        const productID = $('product-id').val()
         axios.post(
             `${process.env.API_URL}/report/purchase`, {
-                startDate : startDate.toLocaleDateString("sv-SE"),
-                endDate : endDate.toLocaleDateString("sv-SE")
+                productID,
+                startDate: startDate.toLocaleDateString("sv-SE"),
+                endDate: endDate.toLocaleDateString("sv-SE")
             },
             headers
         ).then(res => {
@@ -45,7 +49,7 @@ export default function PurchaseReport({user}) {
         <>
             <Head>
                 <title>
-                    Purchase Report
+                    Product Sale Report
                 </title>
             </Head>
             {
@@ -53,11 +57,17 @@ export default function PurchaseReport({user}) {
                     <Loader/>
                 )
             }
-            <Layout user={user} title={`Purchase Report`}>
+            <Layout user={user} title={`Product Sale Report`}>
                 <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <div className="row mb-4">
                             <div className="row">
+                                <div className="col">
+                                    <label className="form-label">
+                                        Product
+                                    </label>
+                                    <ProductSearch token={user.token}/>
+                                </div>
                                 <div className="col">
                                     <label className="form-label">
                                         Start Date

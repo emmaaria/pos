@@ -112,8 +112,12 @@ export default function CustomerLedger({user}) {
                                     </label>
                                     {
                                         customers && (
-                                            <Select options={customers} isClearable={true} isSearchable={true}
-                                                    onChange={(value) => setCustomer(value?.value)}/>
+                                            <Select 
+                                                options={customers} 
+                                                isClearable={true}
+                                                isSearchable={true}
+                                                onChange={(value) => setCustomer(value?.value)}
+                                            />
                                         ) || (
                                             <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
                                                 <Skeleton width={`100%`} height={40}/>

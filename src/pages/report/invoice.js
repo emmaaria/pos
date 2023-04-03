@@ -23,7 +23,8 @@ export default function InvoiceReport({user}) {
         setLoading(true);
         axios.post(
             `${process.env.API_URL}/report/sales`, {
-                startDate, endDate
+                startDate : startDate.toLocaleDateString("sv-SE"),
+                endDate : endDate.toLocaleDateString("sv-SE")
             },
             headers
         ).then(res => {

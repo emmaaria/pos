@@ -25,6 +25,7 @@ export default function CreateCustomer({user}) {
         const name = $('.name').val();
         const mobile = $('.mobile').val();
         const address = $('.address').val();
+        const additionalInfo = $('.additionalInfo').val();
         const due = $('.due').val();
         if (name === ''){
             toast.dismiss();
@@ -41,7 +42,7 @@ export default function CreateCustomer({user}) {
             return;
         }
         try {
-            const res = await axios.post(`${process.env.API_URL}/customer/store`,{name,mobile,address, due}, headers);
+            const res = await axios.post(`${process.env.API_URL}/customer/store`,{name,mobile,address, due, additionalInfo}, headers);
             if (res.data.status === true){
                 toast.dismiss();
                 toast.success('Successfully Saved', {
@@ -110,6 +111,10 @@ export default function CreateCustomer({user}) {
                             <div className="mb-3">
                                 <label htmlFor="address" className={`form-label`}>Customer Address</label>
                                 <input type="text" className={`form-control address`} id={`address`} />
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="additionalInfo" className={`form-label`}>Customer Additional Data</label>
+                                <textarea className={`form-control additionalInfo`} rows={8}/>
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="due" className={`form-label`}>Previous Due</label>

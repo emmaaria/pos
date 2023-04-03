@@ -41,6 +41,7 @@ export default function EditCustomer({user, id}) {
         const name = $('.name').val();
         const mobile = $('.mobile').val();
         const address = $('.address').val();
+        const additionalInfo = $('.additionalInfo').val();
         if (name === '') {
             toast.dismiss();
             toast.error('Name is required', {
@@ -57,7 +58,7 @@ export default function EditCustomer({user, id}) {
         }
         try {
             const res = await axios.post(`${process.env.API_URL}/customer/update`, {
-                name, mobile, address, id: id
+                name, mobile, additionalInfo, address, id: id
             }, headers);
             if (res.data.status === true) {
                 toast.dismiss();
@@ -150,6 +151,19 @@ export default function EditCustomer({user, id}) {
                                     customer && loading === false && (
                                         <input type="text" className={`form-control address`} id={`address`}
                                                defaultValue={customer.address}/>
+                                    ) || (
+                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                            <Skeleton width={`100%`} height={40}/>
+                                        </SkeletonTheme>
+                                    )
+                                }
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="additionalInfo" className={`form-label`}>Customer Additional Data</label>
+
+                                {
+                                    customer && loading === false && (
+                                    <textarea className={`form-control additionalInfo`} rows={8} defaultValue={customer.additionalInfo}/>
                                     ) || (
                                         <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
                                             <Skeleton width={`100%`} height={40}/>
