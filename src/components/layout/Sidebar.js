@@ -401,8 +401,7 @@ export default function Sidebar({user}) {
                           className={`returnParent 
                                 ${
                               router.pathname === '/return' ||
-                              router.pathname === '/return/direct/create' ||
-                              router.pathname === '/purchase/[id]'
+                              router.pathname === '/return/direct/create'
                                   ? styles.active
                                   : ''
                           }

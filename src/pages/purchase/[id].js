@@ -259,10 +259,12 @@ export default function EditPurchase({user, id}) {
                     `${process.env.API_URL}/product?name=${name}`,
                     headers
                 ).then(res => {
+                    setSearching(false)
                     if (res.data.status === true) {
                         setProducts(res.data.products.data);
                     }
                 }).catch(err => {
+                    setSearching(false)
                     console.log(err);
                 });
             }, 500)
