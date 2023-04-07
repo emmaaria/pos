@@ -10,6 +10,7 @@ import Loader from "../../components/Loader";
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 import Multiselect from 'multiselect-react-dropdown';
 import useMode from "../../lib/mode";
+import Select from "react-select";
 
 export default function CreateProduct({user}) {
     const [loader, setLoader] = useState(false);
@@ -18,8 +19,11 @@ export default function CreateProduct({user}) {
     const [purchasePrice, setPurchasePrice] = useState('');
     const [units, setUnits] = useState(null);
     const [suppliers, setSuppliers] = useState(null);
+    const [customers, setCustomers] = useState(null);
+    const [customerPrices, setCustomerPrices] = useState([{customerId: '', price: ''}]);
     const [selectedSupplier, setSelectedSupplier] = useState(null);
     const supplierRef = useRef();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
@@ -39,30 +43,13 @@ export default function CreateProduct({user}) {
         async function getData() {
             try {
                 const res = await axios.get(
-                    `${process.env.API_URL}/category?allData=true`, headers
+                    `${process.env.API_URL}/product-bulk-data`, headers
                 );
                 if (res.data.status === true) {
                     setCategories(res.data.categories);
-                }
-            } catch (err) {
-                console.log(err);
-            }
-            try {
-                const res = await axios.get(
-                    `${process.env.API_URL}/unit?allData=true`, headers
-                );
-                if (res.data.status === true) {
                     setUnits(res.data.units);
-                }
-            } catch (err) {
-                console.log(err);
-            }
-            try {
-                const res = await axios.get(
-                    `${process.env.API_URL}/supplier?allData=true`, headers
-                );
-                if (res.data.status === true) {
                     setSuppliers(res.data.suppliers);
+                    setCustomers(res.data.customers);
                 }
             } catch (err) {
                 console.log(err);
@@ -70,7 +57,7 @@ export default function CreateProduct({user}) {
         }
 
         getData();
-    }, [setCategories, setUnits]);
+    }, []);
     const handleForm = async (e) => {
         e.preventDefault();
         toast.loading('Submitting', {
@@ -101,7 +88,8 @@ export default function CreateProduct({user}) {
         try {
             const res = await axios.post(`${process.env.API_URL}/product/store`, {
                 name,
-                suppliers : selectedSupplier,
+                suppliers: selectedSupplier,
+                customerPrices,
                 category,
                 unit,
                 price,
@@ -168,10 +156,34 @@ export default function CreateProduct({user}) {
         }
     }
     const handleSupplierSelect = (selectedList) => {
-      setSelectedSupplier(selectedList);
+        setSelectedSupplier(selectedList);
     }
     const handleSupplierRemove = (selectedList) => {
         setSelectedSupplier(selectedList);
+    }
+    const handleCustomerChange = (index, customerId) => {
+        setCustomerPrices((prevState) => {
+            const newPrices = [...prevState]
+            newPrices.splice(index, 1, {customerId: customerId, price: customerPrices[index].price});
+            return newPrices;
+        })
+    }
+    const handlePriceChange = (index, price) => {
+        const re = /^[0-9]*[.]?[0-9]*$/;
+        if (price === '' || re.test(price)) {
+            setCustomerPrices((prevState) => {
+                const newPrices = [...prevState]
+                newPrices.splice(index, 1, {customerId: customerPrices[index].customerId, price: price});
+                return newPrices;
+            })
+        }
+    }
+    const handleAddCustomer = () => {
+        setCustomerPrices((oldData) => [...oldData, {customerId: '', price: ''}])
+    }
+
+    const handleRemoveCustomerPrice = (index) => {
+        setCustomerPrices((oldData) => [...oldData.slice(0, index), ...oldData.slice(index + 1)])
     }
     const {mode} = useMode()
     return (
@@ -244,11 +256,13 @@ export default function CreateProduct({user}) {
                             <div className="row mb-3">
                                 <div className="col-md-6">
                                     <label htmlFor="price" className={`form-label`}>Selling Price</label>
-                                    <input type="text" className={`form-control price`} id={`price`} value={sellingPrice} onChange={handleSellingPrice} required/>
+                                    <input type="text" className={`form-control price`} id={`price`}
+                                           value={sellingPrice} onChange={handleSellingPrice} required/>
                                 </div>
                                 <div className="col-md-6">
                                     <label htmlFor="purchasePrice" className={`form-label`}>Purchase Price</label>
-                                    <input value={purchasePrice} onChange={handlePurchasePrice} type="text" className={`form-control purchasePrice`} id={`purchasePrice`} required/>
+                                    <input value={purchasePrice} onChange={handlePurchasePrice} type="text"
+                                           className={`form-control purchasePrice`} id={`purchasePrice`} required/>
                                 </div>
                             </div>
                             <div className="row mb-3">
@@ -273,6 +287,73 @@ export default function CreateProduct({user}) {
                                     }
                                 </div>
                             </div>
+                            {
+                                user.customerBasedPrice == 'yes' && (
+                                    <div className="row mb-3">
+                                        <div className="col-md-12">
+                                            <table className={`table table-bordered`}>
+                                                <thead>
+                                                <tr>
+                                                    <th width="50%">
+                                                        Customer
+                                                    </th>
+                                                    <th width="30%">
+                                                        Price
+                                                    </th>
+                                                    <th width="20%">
+                                                        Action
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {
+                                                    customers?.length > 0 && (
+                                                        customerPrices.map((item, index) => (
+                                                            <tr key={index}>
+                                                                <td>
+                                                                    <Select
+                                                                        options={customers}
+                                                                        isClearable={true}
+                                                                        isSearchable={true}
+                                                                        classNamePrefix="react-select"
+                                                                        onChange={(value) => handleCustomerChange(index, value?.id)}
+                                                                        placeholder="Select Customer"
+                                                                        getOptionLabel={(item) => item.name}
+                                                                        getOptionValue={(item) => item.id}
+                                                                    />
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" className="form-control"
+                                                                           value={item.price}
+                                                                           onChange={(event) => handlePriceChange(index, event.target.value)}/>
+                                                                </td>
+                                                                <td>
+                                                                    <button className="btn btn-sm btn-danger"
+                                                                            onClick={() => handleRemoveCustomerPrice(index)}>
+                                                                        <i className="fa fa-trash"/>
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                        ))
+                                                    )
+                                                }
+                                                <tr>
+                                                    <td colSpan={3} className="text-end">
+                                                        <button className="btn btn-sm btn-success"
+                                                                onClick={handleAddCustomer} type="button">
+                                                            Add New
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                )
+                            }
                             <button className={`btn btn-success`} type={`submit`}>Save</button>
                         </form>
                     </div>

@@ -10,6 +10,7 @@ import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 import Loader from "../../components/Loader";
 import Multiselect from "multiselect-react-dropdown";
 import useMode from "../../lib/mode";
+import Select from "react-select";
 
 export default function EditProduct({user, id}) {
     const [product, setProduct] = useState();
@@ -22,6 +23,8 @@ export default function EditProduct({user, id}) {
     const [suppliers, setSuppliers] = useState(null);
     const [selectedSupplier, setSelectedSupplier] = useState(null);
     const [previousSuppliers, setPreviousSuppliers] = useState(null);
+    const [customers, setCustomers] = useState(null);
+    const [customerPrices, setCustomerPrices] = useState([{customerId: '', price: ''}]);
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
@@ -29,38 +32,20 @@ export default function EditProduct({user, id}) {
         async function getData() {
             try {
                 const res = await axios.get(
-                    `${process.env.API_URL}/category?allData=true`, headers
+                    `${process.env.API_URL}/product-bulk-data`, headers
                 );
                 if (res.data.status === true) {
                     setCategories(res.data.categories);
-                }
-            } catch (err) {
-                console.log(err);
-            }
-            try {
-                const res = await axios.get(
-                    `${process.env.API_URL}/supplier?allData=true`, headers
-                );
-                if (res.data.status === true) {
-                    setSuppliers(res.data.suppliers);
-                }
-            } catch (err) {
-                console.log(err);
-            }
-            try {
-                const res = await axios.get(
-                    `${process.env.API_URL}/unit?allData=true`, headers
-                );
-                if (res.data.status === true) {
                     setUnits(res.data.units);
+                    setSuppliers(res.data.suppliers);
+                    setCustomers(res.data.customers);
                 }
             } catch (err) {
                 console.log(err);
             }
         }
-
         getData();
-    }, [setCategories, setUnits, setSuppliers]);
+    }, []);
     useEffect(() => {
         axios.get(
             `${process.env.API_URL}/product/${id}`,
@@ -71,6 +56,7 @@ export default function EditProduct({user, id}) {
                 setUnit(res.data.product.unit);
                 setCategory(res.data.product.category);
                 setPreviousSuppliers(res.data.suppliers);
+                setCustomerPrices(res.data.prices);
                 setLoading(false);
             }
         }).catch(err => {
@@ -112,6 +98,7 @@ export default function EditProduct({user, id}) {
                 unit,
                 price,
                 weight,
+                customerPrices,
                 purchase_price: purchasePrice,
                 suppliers: selectedSupplier,
             }, headers);
@@ -166,6 +153,31 @@ export default function EditProduct({user, id}) {
     }
     const handleSupplierRemove = (selectedList) => {
         setSelectedSupplier(selectedList);
+    }
+
+    const handleCustomerChange = (index, customerId) => {
+        setCustomerPrices((prevState) => {
+            const newPrices = [...prevState]
+            newPrices.splice(index, 1, {customerId: customerId, price: customerPrices[index].price});
+            return newPrices;
+        })
+    }
+    const handlePriceChange = (index, price) => {
+        const re = /^[0-9]*[.]?[0-9]*$/;
+        if (price === '' || re.test(price)) {
+            setCustomerPrices((prevState) => {
+                const newPrices = [...prevState]
+                newPrices.splice(index, 1, {customerId: customerPrices[index].customerId, price: price});
+                return newPrices;
+            })
+        }
+    }
+    const handleAddCustomer = () => {
+        setCustomerPrices((oldData) => [...oldData, {customerId: '', price: ''}])
+    }
+
+    const handleRemoveCustomerPrice = (index) => {
+        setCustomerPrices((oldData) => [...oldData.slice(0, index), ...oldData.slice(index + 1)])
     }
     const {mode} = useMode()
     return (
@@ -311,6 +323,75 @@ export default function EditProduct({user, id}) {
                                     }
                                 </div>
                             </div>
+
+                            {
+                                user.customerBasedPrice == 'yes' && (
+                                    <div className="row mb-3">
+                                        <div className="col-md-12">
+                                            <table className={`table table-bordered`}>
+                                                <thead>
+                                                <tr>
+                                                    <th width="50%">
+                                                        Customer
+                                                    </th>
+                                                    <th width="30%">
+                                                        Price
+                                                    </th>
+                                                    <th width="20%">
+                                                        Action
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {
+                                                    customers?.length > 0 && (
+                                                        customerPrices.map((item, index) => (
+                                                            <tr key={index}>
+                                                                <td>
+                                                                    <Select
+                                                                        options={customers}
+                                                                        isClearable={true}
+                                                                        isSearchable={true}
+                                                                        classNamePrefix="react-select"
+                                                                        onChange={(value) => handleCustomerChange(index, value?.id)}
+                                                                        placeholder="Select Customer"
+                                                                        getOptionLabel={(item) => item.name}
+                                                                        getOptionValue={(item) => item.id}
+                                                                        value={customers.find(option => option.id === parseInt(item.customerId))}
+                                                                    />
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" className="form-control"
+                                                                           value={item.price}
+                                                                           onChange={(event) => handlePriceChange(index, event.target.value)}/>
+                                                                </td>
+                                                                <td>
+                                                                    <button className="btn btn-sm btn-danger"
+                                                                            onClick={() => handleRemoveCustomerPrice(index)}>
+                                                                        <i className="fa fa-trash"/>
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                        ))
+                                                    )
+                                                }
+                                                <tr>
+                                                    <td colSpan={3} className="text-end">
+                                                        <button className="btn btn-sm btn-success"
+                                                                onClick={handleAddCustomer} type="button">
+                                                            Add New
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                )
+                            }
                             <button className={`btn btn-success`} type={`submit`}>Save</button>
                         </form>
                     </div>

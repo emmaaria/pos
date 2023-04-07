@@ -52,8 +52,12 @@ th, td {
     cursor: pointer;
 }
 
-.open {
+.sidebar .open {
     transform: rotate(90deg);
+}
+
+.react-select__option{
+    color: #000000 !important
 }
 
 .paid {

@@ -70,6 +70,7 @@ export default function Login() {
                             id: response.data.user.id,
                             name: response.data.user.name,
                             companyName: response.data.company.company_name,
+                            customerBasedPrice: response.data.company.customer_based_price,
                             discountType: response.data.company.discount_type,
                             companyAddress: response.data.company.company_address,
                             companyMobile: response.data.company.company_mobile,
