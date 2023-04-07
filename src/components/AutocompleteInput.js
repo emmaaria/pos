@@ -20,11 +20,10 @@ export default function AutocompleteInput({type, token, placeholder, className})
             setTimer(null);
         }
         if (type === 'supplier') {
-            const name = $('.autocompleteInput').val();
             setTimer(
                 setTimeout(() => {
                     axios.get(
-                        `${process.env.API_URL}/supplier?name=${name}`,
+                        `${process.env.API_URL}/supplier?name=${value}`,
                         headers
                     ).then(res => {
                         setSearching(false)
@@ -38,11 +37,10 @@ export default function AutocompleteInput({type, token, placeholder, className})
             );
         }
         if (type === 'customer') {
-            const name = $('.autocompleteInput').val();
             setTimer(
                 setTimeout(() => {
                     axios.get(
-                        `${process.env.API_URL}/customer?name=${name}`,
+                        `${process.env.API_URL}/customer?name=${value}`,
                         headers
                     ).then(res => {
                         setSearching(false)

@@ -18,11 +18,10 @@ export default function AutocompleteDefaultCustomer({name, id, token, className}
             clearTimeout(timer);
             setTimer(null);
         }
-        const name = $('.autocompleteInput').val();
         setTimer(
             setTimeout(() => {
                 axios.get(
-                    `${process.env.API_URL}/customer?name=${name}`,
+                    `${process.env.API_URL}/customer?name=${value}`,
                     headers
                 ).then(res => {
                     setSearching(false)
