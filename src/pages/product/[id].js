@@ -22,7 +22,6 @@ export default function EditProduct({user, id}) {
     const [category, setCategory] = useState(null);
     const [suppliers, setSuppliers] = useState(null);
     const [selectedSupplier, setSelectedSupplier] = useState(null);
-    const [previousSuppliers, setPreviousSuppliers] = useState(null);
     const [customers, setCustomers] = useState(null);
     const [customerPrices, setCustomerPrices] = useState([{customerId: '', price: ''}]);
     const headers = {
@@ -55,7 +54,7 @@ export default function EditProduct({user, id}) {
                 setProduct(res.data.product);
                 setUnit(res.data.product.unit);
                 setCategory(res.data.product.category);
-                setPreviousSuppliers(res.data.suppliers);
+                setSelectedSupplier(res.data.suppliers);
                 setCustomerPrices(res.data.prices);
                 setLoading(false);
             }
@@ -313,7 +312,7 @@ export default function EditProduct({user, id}) {
                                                 onRemove={handleSupplierRemove}
                                                 displayValue="name"
                                                 placeholder={``}
-                                                selectedValues={previousSuppliers}
+                                                selectedValues={selectedSupplier}
                                             />
                                         ) || (
                                             <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
