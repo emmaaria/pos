@@ -1,5 +1,5 @@
 import {useReactToPrint} from 'react-to-print';
-import {useRef} from "react";
+import React, {useRef} from "react";
 
 export default function PosInvoicePrint({companyName, companyAddress, companyMobile, invoice, closeInvoice}) {
     const componentRef = useRef();
@@ -51,7 +51,7 @@ export default function PosInvoicePrint({companyName, companyAddress, companyMob
                             <tbody>
                             {
                                 invoice.items.map((item) => (
-                                    <>
+                                    <React.Fragment key={item.name}>
                                         <tr key={item.name}>
                                             <td>{item.name}</td>
                                             <td>{item.price} Tk.</td>
@@ -61,7 +61,7 @@ export default function PosInvoicePrint({companyName, companyAddress, companyMob
                                         <tr>
                                             <td className={`p-0`} colSpan={4}></td>
                                         </tr>
-                                    </>
+                                    </React.Fragment>
                                 ))
                             }
                             </tbody>

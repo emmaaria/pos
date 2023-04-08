@@ -128,6 +128,7 @@ export default function CreateSale({user}) {
                 discountType,
                 pos: 1
             }, headers)
+            console.log(res.data)
             if (res.data.status === true) {
                 toast.dismiss()
                 toast.success('Successfully Saved', {
@@ -168,6 +169,7 @@ export default function CreateSale({user}) {
                 setLoader(false)
             }
         } catch (e) {
+            console.log(e)
             toast.dismiss()
             toast.error(e.response.data, {
                 position: "bottom-right",
