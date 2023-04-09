@@ -227,7 +227,7 @@ export default function EditSale({user, id}) {
         setGrandTotal(0)
         setDiscountAmount(0)
         $(`.productDiscountedAmount`).each(function () {
-            if (!isNaN($(this).val()) && $(this).val() !== ''){
+            if (!isNaN($(this).val()) && $(this).val() !== '') {
                 setDiscountAmount(oldDiscountAmount => oldDiscountAmount + parseFloat($(this).val()))
             }
         })
@@ -510,37 +510,31 @@ export default function EditSale({user, id}) {
                                                         <td>
                                                             <span>{subTotal} Tk.</span>
                                                         </td>
-                                                        {
-                                                            discountSetting == 'invoice' && (
-                                                                <>
-                                                                    <tr>
-                                                                        <td></td>
-                                                                        <td>
-                                                                            <select
-                                                                                className={`form-select form-control discount-type`}
-                                                                                onChange={calculateDiscount} value={discountType}>
-                                                                                <option value="%">Discount Type (%)</option>
-                                                                                <option value="fixed">Discount Type
-                                                                                    (Fixed)
-                                                                                </option>
-                                                                            </select>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td></td>
-                                                                        <td>
-                                                                            <input type="text"
-                                                                                   className={`form-control discount`}
-                                                                                   placeholder={`Discount`}
-                                                                                   onKeyUp={calculateDiscount}
-                                                                                   onKeyDown={calculateDiscount}
-                                                                                   onChange={calculateDiscount}/>
-                                                                        </td>
-                                                                    </tr>
-                                                                </>
-                                                            )
-                                                        }
                                                     </tr>
+                                                    {
+                                                        discountSetting == 'invoice' && (
+                                                            <tr>
+                                                                <td>
+                                                                    <select
+                                                                        className={`form-select form-control discount-type`}
+                                                                        onChange={calculateDiscount} value={discountType}>
+                                                                        <option value="%">Discount Type (%)</option>
+                                                                        <option value="fixed">Discount Type
+                                                                            (Fixed)
+                                                                        </option>
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text"
+                                                                           className={`form-control discount`}
+                                                                           placeholder={`Discount`}
+                                                                           onKeyUp={calculateDiscount}
+                                                                           onKeyDown={calculateDiscount}
+                                                                           onChange={calculateDiscount}/>
+                                                                </td>
+                                                            </tr>
+                                                        )
+                                                    }
                                                     <tr>
                                                         <td className={`text-end`}>
                                                             <strong>Discount Amount</strong>
@@ -594,7 +588,8 @@ export default function EditSale({user, id}) {
             </Layout>
             <PosPaymentModal hidePayment={hidePayment} calculateDue={calculateDue}
                              discountAmount={discountAmount} grandTotal={grandTotal} handleForm={handleForm}
-                             paid={paid} token={user.token} discountType={discountType} discount={discount} defaultPaymentMethod={defaultPaymentMethod} paymentInfo={paymentInfo}/>
+                             paid={paid} token={user.token} discountType={discountType} discount={discount}
+                             defaultPaymentMethod={defaultPaymentMethod} paymentInfo={paymentInfo}/>
             {
                 showInvoice && (
                     <PosInvoicePrint companyName={user.companyName} companyAddress={user.companyAddress}

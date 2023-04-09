@@ -577,6 +577,10 @@ table {
     overflow-y: scroll;
 }
 
+.product-table.invoice-wise-discount {
+    height: 62%;
+}
+
 .product-table tr {
     border-bottom: 1px solid #eeeeee;
 }

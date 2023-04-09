@@ -40,7 +40,7 @@ export default function PosCartList({invoiceProducts, calculateSubtotal, removeP
         calculateSubtotal(product)
     }
     return (
-        <div className="product-table">
+        <div className={`product-table ${discountType == 'product' ? 'product-wise-discount' : 'invoice-wise-discount'}`}>
             <table className={`table`}>
                 <thead>
                 {

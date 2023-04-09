@@ -112,8 +112,12 @@ export default function Stock({user}) {
                                         <td>{index + 1}</td>
                                         <td>{el.name}</td>
                                         <td>{el.purchase ? el.purchase : 0}</td>
-                                        <td>{el.sale ? el.sale - el.return : 0}</td>
-                                        <td>{el.purchase - el.sale}</td>
+                                        <td>
+                                            {el.sale ? el.sale - el.return : 0}
+                                        </td>
+                                        <td>
+                                            {el.purchase - (el.sale - el.return)}
+                                        </td>
                                     </tr>
                                 ))
                             ) || (
