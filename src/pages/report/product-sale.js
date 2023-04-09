@@ -21,13 +21,13 @@ export default function ProductSaleReport({user}) {
     const [total, setTotal] = useState();
     const [loading, setLoading] = useState(false);
 
-    const search = async (e) => {
+    const search = (e) => {
         e.preventDefault;
         setLoading(true);
-        const productID = $('product-id').val()
+        const productId = $('.product-id').val()
         axios.post(
-            `${process.env.API_URL}/report/purchase`, {
-                productID,
+            `${process.env.API_URL}/report/sales/by-product`, {
+                productId: productId,
                 startDate: startDate.toLocaleDateString("sv-SE"),
                 endDate: endDate.toLocaleDateString("sv-SE")
             },
@@ -105,8 +105,10 @@ export default function ProductSaleReport({user}) {
                                         <thead>
                                         <tr>
                                             <th width={`10%`}>Sl</th>
-                                            <th>Purchase No.</th>
-                                            <th>Supplier Name</th>
+                                            <th>Date</th>
+                                            <th>Invoice No.</th>
+                                            <th>Customer Name</th>
+                                            <th>Quantity</th>
                                             <th>Amount</th>
                                         </tr>
                                         </thead>
@@ -114,7 +116,9 @@ export default function ProductSaleReport({user}) {
                                         {
                                             data && data.length <= 0 && (
                                                 <tr>
-                                                    <td colSpan={4} className={`text-center`}>No Sales Found</td>
+                                                    <td colSpan={5} className={`text-center`}>
+                                                        No Sales Found
+                                                    </td>
                                                 </tr>
                                             )
                                         }
@@ -122,16 +126,18 @@ export default function ProductSaleReport({user}) {
                                             data.map((el, index) => (
                                                 <tr key={el.purchase_id} valign={`middle`}>
                                                     <td>{index + 1}</td>
-                                                    <td>{el.purchase_id}</td>
-                                                    <td>{el.supplier_name}</td>
-                                                    <td>{el.amount} Tk.</td>
+                                                    <td>{el.date}</td>
+                                                    <td>{el.invoice_id}</td>
+                                                    <td>{el.customer_name}</td>
+                                                    <td>{el.quantity}</td>
+                                                    <td>{el.grand_total} Tk.</td>
                                                 </tr>
                                             ))
                                         }
                                         </tbody>
                                         <tfoot>
                                         <tr>
-                                            <td colSpan={3} className="text-end">
+                                            <td colSpan={5} className="text-end">
                                                 <strong>Total</strong>
                                             </td>
                                             <td>

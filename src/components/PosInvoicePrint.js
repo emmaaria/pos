@@ -96,9 +96,9 @@ export default function PosInvoicePrint({companyName, companyAddress, companyMob
                             <tr style={{textAlign: 'right'}}>
                                 {
                                     (invoice.due < 0 || invoice.due === 0) && (
-                                        <td colSpan={4}>Change : {Math.abs(invoice.due)} Tk.</td>
+                                        <td colSpan={4}>Change : {Math.abs(invoice.due).toFixed(2)} Tk.</td>
                                     ) || (
-                                        <td colSpan={4}>Due : {invoice.due} Tk.</td>
+                                        <td colSpan={4}>Due : {parseFloat(invoice.due).toFixed(2)} Tk.</td>
                                     )
                                 }
                             </tr>

@@ -43,11 +43,14 @@ export default function ProductSearch({token}) {
     return (
         <>
             <div className={`autocompleteWrapper`}>
-                <input type="text" className={`form-control autocompleteInput product-input`} autoComplete={`off`}
-                       defaultValue={name}
-                       onKeyUp={search}
-                       onKeyDown={search}
-                       onChange={search}/>
+                <input
+                    type="text"
+                    className={`form-control autocompleteInput product-input`}
+                    autoComplete={`off`}
+                    onKeyUp={search}
+                    onKeyDown={search}
+                    onChange={search}
+                />
                 <input type="hidden" className={`product-id`}/>
                 {
                     keyword && (
@@ -57,7 +60,7 @@ export default function ProductSearch({token}) {
                                     data.length > 0 && (
                                         data.map(el => (
                                             <div className={`autocompleteItem`} key={`customer-${el.id}`}
-                                                 onClick={() => setValue(el.name, el.id)}>{el.name}</div>
+                                                 onClick={() => setValue(el.name, el.product_id)}>{el.name}</div>
                                         ))
                                     ) || (
                                         <div className={`autocompleteItem`}>

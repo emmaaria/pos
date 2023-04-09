@@ -6,12 +6,15 @@ export default function PosCartList({invoiceProducts, calculateSubtotal, removeP
         if (type === 'inc') {
             $(`.productQuantity_${row}`).val(oldVal + 1)
             calculateSubtotal(row)
+            handleDiscount(row)
         } else {
             if (oldVal > 0) {
                 $(`.productQuantity_${row}`).val(oldVal - 1)
                 calculateSubtotal(row)
+                handleDiscount(row)
             }
         }
+        
     }
     const handleDiscount = (product) => {
         const disType = $(`.product_discount_type_${product}`).val()
@@ -20,10 +23,9 @@ export default function PosCartList({invoiceProducts, calculateSubtotal, removeP
         const qty = parseFloat($(`.productQuantity_${product}`).val())
         if (disType === '%') {
             const total = price * qty
-            let discountAmount = (total * discount) / 100
+            const discountAmount = (total * discount) / 100
             if (isNaN(discountAmount)){
-                discountAmount = 0
-                $(`.productDiscountedAmount_${product}`).val(discountAmount)
+                $(`.productDiscountedAmount_${product}`).val(0)
             }else {
                 $(`.productDiscountedAmount_${product}`).val(discountAmount)
             }
@@ -166,7 +168,7 @@ export default function PosCartList({invoiceProducts, calculateSubtotal, removeP
                             }
                             <td className={`text-end`}>
                                 <input type="hidden"
-                                       className={`form-control productDiscountedAmount productDiscountedAmount_${el.product_id}`} defaultValue={el.discount_amount}/>
+                                       className={`form-control productDiscountedAmount productDiscountedAmount_${el.product_id}`}/>
                                                                 <span className={`subtotal subtotal_${el.product_id}`}>
                                                                     {el.quantity ? el.quantity * el.price : el.price}
                                                                 </span> Tk.
