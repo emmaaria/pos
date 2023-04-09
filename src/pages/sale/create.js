@@ -13,6 +13,7 @@ import 'swiper/css'
 import 'swiper/css/free-mode'
 import 'swiper/css/virtual'
 import PosMenu from "../../components/PosMenu";
+import Swal from 'sweetalert2'
 
 const PosCategories = lazy(() => import("../../components/PosCategories"))
 const PosProducts = lazy(() => import("../../components/PosProducts"))
@@ -209,7 +210,7 @@ export default function CreateSale({user}) {
         setGrandTotal(0)
         setDiscountAmount(0)
         $(`.productDiscountedAmount`).each(function () {
-            if (!isNaN($(this).val()) && $(this).val() !== ''){
+            if (!isNaN($(this).val()) && $(this).val() !== '') {
                 setDiscountAmount(oldDiscountAmount => oldDiscountAmount + parseFloat($(this).val()))
             }
         })
@@ -239,7 +240,7 @@ export default function CreateSale({user}) {
             })
         }
     }
-    const addProduct = (data) => {
+    const addToCartDirect = (data) => {
         const alreadyAdded = invoiceProducts.filter(product => {
             return product.product_id === data.product_id
         })
@@ -270,6 +271,70 @@ export default function CreateSale({user}) {
             setGrandTotal(oldTotal => oldTotal + parseFloat(data.price))
         }
         $(`.search-product`).val('')
+    }
+
+    const addToCartByCustomer = (data) => {
+        const alreadyAdded = invoiceProducts.filter(product => {
+            return product.product_id === data.product_id
+        })
+        const stock = data.purchase - data.sale;
+        if (stock <= 0) {
+            toast.dismiss()
+            toast.error('You don\'t have stock. Please purchase product first.', {
+                position: "bottom-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+            })
+            return;
+        }
+        toast.dismiss()
+        if (alreadyAdded.length > 0) {
+            const oldQty = $(`.productQuantity_${data.product_id}`).val()
+            const newQty = parseFloat(oldQty) + 1
+            $(`.productQuantity_${data.product_id}`).val(newQty)
+            calculateSubtotal(data.product_id)
+        } else {
+            setLoader(true)
+            axios.post(`${process.env.API_URL}/product/price-by-customer`, {
+                customer: $('.customer-id').val(),
+                productID: data.product_id
+            }, headers).then(response => {
+                setLoader(false)
+                if (response.data.product && response.data.product.price) {
+                    setInvoiceProducts(currentProduct => [...currentProduct, {...data, price: response.data.product.price}])
+                    setSubTotal(oldTotal => oldTotal + parseFloat(response.data.product.price))
+                    setTotal(oldTotal => oldTotal + parseFloat(response.data.product.price))
+                    setGrandTotal(oldTotal => oldTotal + parseFloat(response.data.product.price))
+                } else {
+                    setInvoiceProducts(currentProduct => [...currentProduct, data])
+                    setSubTotal(oldTotal => oldTotal + parseFloat(data.price))
+                    setTotal(oldTotal => oldTotal + parseFloat(data.price))
+                    setGrandTotal(oldTotal => oldTotal + parseFloat(data.price))
+                }
+            }).catch(error => {
+                setLoader(false)
+                console.log(error)
+            })
+        }
+
+    }
+    const addProduct = (data) => {
+        if (user.customerBasedPrice === 'yes') {
+            if ($('.customer-id').val() == '') {
+                Swal.fire({
+                    title: 'Please select customer first',
+                    icon: 'error'
+                })
+            } else {
+                addToCartByCustomer(data)
+            }
+        } else {
+            addToCartDirect(data)
+        }
     }
     const showPayment = () => {
         $('.payment-modal').fadeIn()
