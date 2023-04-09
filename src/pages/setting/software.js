@@ -53,7 +53,7 @@ export default function EditSetting({user}) {
         const discount_type = discount;
         const customer_based_price = $('.customer_based_price').val();
         try {
-            const res = await axios.post(`${process.env.API_URL}/company/update`, {discount_type, customer_based_price}, headers);
+            const res = await axios.post(`${process.env.API_URL}/software/update`, {discount_type, customer_based_price}, headers);
             if (res.data.status === true) {
                 axios
                     .post('/api/auth/login', {
