@@ -18,7 +18,9 @@ export default function ProductSaleReport({user}) {
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
     const [data, setData] = useState();
-    const [total, setTotal] = useState();
+    const [totalAmount, setTotalAmount] = useState(0);
+    const [totalQty, setTotalQty] = useState(0);
+    const [totalWeight, setTotalWeight] = useState(0);
     const [loading, setLoading] = useState(false);
 
     const search = (e) => {
@@ -35,10 +37,9 @@ export default function ProductSaleReport({user}) {
         ).then(res => {
             if (res.data.status === true) {
                 setData(res.data.data);
-                setTotal(0);
-                res.data.data?.map(el => {
-                    setTotal(old => old + parseFloat(el.amount))
-                })
+                setTotalAmount(res.data.totalAmount);
+                setTotalQty(res.data.totalQuantity);
+                setTotalWeight(res.data.totalWeight);
                 setLoading(false);
             }
         }).catch(err => {
@@ -109,6 +110,7 @@ export default function ProductSaleReport({user}) {
                                             <th>Invoice No.</th>
                                             <th>Customer Name</th>
                                             <th>Quantity</th>
+                                            <th>Weight</th>
                                             <th>Amount</th>
                                         </tr>
                                         </thead>
@@ -130,6 +132,7 @@ export default function ProductSaleReport({user}) {
                                                     <td>{el.invoice_id}</td>
                                                     <td>{el.customer_name}</td>
                                                     <td>{el.quantity}</td>
+                                                    <td>{parseFloat(el.quantity) * parseFloat(el.weight)}</td>
                                                     <td>{el.grand_total} Tk.</td>
                                                 </tr>
                                             ))
@@ -137,11 +140,17 @@ export default function ProductSaleReport({user}) {
                                         </tbody>
                                         <tfoot>
                                         <tr>
-                                            <td colSpan={5} className="text-end">
+                                            <td colSpan={4} className="text-end">
                                                 <strong>Total</strong>
                                             </td>
                                             <td>
-                                                {total} Tk.
+                                                {totalQty.toFixed(2)}
+                                            </td>
+                                            <td>
+                                                {totalWeight.toFixed(2)}
+                                            </td>
+                                            <td>
+                                                {totalAmount.toFixed(2)}
                                             </td>
                                         </tr>
                                         </tfoot>
