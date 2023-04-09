@@ -542,6 +542,7 @@ export default function Sidebar({user}) {
                                 ${
                               router.pathname === '/report/invoice' ||
                               router.pathname === '/report/purchase' ||
+                              router.pathname === '/report/product-purchase' ||
                               router.pathname === '/report/product-sale'
                                   ? styles.active
                                   : ''
@@ -560,7 +561,7 @@ export default function Sidebar({user}) {
                                     : ''
                             }
                             `}>
-                                Invoice Report
+                                Sale By Date
                             </Link>
                         </li>
                         <li>
@@ -571,7 +572,7 @@ export default function Sidebar({user}) {
                                     : ''
                             }
                             `}>
-                                Purchase Report
+                                Purchase By Date
                             </Link>
                         </li>
                         <li>
@@ -582,7 +583,18 @@ export default function Sidebar({user}) {
                                     : ''
                             }
                             `}>
-                                Product Sale Report
+                                Sale By Product
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href={`/report/product-purchase`} className={`
+                                ${
+                                router.pathname === '/report/product-purchase'
+                                    ? styles.active
+                                    : ''
+                            }
+                            `}>
+                                Purchase By Product
                             </Link>
                         </li>
                     </ul>

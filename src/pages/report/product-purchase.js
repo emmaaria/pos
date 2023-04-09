@@ -10,7 +10,7 @@ import useMode from "../../lib/mode";
 import ProductSearch from "../../components/ProductSearch";
 import $ from "jquery"
 
-export default function ProductSaleReport({user}) {
+export default function ProductPurchaseReport({user}) {
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
@@ -28,7 +28,7 @@ export default function ProductSaleReport({user}) {
         setLoading(true);
         const productId = $('.product-id').val()
         axios.post(
-            `${process.env.API_URL}/report/sales/by-product`, {
+            `${process.env.API_URL}/report/purchase/by-product`, {
                 productId: productId,
                 startDate: startDate.toLocaleDateString("sv-SE"),
                 endDate: endDate.toLocaleDateString("sv-SE")
@@ -50,7 +50,7 @@ export default function ProductSaleReport({user}) {
         <>
             <Head>
                 <title>
-                    Product Sale Report
+                    Product Purchase Report
                 </title>
             </Head>
             {
@@ -58,7 +58,7 @@ export default function ProductSaleReport({user}) {
                     <Loader/>
                 )
             }
-            <Layout user={user} title={`Product Sale Report`}>
+            <Layout user={user} title={`Product Purchase Report`}>
                 <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <div className="row mb-4">
@@ -107,8 +107,8 @@ export default function ProductSaleReport({user}) {
                                         <tr>
                                             <th width={`10%`}>Sl</th>
                                             <th>Date</th>
-                                            <th>Invoice No.</th>
-                                            <th>Customer Name</th>
+                                            <th>Purchase No.</th>
+                                            <th>Supplier Name</th>
                                             <th>Quantity</th>
                                             <th>Weight</th>
                                             <th>Amount</th>
@@ -119,21 +119,21 @@ export default function ProductSaleReport({user}) {
                                             data && data.length <= 0 && (
                                                 <tr>
                                                     <td colSpan={7} className={`text-center`}>
-                                                        No Sales Found
+                                                        No Purchase Found
                                                     </td>
                                                 </tr>
                                             )
                                         }
                                         {
                                             data.map((el, index) => (
-                                                <tr key={el.invoice_id} valign={`middle`}>
+                                                <tr key={el.purchase_id} valign={`middle`}>
                                                     <td>{index + 1}</td>
                                                     <td>{el.date}</td>
-                                                    <td>{el.invoice_id}</td>
-                                                    <td>{el.customer_name}</td>
+                                                    <td>{el.purchase_id}</td>
+                                                    <td>{el.supplierName}</td>
                                                     <td>{el.quantity}</td>
                                                     <td>{parseFloat(el.quantity) * parseFloat(el.weight)}</td>
-                                                    <td>{el.grand_total} Tk.</td>
+                                                    <td>{el.total} Tk.</td>
                                                 </tr>
                                             ))
                                         }
