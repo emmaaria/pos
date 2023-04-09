@@ -30,6 +30,7 @@
     "react-virtualized-auto-sizer": "^1.0.7",
     "react-window": "^1.8.8",
     "recharts": "^2.4.3",
+    "sweetalert2": "^11.7.3",
     "swiper": "^8.4.4"
   },
   "devDependencies": {

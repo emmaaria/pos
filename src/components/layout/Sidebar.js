@@ -592,7 +592,8 @@ export default function Sidebar({user}) {
                     <Link href={`#`} onClick={showSettingMenu}
                           className={`settingParent 
                                 ${
-                              router.pathname === '/setting/company'
+                              router.pathname === '/setting/company' ||
+                              router.pathname === '/setting/software'
                                   ? styles.active
                                   : ''
                           }
@@ -611,6 +612,17 @@ export default function Sidebar({user}) {
                             }
                             `}>
                                 Company Information
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href={`/setting/software`} className={`
+                                ${
+                                router.pathname === '/setting/software'
+                                    ? styles.active
+                                    : ''
+                            }
+                            `}>
+                                Software Settings
                             </Link>
                         </li>
                     </ul>

@@ -13,8 +13,6 @@ import useMode from "../../lib/mode";
 
 export default function EditCompany({user}) {
     const [company, setCompany] = useState();
-    const [discount, setDiscount] = useState(null);
-    const [customerBasedPrice, setCustomerBasedPrice] = useState(null);
     const [image, setImage] = useState([]);
     const [loader, setLoader] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -32,8 +30,6 @@ export default function EditCompany({user}) {
         ).then(res => {
             if (res.data.status === true) {
                 setCompany(res.data.company);
-                setDiscount(res.data.company.discount_type)
-                setCustomerBasedPrice(res.data.company.customer_based_price)
                 setLoading(false);
             } else {
                 toast.error(res.data.errors, {
@@ -61,10 +57,8 @@ export default function EditCompany({user}) {
         const mobile = $('.mobile').val();
         const address = $('.address').val();
         const email = $('.email').val();
-        const discount_type = discount;
         const vat_number = $('.vat_number').val();
         const mushok_number = $('.mushok_number').val();
-        const customer_based_price = $('.customer_based_price').val();
         if (name === '') {
             toast.dismiss();
             toast.error('Name is required', {
@@ -81,7 +75,6 @@ export default function EditCompany({user}) {
         }
         try {
             const res = await axios.post(`${process.env.API_URL}/company/update`, {
-                discount_type, customer_based_price,
                 name, mobile, address, email, vat_number, mushok_number, logo: image.length > 0 ? image[0].data_url : ''
             }, headers);
             if (res.data.status === true) {
@@ -90,14 +83,12 @@ export default function EditCompany({user}) {
                         id: user.id,
                         name: user.name,
                         token: user.token,
-                        discountType: discount_type,
                         role: user.role,
                         companyName: name,
                         companyAddress: address,
                         companyMobile: mobile,
                         companyVatNumber: vat_number,
                         companyMushokNumber: mushok_number,
-                        customerBasedPrice: customerBasedPrice,
                     })
                     .then(() => {
                         toast.dismiss();
@@ -151,12 +142,6 @@ export default function EditCompany({user}) {
             });
             setLoader(false);
         }
-    }
-    const handleDiscountChange = (event) => {
-        setDiscount(event.target.value)
-    }
-    const handlePriceChange = (event) => {
-        setCustomerBasedPrice(event.target.value)
     }
     const {mode} = useMode()
     return (
@@ -301,41 +286,6 @@ export default function EditCompany({user}) {
                                     company && loading === false && (
                                         <input type="text" className={`form-control mushok_number`}
                                                defaultValue={company.mushok_number}/>
-                                    ) || (
-                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
-                                            <Skeleton width={`100%`} height={40}/>
-                                        </SkeletonTheme>
-                                    )
-                                }
-                            </div>
-                            <div className="mb-3">
-                                <label className={`form-label`}>Discount Type</label>
-                                {
-                                    company && loading === false && (
-                                        <select className="form-control discount_type" value={discount}
-                                                onChange={handleDiscountChange}>
-                                            <option value="invoice">Invoice Wise</option>
-                                            <option value="product">Product Wise</option>
-                                        </select>
-                                    ) || (
-                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
-                                            <Skeleton width={`100%`} height={40}/>
-                                        </SkeletonTheme>
-                                    )
-                                }
-                            </div>
-
-                            <div className="mb-3">
-                                <label className={`form-label`}>
-                                    Customer Based Price
-                                </label>
-                                {
-                                    company && loading === false && (
-                                        <select className="form-control customer_based_price" value={customerBasedPrice}
-                                                onChange={handlePriceChange}>
-                                            <option value="yes">Yes</option>
-                                            <option value="no">No</option>
-                                        </select>
                                     ) || (
                                         <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
                                             <Skeleton width={`100%`} height={40}/>
