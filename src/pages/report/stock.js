@@ -10,6 +10,9 @@ import useMode from "../../lib/mode";
 
 export default function Stock({user}) {
     const [products, setProducts] = useState();
+    const [totalPurchase, setTotalPurchase] = useState(0);
+    const [totalSale, setTotalSale] = useState(0);
+    const [stock, setStock] = useState(0);
     const [links, setLinks] = useState([]);
     const [loading, setLoading] = useState(true);
     const headers = {
@@ -22,8 +25,10 @@ export default function Stock({user}) {
             headers
         ).then(res => {
             if (res.data.status === true) {
-                console.log(res.data.products.data)
                 setProducts(res.data.products.data);
+                setTotalPurchase(res.data.totalPurchase);
+                setTotalSale(res.data.totalSale);
+                setStock(res.data.stock);
                 setLinks(res.data.products.links);
                 setLoading(false);
             }
@@ -126,6 +131,28 @@ export default function Stock({user}) {
 
                             </tbody>
                             <tfoot>
+                            <tr>
+                                <td colSpan={2} className={`text-end`}>
+                                    <strong>
+                                        Total
+                                    </strong>
+                                </td>
+                                <td>
+                                    <strong>
+                                        {totalPurchase}
+                                    </strong>
+                                </td>
+                                <td>
+                                    <strong>
+                                        {totalSale}
+                                    </strong>
+                                </td>
+                                <td>
+                                    <strong>
+                                        {stock}
+                                    </strong>
+                                </td>
+                            </tr>
                             <tr>
                                 <td colSpan={5}>
                                     <nav className={`float-end`}>

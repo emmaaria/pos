@@ -16,6 +16,7 @@ export default function CreatePurchase({user}) {
     const [banks, setBanks] = useState([]);
     const [bank, setBank] = useState();
     const [total, setTotal] = useState(0);
+    const [totalQty, setTotalQty] = useState(0);
     const [due, setDue] = useState(0);
     const [paymentMethod, setPaymentMethod] = useState('cash');
     const [products, setProducts] = useState();
@@ -153,8 +154,10 @@ export default function CreatePurchase({user}) {
         });
         setPurchaseProducts(newProducts);
         setTotal(0);
+        setTotalQty(0);
         newProducts.map(el => {
             setTotal(oldTotal => oldTotal + parseFloat($(`.subtotal_${el.product_id}`).text()));
+            setTotalQty(oldTotal => oldTotal + parseFloat($(`.productQuantity_${el.product_id}`).val()));
         });
     }
     const calculateSubtotal = (event, type, productId) => {
@@ -173,6 +176,10 @@ export default function CreatePurchase({user}) {
         setTotal(0);
         $(`.subtotal`).each(function () {
             setTotal(oldTotal => oldTotal + parseFloat($(this).text()));
+        });
+        setTotalQty(0)
+        $(`.productQuantity`).each(function () {
+            setTotalQty(oldTotal => oldTotal + parseFloat($(this).val()));
         });
     }
     const calculateDue = (event, type) => {
@@ -222,6 +229,7 @@ export default function CreatePurchase({user}) {
         }
         $(`.search-product`).val('');
         setKeyword(null)
+        setTotalQty(totalQty + 1);
     }
     const handlePaymentMethod = (event) => {
         if (event.target.value === 'bank' || event.target.value === 'multiple') {
@@ -403,7 +411,10 @@ export default function CreatePurchase({user}) {
                                 </tbody>
                                 <tfoot>
                                 <tr>
-                                    <td className={`text-end`} colSpan={4}><strong>Total</strong></td>
+                                    <td className={`text-end`} colSpan={3}><strong>Total</strong></td>
+                                    <td>
+                                        {totalQty}
+                                    </td>
                                     <td className={`text-end border-white d-block border-left-none border-right-none`}>
                                         <span className={`total`}>{parseFloat(total).toFixed(2)} Tk.</span>
                                     </td>

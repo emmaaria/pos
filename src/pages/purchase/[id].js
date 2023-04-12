@@ -31,6 +31,7 @@ export default function EditPurchase({user, id}) {
     const [keyword, setKeyword] = useState();
     const [searching, setSearching] = useState(false);
     const [banks, setBanks] = useState([]);
+    const [totalQty, setTotalQty] = useState(0);
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
@@ -71,6 +72,7 @@ export default function EditPurchase({user, id}) {
             if (res.data.status === true) {
                 setPurchase(res.data.purchase);
                 setTotal(res.data.purchase.purchaseData.amount);
+                setTotalQty(res.data.purchase.totalQty);
                 setDate(new Date(res.data.purchase.purchaseData.date));
                 setDue(res.data.purchase.purchaseData.paid);
                 setPurchaseProducts(res.data.purchase.purchaseItems);
@@ -212,8 +214,10 @@ export default function EditPurchase({user, id}) {
         });
         setPurchaseProducts(newProducts);
         setTotal(0);
+        setTotalQty(0);
         newProducts.map(el => {
             setTotal(oldTotal => oldTotal + parseFloat($(`.subtotal_${el.product_id}`).text()));
+            setTotalQty(oldTotal => oldTotal + parseFloat($(`.productQuantity_${el.product_id}`).val()));
         });
     }
     const calculateSubtotal = (event,type, productId) => {
@@ -232,6 +236,10 @@ export default function EditPurchase({user, id}) {
         setTotal(0);
         $(`.subtotal`).each(function () {
             setTotal(oldTotal => oldTotal + parseFloat($(this).text()));
+        });
+        setTotalQty(0)
+        $(`.productQuantity`).each(function () {
+            setTotalQty(oldTotal => oldTotal + parseFloat($(this).val()));
         });
     }
     const calculateDue = (event, type) => {
@@ -282,6 +290,7 @@ export default function EditPurchase({user, id}) {
         }
         $(`.search-product`).val('');
         setKeyword(null)
+        setTotalQty(totalQty + 1);
     }
     const handleBankPaid = (event) => {
         $(`.bank`).val(event.target.value.replace(/[^0-9.]/g, ''));
@@ -451,7 +460,10 @@ export default function EditPurchase({user, id}) {
                                 </tbody>
                                 <tfoot>
                                 <tr>
-                                    <td className={`text-end`} colSpan={4}><strong>Total</strong></td>
+                                    <td className={`text-end`} colSpan={3}><strong>Total</strong></td>
+                                    <td>
+                                        {totalQty}
+                                    </td>
                                     <td className={`text-end border-1 border-white d-block`}>
                                         {
                                             purchase && loading === false && (

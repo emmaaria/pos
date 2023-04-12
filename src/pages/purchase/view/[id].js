@@ -113,7 +113,22 @@ export default function Details({user, id}) {
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colSpan={4} className={`text-end`}>Total</td>
+                                    <td colSpan={3} className={`text-end`}>
+                                        <strong>
+                                            Total
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        {
+                                            purchase && loading === false && (
+                                                purchase.totalQty
+                                            ) || (
+                                                <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                                    <Skeleton width={`100%`} height={20}/>
+                                                </SkeletonTheme>
+                                            )
+                                        }
+                                    </td>
                                     <td className={`text-end`}>
                                         {
                                             purchase && loading === false && (
