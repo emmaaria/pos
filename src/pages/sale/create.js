@@ -53,7 +53,7 @@ export default function CreateSale({user}) {
         }).catch(err => {
             console.log(err)
         })
-    }, [])
+    }, [invoice])
     const handleForm = async (e) => {
         e.preventDefault()
         toast.loading('Submitting', {
