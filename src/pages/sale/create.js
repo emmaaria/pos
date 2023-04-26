@@ -244,7 +244,7 @@ export default function CreateSale({user}) {
         const alreadyAdded = invoiceProducts.filter(product => {
             return product.product_id === data.product_id
         })
-        const stock = data.purchase - data.sale;
+        const stock = data.purchase - (data.sale - data.return);
         if (stock <= 0) {
             toast.dismiss()
             toast.error('You don\'t have stock. Please purchase product first.', {
@@ -277,7 +277,7 @@ export default function CreateSale({user}) {
         const alreadyAdded = invoiceProducts.filter(product => {
             return product.product_id === data.product_id
         })
-        const stock = data.purchase - data.sale;
+        const stock = data.purchase - (data.sale - data.return);
         if (stock <= 0) {
             toast.dismiss()
             toast.error('You don\'t have stock. Please purchase product first.', {
@@ -305,7 +305,10 @@ export default function CreateSale({user}) {
             }, headers).then(response => {
                 setLoader(false)
                 if (response.data.product && response.data.product.price) {
-                    setInvoiceProducts(currentProduct => [...currentProduct, {...data, price: response.data.product.price}])
+                    setInvoiceProducts(currentProduct => [...currentProduct, {
+                        ...data,
+                        price: response.data.product.price
+                    }])
                     setSubTotal(oldTotal => oldTotal + parseFloat(response.data.product.price))
                     setTotal(oldTotal => oldTotal + parseFloat(response.data.product.price))
                     setGrandTotal(oldTotal => oldTotal + parseFloat(response.data.product.price))

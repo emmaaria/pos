@@ -262,7 +262,7 @@ export default function EditSale({user, id}) {
         const alreadyAdded = invoiceProducts.filter(product => {
             return product.product_id === data.product_id
         })
-        const stock = data.purchase - data.sale;
+        const stock = data.purchase - (data.sale - data.return);
         if (stock <= 0) {
             toast.dismiss()
             toast.error('You don\'t have stock. Please purchase product first.', {
@@ -295,7 +295,7 @@ export default function EditSale({user, id}) {
         const alreadyAdded = invoiceProducts.filter(product => {
             return product.product_id === data.product_id
         })
-        const stock = data.purchase - data.sale;
+        const stock = data.purchase - (data.sale - data.return);
         if (stock <= 0) {
             toast.dismiss()
             toast.error('You don\'t have stock. Please purchase product first.', {
