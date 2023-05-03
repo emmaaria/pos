@@ -1,6 +1,6 @@
 import TopBar from "./TopBar";
 import Sidebar from "./Sidebar";
-import {Offline} from "react-detect-offline";
+// import {Offline} from "react-detect-offline";
 import {FullScreen, useFullScreenHandle} from "react-full-screen";
 
 export default function Layout(props) {
