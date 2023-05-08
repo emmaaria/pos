@@ -214,6 +214,7 @@ export default function Sidebar({user}) {
                               router.pathname === '/customer' ||
                               router.pathname === '/customer/ledger' ||
                               router.pathname === '/customer/create' ||
+                              router.pathname === '/customer/manage-due-receive' ||
                               router.pathname === '/customer/due' ||
                               router.pathname === '/customer/[id]'
                                   ? styles.active
@@ -261,14 +262,14 @@ export default function Sidebar({user}) {
                         </li>
 
                         <li>
-                            <Link href={`/customer/due`} className={`
+                            <Link href={`/customer/manage-due-receive`} className={`
                                 ${
-                                router.pathname === '/customer/due'
+                                router.pathname === '/customer/manage-due-receive'
                                     ? styles.active
                                     : ''
                             }
                             `}>
-                                Due Receive
+                                Manage Due Receive
                             </Link>
                         </li>
                     </ul>
