@@ -214,7 +214,9 @@ export default function Sidebar({user}) {
                               router.pathname === '/customer' ||
                               router.pathname === '/customer/ledger' ||
                               router.pathname === '/customer/create' ||
-                              router.pathname === '/customer/manage-due-receive' ||
+                              router.pathname === '/customer/receive-list' ||
+                              router.pathname === '/customer/due-list' ||
+                              router.pathname === '/customer/receive' ||
                               router.pathname === '/customer/due' ||
                               router.pathname === '/customer/[id]'
                                   ? styles.active
@@ -262,14 +264,26 @@ export default function Sidebar({user}) {
                         </li>
 
                         <li>
-                            <Link href={`/customer/manage-due-receive`} className={`
+                            <Link href={`/customer/receive-list`} className={`
                                 ${
-                                router.pathname === '/customer/manage-due-receive'
+                                router.pathname === '/customer/receive-list'
                                     ? styles.active
                                     : ''
                             }
                             `}>
-                                Manage Due Receive
+                                Customer Payments
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href={`/customer/due-list`} className={`
+                                ${
+                                router.pathname === '/customer/due-list' ||
+                                router.pathname === '/customer/due'
+                                    ? styles.active
+                                    : ''
+                            }
+                            `}>
+                                Customer Manual Due
                             </Link>
                         </li>
                     </ul>

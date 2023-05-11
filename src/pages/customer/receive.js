@@ -12,7 +12,7 @@ import {toast, ToastContainer} from "react-toastify";
 import $ from "jquery";
 import useMode from "../../lib/mode";
 
-export default function AddCustomerDue({user}) {
+export default function CustomerDueReceive({user}) {
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
@@ -21,6 +21,8 @@ export default function AddCustomerDue({user}) {
     const [date, setDate] = useState(new Date());
     const [amount, setAmount] = useState();
     const [loader, setLoader] = useState(false);
+    const [banks, setBanks] = useState([]);
+    const [account, setAccount] = useState();
     const handleAmount = (e) => {
         const re = /^[0-9]*[.]?[0-9]*$/;
         if (e.target.value === '' || re.test(e.target.value)) {
@@ -60,7 +62,36 @@ export default function AddCustomerDue({user}) {
         });
         setLoader(true);
         const note = $('.note').val();
+        const bankId = $('.bankId').val();
         const paymentDate = $('.date').val();
+        if (account === '') {
+            toast.dismiss();
+            toast.error('Account is required', {
+                position: "bottom-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+            });
+            setLoader(false);
+            return;
+        }
+        if (account === 'bank' && !bankId && bankId === '') {
+            toast.dismiss();
+            toast.error('You haven\'t select any Bank', {
+                position: "bottom-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+            });
+            setLoader(false);
+            return;
+        }
         if (!amount || amount === '') {
             toast.dismiss();
             toast.error('Amount is required', {
@@ -104,11 +135,13 @@ export default function AddCustomerDue({user}) {
             return;
         }
         try {
-            const res = await axios.post(`${process.env.API_URL}/customer/due/store`, {
+            const res = await axios.post(`${process.env.API_URL}/customer/payment/store`, {
                 customer,
                 note,
                 amount,
+                account,
                 date: paymentDate,
+                bankId
             }, headers);
             if (res.data.status === true) {
                 toast.dismiss();
@@ -123,6 +156,7 @@ export default function AddCustomerDue({user}) {
                 });
                 $('form').trigger('reset');
                 setAmount('');
+                setAccount('');
                 setLoader(false);
             } else {
                 toast.dismiss();
@@ -167,12 +201,40 @@ export default function AddCustomerDue({user}) {
         }
     }
 
+    const handleAccount = (event) => {
+        if (event.target.value === 'bank') {
+            setLoader(true);
+            axios.get(
+                `${process.env.API_URL}/bank?allData=true`,
+                headers
+            ).then(res => {
+                if (res.data.status === true) {
+                    setBanks(res.data.banks);
+                    setLoader(false);
+                } else {
+                    setLoader(false);
+                    toast.error('No bank account fround. Please add bank first.', {
+                        position: "bottom-right",
+                        autoClose: false,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        theme: 'dark',
+                    });
+                }
+            }).catch(err => {
+                console.log(err);
+            });
+        }
+        setAccount(event.target.value)
+    }
     const {mode} = useMode()
     return (
         <>
             <Head>
                 <title>
-                    Add Manual Customer Due
+                    Customer Due Receive
                 </title>
             </Head>
             {
@@ -181,7 +243,7 @@ export default function AddCustomerDue({user}) {
                 )
             }
             <ToastContainer/>
-            <Layout user={user} title={`Add Manual Customer Due`}>
+            <Layout user={user} title={`Customer Due Receive`}>
                 <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <form onSubmit={handleForm}>
@@ -201,6 +263,17 @@ export default function AddCustomerDue({user}) {
                                     }
                                 </div>
                                 <div className="col-md-4">
+                                    <label htmlFor="note" className={`form-label`}>Account</label>
+                                    <select className="form-select form-control account"
+                                            onChange={handleAccount} value={account}>
+                                        <option value="">Choose Account</option>
+                                        <option value="cash">Cash</option>
+                                        <option value="bkash">Bkash</option>
+                                        <option value="nagad">Nagad</option>
+                                        <option value="bank">Bank</option>
+                                    </select>
+                                </div>
+                                <div className="col-md-4">
                                     <label htmlFor="date" className={`form-label`}>Date</label>
                                     <DatePicker
                                         selected={date}
@@ -209,15 +282,33 @@ export default function AddCustomerDue({user}) {
                                         className={`form-control date`}
                                     />
                                 </div>
-                                <div className="col-md-4">
+                            </div>
+                            {
+                                account && account === 'bank' && (
+                                    <div className="row mb-3">
+                                        <div className="col-md-12">
+                                            <select className={`form-control form-select bankId`}>
+                                                <option value="">Select Bank</option>
+                                                {
+                                                    banks.map(bank => (
+                                                        <option key={bank.id} value={bank.id}>
+                                                            {bank.name} ({bank.account_no})
+                                                        </option>
+                                                    ))
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                )
+                            }
+                            <div className="row mb-3">
+                                <div className="col-md-6">
                                     <label htmlFor="amount" className={`form-label`}>Amount</label>
                                     <input type="text" className={`form-control`} id={`amount`} value={amount}
                                            onChange={handleAmount} onKeyUp={handleAmount} onKeyDown={handleAmount}/>
                                 </div>
-                            </div>
-                            <div className="row mb-3">
-                                <div className="col-md-12">
-                                    <label htmlFor="note" className={`form-label`}>Due Note</label>
+                                <div className="col-md-6">
+                                    <label htmlFor="note" className={`form-label`}>Receive Note</label>
                                     <input type="text" className={`form-control note`} id={`note`}/>
                                 </div>
                             </div>

@@ -14,7 +14,7 @@ import useMode from "../../lib/mode";
 import TableSkeleton from "../../components/TableSkeleton";
 import Link from "next/link";
 
-export default function ManageDueReceive({user}) {
+export default function CustomerReceiveList({user}) {
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
@@ -83,7 +83,7 @@ export default function ManageDueReceive({user}) {
         const start = $('.startDate').val()
         const end = $('.endDate').val()
         axios.post(
-            `${process.env.API_URL}/report/customer/ledger`, {
+            `${process.env.API_URL}/customer/payments`, {
                 startDate: start, endDate: end, customer
             },
             headers
@@ -163,7 +163,7 @@ export default function ManageDueReceive({user}) {
         <>
             <Head>
                 <title>
-                    Manage Customer Due Receive
+                    Manage Customer Payments
                 </title>
             </Head>
             {
@@ -172,13 +172,13 @@ export default function ManageDueReceive({user}) {
                 )
             }
             <ToastContainer/>
-            <Layout user={user} title={`Manage Customer Due Receive`}>
+            <Layout user={user} title={`Manage Customer Payments`}>
                 <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <div className="row mb-4">
                             <div className="col-md-12">
-                                <Link href={`/customer/due`} className={`btn btn-success`}>
-                                    <i className="fa-solid fa-plus"/> Add Customer Due Receive
+                                <Link href={`/customer/receive`} className={`btn btn-success`}>
+                                    <i className="fa-solid fa-plus"/> Add Customer Payment
                                 </Link>
                             </div>
                         </div>
