@@ -89,7 +89,8 @@ export default function CustomerDueList({user}) {
             headers
         ).then(res => {
             if (res.data.status === true) {
-                setData(res.data.data);
+                setData(res.data.data.data);
+                setLinks(res.data.data.links);
                 setLoading(false);
             }
         }).catch(err => {
