@@ -21,11 +21,11 @@ export default function PosPaymentModal({
         if (defaultPaymentMethod) {
             setPaymentMethod(defaultPaymentMethod)
             handlePaymentMethod(defaultPaymentMethod)
-        }else {
+        } else {
             setPaymentMethod('cash')
             handlePaymentMethod('cash')
         }
-    },[defaultPaymentMethod, setPaymentMethod])
+    }, [defaultPaymentMethod, setPaymentMethod])
     const headers = {
         headers: {Authorization: `Bearer ${token}`},
     };
@@ -89,7 +89,8 @@ export default function PosPaymentModal({
                                     </label>
                                     <input type="text" className={`form-control paid cash`}
                                            onKeyUp={calculateDue}
-                                           onKeyDown={calculateDue} onChange={calculateDue} defaultValue={paymentInfo && paymentInfo.cash ? paymentInfo.cash : ''}/>
+                                           onKeyDown={calculateDue} onChange={calculateDue}
+                                           defaultValue={paymentInfo && paymentInfo.cash ? paymentInfo.cash : ''}/>
                                 </div>
                             )
                         }
@@ -101,7 +102,8 @@ export default function PosPaymentModal({
                                     </label>
                                     <input type="text" className={`form-control paid bkash`}
                                            onKeyUp={calculateDue}
-                                           onKeyDown={calculateDue} onChange={calculateDue} defaultValue={paymentInfo && paymentInfo.bkash ? paymentInfo.bkash : ''}/>
+                                           onKeyDown={calculateDue} onChange={calculateDue}
+                                           defaultValue={paymentInfo && paymentInfo.bkash ? paymentInfo.bkash : ''}/>
                                 </div>
                             )
                         }
@@ -113,7 +115,8 @@ export default function PosPaymentModal({
                                     </label>
                                     <input type="text" className={`form-control paid nagad`}
                                            onKeyUp={calculateDue}
-                                           onKeyDown={calculateDue} onChange={calculateDue} defaultValue={paymentInfo && paymentInfo.nagad ? paymentInfo.nagad : ''}/>
+                                           onKeyDown={calculateDue} onChange={calculateDue}
+                                           defaultValue={paymentInfo && paymentInfo.nagad ? paymentInfo.nagad : ''}/>
                                 </div>
                             )
                         }
@@ -130,13 +133,14 @@ export default function PosPaymentModal({
                             )
                         }
                         {
-                            (paymentMethod === 'bank' && banks && banks.length > 0  || paymentMethod === 'multiple') && (
+                            (paymentMethod === 'bank' && banks && banks.length > 0 || paymentMethod === 'multiple') && (
                                 <>
                                     <div className="form-group mb-3">
                                         <label className={`form-label`}>
                                             Bank
                                         </label>
-                                        <select className={`form-control form-select bankId`} required defaultValue={paymentInfo && paymentInfo.bankId ? paymentInfo.bankId : ''}>
+                                        <select className={`form-control form-select bankId`} required
+                                                defaultValue={paymentInfo && paymentInfo.bankId ? paymentInfo.bankId : ''}>
                                             <option value="">Select Bank</option>
                                             {
                                                 banks.map(bank => (
@@ -153,7 +157,8 @@ export default function PosPaymentModal({
                                         </label>
                                         <input type="text" className={`form-control paid bank`}
                                                onKeyUp={calculateDue}
-                                               onKeyDown={calculateDue} onChange={calculateDue} defaultValue={paymentInfo && paymentInfo.bank ? paymentInfo.bank : ''}/>
+                                               onKeyDown={calculateDue} onChange={calculateDue}
+                                               defaultValue={paymentInfo && paymentInfo.bank ? paymentInfo.bank : ''}/>
                                     </div>
                                 </>
                             )

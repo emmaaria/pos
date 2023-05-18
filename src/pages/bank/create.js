@@ -28,7 +28,7 @@ export default function CreateBank({user}) {
         const bank_type = $('.bankType').val();
         const branch = $('.branch').val();
         const balance = $('.balance').val();
-        if (name === ''){
+        if (name === '') {
             toast.dismiss();
             toast.error('Bank name is required', {
                 position: "bottom-left",
@@ -42,7 +42,7 @@ export default function CreateBank({user}) {
             setLoader(false);
             return;
         }
-        if (account_name === ''){
+        if (account_name === '') {
             toast.dismiss();
             toast.error('Account name is required', {
                 position: "bottom-left",
@@ -56,7 +56,7 @@ export default function CreateBank({user}) {
             setLoader(false);
             return;
         }
-        if (account_no === ''){
+        if (account_no === '') {
             toast.dismiss();
             toast.error('Bank account number is required', {
                 position: "bottom-left",
@@ -70,7 +70,7 @@ export default function CreateBank({user}) {
             setLoader(false);
             return;
         }
-        if (branch === ''){
+        if (branch === '') {
             toast.dismiss();
             toast.error('Bank branch is required', {
                 position: "bottom-left",
@@ -84,7 +84,7 @@ export default function CreateBank({user}) {
             setLoader(false);
             return;
         }
-        if (bank_type === ''){
+        if (bank_type === '') {
             toast.dismiss();
             toast.error('Please select bank account type', {
                 position: "bottom-left",
@@ -99,8 +99,15 @@ export default function CreateBank({user}) {
             return;
         }
         try {
-            const res = await axios.post(`${process.env.API_URL}/bank/store`,{name,account_name,account_no, bank_type, balance, branch}, headers);
-            if (res.data.status === true){
+            const res = await axios.post(`${process.env.API_URL}/bank/store`, {
+                name,
+                account_name,
+                account_no,
+                bank_type,
+                balance,
+                branch
+            }, headers);
+            if (res.data.status === true) {
                 toast.dismiss();
                 toast.success('Successfully Saved', {
                     position: "bottom-right",
@@ -113,7 +120,7 @@ export default function CreateBank({user}) {
                 });
                 $('form').trigger('reset');
                 setLoader(false);
-            }else {
+            } else {
                 toast.dismiss();
                 toast.error('Something went wrong', {
                     position: "bottom-right",
@@ -126,7 +133,7 @@ export default function CreateBank({user}) {
                 });
                 setLoader(false);
             }
-        }catch (e) {
+        } catch (e) {
             toast.dismiss();
             toast.error(e.response.statusText, {
                 position: "bottom-right",
@@ -156,37 +163,35 @@ export default function CreateBank({user}) {
             <Layout user={user} title={`Add New Bank Account`}>
                 <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
-                        <form onSubmit={handleForm}>
-                            <div className="mb-3">
-                                <label className={`form-label`}>Bank Name</label>
-                                <input type="text" className={`form-control bankName`} required/>
-                            </div>
-                            <div className="mb-3">
-                                <label className={`form-label`}>Account Name</label>
-                                <input type="text" className={`form-control bankAccountName`} required />
-                            </div>
-                            <div className="mb-3">
-                                <label className={`form-label`}>Account Number</label>
-                                <input type="text" className={`form-control accountNumber`} required />
-                            </div>
-                            <div className="mb-3">
-                                <label className={`form-label`}>Branch</label>
-                                <input type="text" className={`form-control branch`} required />
-                            </div>
-                            <div className="mb-3">
-                                <label className={`form-label`}>Account Type</label>
-                                <select className={`form-control bankType`} required>
-                                    <option value="">Select Account Type</option>
-                                    <option value="saving">Savings</option>
-                                    <option value="loan">Loan</option>
-                                </select>
-                            </div>
-                            <div className="mb-3">
-                                <label className={`form-label`}>Balance</label>
-                                <input type="text" className={`form-control balance`} />
-                            </div>
-                            <button className={`btn btn-success`} type={`submit`}>Save</button>
-                        </form>
+                        <div className="mb-3">
+                            <label className={`form-label`}>Bank Name</label>
+                            <input type="text" className={`form-control bankName`} required/>
+                        </div>
+                        <div className="mb-3">
+                            <label className={`form-label`}>Account Name</label>
+                            <input type="text" className={`form-control bankAccountName`} required/>
+                        </div>
+                        <div className="mb-3">
+                            <label className={`form-label`}>Account Number</label>
+                            <input type="text" className={`form-control accountNumber`} required/>
+                        </div>
+                        <div className="mb-3">
+                            <label className={`form-label`}>Branch</label>
+                            <input type="text" className={`form-control branch`} required/>
+                        </div>
+                        <div className="mb-3">
+                            <label className={`form-label`}>Account Type</label>
+                            <select className={`form-control bankType`} required>
+                                <option value="">Select Account Type</option>
+                                <option value="saving">Savings</option>
+                                <option value="loan">Loan</option>
+                            </select>
+                        </div>
+                        <div className="mb-3">
+                            <label className={`form-label`}>Balance</label>
+                            <input type="text" className={`form-control balance`}/>
+                        </div>
+                        <button className={`btn btn-success`} onClick={handleForm}>Save</button>
                     </div>
                 </div>
             </Layout>

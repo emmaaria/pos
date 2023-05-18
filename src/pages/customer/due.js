@@ -184,45 +184,42 @@ export default function AddCustomerDue({user}) {
             <Layout user={user} title={`Add Manual Customer Due`}>
                 <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
-                        <form onSubmit={handleForm}>
-                            <div className="mb-3 row">
-
-                                <div className="col-md-4">
-                                    <label className={`form-label`}>Customer</label>
-                                    {
-                                        customers && (
-                                            <Select options={customers} isClearable={true} isSearchable={true}
-                                                    onChange={(value) => setCustomer(value?.value)}/>
-                                        ) || (
-                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
-                                                <Skeleton width={`100%`} height={40}/>
-                                            </SkeletonTheme>
-                                        )
-                                    }
-                                </div>
-                                <div className="col-md-4">
-                                    <label htmlFor="date" className={`form-label`}>Date</label>
-                                    <DatePicker
-                                        selected={date}
-                                        onChange={(date) => setDate(date)}
-                                        dateFormat='yyyy-MM-dd'
-                                        className={`form-control date`}
-                                    />
-                                </div>
-                                <div className="col-md-4">
-                                    <label htmlFor="amount" className={`form-label`}>Amount</label>
-                                    <input type="text" className={`form-control`} id={`amount`} value={amount}
-                                           onChange={handleAmount} onKeyUp={handleAmount} onKeyDown={handleAmount}/>
-                                </div>
+                        <div className="mb-3 row">
+                            <div className="col-md-4">
+                                <label className={`form-label`}>Customer</label>
+                                {
+                                    customers && (
+                                        <Select options={customers} isClearable={true} isSearchable={true}
+                                                onChange={(value) => setCustomer(value?.value)}/>
+                                    ) || (
+                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                            <Skeleton width={`100%`} height={40}/>
+                                        </SkeletonTheme>
+                                    )
+                                }
                             </div>
-                            <div className="row mb-3">
-                                <div className="col-md-12">
-                                    <label htmlFor="note" className={`form-label`}>Due Note</label>
-                                    <input type="text" className={`form-control note`} id={`note`}/>
-                                </div>
+                            <div className="col-md-4">
+                                <label htmlFor="date" className={`form-label`}>Date</label>
+                                <DatePicker
+                                    selected={date}
+                                    onChange={(date) => setDate(date)}
+                                    dateFormat='yyyy-MM-dd'
+                                    className={`form-control date`}
+                                />
                             </div>
-                            <button className={`btn btn-success`} type={`submit`}>Save</button>
-                        </form>
+                            <div className="col-md-4">
+                                <label htmlFor="amount" className={`form-label`}>Amount</label>
+                                <input type="text" className={`form-control`} id={`amount`} value={amount}
+                                       onChange={handleAmount} onKeyUp={handleAmount} onKeyDown={handleAmount}/>
+                            </div>
+                        </div>
+                        <div className="row mb-3">
+                            <div className="col-md-12">
+                                <label htmlFor="note" className={`form-label`}>Due Note</label>
+                                <input type="text" className={`form-control note`} id={`note`}/>
+                            </div>
+                        </div>
+                        <button className={`btn btn-success`} onClick={handleForm}>Save</button>
                     </div>
                 </div>
             </Layout>

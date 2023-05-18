@@ -21,8 +21,8 @@ export default function CustomerLedger({user}) {
     const [customer, setCustomer] = useState();
     const [endDate, setEndDate] = useState();
     const [data, setData] = useState([]);
-    const [totalDue, setTotalDue] = useState();
-    const [totalPaid, setTotalPaid] = useState();
+    const [totalDue, setTotalDue] = useState(0);
+    const [totalPaid, setTotalPaid] = useState(0);
     const [loading, setLoading] = useState(false);
     useEffect(() => {
         async function getData() {
@@ -112,8 +112,8 @@ export default function CustomerLedger({user}) {
                                     </label>
                                     {
                                         customers && (
-                                            <Select 
-                                                options={customers} 
+                                            <Select
+                                                options={customers}
                                                 isClearable={true}
                                                 isSearchable={true}
                                                 onChange={(value) => setCustomer(value?.value)}
@@ -198,10 +198,10 @@ export default function CustomerLedger({user}) {
                                                         <strong>Total : </strong>
                                                     </td>
                                                     <td>
-                                                        {totalDue} Tk.
+                                                        {totalDue.toFixed(2)} Tk.
                                                     </td>
                                                     <td>
-                                                        {totalPaid} Tk.
+                                                        {totalPaid.toFixed(2)} Tk.
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -211,7 +211,7 @@ export default function CustomerLedger({user}) {
                                                         </strong>
                                                     </td>
                                                     <td>
-                                                        {totalDue - totalPaid} Tk.
+                                                        {(totalDue - totalPaid).toFixed(2)} Tk.
                                                     </td>
                                                     <td></td>
                                                 </tr>

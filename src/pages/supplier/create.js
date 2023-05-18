@@ -118,50 +118,48 @@ export default function CreateSupplier({user}) {
             <Layout user={user} title={`Add New Supplier`}>
                 <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className={`custom-card`}>
-                        <form onSubmit={handleForm}>
-                            <div className="mb-3">
-                                <label htmlFor="name" className={`form-label`}>Supplier Name</label>
-                                <input type="text" className={`form-control name`} id={`name`} required/>
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="mobile" className={`form-label`}>Supplier Mobile Number</label>
-                                <input type="text" className={`form-control mobile`} id={`mobile`}/>
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="address" className={`form-label`}>Supplier Address</label>
-                                <input type="text" className={`form-control address`} id={`address`}/>
-                            </div>
+                        <div className="mb-3">
+                            <label htmlFor="name" className={`form-label`}>Supplier Name</label>
+                            <input type="text" className={`form-control name`} id={`name`} required/>
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="mobile" className={`form-label`}>Supplier Mobile Number</label>
+                            <input type="text" className={`form-control mobile`} id={`mobile`}/>
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="address" className={`form-label`}>Supplier Address</label>
+                            <input type="text" className={`form-control address`} id={`address`}/>
+                        </div>
 
-                            <div className="mb-3">
-                                <label htmlFor="hasPrevious" className={`form-label`}>Has Previous Balance</label>
-                                <select id="hasPrevious" className="form-control form-select" onChange={handlePrevious}>
-                                    <option value="0">No</option>
-                                    <option value="1">Yes</option>
-                                </select>
-                            </div>
+                        <div className="mb-3">
+                            <label htmlFor="hasPrevious" className={`form-label`}>Has Previous Balance</label>
+                            <select id="hasPrevious" className="form-control form-select" onChange={handlePrevious}>
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                        </div>
 
-                            {
-                                hasPrevious == 1 && (
-                                    <div className="mb-3">
-                                        <label htmlFor="hasPrevious" className={`form-label`}>Balance Type</label>
-                                        <select id="hasPrevious" className="form-control form-select balanceType">
-                                            <option value="due">Due</option>
-                                            <option value="advance">Advance</option>
-                                        </select>
-                                    </div>
-                                )
-                            }
-                            {
-                                hasPrevious == 1 && (
-                                    <div className="mb-3">
-                                        <label htmlFor="balance" className={`form-label`}>Previous Balance Amount</label>
-                                        <input value={balance} onChange={handleBalance} type="text"
-                                               className={`form-control balance`} id={`balance`}/>
-                                    </div>
-                                )
-                            }
-                            <button className={`btn btn-success`} type={`submit`}>Save</button>
-                        </form>
+                        {
+                            hasPrevious == 1 && (
+                                <div className="mb-3">
+                                    <label htmlFor="hasPrevious" className={`form-label`}>Balance Type</label>
+                                    <select id="hasPrevious" className="form-control form-select balanceType">
+                                        <option value="due">Due</option>
+                                        <option value="advance">Advance</option>
+                                    </select>
+                                </div>
+                            )
+                        }
+                        {
+                            hasPrevious == 1 && (
+                                <div className="mb-3">
+                                    <label htmlFor="balance" className={`form-label`}>Previous Balance Amount</label>
+                                    <input value={balance} onChange={handleBalance} type="text"
+                                           className={`form-control balance`} id={`balance`}/>
+                                </div>
+                            )
+                        }
+                        <button className={`btn btn-success`} onClick={handleForm}>Save</button>
                     </div>
                 </div>
             </Layout>

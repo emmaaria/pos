@@ -113,7 +113,6 @@ export default function EditCategory({user, id}) {
             <Layout user={user} title={`Edit Category`}>
                 <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
-                        <form onSubmit={handleForm}>
                             <div className="mb-3">
                                 <label htmlFor="name" className={`form-label`}>Category Name</label>
                                 {
@@ -127,8 +126,7 @@ export default function EditCategory({user, id}) {
                                     )
                                 }
                             </div>
-                            <button className={`btn btn-success`} type={`submit`}>Update</button>
-                        </form>
+                            <button className={`btn btn-success`} onClick={handleForm}>Update</button>
                     </div>
                 </div>
             </Layout>

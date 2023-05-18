@@ -314,7 +314,6 @@ export default function EditPurchase({user, id}) {
             <Layout user={user} title={`Edit Purchase`}>
                 <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
-                        <form onSubmit={handleForm}>
                             <div className="mb-3">
                                 <div className="row">
                                     <div className="col-md-6">
@@ -705,8 +704,7 @@ export default function EditPurchase({user, id}) {
                                     )
                                 }
                             </div>
-                            <button className={`btn btn-success`} type={`submit`}>Update</button>
-                        </form>
+                            <button className={`btn btn-success`} onClick={handleForm}>Update</button>
                     </div>
                 </div>
             </Layout>

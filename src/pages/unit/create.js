@@ -95,13 +95,11 @@ export default function CreateUnit({user}) {
             <Layout user={user} title={`Create New Unit`}>
                 <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
-                        <form onSubmit={handleForm}>
-                            <div className="mb-3">
-                                <label htmlFor="name" className={`form-label`}>Unit Name</label>
-                                <input type="text" className={`form-control name`} id={`name`} required/>
-                            </div>
-                            <button className={`btn btn-success`} type={`submit`}>Save</button>
-                        </form>
+                        <div className="mb-3">
+                            <label htmlFor="name" className={`form-label`}>Unit Name</label>
+                            <input type="text" className={`form-control name`} id={`name`} required/>
+                        </div>
+                        <button className={`btn btn-success`} onClick={handleForm}>Save</button>
                     </div>
                 </div>
             </Layout>

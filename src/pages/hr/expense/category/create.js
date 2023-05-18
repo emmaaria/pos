@@ -5,7 +5,7 @@ import session from "../../../../lib/session";
 import {ToastContainer, toast} from 'react-toastify';
 import axios from "axios";
 import $ from 'jquery';
-import { useState} from "react";
+import {useState} from "react";
 import Loader from "../../../../components/Loader";
 import useMode from "../../../../lib/mode";
 
@@ -112,15 +112,13 @@ export default function CreateExpenseCategory({user}) {
             <Layout user={user} title={`Add New Expense Category`}>
                 <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
-                        <form onSubmit={handleForm}>
-                            <div className="mb-3 row">
-                                <div className="col-md-12">
-                                    <label htmlFor="name" className={`form-label`}>Expense Category Name</label>
-                                    <input type="text" className={`form-control name`} id={`name`} required/>
-                                </div>
+                        <div className="mb-3 row">
+                            <div className="col-md-12">
+                                <label htmlFor="name" className={`form-label`}>Expense Category Name</label>
+                                <input type="text" className={`form-control name`} id={`name`} required/>
                             </div>
-                            <button className={`btn btn-success`} type={`submit`}>Save</button>
-                        </form>
+                        </div>
+                        <button className={`btn btn-success`} onClick={handleForm}>Save</button>
                     </div>
                 </div>
             </Layout>

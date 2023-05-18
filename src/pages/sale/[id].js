@@ -415,7 +415,6 @@ export default function EditSale({user, id}) {
                 <div className={`content-pos ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="row pb-15">
                         <div className="col-md-7">
-                            <form onSubmit={handleForm} id='invoice'></form>
                             <div className="d-flex gap-3 justify-content-between">
                                 <PosMenu token={user.token}/>
                                 <div className={`autocompleteWrapper product flex-grow-1`}>

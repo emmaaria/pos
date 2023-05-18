@@ -114,50 +114,48 @@ export default function EditSupplier({user, id}) {
             <Layout user={user} title={`Edit Supplier`}>
                 <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
-                        <form onSubmit={handleForm}>
-                            <div className="mb-3">
-                                <label htmlFor="name" className={`form-label`}>Supplier Name</label>
-                                {
-                                    supplier && loading === false && (
-                                        <input type="text" className={`form-control name`} id={`name`} required
-                                               defaultValue={supplier.name}/>
-                                    ) || (
-                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
-                                            <Skeleton width={`100%`} height={40}/>
-                                        </SkeletonTheme>
-                                    )
-                                }
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="mobile" className={`form-label`}>Supplier Mobile</label>
+                        <div className="mb-3">
+                            <label htmlFor="name" className={`form-label`}>Supplier Name</label>
+                            {
+                                supplier && loading === false && (
+                                    <input type="text" className={`form-control name`} id={`name`} required
+                                           defaultValue={supplier.name}/>
+                                ) || (
+                                    <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                        <Skeleton width={`100%`} height={40}/>
+                                    </SkeletonTheme>
+                                )
+                            }
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="mobile" className={`form-label`}>Supplier Mobile</label>
 
-                                {
-                                    supplier && loading === false && (
-                                        <input type="text" className={`form-control mobile`} id={`mobile`}
-                                               defaultValue={supplier.mobile}/>
-                                    ) || (
-                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
-                                            <Skeleton width={`100%`} height={40}/>
-                                        </SkeletonTheme>
-                                    )
-                                }
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="address" className={`form-label`}>Supplier Address</label>
+                            {
+                                supplier && loading === false && (
+                                    <input type="text" className={`form-control mobile`} id={`mobile`}
+                                           defaultValue={supplier.mobile}/>
+                                ) || (
+                                    <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                        <Skeleton width={`100%`} height={40}/>
+                                    </SkeletonTheme>
+                                )
+                            }
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="address" className={`form-label`}>Supplier Address</label>
 
-                                {
-                                    supplier && loading === false && (
-                                        <input type="text" className={`form-control address`} id={`address`}
-                                               defaultValue={supplier.address}/>
-                                    ) || (
-                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
-                                            <Skeleton width={`100%`} height={40}/>
-                                        </SkeletonTheme>
-                                    )
-                                }
-                            </div>
-                            <button className={`btn btn-success`} type={`submit`}>Update</button>
-                        </form>
+                            {
+                                supplier && loading === false && (
+                                    <input type="text" className={`form-control address`} id={`address`}
+                                           defaultValue={supplier.address}/>
+                                ) || (
+                                    <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                        <Skeleton width={`100%`} height={40}/>
+                                    </SkeletonTheme>
+                                )
+                            }
+                        </div>
+                        <button className={`btn btn-success`} onClick={handleForm}>Update</button>
                     </div>
                 </div>
             </Layout>

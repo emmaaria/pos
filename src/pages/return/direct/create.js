@@ -279,219 +279,218 @@ export default function CreateDirectReturn({user}) {
             <Layout user={user} title={`Add Direct Product Return`}>
                 <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
-                        <form onSubmit={handleForm}>
-                            <div className="mb-3">
-                                <div className="row">
-                                    <div className="col-md-3">
-                                        <label htmlFor="date" className={`form-label`}>Date</label>
-                                        <DatePicker
-                                            selected={date}
-                                            onChange={(date) => setDate(date)}
-                                            dateFormat='yyyy-MM-dd'
-                                            className={`form-control date`}
-                                        />
-                                    </div>
+                        <div className="mb-3">
+                            <div className="row">
+                                <div className="col-md-3">
+                                    <label htmlFor="date" className={`form-label`}>Date</label>
+                                    <DatePicker
+                                        selected={date}
+                                        onChange={(date) => setDate(date)}
+                                        dateFormat='yyyy-MM-dd'
+                                        className={`form-control date`}
+                                    />
                                 </div>
                             </div>
-                            <div className="mb-3">
-                                <div className="row">
-                                    <div className="col-md-6">
-                                        <label htmlFor="product" className={`form-label`}>Choose Product</label>
-                                        <div className={`autocompleteWrapper product`}>
-                                            <input type="text"
-                                                   className={`form-control autocompleteInput search-product`}
-                                                   autoComplete={`off`} onKeyUp={(e) => searchProduct(e.target.value)}
-                                                   onKeyDown={(e) => searchProduct(e.target.value)}
-                                                   onChange={(e) => searchProduct(e.target.value)}
-                                                   placeholder={`Write product name`}/>
-                                            {
-                                                keyword && (
-                                                    <div className={`autocompleteItemContainer product`}>
-                                                        {
-                                                            products && (
-                                                                products.length > 0 && (
-                                                                    products.map(el => (
-                                                                        <div className={`autocompleteItem`}
-                                                                             key={`search-product-item-${el.product_id}`}
-                                                                             onClick={() => addProduct(el)}>{el.name} ({el.product_id})</div>
-                                                                    ))
-                                                                ) || (
-                                                                    <div className={`autocompleteItem`}>
-                                                                        No result found
-                                                                    </div>
-                                                                )
-                                                            )
-                                                        }
-                                                        {
-                                                            searching && (
+                        </div>
+                        <div className="mb-3">
+                            <div className="row">
+                                <div className="col-md-6">
+                                    <label htmlFor="product" className={`form-label`}>Choose Product</label>
+                                    <div className={`autocompleteWrapper product`}>
+                                        <input type="text"
+                                               className={`form-control autocompleteInput search-product`}
+                                               autoComplete={`off`} onKeyUp={(e) => searchProduct(e.target.value)}
+                                               onKeyDown={(e) => searchProduct(e.target.value)}
+                                               onChange={(e) => searchProduct(e.target.value)}
+                                               placeholder={`Write product name`}/>
+                                        {
+                                            keyword && (
+                                                <div className={`autocompleteItemContainer product`}>
+                                                    {
+                                                        products && (
+                                                            products.length > 0 && (
+                                                                products.map(el => (
+                                                                    <div className={`autocompleteItem`}
+                                                                         key={`search-product-item-${el.product_id}`}
+                                                                         onClick={() => addProduct(el)}>{el.name} ({el.product_id})</div>
+                                                                ))
+                                                            ) || (
                                                                 <div className={`autocompleteItem`}>
-                                                                    Searching...
+                                                                    No result found
                                                                 </div>
                                                             )
-                                                        }
-                                                    </div>
-                                                )
-                                            }
-                                        </div>
-                                    </div>
-                                    <div className="col-md-6">
-                                        <label htmlFor="barcode" className={`form-label`}>Scan Barcode</label>
-                                        <input type="text" className={`form-control barcode`}
-                                               autoComplete={`off`} onKeyUp={scanBarcode}
-                                               onKeyDown={scanBarcode}
-                                               onChange={scanBarcode}
-                                               placeholder={`Scan barcode here`}/>
+                                                        )
+                                                    }
+                                                    {
+                                                        searching && (
+                                                            <div className={`autocompleteItem`}>
+                                                                Searching...
+                                                            </div>
+                                                        )
+                                                    }
+                                                </div>
+                                            )
+                                        }
                                     </div>
                                 </div>
+                                <div className="col-md-6">
+                                    <label htmlFor="barcode" className={`form-label`}>Scan Barcode</label>
+                                    <input type="text" className={`form-control barcode`}
+                                           autoComplete={`off`} onKeyUp={scanBarcode}
+                                           onKeyDown={scanBarcode}
+                                           onChange={scanBarcode}
+                                           placeholder={`Scan barcode here`}/>
+                                </div>
                             </div>
-                            <table className={`table table-bordered table-hover`}>
-                                <thead>
-                                <tr>
-                                    <th width={`5%`}>
-                                        SL
-                                    </th>
-                                    <th width={`40%`}>
-                                        Product Name
-                                    </th>
-                                    <th width={`15%`}>
-                                        Price
-                                    </th>
-                                    <th width={`15%`}>
-                                        Quantity
-                                    </th>
-                                    <th className={`text-end`} width={`20%`}>
-                                        Subtotal
-                                    </th>
-                                    <th className={`text-center`} width={`5%`}>
-                                        Action
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {
-                                    returnProducts.length > 0 && (
-                                        returnProducts.map((el, index) => (
-                                            <tr key={`purchase-product-item-${el.product_id}`}>
-                                                <td>
-                                                    {index + 1}
-                                                </td>
-                                                <td>
-                                                    {el.name}
-                                                    <input type="hidden" className={`productId`}
-                                                           defaultValue={el.product_id}/>
-                                                </td>
-                                                <td>
-                                                    <input type="text"
-                                                           className={`form-control productPrice productPrice_${el.product_id}`}
-                                                           defaultValue={el.price}
-                                                           onChange={(event) => calculateSubtotal(event, 'price', el.product_id)}
-                                                           onKeyUp={(event) => calculateSubtotal(event, 'price', el.product_id)}
-                                                           onKeyDown={(event) => calculateSubtotal(event, 'price', el.product_id)}/>
-                                                </td>
-                                                <td>
-                                                    <input type="text"
-                                                           className={`form-control productQuantity productQuantity_${el.product_id}`}
-                                                           defaultValue={1}
-                                                           onChange={(event) => calculateSubtotal(event, 'quantity', el.product_id)}
-                                                           onKeyUp={(event) => calculateSubtotal(event, 'quantity', el.product_id)}
-                                                           onKeyDown={(event) => calculateSubtotal(event, 'quantity', el.product_id)}/>
-                                                </td>
-                                                <td className={`text-end`}>
+                        </div>
+                        <table className={`table table-bordered table-hover`}>
+                            <thead>
+                            <tr>
+                                <th width={`5%`}>
+                                    SL
+                                </th>
+                                <th width={`40%`}>
+                                    Product Name
+                                </th>
+                                <th width={`15%`}>
+                                    Price
+                                </th>
+                                <th width={`15%`}>
+                                    Quantity
+                                </th>
+                                <th className={`text-end`} width={`20%`}>
+                                    Subtotal
+                                </th>
+                                <th className={`text-center`} width={`5%`}>
+                                    Action
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {
+                                returnProducts.length > 0 && (
+                                    returnProducts.map((el, index) => (
+                                        <tr key={`purchase-product-item-${el.product_id}`}>
+                                            <td>
+                                                {index + 1}
+                                            </td>
+                                            <td>
+                                                {el.name}
+                                                <input type="hidden" className={`productId`}
+                                                       defaultValue={el.product_id}/>
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       className={`form-control productPrice productPrice_${el.product_id}`}
+                                                       defaultValue={el.price}
+                                                       onChange={(event) => calculateSubtotal(event, 'price', el.product_id)}
+                                                       onKeyUp={(event) => calculateSubtotal(event, 'price', el.product_id)}
+                                                       onKeyDown={(event) => calculateSubtotal(event, 'price', el.product_id)}/>
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       className={`form-control productQuantity productQuantity_${el.product_id}`}
+                                                       defaultValue={1}
+                                                       onChange={(event) => calculateSubtotal(event, 'quantity', el.product_id)}
+                                                       onKeyUp={(event) => calculateSubtotal(event, 'quantity', el.product_id)}
+                                                       onKeyDown={(event) => calculateSubtotal(event, 'quantity', el.product_id)}/>
+                                            </td>
+                                            <td className={`text-end`}>
                                                 <span
                                                     className={`subtotal subtotal_${el.product_id}`}>{el.purchase_price}</span> Tk.
-                                                </td>
-                                                <td className={`text-center`}>
-                                                    <button
-                                                        className={`btn btn-danger btn-sm`}
-                                                        onClick={() => removeProduct(el.product_id)}>
-                                                        <i className="fa-solid fa-trash-can"/>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        ))
-                                    ) || (
-                                        <tr>
-                                            <td colSpan={6} className={`text-center`}>
-                                                No product added
+                                            </td>
+                                            <td className={`text-center`}>
+                                                <button
+                                                    className={`btn btn-danger btn-sm`}
+                                                    onClick={() => removeProduct(el.product_id)}>
+                                                    <i className="fa-solid fa-trash-can"/>
+                                                </button>
                                             </td>
                                         </tr>
-                                    )
-                                }
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <td colSpan={4} className="text-end">
-                                        <strong>Total</strong>
-                                    </td>
-                                    <td>
-                                        <input type="text" value={total} onChange={handleTotal} className="form-control total"/>
-                                    </td>
-                                    <td>Tk.</td>
-                                </tr>
-                                <tr>
-                                    <td colSpan={4} className="text-end">
-                                        <strong>Adjust From</strong>
-                                    </td>
-                                    <td>
-                                        <select name="" className="form-select form-control account"
-                                                onChange={handleAccountChange}>
-                                            <option value="">Choose Option</option>
-                                            <option value="cash">Cash</option>
-                                            <option value="customer">Customer Account</option>
-                                            <option value="bkash">Bkash</option>
-                                            <option value="nagad">Nagad</option>
-                                            <option value="bank">Bank</option>
-                                        </select>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                {
-                                    (account && account === 'customer') && (
-                                        <tr>
-                                            <td colSpan={4} className="text-end">
-                                                <strong>Customer</strong>
-                                            </td>
-                                            <td>
-                                                <div className="return-customer-input">
-                                                    <AutocompleteInput type='customer' token={user.token}
-                                                                       placeholder='Search customer'
-                                                                       className={styles.posInput}/>
-                                                </div>
-                                            </td>
-                                            <td></td>
-                                        </tr>
-                                    )
-                                }
-                                {
-                                    (account && account === 'bank' && banks && banks.length > 0) && (
-                                        <tr>
-                                            <td colSpan={4} className="text-end">
-                                                <strong>Bank</strong>
-                                            </td>
-                                            <td>
-                                                <select className={`form-control form-select bankId`} required>
-                                                    <option value="">Select Bank</option>
-                                                    {
-                                                        banks.map(bank => (
-                                                            <option key={bank.id} value={bank.id}>
-                                                                {bank.name} ({bank.account_no})
-                                                            </option>
-                                                        ))
-                                                    }
-                                                </select>
-                                            </td>
-                                            <td></td>
-                                        </tr>
-                                    )
-                                }
-                                </tfoot>
-                            </table>
-                            <div className="mb-3 mt-3">
-                                <label htmlFor="note" className={`form-label`}>Note</label>
-                                <textarea id="note" rows="3" className={`note form-control`}/>
-                            </div>
-                            <button className={`btn btn-success`} type={`submit`}>Save</button>
-                        </form>
+                                    ))
+                                ) || (
+                                    <tr>
+                                        <td colSpan={6} className={`text-center`}>
+                                            No product added
+                                        </td>
+                                    </tr>
+                                )
+                            }
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td colSpan={4} className="text-end">
+                                    <strong>Total</strong>
+                                </td>
+                                <td>
+                                    <input type="text" value={total} onChange={handleTotal}
+                                           className="form-control total"/>
+                                </td>
+                                <td>Tk.</td>
+                            </tr>
+                            <tr>
+                                <td colSpan={4} className="text-end">
+                                    <strong>Adjust From</strong>
+                                </td>
+                                <td>
+                                    <select name="" className="form-select form-control account"
+                                            onChange={handleAccountChange}>
+                                        <option value="">Choose Option</option>
+                                        <option value="cash">Cash</option>
+                                        <option value="customer">Customer Account</option>
+                                        <option value="bkash">Bkash</option>
+                                        <option value="nagad">Nagad</option>
+                                        <option value="bank">Bank</option>
+                                    </select>
+                                </td>
+                                <td></td>
+                            </tr>
+                            {
+                                (account && account === 'customer') && (
+                                    <tr>
+                                        <td colSpan={4} className="text-end">
+                                            <strong>Customer</strong>
+                                        </td>
+                                        <td>
+                                            <div className="return-customer-input">
+                                                <AutocompleteInput type='customer' token={user.token}
+                                                                   placeholder='Search customer'
+                                                                   className={styles.posInput}/>
+                                            </div>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                )
+                            }
+                            {
+                                (account && account === 'bank' && banks && banks.length > 0) && (
+                                    <tr>
+                                        <td colSpan={4} className="text-end">
+                                            <strong>Bank</strong>
+                                        </td>
+                                        <td>
+                                            <select className={`form-control form-select bankId`} required>
+                                                <option value="">Select Bank</option>
+                                                {
+                                                    banks.map(bank => (
+                                                        <option key={bank.id} value={bank.id}>
+                                                            {bank.name} ({bank.account_no})
+                                                        </option>
+                                                    ))
+                                                }
+                                            </select>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                )
+                            }
+                            </tfoot>
+                        </table>
+                        <div className="mb-3 mt-3">
+                            <label htmlFor="note" className={`form-label`}>Note</label>
+                            <textarea id="note" rows="3" className={`note form-control`}/>
+                        </div>
+                        <button className={`btn btn-success`} onClick={handleForm}>Save</button>
                     </div>
                 </div>
             </Layout>

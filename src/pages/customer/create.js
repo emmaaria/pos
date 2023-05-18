@@ -27,7 +27,7 @@ export default function CreateCustomer({user}) {
         const address = $('.address').val();
         const additionalInfo = $('.additionalInfo').val();
         const due = $('.due').val();
-        if (name === ''){
+        if (name === '') {
             toast.dismiss();
             toast.error('Name is required', {
                 position: "bottom-right",
@@ -42,8 +42,14 @@ export default function CreateCustomer({user}) {
             return;
         }
         try {
-            const res = await axios.post(`${process.env.API_URL}/customer/store`,{name,mobile,address, due, additionalInfo}, headers);
-            if (res.data.status === true){
+            const res = await axios.post(`${process.env.API_URL}/customer/store`, {
+                name,
+                mobile,
+                address,
+                due,
+                additionalInfo
+            }, headers);
+            if (res.data.status === true) {
                 toast.dismiss();
                 toast.success('Successfully Saved', {
                     position: "bottom-right",
@@ -56,7 +62,7 @@ export default function CreateCustomer({user}) {
                 });
                 $('form').trigger('reset');
                 setLoader(false);
-            }else {
+            } else {
                 toast.dismiss();
                 toast.error('Something went wrong', {
                     position: "bottom-right",
@@ -69,7 +75,7 @@ export default function CreateCustomer({user}) {
                 });
                 setLoader(false);
             }
-        }catch (e) {
+        } catch (e) {
             toast.dismiss();
             toast.error(e.response.statusText, {
                 position: "bottom-right",
@@ -99,29 +105,27 @@ export default function CreateCustomer({user}) {
             <Layout user={user} title={`Add New Customer`}>
                 <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
-                        <form onSubmit={handleForm}>
-                            <div className="mb-3">
-                                <label htmlFor="name" className={`form-label`}>Customer Name</label>
-                                <input type="text" className={`form-control name`} id={`name`} required/>
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="mobile" className={`form-label`}>Customer Mobile Number</label>
-                                <input type="text" className={`form-control mobile`} id={`mobile`} />
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="address" className={`form-label`}>Customer Address</label>
-                                <input type="text" className={`form-control address`} id={`address`} />
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="additionalInfo" className={`form-label`}>Customer Additional Data</label>
-                                <textarea className={`form-control additionalInfo`} rows={8}/>
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="due" className={`form-label`}>Previous Due</label>
-                                <input type="text" className={`form-control due`} id={`due`} />
-                            </div>
-                            <button className={`btn btn-success`} type={`submit`}>Save</button>
-                        </form>
+                        <div className="mb-3">
+                            <label htmlFor="name" className={`form-label`}>Customer Name</label>
+                            <input type="text" className={`form-control name`} id={`name`} required/>
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="mobile" className={`form-label`}>Customer Mobile Number</label>
+                            <input type="text" className={`form-control mobile`} id={`mobile`}/>
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="address" className={`form-label`}>Customer Address</label>
+                            <input type="text" className={`form-control address`} id={`address`}/>
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="additionalInfo" className={`form-label`}>Customer Additional Data</label>
+                            <textarea className={`form-control additionalInfo`} rows={8}/>
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="due" className={`form-label`}>Previous Due</label>
+                            <input type="text" className={`form-control due`} id={`due`}/>
+                        </div>
+                        <button className={`btn btn-success`} onClick={handleForm}>Save</button>
                     </div>
                 </div>
             </Layout>

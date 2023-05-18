@@ -202,160 +202,158 @@ export default function CreateProduct({user}) {
             <Layout user={user} title={`Add New Product`}>
                 <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
-                        <form onSubmit={handleForm}>
-                            <div className="mb-3 row">
-                                <div className="col-md-6">
-                                    <label htmlFor="name" className={`form-label`}>Product Name</label>
-                                    <input type="text" className={`form-control name`} id={`name`} required/>
-                                </div>
-                                <div className="col-md-6">
-                                    <label htmlFor="category" className={`form-label`}>Category</label>
-                                    {
-                                        categories && (
-                                            <select className="form-control category">
-                                                <option value="">Choose Category</option>
-                                                {
-                                                    categories.map(el => (
-                                                        <option value={el.id} key={el.id}>{el.name}</option>
+                        <div className="mb-3 row">
+                            <div className="col-md-6">
+                                <label htmlFor="name" className={`form-label`}>Product Name</label>
+                                <input type="text" className={`form-control name`} id={`name`} required/>
+                            </div>
+                            <div className="col-md-6">
+                                <label htmlFor="category" className={`form-label`}>Category</label>
+                                {
+                                    categories && (
+                                        <select className="form-control category">
+                                            <option value="">Choose Category</option>
+                                            {
+                                                categories.map(el => (
+                                                    <option value={el.id} key={el.id}>{el.name}</option>
+                                                ))
+                                            }
+                                        </select>
+                                    ) || (
+                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                            <Skeleton width={`100%`} height={40}/>
+                                        </SkeletonTheme>
+                                    )
+                                }
+                            </div>
+                        </div>
+                        <div className="mb-3 row">
+                            <div className="col-md-6">
+                                <label htmlFor="unit" className={`form-label`}>Unit</label>
+                                {
+                                    units && (
+                                        <select className="form-control unit">
+                                            <option value="">Choose Unit</option>
+                                            {
+                                                units.map(el => (
+                                                    <option value={el.id} key={el.id}>{el.name}</option>
+                                                ))
+                                            }
+                                        </select>
+                                    ) || (
+                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                            <Skeleton width={`100%`} height={40}/>
+                                        </SkeletonTheme>
+                                    )
+                                }
+                            </div>
+                            <div className="col-md-6">
+                                <label htmlFor="weight" className={`form-label`}>Weight</label>
+                                <input type="text" className={`form-control weight`} id={`weight`}/>
+                            </div>
+                        </div>
+                        <div className="row mb-3">
+                            <div className="col-md-6">
+                                <label htmlFor="price" className={`form-label`}>Selling Price</label>
+                                <input type="text" className={`form-control price`} id={`price`}
+                                       value={sellingPrice} onChange={handleSellingPrice} required/>
+                            </div>
+                            <div className="col-md-6">
+                                <label htmlFor="purchasePrice" className={`form-label`}>Purchase Price</label>
+                                <input value={purchasePrice} onChange={handlePurchasePrice} type="text"
+                                       className={`form-control purchasePrice`} id={`purchasePrice`} required/>
+                            </div>
+                        </div>
+                        <div className="row mb-3">
+                            <div className="col-md-12">
+                                <label htmlFor="suppliers" className={`form-label`}>Suppliers</label>
+                                {
+                                    suppliers && (
+                                        <Multiselect
+                                            options={suppliers}
+                                            onSelect={handleSupplierSelect}
+                                            onRemove={handleSupplierRemove}
+                                            displayValue="name"
+                                            placeholder={``}
+                                            selectedValues={null}
+                                            ref={supplierRef}
+                                        />
+                                    ) || (
+                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                            <Skeleton width={`100%`} height={40}/>
+                                        </SkeletonTheme>
+                                    )
+                                }
+                            </div>
+                        </div>
+                        {
+                            user.customerBasedPrice == 'yes' && (
+                                <div className="row mb-3">
+                                    <div className="col-md-12">
+                                        <table className={`table table-bordered`}>
+                                            <thead>
+                                            <tr>
+                                                <th width="50%">
+                                                    Customer
+                                                </th>
+                                                <th width="30%">
+                                                    Price
+                                                </th>
+                                                <th width="20%">
+                                                    Action
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {
+                                                customers?.length > 0 && (
+                                                    customerPrices.map((item, index) => (
+                                                        <tr key={index}>
+                                                            <td>
+                                                                <Select
+                                                                    options={customers}
+                                                                    isClearable={true}
+                                                                    isSearchable={true}
+                                                                    classNamePrefix="react-select"
+                                                                    onChange={(value) => handleCustomerChange(index, value?.id)}
+                                                                    placeholder="Select Customer"
+                                                                    getOptionLabel={(item) => (`${item.name} (${item.address ? item.address : ''})`)}
+                                                                    getOptionValue={(item) => item.id}
+                                                                />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" className="form-control"
+                                                                       value={item.price}
+                                                                       onChange={(event) => handlePriceChange(index, event.target.value)}/>
+                                                            </td>
+                                                            <td>
+                                                                <button className="btn btn-sm btn-danger"
+                                                                        onClick={() => handleRemoveCustomerPrice(index)}>
+                                                                    <i className="fa fa-trash"/>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
                                                     ))
-                                                }
-                                            </select>
-                                        ) || (
-                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
-                                                <Skeleton width={`100%`} height={40}/>
-                                            </SkeletonTheme>
-                                        )
-                                    }
-                                </div>
-                            </div>
-                            <div className="mb-3 row">
-                                <div className="col-md-6">
-                                    <label htmlFor="unit" className={`form-label`}>Unit</label>
-                                    {
-                                        units && (
-                                            <select className="form-control unit">
-                                                <option value="">Choose Unit</option>
-                                                {
-                                                    units.map(el => (
-                                                        <option value={el.id} key={el.id}>{el.name}</option>
-                                                    ))
-                                                }
-                                            </select>
-                                        ) || (
-                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
-                                                <Skeleton width={`100%`} height={40}/>
-                                            </SkeletonTheme>
-                                        )
-                                    }
-                                </div>
-                                <div className="col-md-6">
-                                    <label htmlFor="weight" className={`form-label`}>Weight</label>
-                                    <input type="text" className={`form-control weight`} id={`weight`}/>
-                                </div>
-                            </div>
-                            <div className="row mb-3">
-                                <div className="col-md-6">
-                                    <label htmlFor="price" className={`form-label`}>Selling Price</label>
-                                    <input type="text" className={`form-control price`} id={`price`}
-                                           value={sellingPrice} onChange={handleSellingPrice} required/>
-                                </div>
-                                <div className="col-md-6">
-                                    <label htmlFor="purchasePrice" className={`form-label`}>Purchase Price</label>
-                                    <input value={purchasePrice} onChange={handlePurchasePrice} type="text"
-                                           className={`form-control purchasePrice`} id={`purchasePrice`} required/>
-                                </div>
-                            </div>
-                            <div className="row mb-3">
-                                <div className="col-md-12">
-                                    <label htmlFor="suppliers" className={`form-label`}>Suppliers</label>
-                                    {
-                                        suppliers && (
-                                            <Multiselect
-                                                options={suppliers}
-                                                onSelect={handleSupplierSelect}
-                                                onRemove={handleSupplierRemove}
-                                                displayValue="name"
-                                                placeholder={``}
-                                                selectedValues={null}
-                                                ref={supplierRef}
-                                            />
-                                        ) || (
-                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
-                                                <Skeleton width={`100%`} height={40}/>
-                                            </SkeletonTheme>
-                                        )
-                                    }
-                                </div>
-                            </div>
-                            {
-                                user.customerBasedPrice == 'yes' && (
-                                    <div className="row mb-3">
-                                        <div className="col-md-12">
-                                            <table className={`table table-bordered`}>
-                                                <thead>
-                                                <tr>
-                                                    <th width="50%">
-                                                        Customer
-                                                    </th>
-                                                    <th width="30%">
-                                                        Price
-                                                    </th>
-                                                    <th width="20%">
-                                                        Action
-                                                    </th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                {
-                                                    customers?.length > 0 && (
-                                                        customerPrices.map((item, index) => (
-                                                            <tr key={index}>
-                                                                <td>
-                                                                    <Select
-                                                                        options={customers}
-                                                                        isClearable={true}
-                                                                        isSearchable={true}
-                                                                        classNamePrefix="react-select"
-                                                                        onChange={(value) => handleCustomerChange(index, value?.id)}
-                                                                        placeholder="Select Customer"
-                                                                        getOptionLabel={(item) => (`${item.name} (${item.address ? item.address : ''})`)}
-                                                                        getOptionValue={(item) => item.id}
-                                                                    />
-                                                                </td>
-                                                                <td>
-                                                                    <input type="text" className="form-control"
-                                                                           value={item.price}
-                                                                           onChange={(event) => handlePriceChange(index, event.target.value)}/>
-                                                                </td>
-                                                                <td>
-                                                                    <button className="btn btn-sm btn-danger"
-                                                                            onClick={() => handleRemoveCustomerPrice(index)}>
-                                                                        <i className="fa fa-trash"/>
-                                                                    </button>
-                                                                </td>
-                                                            </tr>
-                                                        ))
-                                                    )
-                                                }
-                                                <tr>
-                                                    <td colSpan={3} className="text-end">
-                                                        <button className="btn btn-sm btn-success"
-                                                                onClick={handleAddCustomer} type="button">
-                                                            Add New
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
+                                                )
+                                            }
+                                            <tr>
+                                                <td colSpan={3} className="text-end">
+                                                    <button className="btn btn-sm btn-success"
+                                                            onClick={handleAddCustomer} type="button">
+                                                        Add New
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
 
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                            </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
-                                )
-                            }
-                            <button className={`btn btn-success`} type={`submit`}>Save</button>
-                        </form>
+                                </div>
+                            )
+                        }
+                        <button className={`btn btn-success`} onClick={handleForm}>Save</button>
                     </div>
                 </div>
             </Layout>

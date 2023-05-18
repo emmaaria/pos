@@ -45,7 +45,7 @@ export default function EditBank({user, id}) {
         const account_no = $('.accountNumber').val();
         const bank_type = $('.bankType').val();
         const branch = $('.branch').val();
-        if (name === ''){
+        if (name === '') {
             toast.dismiss();
             toast.error('Bank name is required', {
                 position: "bottom-left",
@@ -59,7 +59,7 @@ export default function EditBank({user, id}) {
             setLoader(false);
             return;
         }
-        if (account_name === ''){
+        if (account_name === '') {
             toast.dismiss();
             toast.error('Account name is required', {
                 position: "bottom-left",
@@ -73,7 +73,7 @@ export default function EditBank({user, id}) {
             setLoader(false);
             return;
         }
-        if (account_no === ''){
+        if (account_no === '') {
             toast.dismiss();
             toast.error('Bank account number is required', {
                 position: "bottom-left",
@@ -87,7 +87,7 @@ export default function EditBank({user, id}) {
             setLoader(false);
             return;
         }
-        if (branch === ''){
+        if (branch === '') {
             toast.dismiss();
             toast.error('Bank branch is required', {
                 position: "bottom-left",
@@ -101,7 +101,7 @@ export default function EditBank({user, id}) {
             setLoader(false);
             return;
         }
-        if (bank_type === ''){
+        if (bank_type === '') {
             toast.dismiss();
             toast.error('Please select bank account type', {
                 position: "bottom-left",
@@ -116,8 +116,15 @@ export default function EditBank({user, id}) {
             return;
         }
         try {
-            const res = await axios.post(`${process.env.API_URL}/bank/update`,{name,account_name,account_no, bank_type, branch, id}, headers);
-            if (res.data.status === true){
+            const res = await axios.post(`${process.env.API_URL}/bank/update`, {
+                name,
+                account_name,
+                account_no,
+                bank_type,
+                branch,
+                id
+            }, headers);
+            if (res.data.status === true) {
                 toast.dismiss();
                 toast.success('Successfully Saved', {
                     position: "bottom-right",
@@ -129,7 +136,7 @@ export default function EditBank({user, id}) {
                     theme: 'dark',
                 });
                 setLoader(false);
-            }else {
+            } else {
                 toast.dismiss();
                 toast.error('Something went wrong', {
                     position: "bottom-right",
@@ -142,7 +149,7 @@ export default function EditBank({user, id}) {
                 });
                 setLoader(false);
             }
-        }catch (e) {
+        } catch (e) {
             toast.dismiss();
             toast.error(e.response.statusText, {
                 position: "bottom-right",
@@ -176,87 +183,90 @@ export default function EditBank({user, id}) {
             <Layout user={user} title={`Edit Bank`}>
                 <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
-                        <form onSubmit={handleForm}>
-                            <div className="mb-3">
-                                <label className={`form-label`}>Bank Name</label>
-                                {
-                                    bank && loading === false && (
-                                        <div className="mb-3">
-                                            <input type="text" className={`form-control bankName`} defaultValue={bank.name} required/>
-                                        </div>
-                                    ) || (
-                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
-                                            <Skeleton width={`100%`} height={40}/>
-                                        </SkeletonTheme>
-                                    )
-                                }
-                            </div>
+                        <div className="mb-3">
+                            <label className={`form-label`}>Bank Name</label>
+                            {
+                                bank && loading === false && (
+                                    <div className="mb-3">
+                                        <input type="text" className={`form-control bankName`} defaultValue={bank.name}
+                                               required/>
+                                    </div>
+                                ) || (
+                                    <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                        <Skeleton width={`100%`} height={40}/>
+                                    </SkeletonTheme>
+                                )
+                            }
+                        </div>
 
-                            <div className="mb-3">
-                                <label className={`form-label`}>Account Name</label>
-                                {
-                                    bank && loading === false && (
-                                        <div className="mb-3">
-                                            <input type="text" className={`form-control bankAccountName`} required defaultValue={bank.account_name} />
-                                        </div>
-                                    ) || (
-                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
-                                            <Skeleton width={`100%`} height={40}/>
-                                        </SkeletonTheme>
-                                    )
-                                }
-                            </div>
+                        <div className="mb-3">
+                            <label className={`form-label`}>Account Name</label>
+                            {
+                                bank && loading === false && (
+                                    <div className="mb-3">
+                                        <input type="text" className={`form-control bankAccountName`} required
+                                               defaultValue={bank.account_name}/>
+                                    </div>
+                                ) || (
+                                    <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                        <Skeleton width={`100%`} height={40}/>
+                                    </SkeletonTheme>
+                                )
+                            }
+                        </div>
 
-                            <div className="mb-3">
-                                <label className={`form-label`}>Account Number</label>
-                                {
-                                    bank && loading === false && (
-                                        <div className="mb-3">
-                                            <input type="text" className={`form-control accountNumber`} required defaultValue={bank.account_no} />
-                                        </div>
-                                    ) || (
-                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
-                                            <Skeleton width={`100%`} height={40}/>
-                                        </SkeletonTheme>
-                                    )
-                                }
-                            </div>
+                        <div className="mb-3">
+                            <label className={`form-label`}>Account Number</label>
+                            {
+                                bank && loading === false && (
+                                    <div className="mb-3">
+                                        <input type="text" className={`form-control accountNumber`} required
+                                               defaultValue={bank.account_no}/>
+                                    </div>
+                                ) || (
+                                    <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                        <Skeleton width={`100%`} height={40}/>
+                                    </SkeletonTheme>
+                                )
+                            }
+                        </div>
 
-                            <div className="mb-3">
-                                <label className={`form-label`}>Branch</label>
-                                {
-                                    bank && loading === false && (
-                                        <div className="mb-3">
-                                            <input type="text" className={`form-control branch`} required defaultValue={bank.branch} />
-                                        </div>
-                                    ) || (
-                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
-                                            <Skeleton width={`100%`} height={40}/>
-                                        </SkeletonTheme>
-                                    )
-                                }
-                            </div>
+                        <div className="mb-3">
+                            <label className={`form-label`}>Branch</label>
+                            {
+                                bank && loading === false && (
+                                    <div className="mb-3">
+                                        <input type="text" className={`form-control branch`} required
+                                               defaultValue={bank.branch}/>
+                                    </div>
+                                ) || (
+                                    <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                        <Skeleton width={`100%`} height={40}/>
+                                    </SkeletonTheme>
+                                )
+                            }
+                        </div>
 
-                            <div className="mb-3">
-                                <label className={`form-label`}>Account Type</label>
-                                {
-                                    bank && loading === false && (
-                                        <div className="mb-3">
-                                            <select className={`form-control bankType`} required value={type} onChange={handleTypeChange}>
-                                                <option value="">Select Account Type</option>
-                                                <option value="saving">Savings</option>
-                                                <option value="loan">Loan</option>
-                                            </select>
-                                        </div>
-                                    ) || (
-                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
-                                            <Skeleton width={`100%`} height={40}/>
-                                        </SkeletonTheme>
-                                    )
-                                }
-                            </div>
-                            <button className={`btn btn-success`} type={`submit`}>Update</button>
-                        </form>
+                        <div className="mb-3">
+                            <label className={`form-label`}>Account Type</label>
+                            {
+                                bank && loading === false && (
+                                    <div className="mb-3">
+                                        <select className={`form-control bankType`} required value={type}
+                                                onChange={handleTypeChange}>
+                                            <option value="">Select Account Type</option>
+                                            <option value="saving">Savings</option>
+                                            <option value="loan">Loan</option>
+                                        </select>
+                                    </div>
+                                ) || (
+                                    <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                        <Skeleton width={`100%`} height={40}/>
+                                    </SkeletonTheme>
+                                )
+                            }
+                        </div>
+                        <button className={`btn btn-success`} onClick={handleForm}>Update</button>
                     </div>
                 </div>
             </Layout>

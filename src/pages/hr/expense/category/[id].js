@@ -114,22 +114,20 @@ export default function EditExpenseCategory({user, id}) {
             <Layout user={user} title={`Edit Unit`}>
                 <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
-                        <form onSubmit={handleForm}>
-                            <div className="mb-3">
-                                <label htmlFor="name" className={`form-label`}>Expense Category Name</label>
-                                {
-                                    data && loading === false && (
-                                        <input type="text" className={`form-control name`} id={`name`} required
-                                               defaultValue={data.name}/>
-                                    ) || (
-                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
-                                            <Skeleton width={`100%`} height={40}/>
-                                        </SkeletonTheme>
-                                    )
-                                }
-                            </div>
-                            <button className={`btn btn-success`} type={`submit`}>Update</button>
-                        </form>
+                        <div className="mb-3">
+                            <label htmlFor="name" className={`form-label`}>Expense Category Name</label>
+                            {
+                                data && loading === false && (
+                                    <input type="text" className={`form-control name`} id={`name`} required
+                                           defaultValue={data.name}/>
+                                ) || (
+                                    <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                        <Skeleton width={`100%`} height={40}/>
+                                    </SkeletonTheme>
+                                )
+                            }
+                        </div>
+                        <button className={`btn btn-success`} onClick={handleForm}>Update</button>
                     </div>
                 </div>
             </Layout>

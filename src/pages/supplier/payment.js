@@ -248,74 +248,72 @@ export default function SupplierPayment({user}) {
             <Layout user={user} title={`Supplier Payment`}>
                 <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
-                        <form onSubmit={handleForm}>
-                            <div className="mb-3 row">
+                        <div className="mb-3 row">
 
-                                <div className="col-md-4">
-                                    <label className={`form-label`}>Supplier</label>
-                                    {
-                                        suppliers && (
-                                            <Select options={suppliers} isClearable={true} isSearchable={true}
-                                                    onChange={(value) => setSupplier(value?.value)}/>
-                                        ) || (
-                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
-                                                <Skeleton width={`100%`} height={40}/>
-                                            </SkeletonTheme>
-                                        )
-                                    }
-                                </div>
-                                <div className="col-md-4">
-                                    <label htmlFor="note" className={`form-label`}>Paid By</label>
-                                    <select className="form-select form-control account"
-                                            onChange={handleAccount} value={account}>
-                                        <option value="">Choose Account</option>
-                                        <option value="cash">Cash</option>
-                                        <option value="bkash">Bkash</option>
-                                        <option value="nagad">Nagad</option>
-                                        <option value="bank">Bank</option>
-                                    </select>
-                                </div>
-                                <div className="col-md-4">
-                                    <label htmlFor="date" className={`form-label`}>Date</label>
-                                    <DatePicker
-                                        selected={date}
-                                        onChange={(date) => setDate(date)}
-                                        dateFormat='yyyy-MM-dd'
-                                        className={`form-control date`}
-                                    />
-                                </div>
+                            <div className="col-md-4">
+                                <label className={`form-label`}>Supplier</label>
+                                {
+                                    suppliers && (
+                                        <Select options={suppliers} isClearable={true} isSearchable={true}
+                                                onChange={(value) => setSupplier(value?.value)}/>
+                                    ) || (
+                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                            <Skeleton width={`100%`} height={40}/>
+                                        </SkeletonTheme>
+                                    )
+                                }
                             </div>
-                            {
-                                account && account === 'bank' && (
-                                    <div className="row mb-3">
-                                        <div className="col-md-12">
-                                            <select className={`form-control form-select bankId`}>
-                                                <option value="">Select Bank</option>
-                                                {
-                                                    banks.map(bank => (
-                                                        <option key={bank.id} value={bank.id}>
-                                                            {bank.name} ({bank.account_no})
-                                                        </option>
-                                                    ))
-                                                }
-                                            </select>
-                                        </div>
+                            <div className="col-md-4">
+                                <label htmlFor="note" className={`form-label`}>Paid By</label>
+                                <select className="form-select form-control account"
+                                        onChange={handleAccount} value={account}>
+                                    <option value="">Choose Account</option>
+                                    <option value="cash">Cash</option>
+                                    <option value="bkash">Bkash</option>
+                                    <option value="nagad">Nagad</option>
+                                    <option value="bank">Bank</option>
+                                </select>
+                            </div>
+                            <div className="col-md-4">
+                                <label htmlFor="date" className={`form-label`}>Date</label>
+                                <DatePicker
+                                    selected={date}
+                                    onChange={(date) => setDate(date)}
+                                    dateFormat='yyyy-MM-dd'
+                                    className={`form-control date`}
+                                />
+                            </div>
+                        </div>
+                        {
+                            account && account === 'bank' && (
+                                <div className="row mb-3">
+                                    <div className="col-md-12">
+                                        <select className={`form-control form-select bankId`}>
+                                            <option value="">Select Bank</option>
+                                            {
+                                                banks.map(bank => (
+                                                    <option key={bank.id} value={bank.id}>
+                                                        {bank.name} ({bank.account_no})
+                                                    </option>
+                                                ))
+                                            }
+                                        </select>
                                     </div>
-                                )
-                            }
-                            <div className="row mb-3">
-                                <div className="col-md-6">
-                                    <label htmlFor="amount" className={`form-label`}>Amount</label>
-                                    <input type="text" className={`form-control`} id={`amount`} value={amount}
-                                           onChange={handleAmount} onKeyUp={handleAmount} onKeyDown={handleAmount}/>
                                 </div>
-                                <div className="col-md-6">
-                                    <label htmlFor="note" className={`form-label`}>Payment Note</label>
-                                    <input type="text" className={`form-control note`} id={`note`}/>
-                                </div>
+                            )
+                        }
+                        <div className="row mb-3">
+                            <div className="col-md-6">
+                                <label htmlFor="amount" className={`form-label`}>Amount</label>
+                                <input type="text" className={`form-control`} id={`amount`} value={amount}
+                                       onChange={handleAmount} onKeyUp={handleAmount} onKeyDown={handleAmount}/>
                             </div>
-                            <button className={`btn btn-success`} type={`submit`}>Save</button>
-                        </form>
+                            <div className="col-md-6">
+                                <label htmlFor="note" className={`form-label`}>Payment Note</label>
+                                <input type="text" className={`form-control note`} id={`note`}/>
+                            </div>
+                        </div>
+                        <button className={`btn btn-success`} onClick={handleForm}>Save</button>
                     </div>
                 </div>
             </Layout>

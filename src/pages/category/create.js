@@ -22,7 +22,7 @@ export default function CreateCategory({user}) {
         });
         setLoader(true);
         const name = $('.name').val();
-        if (name === ''){
+        if (name === '') {
             toast.dismiss();
             toast.error('Name is required', {
                 position: "bottom-left",
@@ -37,8 +37,8 @@ export default function CreateCategory({user}) {
             return;
         }
         try {
-            const res = await axios.post(`${process.env.API_URL}/category/store`,{name}, headers);
-            if (res.data.status === true){
+            const res = await axios.post(`${process.env.API_URL}/category/store`, {name}, headers);
+            if (res.data.status === true) {
                 toast.dismiss();
                 toast.success('Successfully Saved', {
                     position: "bottom-right",
@@ -51,7 +51,7 @@ export default function CreateCategory({user}) {
                 });
                 $('form').trigger('reset');
                 setLoader(false);
-            }else {
+            } else {
                 toast.dismiss();
                 toast.success('Something went wrong', {
                     position: "bottom-right",
@@ -64,7 +64,7 @@ export default function CreateCategory({user}) {
                 });
                 setLoader(false);
             }
-        }catch (e) {
+        } catch (e) {
             toast.dismiss();
             toast.error(e.response.statusText, {
                 position: "bottom-right",
@@ -95,13 +95,11 @@ export default function CreateCategory({user}) {
             <Layout user={user} title={`Create New Category`}>
                 <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
-                        <form onSubmit={handleForm}>
-                            <div className="mb-3">
-                                <label htmlFor="name" className={`form-label`}>Category Name</label>
-                                <input type="text" className={`form-control name`} id={`name`} required/>
-                            </div>
-                            <button className={`btn btn-success`} type={`submit`}>Save</button>
-                        </form>
+                        <div className="mb-3">
+                            <label htmlFor="name" className={`form-label`}>Category Name</label>
+                            <input type="text" className={`form-control name`} id={`name`} required/>
+                        </div>
+                        <button className={`btn btn-success`} onClick={handleForm}>Save</button>
                     </div>
                 </div>
             </Layout>
