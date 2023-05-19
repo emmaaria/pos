@@ -121,7 +121,7 @@ export default function Stock({user}) {
                                             {el.sale ? (el.sale - el.return).toFixed(2) : 0}
                                         </td>
                                         <td>
-                                            {el.purchase - (el.sale - el.return)}
+                                            {el.purchase.toFixed(2) - (el.sale - el.return).toFixed(2)}
                                         </td>
                                     </tr>
                                 ))
