@@ -118,7 +118,7 @@ export default function Stock({user}) {
                                         <td>{el.name}</td>
                                         <td>{el.purchase ? el.purchase : 0}</td>
                                         <td>
-                                            {el.sale ? el.sale - el.return : 0}
+                                            {el.sale ? (el.sale - el.return).toFixed(2) : 0}
                                         </td>
                                         <td>
                                             {el.purchase - (el.sale - el.return)}
@@ -139,17 +139,17 @@ export default function Stock({user}) {
                                 </td>
                                 <td>
                                     <strong>
-                                        {totalPurchase}
+                                        {totalPurchase.toFixed(2)}
                                     </strong>
                                 </td>
                                 <td>
                                     <strong>
-                                        {totalSale}
+                                        {totalSale.toFixed(2)}
                                     </strong>
                                 </td>
                                 <td>
                                     <strong>
-                                        {stock}
+                                        {stock.toFixed(2)}
                                     </strong>
                                 </td>
                             </tr>
