@@ -46,6 +46,9 @@ export default function Stock({user}) {
         ).then(res => {
             if (res.data.status === true) {
                 setProducts(res.data.products.data);
+                setTotalPurchase(res.data.totalPurchase);
+                setTotalSale(res.data.totalSale);
+                setStock(res.data.stock);
                 setLinks(res.data.products.links);
                 setLoading(false);
             }
