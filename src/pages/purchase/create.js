@@ -103,7 +103,6 @@ export default function CreatePurchase({user}) {
                 total,
                 openingStock
             }, headers);
-            console.log(res.data)
             if (res.data.status === true) {
                 toast.dismiss();
                 toast.success('Successfully Saved', {
@@ -119,6 +118,7 @@ export default function CreatePurchase({user}) {
                 setDue(0);
                 setPurchaseProducts([]);
                 setTotal(0);
+                setTotalQty(0);
                 setLoader(false);
             } else {
                 toast.dismiss();
