@@ -2,15 +2,20 @@ import Layout from "../../components/layout/Layout";
 import Head from "next/head";
 import {withIronSessionSsr} from 'iron-session/next';
 import session from "../../lib/session";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import Loader from "../../components/Loader";
 import useMode from "../../lib/mode";
 import Select from "react-select";
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
+import {useReactToPrint} from "react-to-print";
 
 export default function SaleByCategory({user}) {
+    const componentRef = useRef();
+    const handlePrint = useReactToPrint({
+        content: () => componentRef.current,
+    });
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
@@ -132,6 +137,13 @@ export default function SaleByCategory({user}) {
                                     <button className="btn btn-success" type={"button"} onClick={search}>
                                         Search
                                     </button>
+                                    {
+                                        data && data.length > 0 && (
+                                            <button className="btn btn-warning ms-3" type={"button"} onClick={handlePrint}>
+                                                Print
+                                            </button>
+                                        )
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -139,7 +151,7 @@ export default function SaleByCategory({user}) {
                             data && (
                                 <>
                                     <hr/>
-                                    <table className={`table mt-4`}>
+                                    <table className={`table mt-4`} ref={componentRef}>
                                         <thead>
                                         <tr>
                                             <th width={`10%`}>Sl</th>
@@ -153,7 +165,7 @@ export default function SaleByCategory({user}) {
                                         {
                                             data && data.length <= 0 && (
                                                 <tr>
-                                                    <td colSpan={7} className={`text-center`}>
+                                                    <td colSpan={5} className={`text-center`}>
                                                         No Sales Found
                                                     </td>
                                                 </tr>
