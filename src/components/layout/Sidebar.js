@@ -559,6 +559,7 @@ export default function Sidebar({user}) {
                               router.pathname === '/report/purchase' ||
                               router.pathname === '/report/product-purchase' ||
                               router.pathname === '/report/sale-by-category' ||
+                              router.pathname === '/report/purchase-by-category' ||
                               router.pathname === '/report/product-sale'
                                   ? styles.active
                                   : ''
@@ -622,6 +623,17 @@ export default function Sidebar({user}) {
                             }
                             `}>
                                 Purchase By Product
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href={`/report/purchase-by-category`} className={`
+                                ${
+                                router.pathname === '/report/purchase-by-category'
+                                    ? styles.active
+                                    : ''
+                            }
+                            `}>
+                                Purchase By Category
                             </Link>
                         </li>
                     </ul>
