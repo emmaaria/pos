@@ -600,7 +600,7 @@ export default function Sidebar({user}) {
                                     : ''
                             }
                             `}>
-                                Sale By Product
+                                Product Wise Sales
                             </Link>
                         </li>
                         <li>
@@ -611,7 +611,7 @@ export default function Sidebar({user}) {
                                     : ''
                             }
                             `}>
-                                Sale By Category
+                                Category Wise Sales
                             </Link>
                         </li>
                         <li>
@@ -622,7 +622,7 @@ export default function Sidebar({user}) {
                                     : ''
                             }
                             `}>
-                                Purchase By Product
+                                Product Wise Purchase
                             </Link>
                         </li>
                         <li>
@@ -633,7 +633,7 @@ export default function Sidebar({user}) {
                                     : ''
                             }
                             `}>
-                                Purchase By Category
+                                Category Wise Purchase
                             </Link>
                         </li>
                     </ul>

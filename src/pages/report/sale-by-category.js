@@ -75,7 +75,7 @@ export default function SaleByCategory({user}) {
         <>
             <Head>
                 <title>
-                    Sale Report by Category
+                    Category Wise Sales
                 </title>
             </Head>
             {
@@ -83,7 +83,7 @@ export default function SaleByCategory({user}) {
                     <Loader/>
                 )
             }
-            <Layout user={user} title={`Sale Report by Category`}>
+            <Layout user={user} title={`Category Wise Sales`}>
                 <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <div className="row mb-4">

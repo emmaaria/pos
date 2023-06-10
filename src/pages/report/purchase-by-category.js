@@ -75,7 +75,7 @@ export default function PurchaseByCategory({user}) {
         <>
             <Head>
                 <title>
-                    Purchase Report by Category
+                     Category Wise Purchase Report
                 </title>
             </Head>
             {
@@ -83,7 +83,7 @@ export default function PurchaseByCategory({user}) {
                     <Loader/>
                 )
             }
-            <Layout user={user} title={`Purchase Report by Category`}>
+            <Layout user={user} title={`Category Wise Purchase Report`}>
                 <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <div className="row mb-4">

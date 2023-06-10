@@ -50,7 +50,7 @@ export default function ProductSaleReport({user}) {
         <>
             <Head>
                 <title>
-                    Product Sale Report
+                    Product Wise Sale Report
                 </title>
             </Head>
             {
@@ -58,7 +58,7 @@ export default function ProductSaleReport({user}) {
                     <Loader/>
                 )
             }
-            <Layout user={user} title={`Product Sale Report`}>
+            <Layout user={user} title={`Product Wise Sale Report`}>
                 <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <div className="row mb-4">
