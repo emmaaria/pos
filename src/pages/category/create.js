@@ -49,7 +49,7 @@ export default function CreateCategory({user}) {
                     draggable: true,
                     theme: 'dark',
                 });
-                $('form').trigger('reset');
+                $('.name').val('');
                 setLoader(false);
             } else {
                 toast.dismiss();

@@ -10,6 +10,7 @@ import useMode from "../../lib/mode";
 import Select from "react-select";
 import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 import {useReactToPrint} from "react-to-print";
+import {toast, ToastContainer} from "react-toastify";
 
 export default function SaleByCategory({user}) {
     const componentRef = useRef();
@@ -51,12 +52,25 @@ export default function SaleByCategory({user}) {
 
     const search = (e) => {
         e.preventDefault;
+        if (!category){
+            toast.dismiss();
+            toast.error('Please select a category', {
+                position: "bottom-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+            });
+            return
+        }
         setLoading(true);
         axios.post(
             `${process.env.API_URL}/report/sales/by-category`, {
                 category: category,
-                startDate: startDate.toLocaleDateString("sv-SE"),
-                endDate: endDate.toLocaleDateString("sv-SE")
+                startDate: startDate?.toLocaleDateString("sv-SE"),
+                endDate: endDate?.toLocaleDateString("sv-SE")
             },
             headers
         ).then(res => {
@@ -83,6 +97,7 @@ export default function SaleByCategory({user}) {
                     <Loader/>
                 )
             }
+            <ToastContainer/>
             <Layout user={user} title={`Category Wise Sales`}>
                 <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">

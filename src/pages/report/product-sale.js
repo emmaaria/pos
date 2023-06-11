@@ -9,6 +9,7 @@ import Loader from "../../components/Loader";
 import useMode from "../../lib/mode";
 import ProductSearch from "../../components/ProductSearch";
 import $ from "jquery"
+import {toast, ToastContainer} from "react-toastify";
 
 export default function ProductSaleReport({user}) {
     const headers = {
@@ -25,13 +26,26 @@ export default function ProductSaleReport({user}) {
 
     const search = (e) => {
         e.preventDefault;
-        setLoading(true);
         const productId = $('.product-id').val()
+        if (!productId || productId === ''){
+            toast.dismiss();
+            toast.error('Please select a product', {
+                position: "bottom-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+            });
+            return
+        }
+        setLoading(true);
         axios.post(
             `${process.env.API_URL}/report/sales/by-product`, {
                 productId: productId,
-                startDate: startDate.toLocaleDateString("sv-SE"),
-                endDate: endDate.toLocaleDateString("sv-SE")
+                startDate: startDate?.toLocaleDateString("sv-SE"),
+                endDate: endDate?.toLocaleDateString("sv-SE")
             },
             headers
         ).then(res => {
@@ -58,6 +72,7 @@ export default function ProductSaleReport({user}) {
                     <Loader/>
                 )
             }
+            <ToastContainer/>
             <Layout user={user} title={`Product Wise Sale Report`}>
                 <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">

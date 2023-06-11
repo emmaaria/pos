@@ -107,7 +107,12 @@ export default function CreateProduct({user}) {
                     draggable: true,
                     theme: 'dark',
                 });
-                $('form').trigger('reset');
+                $('.name').val('');
+                $('.category').val('');
+                $('.unit').val('');
+                $('.price').val('');
+                $('.purchasePrice').val('');
+                $('.weight').val('');
                 setLoader(false);
                 setSelectedSupplier([]);
                 setSellingPrice('')

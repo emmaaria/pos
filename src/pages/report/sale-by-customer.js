@@ -12,7 +12,7 @@ import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 import {useReactToPrint} from "react-to-print";
 import {toast, ToastContainer} from "react-toastify";
 
-export default function PurchaseByCategory({user}) {
+export default function SaleByCustomer({user}) {
     const componentRef = useRef();
     const handlePrint = useReactToPrint({
         content: () => componentRef.current,
@@ -26,6 +26,10 @@ export default function PurchaseByCategory({user}) {
     const [data, setData] = useState();
     const [categories, setCategories] = useState();
     const [category, setCategory] = useState();
+    const [customers, setCustomers] = useState();
+    const [customer, setCustomer] = useState();
+    const [products, setProducts] = useState();
+    const [product, setProduct] = useState();
     const [totalAmount, setTotalAmount] = useState(0);
     const [totalQty, setTotalQty] = useState(0);
     const [totalWeight, setTotalWeight] = useState(0);
@@ -45,16 +49,42 @@ export default function PurchaseByCategory({user}) {
             } catch (err) {
                 console.log(err);
             }
+
+            try {
+                const res = await axios.get(
+                    `${process.env.API_URL}/customer?allData=true`, headers
+                );
+                if (res.data.status === true) {
+                    if (res.data.customers && res.data.customers.length > 0) {
+                        setCustomers(res.data.customers);
+                    }
+                }
+            } catch (err) {
+                console.log(err);
+            }
+
+            try {
+                const res = await axios.get(
+                    `${process.env.API_URL}/product?all=true`, headers
+                );
+                if (res.data.status === true) {
+                    if (res.data.products && res.data.products.length > 0) {
+                        setProducts(res.data.products);
+                    }
+                }
+            } catch (err) {
+                console.log(err);
+            }
         }
 
         getData();
-    }, [setCategories]);
+    }, [setCategories, setCustomers, setProducts]);
 
     const search = (e) => {
         e.preventDefault;
-        if (!category){
+        if (!customer){
             toast.dismiss();
-            toast.error('Please select a category', {
+            toast.error('Please select a customer', {
                 position: "bottom-right",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -65,10 +95,11 @@ export default function PurchaseByCategory({user}) {
             });
             return
         }
-
         setLoading(true);
         axios.post(
-            `${process.env.API_URL}/report/purchase/by-category`, {
+            `${process.env.API_URL}/report/sales/by-customer`, {
+                customer: customer,
+                product: product,
                 category: category,
                 startDate: startDate?.toLocaleDateString("sv-SE"),
                 endDate: endDate?.toLocaleDateString("sv-SE")
@@ -90,7 +121,7 @@ export default function PurchaseByCategory({user}) {
         <>
             <Head>
                 <title>
-                     Category Wise Purchase Report
+                    Customer Wise Sales
                 </title>
             </Head>
             {
@@ -99,11 +130,34 @@ export default function PurchaseByCategory({user}) {
                 )
             }
             <ToastContainer/>
-            <Layout user={user} title={`Category Wise Purchase Report`}>
+            <Layout user={user} title={`Customer Wise Sales`}>
                 <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
                     <div className="custom-card">
                         <div className="row mb-4">
                             <div className="row">
+                                <div className="col">
+                                    <label className="form-label">
+                                        Customer
+                                    </label>
+                                    {
+                                        customers && (
+                                            <Select
+                                                options={customers}
+                                                placeholder="Select Customer"
+                                                isClearable={true}
+                                                isSearchable={true}
+                                                getOptionValue={(item) => item.id}
+                                                getOptionLabel={(item) => `${item.name} (${item.address ? item.address : ''})`}
+                                                onChange={(value) => {
+                                                    setCustomer(value?.id)
+                                                }}/>
+                                        ) || (
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                                <Skeleton width={`100%`} height={40}/>
+                                            </SkeletonTheme>
+                                        )
+                                    }
+                                </div>
                                 <div className="col">
                                     <label className="form-label">
                                         Category
@@ -119,6 +173,29 @@ export default function PurchaseByCategory({user}) {
                                                 getOptionLabel={(item) => item.name}
                                                 onChange={(value) => {
                                                     setCategory(value?.id)
+                                                }}/>
+                                        ) || (
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                                <Skeleton width={`100%`} height={40}/>
+                                            </SkeletonTheme>
+                                        )
+                                    }
+                                </div>
+                                <div className="col">
+                                    <label className="form-label">
+                                        Product
+                                    </label>
+                                    {
+                                        products && (
+                                            <Select
+                                                options={products}
+                                                placeholder="Select Product"
+                                                isClearable={true}
+                                                isSearchable={true}
+                                                getOptionValue={(item) => item.product_id}
+                                                getOptionLabel={(item) => item.name}
+                                                onChange={(value) => {
+                                                    setProduct(value?.product_id)
                                                 }}/>
                                         ) || (
                                             <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
@@ -182,7 +259,7 @@ export default function PurchaseByCategory({user}) {
                                             data && data.length <= 0 && (
                                                 <tr>
                                                     <td colSpan={5} className={`text-center`}>
-                                                        No Purchase Found
+                                                        No Sales Found
                                                     </td>
                                                 </tr>
                                             )
@@ -194,7 +271,7 @@ export default function PurchaseByCategory({user}) {
                                                     <td>{el.name}</td>
                                                     <td>{el.qty}</td>
                                                     <td>{el.weight * el.qty}</td>
-                                                    <td>{el.total} Tk.</td>
+                                                    <td>{el.grand_total} Tk.</td>
                                                 </tr>
                                             ))
                                         }
