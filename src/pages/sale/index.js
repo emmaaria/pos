@@ -59,10 +59,11 @@ export default function Sale({user}) {
         );
     }
     const paginate = async (url) => {
+        const name = $('.terms').val();
         setLoading(true);
         try {
             const res = await axios.get(
-                url,
+                `${url}&keyword=${name}`,
                 headers
             );
             if (res.data.status === true) {
