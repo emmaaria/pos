@@ -129,7 +129,7 @@ export default function Expense({user}) {
             </Head>
             <ToastContainer/>
             <Layout user={user} title={`Manage Expense`}>
-                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body dark' : 'body-bg'}`}>
                     <div className="custom-card">
                         <div className="row">
                             <div className="col-md-9">

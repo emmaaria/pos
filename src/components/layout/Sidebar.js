@@ -266,7 +266,8 @@ export default function Sidebar({user}) {
                         <li>
                             <Link href={`/customer/receive-list`} className={`
                                 ${
-                                router.pathname === '/customer/receive-list'
+                                router.pathname === '/customer/receive-list' ||
+                                router.pathname === '/customer/receive'
                                     ? styles.active
                                     : ''
                             }

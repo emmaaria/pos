@@ -272,7 +272,7 @@ export default function CustomerDueReceive({user}) {
                                 </select>
                             </div>
                             <div className="col-md-4">
-                                <label htmlFor="date" className={`form-label`}>Date</label>
+                                <label htmlFor="date" className={`form-label d-block`}>Date</label>
                                 <DatePicker
                                     selected={date}
                                     onChange={(date) => setDate(date)}

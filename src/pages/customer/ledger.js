@@ -102,7 +102,7 @@ export default function CustomerLedger({user}) {
             }
             <ToastContainer/>
             <Layout user={user} title={`Customer Ledger`}>
-                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body dark' : 'body-bg'}`}>
                     <div className="custom-card">
                         <div className="row mb-4">
                             <div className="row">

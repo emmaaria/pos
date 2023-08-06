@@ -275,7 +275,7 @@ export default function CreatePurchase({user}) {
             }
             <ToastContainer/>
             <Layout user={user} title={`Add New Purchase`}>
-                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body dark' : 'body-bg'}`}>
                     <div className="custom-card">
                         <div className="mb-3">
                             <div className="row">
@@ -284,7 +284,7 @@ export default function CreatePurchase({user}) {
                                     <AutocompleteInput type='supplier' token={user.token}/>
                                 </div>
                                 <div className="col-md-6">
-                                    <label htmlFor="date" className={`form-label`}>Date</label>
+                                    <label htmlFor="date" className={`form-label d-block`}>Date</label>
                                     <DatePicker
                                         selected={date}
                                         onChange={(date) => setDate(date)}

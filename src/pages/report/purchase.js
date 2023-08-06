@@ -54,12 +54,12 @@ export default function PurchaseReport({user}) {
                 )
             }
             <Layout user={user} title={`Purchase Report`}>
-                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body dark' : 'body-bg'}`}>
                     <div className="custom-card">
                         <div className="row mb-4">
                             <div className="row">
                                 <div className="col">
-                                    <label className="form-label">
+                                    <label className="form-label d-block">
                                         Start Date
                                     </label>
                                     <DatePicker
@@ -70,7 +70,7 @@ export default function PurchaseReport({user}) {
                                     />
                                 </div>
                                 <div className="col">
-                                    <label className="form-label">
+                                    <label className="form-label d-block">
                                         End Date
                                     </label>
                                     <DatePicker

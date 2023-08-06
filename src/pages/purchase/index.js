@@ -129,7 +129,7 @@ export default function Purchase({user}) {
             </Head>
             <ToastContainer/>
             <Layout user={user} title={`Purchase`}>
-                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body' : 'body-bg'}`}>
+                <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body dark' : 'body-bg'}`}>
                     <div className="custom-card">
                         <div className="row">
                             <div className="col-md-9">

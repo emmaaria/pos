@@ -56,7 +56,7 @@ th, td {
     transform: rotate(90deg);
 }
 
-.react-select__option{
+.react-select__option {
     color: #000000 !important
 }
 
@@ -711,18 +711,24 @@ table {
     padding: 20px;
 }
 
-.dark-mode-bg-body .custom-card{
+.dark-mode-bg-body .custom-card {
     background: #212130 !important;
 }
-.dark-mode-bg-body .product-item{
+
+.dark-mode-bg-body .product-item {
     background: #2C3A47 !important;
 }
-.dark-mode-bg-body hr, .dark-mode-bg-body p{
+
+.dark-mode-bg-body hr, .dark-mode-bg-body p {
     color: #ffffff !important;
 }
 
-.dark-mode-bg-body label, .dark-mode-bg-body th, .dark-mode-bg-body td{
+.dark-mode-bg-body label, .dark-mode-bg-body th, .dark-mode-bg-body td {
     color: #ffffff !important;
+}
+
+.dark table th, .dark table td{
+    background: #212130 !important;
 }
 
 @media print {
