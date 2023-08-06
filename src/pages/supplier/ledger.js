@@ -160,7 +160,7 @@ export default function SupplierLedger({user}) {
                                         <tr>
                                             <th width={`10%`}>Sl</th>
                                             <th>Date</th>
-                                            <th>Customer Name</th>
+                                            <th>Supplier Name</th>
                                             <th>Purpose</th>
                                             <th>Due</th>
                                             <th>Paid</th>

@@ -148,8 +148,9 @@ export default function Return({user}) {
                         <table className={`table mt-4`}>
                             <thead>
                             <tr>
-                                <th width={`10%`}>Sl</th>
-                                <th width={`40%`}>Return ID</th>
+                                <th width={`5%`}>Sl</th>
+                                <th width={`20%`}>Return ID</th>
+                                <th width={`25%`}>Customer Name</th>
                                 <th width={`20%`}>Return Amount</th>
                                 <th width={`20%`}>Note</th>
                                 <th width={`10%`}>Action</th>
@@ -159,7 +160,7 @@ export default function Return({user}) {
                             {
                                 data && data.length <= 0 && (
                                     <tr>
-                                        <td colSpan={5} className={`text-center`}>No Return Found</td>
+                                        <td colSpan={6} className={`text-center`}>No Return Found</td>
                                     </tr>
                                 )
                             }
@@ -168,6 +169,7 @@ export default function Return({user}) {
                                     <tr key={el.return_id} valign={`middle`} className={`row-id-${el.return_id}`}>
                                         <td>{index + 1}</td>
                                         <td>{el.return_id}</td>
+                                        <td>{el.name}</td>
                                         <td>{el.return_amount} Tk.</td>
                                         <td>{el.note}</td>
                                         <td>
@@ -192,7 +194,7 @@ export default function Return({user}) {
                                     </tr>
                                 ))
                             ) || (
-                                <TableSkeleton tr={3} td={5}/>
+                                <TableSkeleton tr={3} td={6}/>
                             )}
                             </tbody>
                             <tfoot>

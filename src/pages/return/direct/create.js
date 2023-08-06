@@ -8,7 +8,6 @@ import $ from 'jquery';
 import {useState} from "react";
 import DatePicker from "react-datepicker";
 import Loader from "../../../components/Loader";
-import styles from "../../../styles/CreateSale.module.css";
 import AutocompleteInput from "../../../components/AutocompleteInput";
 import useMode from "../../../lib/mode";
 
@@ -65,6 +64,20 @@ export default function CreateDirectReturn({user}) {
             setLoader(false);
             toast.dismiss();
             toast.error('No adjust account selected', {
+                position: "bottom-right",
+                autoClose: false,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'dark',
+            });
+            return;
+        }
+        if (customerId == '') {
+            setLoader(false);
+            toast.dismiss();
+            toast.error('Please select a customer', {
                 position: "bottom-right",
                 autoClose: false,
                 hideProgressBar: false,
@@ -290,6 +303,14 @@ export default function CreateDirectReturn({user}) {
                                         className={`form-control date`}
                                     />
                                 </div>
+                                <div className="col-md-3">
+                                    <label htmlFor="date" className={`form-label`}>Customer</label>
+                                    <AutocompleteInput
+                                        type='customer'
+                                        token={user.token}
+                                        placeholder='Search customer'
+                                    />
+                                </div>
                             </div>
                         </div>
                         <div className="mb-3">
@@ -445,23 +466,6 @@ export default function CreateDirectReturn({user}) {
                                 </td>
                                 <td></td>
                             </tr>
-                            {
-                                (account && account === 'customer') && (
-                                    <tr>
-                                        <td colSpan={4} className="text-end">
-                                            <strong>Customer</strong>
-                                        </td>
-                                        <td>
-                                            <div className="return-customer-input">
-                                                <AutocompleteInput type='customer' token={user.token}
-                                                                   placeholder='Search customer'
-                                                                   className={styles.posInput}/>
-                                            </div>
-                                        </td>
-                                        <td></td>
-                                    </tr>
-                                )
-                            }
                             {
                                 (account && account === 'bank' && banks && banks.length > 0) && (
                                     <tr>
