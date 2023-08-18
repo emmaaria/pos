@@ -10,6 +10,7 @@ export default withIronSessionApiRoute(async (req, res) => {
         customerBasedPrice: req.body.customerBasedPrice,
         role: req.body.role,
         companyName: req.body.companyName,
+        stockOverSelling: req.body.stockOverSelling,
         companyAddress: req.body.companyAddress,
         companyMobile: req.body.companyMobile,
         companyVatNumber: req.body.companyVatNumber,

@@ -244,20 +244,23 @@ export default function CreateSale({user}) {
         const alreadyAdded = invoiceProducts.filter(product => {
             return product.product_id === data.product_id
         })
-        const stock = data.purchase - (data.sale - data.return);
-        if (stock <= 0) {
-            toast.dismiss()
-            toast.error('You don\'t have stock. Please purchase product first.', {
-                position: "bottom-right",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                theme: 'dark',
-            })
-            return;
+        if (user.stockOverSelling != 1) {
+            const stock = data.purchase - (data.sale - data.return);
+            if (stock <= 0) {
+                toast.dismiss()
+                toast.error('You don\'t have stock. Please purchase product first.', {
+                    position: "bottom-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: 'dark',
+                })
+                return;
+            }
         }
+
         toast.dismiss()
         if (alreadyAdded.length > 0) {
             const oldQty = $(`.productQuantity_${data.product_id}`).val()
@@ -277,19 +280,21 @@ export default function CreateSale({user}) {
         const alreadyAdded = invoiceProducts.filter(product => {
             return product.product_id === data.product_id
         })
-        const stock = data.purchase - (data.sale - data.return);
-        if (stock <= 0) {
-            toast.dismiss()
-            toast.error('You don\'t have stock. Please purchase product first.', {
-                position: "bottom-right",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                theme: 'dark',
-            })
-            return;
+        if (user.stockOverSelling != 1) {
+            const stock = data.purchase - (data.sale - data.return);
+            if (stock <= 0) {
+                toast.dismiss()
+                toast.error('You don\'t have stock. Please purchase product first.', {
+                    position: "bottom-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: 'dark',
+                })
+                return;
+            }
         }
         toast.dismiss()
         if (alreadyAdded.length > 0) {

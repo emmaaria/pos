@@ -13,6 +13,7 @@ import useMode from "../../lib/mode";
 export default function EditSetting({user}) {
     const [discount, setDiscount] = useState(null);
     const [customerBasedPrice, setCustomerBasedPrice] = useState(null);
+    const [stockOverSelling, setStockOverSelling] = useState(null);
     const [loader, setLoader] = useState(false);
     const [loading, setLoading] = useState(true);
     const headers = {
@@ -27,6 +28,7 @@ export default function EditSetting({user}) {
             if (res.data.status === true) {
                 setDiscount(res.data.company.discount_type)
                 setCustomerBasedPrice(res.data.company.customer_based_price)
+                setStockOverSelling(res.data.company.stock_over_selling)
                 setLoading(false);
             } else {
                 toast.error(res.data.errors, {
@@ -53,7 +55,7 @@ export default function EditSetting({user}) {
         const discount_type = discount;
         const customer_based_price = $('.customer_based_price').val();
         try {
-            const res = await axios.post(`${process.env.API_URL}/software/update`, {discount_type, customer_based_price}, headers);
+            const res = await axios.post(`${process.env.API_URL}/software/update`, {discount_type, customer_based_price, stock_over_selling: stockOverSelling}, headers);
             if (res.data.status === true) {
                 axios
                     .post('/api/auth/login', {
@@ -68,6 +70,7 @@ export default function EditSetting({user}) {
                         companyVatNumber: user.companyVatNumber,
                         companyMushokNumber: user.companyMushokNumber,
                         customerBasedPrice: customerBasedPrice,
+                        stockOverSelling: stockOverSelling,
                     })
                     .then(() => {
                         toast.dismiss();
@@ -154,6 +157,23 @@ export default function EditSetting({user}) {
                                                 onChange={handleDiscountChange}>
                                             <option value="invoice">Invoice Wise</option>
                                             <option value="product">Product Wise</option>
+                                        </select>
+                                    ) || (
+                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                            <Skeleton width={`100%`} height={40}/>
+                                        </SkeletonTheme>
+                                    )
+                                }
+                            </div>
+
+                            <div className="mb-3">
+                                <label className={`form-label`}>Stock Over Selling</label>
+                                {
+                                    loading === false && (
+                                        <select className="form-control stock_over_selling" value={stockOverSelling}
+                                                onChange={(e) => setStockOverSelling(e.target.value)}>
+                                            <option value="1">Yes</option>
+                                            <option value="0">No</option>
                                         </select>
                                     ) || (
                                         <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">

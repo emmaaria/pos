@@ -74,6 +74,7 @@ export default function Login() {
                             discountType: response.data.company.discount_type,
                             companyAddress: response.data.company.company_address,
                             companyMobile: response.data.company.company_mobile,
+                            stockOverSelling: response.data.company.stock_over_selling,
                             companyVatNumber: response.data.company.vat_number,
                             companyMushokNumber: response.data.company.mushok_number,
                             role: response.data.user.role,
