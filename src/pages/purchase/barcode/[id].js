@@ -60,7 +60,7 @@ export default function PrintBarcode({user, id}) {
                 <div className="content">
                     <div className="custom-card text-light">
                         <button className={`btn btn-success float-end mb-4`} onClick={handlePrint}>Print</button>
-                        <div className="barcode-grid" ref={componentRef}>
+                        <div className="barcode-grid" ref={componentRef} style={{paddingTop: `${user.paddingTop}`, paddingLeft: `${user.paddingLeft}`, paddingRight: `${user.paddingRight}`}}>
                             {
                                 purchase && purchase.purchaseItems && !loading && (
                                     purchase.purchaseItems.map((el, index) => (
