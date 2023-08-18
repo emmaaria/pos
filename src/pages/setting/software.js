@@ -14,6 +14,10 @@ export default function EditSetting({user}) {
     const [discount, setDiscount] = useState(null);
     const [customerBasedPrice, setCustomerBasedPrice] = useState(null);
     const [stockOverSelling, setStockOverSelling] = useState(null);
+    const [barcodePageSpaceTop, setBarcodePageSpaceTop] = useState(null);
+    const [barcodePageSpaceLeft, setBarcodePageSpaceLeft] = useState(null);
+    const [barcodePageSpaceRight, setBarcodePageSpaceRight] = useState(null);
+    const [barcodePagePerRow, setBarcodePagePerRow] = useState(null);
     const [loader, setLoader] = useState(false);
     const [loading, setLoading] = useState(true);
     const headers = {
@@ -29,6 +33,10 @@ export default function EditSetting({user}) {
                 setDiscount(res.data.company.discount_type)
                 setCustomerBasedPrice(res.data.company.customer_based_price)
                 setStockOverSelling(res.data.company.stock_over_selling)
+                setBarcodePageSpaceTop(res.data.company.paddingTop)
+                setBarcodePageSpaceLeft(res.data.company.paddingLeft)
+                setBarcodePageSpaceRight(res.data.company.paddingRight)
+                setBarcodePagePerRow(res.data.company.perRow)
                 setLoading(false);
             } else {
                 toast.error(res.data.errors, {
@@ -55,7 +63,16 @@ export default function EditSetting({user}) {
         const discount_type = discount;
         const customer_based_price = $('.customer_based_price').val();
         try {
-            const res = await axios.post(`${process.env.API_URL}/software/update`, {discount_type, customer_based_price, stock_over_selling: stockOverSelling}, headers);
+            const res = await axios.post(`${process.env.API_URL}/software/update`, {
+                discount_type,
+                customer_based_price,
+                stock_over_selling: stockOverSelling,
+                paddingLeft: barcodePageSpaceLeft,
+                paddingRight: barcodePageSpaceRight,
+                paddingTop: barcodePageSpaceTop,
+                perRow: barcodePagePerRow,
+                stockOverSelling: stockOverSelling,
+            }, headers);
             if (res.data.status === true) {
                 axios
                     .post('/api/auth/login', {
@@ -70,6 +87,10 @@ export default function EditSetting({user}) {
                         companyVatNumber: user.companyVatNumber,
                         companyMushokNumber: user.companyMushokNumber,
                         customerBasedPrice: customerBasedPrice,
+                        paddingLeft: barcodePageSpaceLeft,
+                        paddingRight: barcodePageSpaceRight,
+                        paddingTop: barcodePageSpaceTop,
+                        perRow: barcodePagePerRow,
                         stockOverSelling: stockOverSelling,
                     })
                     .then(() => {
@@ -194,6 +215,66 @@ export default function EditSetting({user}) {
                                             <option value="yes">Yes</option>
                                             <option value="no">No</option>
                                         </select>
+                                    ) || (
+                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                            <Skeleton width={`100%`} height={40}/>
+                                        </SkeletonTheme>
+                                    )
+                                }
+                            </div>
+
+                            <div className="mb-3">
+                                <label className={`form-label`}>
+                                    Barcode Page Top Space
+                                </label>
+                                {
+                                    loading === false && (
+                                        <input type="text" value={barcodePageSpaceTop} onChange={(e) => setBarcodePageSpaceTop(e.target.value)} className="form-control"/>
+                                    ) || (
+                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                            <Skeleton width={`100%`} height={40}/>
+                                        </SkeletonTheme>
+                                    )
+                                }
+                            </div>
+
+                            <div className="mb-3">
+                                <label className={`form-label`}>
+                                    Barcode Page Left Space
+                                </label>
+                                {
+                                    loading === false && (
+                                        <input type="text" value={barcodePageSpaceLeft} onChange={(e) => setBarcodePageSpaceLeft(e.target.value)} className="form-control"/>
+                                    ) || (
+                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                            <Skeleton width={`100%`} height={40}/>
+                                        </SkeletonTheme>
+                                    )
+                                }
+                            </div>
+
+                            <div className="mb-3">
+                                <label className={`form-label`}>
+                                    Barcode Page Right Space
+                                </label>
+                                {
+                                    loading === false && (
+                                        <input type="text" value={barcodePageSpaceRight} onChange={(e) => setBarcodePageSpaceRight(e.target.value)} className="form-control"/>
+                                    ) || (
+                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                            <Skeleton width={`100%`} height={40}/>
+                                        </SkeletonTheme>
+                                    )
+                                }
+                            </div>
+
+                            <div className="mb-3">
+                                <label className={`form-label`}>
+                                    Barcode Page Barcode Per Row
+                                </label>
+                                {
+                                    loading === false && (
+                                        <input type="text" value={barcodePagePerRow} onChange={(e) => setBarcodePagePerRow(e.target.value)} className="form-control"/>
                                     ) || (
                                         <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
                                             <Skeleton width={`100%`} height={40}/>

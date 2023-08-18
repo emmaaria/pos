@@ -9,13 +9,13 @@ import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 import {useReactToPrint} from 'react-to-print';
 import {useRef} from "react";
 
-const ProductItem = ({data}) => {
+const ProductItem = ({data, perRow}) => {
     const countBarcode = [];
     for (let i = 0; i < data.quantity; i++) {
         countBarcode.push(i);
     }
     return (countBarcode.map((el, index) => (
-        <div className={`barcode-item`} key={`barcode-${index}`}>
+        <div className={`barcode-item`} key={`barcode-${index}`} style={{ width: `${100/perRow}%` }}>
             <div className="barcodeContainer">
                 <span style={{fontSize: '10px'}}>{data.name}</span>
                 <Barcode value={data.product_id} height={25} fontSize={10} margin={0}
@@ -64,7 +64,7 @@ export default function PrintBarcode({user, id}) {
                             {
                                 purchase && purchase.purchaseItems && !loading && (
                                     purchase.purchaseItems.map((el, index) => (
-                                        <ProductItem data={el} key={`barcode-item-${index}`}/>
+                                        <ProductItem perRow={user.perRow} data={el} key={`barcode-item-${index}`}/>
                                     ))
                                 ) || (
                                     <>

@@ -77,6 +77,10 @@ export default function Login() {
                             stockOverSelling: response.data.company.stock_over_selling,
                             companyVatNumber: response.data.company.vat_number,
                             companyMushokNumber: response.data.company.mushok_number,
+                            paddingLeft: response.data.company.paddingLeft,
+                            paddingRight: response.data.company.paddingRight,
+                            paddingTop: response.data.company.paddingTop,
+                            perRow: response.data.company.perRow,
                             role: response.data.user.role,
                             token: response.data.token,
                         })
