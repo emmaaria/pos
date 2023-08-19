@@ -73,6 +73,7 @@ export default function EditProduct({user, id}) {
         const name = $('.name').val();
         const category = $('.category').val();
         const unit = $('.unit').val();
+        const product_id = $('.product_id').val();
         const price = $('.price').val();
         const purchasePrice = $('.purchasePrice').val();
         const weight = $('.weight').val();
@@ -99,6 +100,7 @@ export default function EditProduct({user, id}) {
                 price,
                 weight,
                 customerPrices,
+                product_id,
                 purchase_price: purchasePrice,
                 suppliers: selectedSupplier,
             }, headers);
@@ -299,7 +301,21 @@ export default function EditProduct({user, id}) {
                                     )
                                 }
                             </div>
-
+                        </div>
+                        <div className="row mb-3">
+                            <div className="col-md-12">
+                                <label htmlFor="product_id" className={`form-label`}>Barcode</label>
+                                {
+                                    product && loading === false && (
+                                        <input type="text" className={`form-control product_id`} id={`product_id`}
+                                               required defaultValue={product.product_id}/>
+                                    ) || (
+                                        <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#212130">
+                                            <Skeleton width={`100%`} height={40}/>
+                                        </SkeletonTheme>
+                                    )
+                                }
+                            </div>
                         </div>
                         <div className="row mb-3">
                             <div className="col-md-12">

@@ -734,9 +734,18 @@ table {
         display: none !important;
     }
 
+    .invoiceModal{
+        position: static !important;
+        height: auto !important;
+        background: transparent !important;
+    }
+
     .invoiceModalContainer {
         position: static !important;
         transform: none !important;
+        width: 100%;
+        height: auto !important;
+        background: transparent !important;
     }
 
     .barcode-grid {
