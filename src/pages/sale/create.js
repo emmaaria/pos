@@ -504,8 +504,8 @@ export default function CreateSale({user}) {
                                             <table className={`table table-bordered`}>
                                                 <thead>
                                                 <tr className={`no-border`}>
-                                                    <th width="60%" className={`no-border`}></th>
-                                                    <th className={`no-border`} width="40%"></th>
+                                                    <th width="60%" className={`no-border p-0`}></th>
+                                                    <th className={`no-border p-0`} width="40%"></th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>

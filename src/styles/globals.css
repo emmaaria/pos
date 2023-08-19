@@ -723,6 +723,7 @@ table {
 
 .dark-mode-bg-body label, .dark-mode-bg-body th, .dark-mode-bg-body td {
     color: #ffffff !important;
+    background: #2C3A47;
 }
 
 .dark table th, .dark table td{
