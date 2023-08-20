@@ -234,8 +234,6 @@ export default function CreateSale({user}) {
                 if (item.product_id === id) {
                     addProduct(item)
                     $(`.scan-barcode`).val('')
-                    calculateSubtotal(item.product_id)
-                    calculateSum()
                 }
             })
         }
