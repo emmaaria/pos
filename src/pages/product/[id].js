@@ -370,7 +370,7 @@ export default function EditProduct({user, id}) {
                                                                     classNamePrefix="react-select"
                                                                     onChange={(value) => handleCustomerChange(index, value?.id)}
                                                                     placeholder="Select Customer"
-                                                                    getOptionLabel={(item) => item.name}
+                                                                    getOptionLabel={(item) => (`${item.name} (${item.address ? item.address : ''})`)}
                                                                     getOptionValue={(item) => item.id}
                                                                     value={customers.find(option => option.id === parseInt(item.customerId))}
                                                                 />
