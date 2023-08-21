@@ -59,7 +59,9 @@ export default function AutocompleteDefaultCustomer({name, id, token, className}
                                     data.length > 0 && (
                                         data.map(el => (
                                             <div className={`autocompleteItem`} key={`customer-${el.id}`}
-                                                 onClick={() => setValue(el.name, el.id)}>{el.name}</div>
+                                                 onClick={() => setValue(el.name, el.id)}>
+                                                {el.name} ({el.address})
+                                            </div>
                                         ))
                                     ) || (
                                         <div className={`autocompleteItem`}>
