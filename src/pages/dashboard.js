@@ -135,7 +135,7 @@ export default function Dashboard({user}) {
                                                         type="monotone"
                                                         dataKey="sale"
                                                         stroke="rgb(249, 58, 11)"
-                                                        strokeWidth={2} 
+                                                        strokeWidth={2}
                                                         activeDot={{r: 8}}
                                                         fill="rgba(249, 58, 11,0.5)"
                                                     />
@@ -173,7 +173,7 @@ export default function Dashboard({user}) {
                             <DashboardCard
                                 icon="fa-solid fa-filter-circle-dollar"
                                 title="Cash"
-                                value={data ? `${data?.totalCash} Tk.` : ''}
+                                value={data ? `${data?.totalCash.toFixed(2)} Tk.` : ''}
                                 bgColor="#05c46b"
                                 imege={true}
                                 imageSrc={cash}

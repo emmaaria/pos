@@ -561,6 +561,7 @@ export default function Sidebar({user}) {
                               router.pathname === '/report/product-purchase' ||
                               router.pathname === '/report/sale-by-category' ||
                               router.pathname === '/report/sale-by-customer' ||
+                              router.pathname === '/report/sale-by-supplier' ||
                               router.pathname === '/report/purchase-by-category' ||
                               router.pathname === '/report/product-sale'
                                   ? styles.active
@@ -647,6 +648,17 @@ export default function Sidebar({user}) {
                             }
                             `}>
                                 Customer Wise Sale
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href={`/report/sale-by-supplier`} className={`
+                                ${
+                                router.pathname === '/report/sale-by-supplier'
+                                    ? styles.active
+                                    : ''
+                            }
+                            `}>
+                                Supplier Wise Sale
                             </Link>
                         </li>
                     </ul>

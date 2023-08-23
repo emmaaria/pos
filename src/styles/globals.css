@@ -721,7 +721,11 @@ table {
     color: #ffffff !important;
 }
 
-.dark-mode-bg-body label, .dark-mode-bg-body th, .dark-mode-bg-body td {
+.dark-mode-bg-body label {
+    color: #ffffff !important;
+}
+
+.dark-mode-bg-body th, .dark-mode-bg-body td {
     color: #ffffff !important;
     background: #2C3A47;
 }
