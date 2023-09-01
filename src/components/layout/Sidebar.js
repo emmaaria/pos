@@ -297,6 +297,7 @@ export default function Sidebar({user}) {
                               router.pathname === '/supplier/create' ||
                               router.pathname === '/supplier/ledger' ||
                               router.pathname === '/supplier/payment' ||
+                              router.pathname === '/supplier/payment-list' ||
                               router.pathname === '/supplier/[id]'
                                   ? styles.active
                                   : ''
@@ -342,9 +343,9 @@ export default function Sidebar({user}) {
                             </Link>
                         </li>
                         <li>
-                            <Link href={`/supplier/payment`} className={`
+                            <Link href={`/supplier/payment-list`} className={`
                                 ${
-                                router.pathname === '/supplier/payment'
+                                router.pathname === '/supplier/payment-list'
                                     ? styles.active
                                     : ''
                             }
