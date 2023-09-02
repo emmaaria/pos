@@ -9,6 +9,7 @@ export default function AutocompleteDefaultSupplier({name, id, token}) {
     const [timer, setTimer] = useState(null);
     const [data, setData] = useState();
     const [keyword, setKeyword] = useState();
+    const [supplierId, setSupplierId] = useState(id);
     const [searching, setSearching] = useState(false);
     const search = async (value) => {
         setKeyword(value);
@@ -35,7 +36,7 @@ export default function AutocompleteDefaultSupplier({name, id, token}) {
     }
     const setValue = (label, value) => {
         $('.supplier-input').val(label);
-        $('.supplier-id').val(value);
+        setSupplierId(value)
         setKeyword(null)
     }
     return (
@@ -46,7 +47,7 @@ export default function AutocompleteDefaultSupplier({name, id, token}) {
                        onKeyUp={(e) => search(e.target.value)}
                        onKeyDown={(e) => search(e.target.value)}
                        onChange={(e) => search(e.target.value)}/>
-                <input type="hidden" className={`supplier-id`} defaultValue={id}/>
+                <input type="hidden" className={`supplier-id`} value={supplierId}/>
                 {
                     keyword && (
                         <div className={`autocompleteItemContainer supplier`}>

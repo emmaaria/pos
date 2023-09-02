@@ -331,7 +331,7 @@ export default function EditPurchase({user, id}) {
                                         }
                                     </div>
                                     <div className="col-md-6">
-                                        <label htmlFor="date" className={`form-label`}>Date</label>
+                                        <label htmlFor="date" className={`form-label d-block`}>Date</label>
                                         {
                                             purchase && loading === false && (
                                                 <DatePicker
