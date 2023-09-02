@@ -35,6 +35,9 @@ export default function SaleByCustomer({user}) {
     const [totalWeight, setTotalWeight] = useState(0);
     const [loading, setLoading] = useState(false);
 
+    const [suppliers, setSuppliers] = useState();
+    const [supplier, setSupplier] = useState();
+
     useEffect(() => {
         async function getData() {
             try {
@@ -65,6 +68,19 @@ export default function SaleByCustomer({user}) {
 
             try {
                 const res = await axios.get(
+                    `${process.env.API_URL}/supplier?allData=true`, headers
+                );
+                if (res.data.status === true) {
+                    if (res.data.suppliers && res.data.suppliers.length > 0) {
+                        setSuppliers(res.data.suppliers);
+                    }
+                }
+            } catch (err) {
+                console.log(err);
+            }
+
+            try {
+                const res = await axios.get(
                     `${process.env.API_URL}/product?all=true`, headers
                 );
                 if (res.data.status === true) {
@@ -78,7 +94,7 @@ export default function SaleByCustomer({user}) {
         }
 
         getData();
-    }, [setCategories, setCustomers, setProducts]);
+    }, [setCategories, setCustomers, setProducts, setSuppliers]);
 
     const search = (e) => {
         e.preventDefault;
@@ -98,6 +114,7 @@ export default function SaleByCustomer({user}) {
         setLoading(true);
         axios.post(
             `${process.env.API_URL}/report/sales/by-customer`, {
+                supplier: supplier,
                 customer: customer,
                 product: product,
                 category: category,
@@ -150,6 +167,29 @@ export default function SaleByCustomer({user}) {
                                                 getOptionLabel={(item) => `${item.name} (${item.address ? item.address : ''})`}
                                                 onChange={(value) => {
                                                     setCustomer(value?.id)
+                                                }}/>
+                                        ) || (
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                                <Skeleton width={`100%`} height={40}/>
+                                            </SkeletonTheme>
+                                        )
+                                    }
+                                </div>
+                                <div className="col">
+                                    <label className="form-label">
+                                        Supplier
+                                    </label>
+                                    {
+                                        suppliers && (
+                                            <Select
+                                                options={suppliers}
+                                                placeholder="Select Supplier"
+                                                isClearable={true}
+                                                isSearchable={true}
+                                                getOptionValue={(item) => item.id}
+                                                getOptionLabel={(item) => `${item.name}`}
+                                                onChange={(value) => {
+                                                    setSupplier(value?.id)
                                                 }}/>
                                         ) || (
                                             <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
