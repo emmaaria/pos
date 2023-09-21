@@ -154,17 +154,18 @@ export default function Expense({user}) {
                             <thead>
                             <tr>
                                 <th width={`10%`}>Sl</th>
-                                <th width={`35%`}>Category</th>
+                                <th width={`15%`}>Date</th>
+                                <th width={`25%`}>Category</th>
                                 <th width={`20%`}>Amount</th>
                                 <th width={`20%`}>Note</th>
-                                <th width={`15%`}>Action</th>
+                                <th width={`10%`}>Action</th>
                             </tr>
                             </thead>
                             <tbody>
                             {
                                 data && data.length <= 0 && (
                                     <tr>
-                                        <td colSpan={5} className={`text-center`}>No Expense Found</td>
+                                        <td colSpan={6} className={`text-center`}>No Expense Found</td>
                                     </tr>
                                 )
                             }
@@ -172,6 +173,7 @@ export default function Expense({user}) {
                                 data.map((el, index) => (
                                     <tr key={el.expense_id} valign={`middle`} className={`row-id-${el.expense_id}`}>
                                         <td>{index + 1}</td>
+                                        <td>{el.date}</td>
                                         <td>{el.title}</td>
                                         <td>{el.amount} Tk.</td>
                                         <td>{el.note}</td>
@@ -197,7 +199,7 @@ export default function Expense({user}) {
                                     </tr>
                                 ))
                             ) || (
-                                <TableSkeleton tr={3} td={5}/>
+                                <TableSkeleton tr={3} td={6}/>
                             )}
                             </tbody>
                             <tfoot>
