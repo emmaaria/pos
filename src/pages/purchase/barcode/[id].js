@@ -9,13 +9,23 @@ import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 import {useReactToPrint} from 'react-to-print';
 import {useRef} from "react";
 
-const ProductItem = ({data, perRow}) => {
+const ProductItem = ({data, perRow, user}) => {
     const countBarcode = [];
     for (let i = 0; i < data.quantity; i++) {
         countBarcode.push(i);
     }
     return (countBarcode.map((el, index) => (
-        <div className={`barcode-item`} key={`barcode-${index}`} style={{ width: `${100/perRow}%` }}>
+        <div className={`barcode-item position-relative`} key={`barcode-${index}`} style={{width: `${100 / perRow}%`}}>
+            <small className="left">
+                {
+                    user.companyName.split(" ").length > 0 ? user.companyName.split(" ")[0] : ""
+                }
+            </small>
+            <small className="right">
+                {
+                    user.companyName.split(" ").length > 1 ? user.companyName.split(" ")[1] : ""
+                }
+            </small>
             <div className="barcodeContainer">
                 <span style={{fontSize: '10px'}}>{data.name}</span>
                 <Barcode value={data.product_id} height={25} fontSize={10} margin={0}
@@ -60,11 +70,16 @@ export default function PrintBarcode({user, id}) {
                 <div className="content">
                     <div className="custom-card text-light">
                         <button className={`btn btn-success float-end mb-4`} onClick={handlePrint}>Print</button>
-                        <div className="barcode-grid" ref={componentRef} style={{paddingTop: `${user.paddingTop}`, paddingLeft: `${user.paddingLeft}`, paddingRight: `${user.paddingRight}`}}>
+                        <div className="barcode-grid" ref={componentRef} style={{
+                            paddingTop: `${user.paddingTop}`,
+                            paddingLeft: `${user.paddingLeft}`,
+                            paddingRight: `${user.paddingRight}`
+                        }}>
                             {
                                 purchase && purchase.purchaseItems && !loading && (
                                     purchase.purchaseItems.map((el, index) => (
-                                        <ProductItem perRow={user.perRow} data={el} key={`barcode-item-${index}`}/>
+                                        <ProductItem user={user} perRow={user.perRow} data={el}
+                                                     key={`barcode-item-${index}`}/>
                                     ))
                                 ) || (
                                     <>

@@ -730,7 +730,7 @@ table {
     background: #2C3A47;
 }
 
-.dark table th, .dark table td{
+.dark table th, .dark table td {
     background: #212130 !important;
 }
 
@@ -739,7 +739,7 @@ table {
         display: none !important;
     }
 
-    .invoiceModal{
+    .invoiceModal {
         position: static !important;
         height: auto !important;
         background: transparent !important;
@@ -867,4 +867,19 @@ table {
         padding-top: 0.5rem !important;
         padding-bottom: 0.5rem !important;
     }
+}
+
+.barcode-item .left {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translate(0,-50%) rotate(-90deg);
+    font-size: 10px;
+}
+.barcode-item .right {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translate(0,-50%) rotate(90deg);
+    font-size: 10px;
 }
