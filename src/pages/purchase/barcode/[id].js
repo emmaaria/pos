@@ -28,9 +28,9 @@ const ProductItem = ({data, perRow, user}) => {
             </small>
             <div className="barcodeContainer">
                 <span style={{fontSize: '10px'}}>{data.name}</span>
-                <Barcode value={data.product_id} height={25} fontSize={10} margin={0}
+                <span style={{fontSize: '12px'}}><strong>Price - {data.price} Tk.</strong></span>
+                <Barcode value={data.product_id} height={23} fontSize={9} margin={0}
                          width={1} background={`#ffffff`} lineColor={`#000000`}/>
-                <span style={{fontSize: '10px'}}><strong>Price - {data.price} Tk.</strong></span>
             </div>
         </div>
     )))
