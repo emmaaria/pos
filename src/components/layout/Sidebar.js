@@ -218,6 +218,7 @@ export default function Sidebar({user}) {
                               router.pathname === '/customer/due-list' ||
                               router.pathname === '/customer/receive' ||
                               router.pathname === '/customer/due' ||
+                              router.pathname === '/customer/old' ||
                               router.pathname === '/customer/[id]'
                                   ? styles.active
                                   : ''
@@ -238,6 +239,17 @@ export default function Sidebar({user}) {
                             }
                             `}>
                                 Customer List
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href={`/customer/old`} className={`
+                                ${
+                                router.pathname === '/customer/old'
+                                    ? styles.active
+                                    : ''
+                            }
+                            `}>
+                                Old Customer List
                             </Link>
                         </li>
                         <li>
