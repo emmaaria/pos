@@ -16,7 +16,6 @@ export default function OldCustomer({user}) {
     };
     const {mode} = useMode()
     const [customers, setCustomers] = useState();
-    const [links, setLinks] = useState([]);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
         axios.get(
@@ -25,29 +24,12 @@ export default function OldCustomer({user}) {
         ).then(res => {
             if (res.data.status === true) {
                 setCustomers(res.data.customers.data);
-                setLinks(res.data.customers.links);
                 setLoading(false);
             }
         }).catch(err => {
             console.log(err);
         });
     }, []);
-    const paginate = async (url) => {
-        setLoading(true);
-        try {
-            const res = await axios.get(
-                url,
-                headers
-            );
-            if (res.data.status === true) {
-                setCustomers(res.data.customers.data);
-                setLinks(res.data.customers.links);
-                setLoading(false);
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    }
     const deleteHandler = async (id) => {
         toast.loading('Deleting', {
             position: "bottom-right",
@@ -168,26 +150,6 @@ export default function OldCustomer({user}) {
                                 <TableSkeleton tr={3} td={6}/>
                             )}
                             </tbody>
-                            <tfoot>
-                            <tr>
-                                <td colSpan={6}>
-                                    <nav className={`float-end`}>
-                                        <ul className="pagination mt-3">
-                                            {
-                                                links.map(el => (
-                                                    <li className={`page-item ${el.active === true ? 'active' : ''}`}
-                                                        key={el.label}>
-                                                        <a className={`page-link`}
-                                                           onClick={() => paginate(el.url)}
-                                                           dangerouslySetInnerHTML={{__html: el.label}}/>
-                                                    </li>
-                                                ))
-                                            }
-                                        </ul>
-                                    </nav>
-                                </td>
-                            </tr>
-                            </tfoot>
                         </table>
                     </div>
                 </div>
