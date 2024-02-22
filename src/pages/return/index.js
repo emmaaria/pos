@@ -8,12 +8,17 @@ import TableSkeleton from "../../components/TableSkeleton";
 import $ from 'jquery';
 import {ToastContainer, toast} from 'react-toastify';
 import useMode from "../../lib/mode";
+import Loader from "../../components/Loader";
 
 export default function Return({user}) {
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };
     const [data, setData] = useState();
+    const [showReceipt, setShowReceipt] = useState(false);
+    const [returnData, setReturnData] = useState();
+    const [returnItems, setReturnItems] = useState();
+    const [returnLoading, setReturnLoading] = useState(false);
     const [links, setLinks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [timer, setTimer] = useState(null);
@@ -119,6 +124,22 @@ export default function Return({user}) {
         }
     };
     const {mode} = useMode()
+    const getReturn = async (id) => {
+        setReturnLoading(true)
+        try {
+            const response = await axios.get(`${process.env.API_URL}/sale/return/${id}`, headers);
+            if (response.data.status === true) {
+                setReturnData(response.data.return)
+                setReturnItems(response.data.returnItems)
+                setShowReceipt(true)
+                setReturnLoading(false)
+                console.log(response.data.return)
+                console.log(response.data.returnItems)
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
     return (
         <>
             <Head>
@@ -126,6 +147,11 @@ export default function Return({user}) {
                     Return List
                 </title>
             </Head>
+            {
+                returnLoading && (
+                    <Loader/>
+                )
+            }
             <ToastContainer/>
             <Layout user={user} title={`Return List`}>
                 <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body dark' : 'body-bg'}`}>
@@ -149,18 +175,19 @@ export default function Return({user}) {
                             <thead>
                             <tr>
                                 <th width={`5%`}>Sl</th>
-                                <th width={`20%`}>Return ID</th>
-                                <th width={`25%`}>Customer Name</th>
-                                <th width={`20%`}>Return Amount</th>
-                                <th width={`20%`}>Note</th>
-                                <th width={`10%`}>Action</th>
+                                <th width={`10%`}>Return ID</th>
+                                <th width={`20%`}>Customer Name</th>
+                                <th width={`10%`}>Date</th>
+                                <th width={`15%`}>Return Amount</th>
+                                <th width={`25%`}>Note</th>
+                                <th width={`15%`}>Action</th>
                             </tr>
                             </thead>
                             <tbody>
                             {
                                 data && data.length <= 0 && (
                                     <tr>
-                                        <td colSpan={6} className={`text-center`}>No Return Found</td>
+                                        <td colSpan={7} className={`text-center`}>No Return Found</td>
                                     </tr>
                                 )
                             }
@@ -170,12 +197,15 @@ export default function Return({user}) {
                                         <td>{index + 1}</td>
                                         <td>{el.return_id}</td>
                                         <td>{el.name}</td>
+                                        <td>{el.date}</td>
                                         <td>{el.return_amount} Tk.</td>
                                         <td>{el.note}</td>
                                         <td>
-                                            {/*<Link href={`/product/${el.id}`} className={`btn btn-warning btn-sm me-2`}>*/}
-                                            {/*    <i className="fa-solid fa-pen-to-square"/>*/}
-                                            {/*</Link>*/}
+                                            <button className="btn btn-sm btn-primary me-2" onClick={() => {
+                                                getReturn(el.return_id)
+                                            }}>
+                                                <i className="fa-solid fa-eye"/>
+                                            </button>
                                             <a className={`btn btn-danger btn-sm`} onClick={(e) => {
                                                 e.preventDefault();
                                                 const result =
@@ -219,6 +249,87 @@ export default function Return({user}) {
                             </tfoot>
                         </table>
                     </div>
+                    {
+                        showReceipt && (
+                            <div className="return-popup">
+                                <div className="custom-card card">
+                                    <div className="card-header text-white bold px-0 pb-0">
+                                        <h5>
+                                            Return Details
+                                        </h5>
+                                    </div>
+                                    <hr/>
+                                    <div className="card-body p-0">
+                                        <div className="row">
+                                            <div className="col-md-12">
+                                                <p className="mb-1">Customer Name: {returnData?.customerName}</p>
+                                                <p className="mb-1">Date: {returnData?.date}</p>
+                                            </div>
+                                        </div>
+                                        <hr/>
+                                        <div className="row">
+                                            <div className="col-md-12">
+                                                <table className="table">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>
+                                                            Product
+                                                        </th>
+                                                        <th>
+                                                            Quantity
+                                                        </th>
+                                                        <th>
+                                                            Subtotal
+                                                        </th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {
+                                                        returnItems?.map((item) => (
+                                                            <tr key={item.id}>
+                                                                <td>
+                                                                    {item?.name}
+                                                                </td>
+                                                                <td>
+                                                                    {item?.quantity}
+                                                                </td>
+                                                                <td>
+                                                                    {item?.total} Tk.
+                                                                </td>
+                                                            </tr>
+                                                        ))
+                                                    }
+                                                    </tbody>
+                                                    <tfoot>
+                                                    <tr>
+                                                        <td colSpan={2} className="text-end bold">
+                                                            Total
+                                                        </td>
+                                                        <td>
+                                                            {returnData?.return_amount} Tk.
+                                                        </td>
+                                                    </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-md-12 text-center">
+                                                <button className="btn btn-warning" onClick={() => {
+                                                    setShowReceipt(false);
+                                                    setReturnItems({})
+                                                    setReturnData({})
+                                                }}>
+                                                    Close
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    }
+
                 </div>
             </Layout>
         </>

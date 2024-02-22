@@ -888,3 +888,19 @@ table {
 .barcode-item {
     height: 1.9cm;
 }
+
+.return-popup {
+    position: fixed;
+    background: rgba(0,0,0,0.8);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.return-popup .card{
+    min-width: 450px;
+}
