@@ -309,7 +309,7 @@ export default function SaleByCustomer({user}) {
                                                 <tr key={el.product_id} valign={`middle`}>
                                                     <td>{index + 1}</td>
                                                     <td>{el.name}</td>
-                                                    <td>{el.qty}</td>
+                                                    <td>{el.qty - el.returnQty}</td>
                                                     <td>{el.weight * el.qty}</td>
                                                     <td>{el.grand_total} Tk.</td>
                                                 </tr>

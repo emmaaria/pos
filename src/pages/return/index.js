@@ -224,12 +224,12 @@ export default function Return({user}) {
                                     </tr>
                                 ))
                             ) || (
-                                <TableSkeleton tr={3} td={6}/>
+                                <TableSkeleton tr={3} td={7}/>
                             )}
                             </tbody>
                             <tfoot>
                             <tr>
-                                <td colSpan={6}>
+                                <td colSpan={7}>
                                     <nav className={`float-end`}>
                                         <ul className="pagination mt-3">
                                             {
