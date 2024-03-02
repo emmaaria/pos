@@ -98,7 +98,7 @@ export default function SaleByCustomer({user}) {
 
     const search = (e) => {
         e.preventDefault;
-        if (!customer){
+        if (!customer) {
             toast.dismiss();
             toast.error('Please select a customer', {
                 position: "bottom-right",
@@ -311,7 +311,7 @@ export default function SaleByCustomer({user}) {
                                                     <td>{el.name}</td>
                                                     <td>{el.qty - el.returnQty}</td>
                                                     <td>{el.weight * el.qty}</td>
-                                                    <td>{el.grand_total} Tk.</td>
+                                                    <td>{el.grand_total - el.returnTotal} Tk.</td>
                                                 </tr>
                                             ))
                                         }
