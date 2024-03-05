@@ -267,6 +267,7 @@ table {
     color: #ffffff;
     z-index: 99999;
     height: 100%;
+    overflow-y: auto;
 }
 
 .invoiceModalContainer {
