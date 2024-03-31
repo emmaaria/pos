@@ -31,7 +31,9 @@ export default function SaleByCustomer({user}) {
     const [products, setProducts] = useState();
     const [product, setProduct] = useState();
     const [totalAmount, setTotalAmount] = useState(0);
-    const [totalQty, setTotalQty] = useState(0);
+    const [totalSaleQty, setTotalSaleQty] = useState(0);
+    const [totalReturnQty, setTotalReturnQty] = useState(0);
+    const [totalNetQuantity, setTotalNetQuantity] = useState(0);
     const [totalWeight, setTotalWeight] = useState(0);
     const [loading, setLoading] = useState(false);
 
@@ -123,10 +125,13 @@ export default function SaleByCustomer({user}) {
             },
             headers
         ).then(res => {
+            console.log(res.data)
             if (res.data.status === true) {
                 setData(res.data.data);
                 setTotalAmount(res.data.totalAmount);
-                setTotalQty(res.data.totalQuantity);
+                setTotalNetQuantity(res.data.totalNetQuantity);
+                setTotalReturnQty(res.data.totalReturnQty);
+                setTotalSaleQty(res.data.totalSaleQty);
                 setTotalWeight(res.data.totalWeight);
                 setLoading(false);
             }
@@ -289,7 +294,9 @@ export default function SaleByCustomer({user}) {
                                         <tr>
                                             <th width={`10%`}>Sl</th>
                                             <th>Product</th>
-                                            <th>Quantity</th>
+                                            <th>Sale Qty</th>
+                                            <th>Return Qty</th>
+                                            <th>Net Sale Qty</th>
                                             <th>Weight</th>
                                             <th>Amount</th>
                                         </tr>
@@ -309,9 +316,11 @@ export default function SaleByCustomer({user}) {
                                                 <tr key={el.product_id} valign={`middle`}>
                                                     <td>{index + 1}</td>
                                                     <td>{el.name}</td>
-                                                    <td>{el.qty - el.returnQty}</td>
-                                                    <td>{el.weight * el.qty}</td>
-                                                    <td>{el.grand_total - el.returnTotal} Tk.</td>
+                                                    <td>{el.sold_qty}</td>
+                                                    <td>{el.returned_qty}</td>
+                                                    <td>{el.final_qty}</td>
+                                                    <td>{el.weight * el.final_qty}</td>
+                                                    <td>{el.final_sale_amount} Tk.</td>
                                                 </tr>
                                             ))
                                         }
@@ -322,7 +331,13 @@ export default function SaleByCustomer({user}) {
                                                 <strong>Total</strong>
                                             </td>
                                             <td>
-                                                {totalQty.toFixed(2)}
+                                                {totalSaleQty.toFixed(2)}
+                                            </td>
+                                            <td>
+                                                {totalReturnQty.toFixed(2)}
+                                            </td>
+                                            <td>
+                                                {totalNetQuantity.toFixed(2)}
                                             </td>
                                             <td>
                                                 {totalWeight.toFixed(2)}
