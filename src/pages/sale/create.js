@@ -552,6 +552,14 @@ export default function CreateSale({user}) {
                                                 </tr>
                                                 <tr>
                                                     <td className={`text-end`}>
+                                                        <strong>Previous Due</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span className="previousDue">0 Tk.</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td className={`text-end`}>
                                                         <p className={`ttl`}>
                                                             <strong>Total</strong>
                                                         </p>

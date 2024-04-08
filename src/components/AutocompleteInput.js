@@ -46,6 +46,7 @@ export default function AutocompleteInput({type, token, placeholder, className})
                         setSearching(false)
                         if (res.data.status === true) {
                             setData(res.data.customers.data);
+                            console.log(res.data.customers.data)
                         }
                     }).catch(err => {
                         console.log(err);
@@ -54,13 +55,16 @@ export default function AutocompleteInput({type, token, placeholder, className})
             );
         }
     }
-    const setValue = (label, value) => {
+    const setValue = (label, value, balance) => {
         $('.supplier-input').val(label);
         if (type === 'supplier') {
             $('.supplier-id').val(value);
         }
         if (type === 'customer') {
             $('.customer-id').val(value);
+        }
+        if(balance){
+            $('.previousDue').text(`${balance} Tk.`);
         }
         setKeyword(null)
     }
@@ -92,7 +96,7 @@ export default function AutocompleteInput({type, token, placeholder, className})
                                     data.length > 0 && (
                                         data.map(el => (
                                                 <div className={`autocompleteItem`} key={`supplier-${el.id}`}
-                                                     onClick={() => setValue(`${el.name} (${el.address})`, el.id)}>
+                                                     onClick={() => setValue(`${el.name} (${el.address})`, el.id, el?.balance)}>
                                                     {el.name}
                                                     {type !== 'supplier' && (
                                                         ` (${el.address ? el.address : ''})`
