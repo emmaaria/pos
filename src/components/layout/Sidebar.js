@@ -466,10 +466,9 @@ export default function Sidebar({user}) {
                             </Link>
                         </li>
                         <li>
-                            <Link href={`/return`} className={`
+                            <Link href={`/return/supplier`} className={`
                                 ${
-                                router.pathname === '/return' ||
-                                router.pathname === '/return/[id]'
+                                router.pathname === '/return/supplier'
                                     ? styles.active
                                     : ''
                             }
@@ -478,9 +477,9 @@ export default function Sidebar({user}) {
                             </Link>
                         </li>
                         <li>
-                            <Link href={`/return/direct/create`} className={`
+                            <Link href={`/return/supplier/create`} className={`
                                 ${
-                                router.pathname === '/return/direct/create'
+                                router.pathname === '/return/supplier/create'
                                     ? styles.active
                                     : ''
                             }
