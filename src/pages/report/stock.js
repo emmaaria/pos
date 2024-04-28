@@ -119,12 +119,12 @@ export default function Stock({user}) {
                                     <tr key={el.product_id} valign={`middle`}>
                                         <td>{index + 1}</td>
                                         <td>{el.name}</td>
-                                        <td>{el.purchase ? el.purchase : 0}</td>
+                                        <td>{el.purchase ? el.purchase - el.purchaseReturn : 0}</td>
                                         <td>
                                             {el.sale ? (el.sale - el.return).toFixed(2) : 0}
                                         </td>
                                         <td>
-                                            {(el.purchase - (el.sale - el.return)).toFixed(2)}
+                                            {((el.purchase - el.purchaseReturn) - (el.sale - el.return)).toFixed(2)}
                                         </td>
                                     </tr>
                                 ))
