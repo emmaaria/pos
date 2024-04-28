@@ -51,7 +51,7 @@ export default function CreateExpenseCategory({user}) {
                     draggable: true,
                     theme: 'dark',
                 });
-                $('form').trigger('reset');
+                $('.name').val('');
                 setLoader(false);
             } else {
                 toast.dismiss();

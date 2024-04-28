@@ -570,6 +570,7 @@ export default function Sidebar({user}) {
                           className={`reportParent 
                                 ${
                               router.pathname === '/report/invoice' ||
+                              router.pathname === '/report/expense' ||
                               router.pathname === '/report/purchase' ||
                               router.pathname === '/report/product-purchase' ||
                               router.pathname === '/report/sale-by-category' ||
@@ -672,6 +673,18 @@ export default function Sidebar({user}) {
                             }
                             `}>
                                 Supplier Wise Sale
+                            </Link>
+                        </li>
+
+                        <li>
+                            <Link href={`/report/expense`} className={`
+                                ${
+                                router.pathname === '/report/expense'
+                                    ? styles.active
+                                    : ''
+                            }
+                            `}>
+                                Expense
                             </Link>
                         </li>
                     </ul>
