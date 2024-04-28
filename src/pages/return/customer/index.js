@@ -1,16 +1,16 @@
-import Layout from "../../components/layout/Layout";
+import Layout from "../../../components/layout/Layout";
 import Head from "next/head";
 import {withIronSessionSsr} from 'iron-session/next';
-import session from "../../lib/session";
+import session from "../../../lib/session";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import TableSkeleton from "../../components/TableSkeleton";
+import TableSkeleton from "../../../components/TableSkeleton";
 import $ from 'jquery';
 import {ToastContainer, toast} from 'react-toastify';
-import useMode from "../../lib/mode";
-import Loader from "../../components/Loader";
+import useMode from "../../../lib/mode";
+import Loader from "../../../components/Loader";
 
-export default function Return({user}) {
+export default function CustomerReturnList({user}) {
     const headers = {
         headers: {Authorization: `Bearer ${user.token}`},
     };

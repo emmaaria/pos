@@ -11,7 +11,7 @@ import Loader from "../../../components/Loader";
 import AutocompleteInput from "../../../components/AutocompleteInput";
 import useMode from "../../../lib/mode";
 
-export default function CreateDirectReturn({user}) {
+export default function CreateCustomerReturn({user}) {
     const [loader, setLoader] = useState(false);
     const [total, setTotal] = useState(0);
     const [products, setProducts] = useState();

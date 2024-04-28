@@ -429,8 +429,10 @@ export default function Sidebar({user}) {
                     <Link href={`#`} onClick={showReturnMenu}
                           className={`returnParent 
                                 ${
-                              router.pathname === '/return' ||
-                              router.pathname === '/return/direct/create'
+                              router.pathname === '/return/customer' ||
+                              router.pathname === '/return/supplier' ||
+                              router.pathname === '/return/supplier/create' ||
+                              router.pathname === '/return/customer/create'
                                   ? styles.active
                                   : ''
                           }
@@ -441,6 +443,29 @@ export default function Sidebar({user}) {
                     </Link>
                     <ul className={`returnMenu ${styles.subMenu}`}>
                         <li>
+                            <Link href={`/return/customer`} className={`
+                                ${
+                                router.pathname === '/return/customer' ||
+                                router.pathname === '/return/[id]'
+                                    ? styles.active
+                                    : ''
+                            }
+                            `}>
+                                Customer Return List
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href={`/return/customer/create`} className={`
+                                ${
+                                router.pathname === '/return/customer/create'
+                                    ? styles.active
+                                    : ''
+                            }
+                            `}>
+                                Customer Return
+                            </Link>
+                        </li>
+                        <li>
                             <Link href={`/return`} className={`
                                 ${
                                 router.pathname === '/return' ||
@@ -449,7 +474,7 @@ export default function Sidebar({user}) {
                                     : ''
                             }
                             `}>
-                                Return List
+                                Supplier Return List
                             </Link>
                         </li>
                         <li>
@@ -460,7 +485,7 @@ export default function Sidebar({user}) {
                                     : ''
                             }
                             `}>
-                                Direct Product Return
+                                Supplier Return
                             </Link>
                         </li>
                         {/*<li>*/}

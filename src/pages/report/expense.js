@@ -27,8 +27,6 @@ export default function ExpenseReport({user}) {
     const [expenseCategories, setExpenseCategories] = useState();
     const [expenseCategory, setExpenseCategory] = useState();
     const [totalAmount, setTotalAmount] = useState(0);
-    const [totalQty, setTotalQty] = useState(0);
-    const [totalWeight, setTotalWeight] = useState(0);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
