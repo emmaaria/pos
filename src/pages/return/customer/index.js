@@ -24,7 +24,7 @@ export default function CustomerReturnList({user}) {
     const [timer, setTimer] = useState(null);
     useEffect(() => {
         axios.get(
-            `${process.env.API_URL}/sale/return`,
+            `${process.env.API_URL}/return/customer`,
             headers
         ).then(res => {
             if (res.data.status === true) {
@@ -47,7 +47,7 @@ export default function CustomerReturnList({user}) {
                 setLoading(true);
                 const name = $('.terms').val();
                 axios.get(
-                    `${process.env.API_URL}/sale/return?name=${name}`,
+                    `${process.env.API_URL}/return/customer?name=${name}`,
                     headers
                 ).then(res => {
                     if (res.data.status === true) {
@@ -83,7 +83,7 @@ export default function CustomerReturnList({user}) {
             theme: 'dark'
         });
         try {
-            const response = await axios.post(`${process.env.API_URL}/sale/return/delete`, {
+            const response = await axios.post(`${process.env.API_URL}/return/customer/delete`, {
                 id: id,
             }, headers);
             if (response.data.status === true) {
@@ -127,7 +127,7 @@ export default function CustomerReturnList({user}) {
     const getReturn = async (id) => {
         setReturnLoading(true)
         try {
-            const response = await axios.get(`${process.env.API_URL}/sale/return/${id}`, headers);
+            const response = await axios.get(`${process.env.API_URL}/return/customer/${id}`, headers);
             if (response.data.status === true) {
                 setReturnData(response.data.return)
                 setReturnItems(response.data.returnItems)
@@ -144,7 +144,7 @@ export default function CustomerReturnList({user}) {
         <>
             <Head>
                 <title>
-                    Return List
+                    Customer Return List
                 </title>
             </Head>
             {
@@ -153,7 +153,7 @@ export default function CustomerReturnList({user}) {
                 )
             }
             <ToastContainer/>
-            <Layout user={user} title={`Return List`}>
+            <Layout user={user} title={`Customer Return List`}>
                 <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body dark' : 'body-bg'}`}>
                     <div className="custom-card">
                         <div className="row">

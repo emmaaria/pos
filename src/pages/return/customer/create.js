@@ -103,7 +103,7 @@ export default function CreateCustomerReturn({user}) {
             return;
         }
         try {
-            const res = await axios.post(`${process.env.API_URL}/sale/return/direct`, {
+            const res = await axios.post(`${process.env.API_URL}/return/customer/store`, {
                 productIds,
                 productQuantities,
                 productPrices,
@@ -280,7 +280,7 @@ export default function CreateCustomerReturn({user}) {
         <>
             <Head>
                 <title>
-                    Add Direct Product Return
+                    Add Customer Return
                 </title>
             </Head>
             {
@@ -289,7 +289,7 @@ export default function CreateCustomerReturn({user}) {
                 )
             }
             <ToastContainer/>
-            <Layout user={user} title={`Add Direct Product Return`}>
+            <Layout user={user} title={`Add Customer Return`}>
                 <div className={`content ${mode === 'dark' ? 'dark-mode-bg-body dark' : 'body-bg'}`}>
                     <div className="custom-card">
                         <div className="mb-3">
