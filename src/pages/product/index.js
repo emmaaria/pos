@@ -219,10 +219,10 @@ export default function Product({user}) {
                             <thead>
                             <tr>
                                 <th width={`10%`}>Sl</th>
-                                <th width={`40%`}>Name</th>
-                                <th width={`40%`}>Supplier</th>
-                                <th width={`20%`}>Sale Price</th>
-                                <th width={`20%`}>Purchase Price</th>
+                                <th width={`30%`}>Name</th>
+                                <th width={`20%`}>Supplier</th>
+                                <th width={`15%`}>Sale Price</th>
+                                <th width={`15%`}>Purchase Price</th>
                                 <th width={`10%`} className={`no-print`}>Action</th>
                             </tr>
                             </thead>
