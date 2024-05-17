@@ -220,6 +220,7 @@ export default function Product({user}) {
                             <tr>
                                 <th width={`10%`}>Sl</th>
                                 <th width={`40%`}>Name</th>
+                                <th width={`40%`}>Supplier</th>
                                 <th width={`20%`}>Sale Price</th>
                                 <th width={`20%`}>Purchase Price</th>
                                 <th width={`10%`} className={`no-print`}>Action</th>
@@ -240,6 +241,7 @@ export default function Product({user}) {
                                             <tr key={el.id} valign={`middle`} className={`row-id-${el.id}`}>
                                                 <td>{index + 1}</td>
                                                 <td>{el.name}</td>
+                                                <td>{el.supplierName}</td>
                                                 <td>{el.price} Tk.</td>
                                                 <td>{el.purchase_price} Tk.</td>
                                                 <td className={`no-print`}>
