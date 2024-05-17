@@ -418,7 +418,7 @@ export default function CreateCustomerReturn({user}) {
                                             </td>
                                             <td className={`text-end`}>
                                                 <span
-                                                    className={`subtotal subtotal_${el.product_id}`}>{el.purchase_price}</span> Tk.
+                                                    className={`subtotal subtotal_${el.product_id}`}>{el.price}</span> Tk.
                                             </td>
                                             <td className={`text-center`}>
                                                 <button
