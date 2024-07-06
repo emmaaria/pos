@@ -2,11 +2,13 @@ import Layout from "../../components/layout/Layout";
 import Head from "next/head";
 import {withIronSessionSsr} from 'iron-session/next';
 import session from "../../lib/session";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import Loader from "../../components/Loader";
 import useMode from "../../lib/mode";
+import Select from "react-select";
+import Skeleton, {SkeletonTheme} from "react-loading-skeleton";
 
 export default function PurchaseReport({user}) {
     const headers = {
@@ -18,14 +20,36 @@ export default function PurchaseReport({user}) {
     const [data, setData] = useState();
     const [total, setTotal] = useState();
     const [loading, setLoading] = useState(false);
+    const [suppliers, setSuppliers] = useState();
+    const [supplier, setSupplier] = useState();
+
+    useEffect(() => {
+        async function getData() {
+            try {
+                const res = await axios.get(
+                    `${process.env.API_URL}/supplier?allData=true`, headers
+                );
+                if (res.data.status === true) {
+                    if (res.data.suppliers && res.data.suppliers.length > 0) {
+                        setSuppliers(res.data.suppliers);
+                    }
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        }
+
+        getData();
+    }, [setSuppliers]);
 
     const search = async (e) => {
         e.preventDefault;
         setLoading(true);
         axios.post(
             `${process.env.API_URL}/report/purchase`, {
-                startDate : startDate.toLocaleDateString("sv-SE"),
-                endDate : endDate.toLocaleDateString("sv-SE")
+                startDate: startDate.toLocaleDateString("sv-SE"),
+                endDate: endDate.toLocaleDateString("sv-SE"),
+                supplier: supplier,
             },
             headers
         ).then(res => {
@@ -58,6 +82,29 @@ export default function PurchaseReport({user}) {
                     <div className="custom-card">
                         <div className="row mb-4">
                             <div className="row">
+                                <div className="col">
+                                    <label className="form-label">
+                                        Supplier
+                                    </label>
+                                    {
+                                        suppliers && (
+                                            <Select
+                                                options={suppliers}
+                                                placeholder="Select Supplier"
+                                                isClearable={true}
+                                                isSearchable={true}
+                                                getOptionValue={(item) => item.id}
+                                                getOptionLabel={(item) => item.name}
+                                                onChange={(value) => {
+                                                    setSupplier(value?.id)
+                                                }}/>
+                                        ) || (
+                                            <SkeletonTheme baseColor="rgba(249, 58, 11, 0.1)" highlightColor="#dddddd">
+                                                <Skeleton width={`100%`} height={40}/>
+                                            </SkeletonTheme>
+                                        )
+                                    }
+                                </div>
                                 <div className="col">
                                     <label className="form-label d-block">
                                         Start Date
@@ -111,7 +158,7 @@ export default function PurchaseReport({user}) {
                                         {
                                             data.map((el, index) => (
                                                 <tr key={el.purchase_id} valign={`middle`}>
-                                                    <td>{index + 1}</td>
+                                                <td>{index + 1}</td>
                                                     <td>{el.purchase_id}</td>
                                                     <td>{el.supplier_name}</td>
                                                     <td>{el.amount} Tk.</td>
