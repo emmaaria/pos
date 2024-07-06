@@ -168,7 +168,7 @@ export default function Dashboard({user}) {
                         </div>
                     </div>
                     <h4 className={mode === 'dark' ? 'dark-mode-color' : ''}>Balance Overview</h4>
-                    <div className="row mt-4 row-cols-xxl-5 row-cols-md-3">
+                    <div className="row mt-4 row-cols-xxl-6 row-cols-md-3">
                         <div className="col mb-4">
                             <DashboardCard
                                 icon="fa-solid fa-filter-circle-dollar"
@@ -215,6 +215,16 @@ export default function Dashboard({user}) {
                                 title="Card"
                                 value={data ? `${data?.totalCard} Tk.` : ''}
                                 bgColor="#40407a"
+                                imege={true}
+                                imageSrc={card}
+                            />
+                        </div>
+                        <div className="col mb-4">
+                            <DashboardCard
+                                icon="fa-solid fa-filter-circle-dollar"
+                                title="Total Due"
+                                value={data ? `${parseFloat(data?.totalDue).toFixed(2)} Tk.` : ''}
+                                bgColor="#F93A0B"
                                 imege={true}
                                 imageSrc={card}
                             />
