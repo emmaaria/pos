@@ -601,6 +601,7 @@ export default function Sidebar({user}) {
                               router.pathname === '/report/sale-by-customer' ||
                               router.pathname === '/report/sale-by-supplier' ||
                               router.pathname === '/report/purchase-by-category' ||
+                              router.pathname === '/report/purchase-by-supplier' ||
                               router.pathname === '/report/product-sale'
                                   ? styles.active
                                   : ''
@@ -631,6 +632,17 @@ export default function Sidebar({user}) {
                             }
                             `}>
                                 Purchase By Date
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href={`/report/purchase-by-supplier`} className={`
+                                ${
+                                router.pathname === '/report/purchase-by-supplier'
+                                    ? styles.active
+                                    : ''
+                            }
+                            `}>
+                                Purchase By Supplier
                             </Link>
                         </li>
                         <li>
