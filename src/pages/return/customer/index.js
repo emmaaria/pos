@@ -47,7 +47,7 @@ export default function CustomerReturnList({user}) {
                 setLoading(true);
                 const name = $('.terms').val();
                 axios.get(
-                    `${process.env.API_URL}/return/customer?name=${name}`,
+                    `${process.env.API_URL}/return/customer?keyword=${name}`,
                     headers
                 ).then(res => {
                     if (res.data.status === true) {
